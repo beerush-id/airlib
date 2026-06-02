@@ -1,36 +1,135 @@
-# TypeScript Package Template (tsdown)
+# AIR Form
 
-A simple, zero-config TypeScript package template using tsdown for bundling. Perfect for creating libraries and packages with modern tooling.
+AIR Form is a reactive, framework-agnostic form engine powered by Zod schemas.
 
-## Features
+## AIR Stack Integration
+To use AIR Form inside a reactive component, create a strictly typed form factory outside the component, and initialize the form state within the component's `setup` phase.
 
-- **TypeScript** - Write your code in TypeScript for type safety and better developer experience
-- **tsdown** - Zero-config bundler powered by esbuild for blazing fast builds
-- **ESLint** - Integrated code linting with modern ESLint configuration
-- **Prettier** - Code formatting that maintains consistent style
-- **Publint** - Package validation before publishing to npm
-- **Dual Package Support** - Outputs both ESM and CommonJS formats
+```tsx
+import { setup, render } from '@anchorlib/react';
+import { formFactory } from '@airlib/form';
+import { z } from 'zod';
 
-## Getting Started
+const userSchema = z.object({
+  name: z.string().min(3, 'Name is too short'),
+  age: z.number().min(18, 'Must be an adult'),
+});
 
-1. Clone this template
-2. Install dependencies with your preferred package manager
-3. Start developing with `npm run dev`
+// Create a strictly typed factory outside the component
+const userForm = formFactory(userSchema);
 
-## Scripts
+export const UserForm = setup((props) => {
+  // Initialize the reactive form state inside the component
+  const form = userForm({ 
+    value: { name: '', age: 0 } 
+  });
 
-- `npm run dev` - Start development mode with watch
-- `npm run build` - Build the package for production
-- `npm run clean` - Remove the dist directory
-- `npm run prepublish` - Prepare the package for publishing
+  return render(() => (
+    <form>
+      {/* UI logic goes here */}
+    </form>
+  ));
+});
+```
 
-## Output
+The factory guarantees that the initialized `formState` is strictly typed to the schema and properly integrated with the reactive rendering cycle.
 
-The build process generates:
-- CommonJS output (`*.cjs`)
-- ES Modules output (`*.js`)
-- TypeScript declarations (`*.d.ts`)
+## Field Selection
+To access a specific field within the form, use the `.field()` method on the initialized form.
 
-## License
+```tsx
+export const UserForm = setup((props) => {
+  const form = userForm({ value: { name: '', age: 0 } });
 
-MIT
+  // Isolate a strictly typed field boundary
+  const name = form.field('name');
+
+  return render(() => (
+    <div>
+      <input 
+        value={name.value} 
+        onInput={(e) => { name.value = e.currentTarget.value; }} 
+      />
+      {!name.valid && <span>{name.error}</span>}
+    </div>
+  ));
+});
+```
+
+The `.field()` method provides a strictly typed reactive boundary for the specified field, allowing isolated state updates and error checking.
+
+## Input Controllers
+To bind a field to a UI input, use the `.input()` method to generate an input controller.
+
+```tsx
+export type UserFormProps = {
+  value?: { name: string, age: number }
+};
+
+export const UserForm = setup<UserFormProps>((props) => {
+  const form = userForm(props);
+  
+  // Generate input controllers
+  const name = form.field('name').input({ type: 'text' });
+  const age = form.field('age').input({ type: 'number' });
+
+  return render(() => (
+    <form>
+      <input 
+        type={name.type} 
+        name={name.name}
+        value={name.value}
+        onInput={(e) => { name.value = e.currentTarget.value; }}
+        onBlur={() => { name.settled(); }}
+      />
+      
+      <input 
+        type={age.type} 
+        name={age.name}
+        value={age.value}
+        onInput={(e) => { age.value = e.currentTarget.value; }}
+        onBlur={() => { age.settled(); }}
+      />
+    </form>
+  ));
+});
+```
+
+The input controller handles two-way data binding, string parsing, and event synchronization for the underlying input element.
+
+## Form Context
+To build composable input components without passing props, use the `formField` API to automatically inherit the form context.
+
+```tsx
+import { formField, FormInputType } from '@airlib/form';
+import { setup, render } from '@anchorlib/react';
+
+export const TextInput = setup<{ name: string, label: string, type?: FormInputType }>((props) => {
+  // Automatically reads the Form context from the tree
+  const input = formField<string>(props.name).input(props);
+
+  return render(() => (
+    <div className="field-group">
+      <label>{props.label}</label>
+      <input 
+        type={input.type}
+        name={input.name}
+        value={input.value}
+        onInput={(e) => { input.value = e.currentTarget.value; }}
+        onBlur={() => { input.settled(); }}
+      />
+      {!input.valid && <span className="error">{input.error}</span>}
+    </div>
+  ));
+});
+```
+
+The `formField` function automatically discovers the closest form provider in the component tree.
+
+## Component Usage
+
+```tsx
+export const ProfileForm = setup(() => (
+  
+))
+```

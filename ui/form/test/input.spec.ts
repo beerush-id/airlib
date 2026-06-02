@@ -171,7 +171,7 @@ describe('formInput', () => {
   describe('Checkbox type', () => {
     it('should fallback to props.checked or false', () => {
       vi.spyOn(context, 'read').mockReturnValue(undefined);
-      
+
       const state1 = formInput({ type: 'checkbox', checked: true });
       expect(state1.checked).toBe(true);
 
@@ -264,7 +264,7 @@ describe('formInput', () => {
       vi.spyOn(context, 'read').mockReturnValue(undefined);
       const date = new Date(2026, 5, 2, 14, 30);
       const state = formInput({ name: 'event', type: 'datetime-local', value: date as any });
-      
+
       expect(state.value).toBe('2026-06-02T14:30');
       vi.restoreAllMocks();
     });
@@ -273,7 +273,7 @@ describe('formInput', () => {
       vi.spyOn(context, 'read').mockReturnValue(undefined);
       const date = new Date(2026, 5, 2, 14, 30);
       const state = formInput({ name: 'alarm', type: 'time', value: date as any });
-      
+
       expect(state.value).toBe('14:30');
       vi.restoreAllMocks();
     });
@@ -282,7 +282,7 @@ describe('formInput', () => {
       vi.spyOn(context, 'read').mockReturnValue(undefined);
       const date = new Date(2026, 5, 2);
       const state = formInput({ name: 'expiry', type: 'month', value: date as any });
-      
+
       expect(state.value).toBe('2026-06');
       vi.restoreAllMocks();
     });
@@ -291,7 +291,7 @@ describe('formInput', () => {
       vi.spyOn(context, 'read').mockReturnValue(undefined);
       const date = new Date(2026, 0, 1); // Jan 1, 2026
       const state = formInput({ name: 'week', type: 'week', value: date as any });
-      
+
       expect(state.value).toBe('2026-W01');
       vi.restoreAllMocks();
     });
@@ -306,7 +306,7 @@ describe('formInput', () => {
 
     it('should handle invalid string dates in stringify gracefully', () => {
       vi.spyOn(context, 'read').mockReturnValue(undefined);
-      
+
       const types = ['date', 'datetime-local', 'time', 'month', 'week'] as const;
       for (const type of types) {
         const state = formInput({ name: 'invalid', type, value: 'not-a-valid-date' });
@@ -319,10 +319,10 @@ describe('formInput', () => {
     it('should handle invalid dates in stringify gracefully', () => {
       vi.spyOn(context, 'read').mockReturnValue(undefined);
       const invalidDate = new Date('invalid');
-      
+
       const state = formInput({ name: 'invalid', type: 'datetime-local', value: invalidDate as any });
       expect(state.value).toBe('');
-      
+
       vi.restoreAllMocks();
     });
 
@@ -410,13 +410,13 @@ describe('formInput', () => {
       vi.spyOn(context, 'read').mockReturnValue(undefined);
       const props = { name: 'agree', type: 'checkbox' as const, checked: true };
       const state = formInput(props);
-      
+
       expect(state.checked).toBe(true);
       expect(state.value).toBe(''); // checkbox has no text value
 
       props.checked = false;
       state.settled(); // should do nothing for boolean inputs
-      
+
       expect(state.value).toBe('');
 
       vi.restoreAllMocks();

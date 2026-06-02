@@ -56,6 +56,10 @@ export type AnyType = any;
 export type FormDataMap = Map<string, AnyType>;
 export type FormErrorMap = Map<string, string[]>;
 
+export type FormStateProps<T> = {
+  value?: T;
+};
+
 /**
  * Configuration options for initializing a reactive form state.
  */
@@ -63,6 +67,25 @@ export type FormStateOptions = {
   strict?: boolean;
   onChange?: (data: FormDataMap, errors: FormErrorMap) => void;
   validateOnInit?: boolean;
+};
+
+/**
+ * A strictly-typed factory for creating and managing form states.
+ *
+ * @template T - The Zod schema defining the form's data structure.
+ */
+export type FormFactory<T extends ZodType> = ((props: FormStateProps<input<T>>) => FormState<T>) & {
+  /**
+   * Retrieves the currently active `FormState`.
+   */
+  get(): FormState<T> | undefined;
+
+  /**
+   * Creates a reactive reference to a specific form field.
+   *
+   * @param field - The dot-notation path of the field.
+   */
+  field<K extends DeepPaths<input<T>>>(field: K): FormFieldState<PathValue<input<T>, K>>;
 };
 
 export type ContextReader = <T>(key: symbol) => T | undefined;
@@ -99,7 +122,7 @@ export type FormState<T extends ZodType> = {
 export type FormFieldState<T> = {
   get name(): string;
   get value(): T;
-  set value(v: AnyType);
+  set value(value: T);
   get error(): string[] | undefined;
   get valid(): boolean;
   input(props: FormInputProps<T>, options?: FormInputOptions<T>): FormInputState;
@@ -134,11 +157,11 @@ export type FormInputState = {
   get name(): string;
   get type(): InputType;
   get value(): string;
-  set value(v: string);
+  set value(value: string);
   get error(): string[] | undefined;
   get valid(): boolean;
   get checked(): boolean;
-  set checked(v: boolean);
+  set checked(checked: boolean);
   locked: boolean;
   settled(): void;
 };

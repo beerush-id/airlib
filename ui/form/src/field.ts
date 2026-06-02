@@ -6,13 +6,7 @@ import type { AnyType, FormFieldState, FormInputOptions, FormInputProps, FormInp
 /**
  * Creates a reactive reference to a specific form field.
  *
- * This function retrieves the form state from the context and provides
- * a targeted interface to get or set a specific field's value, check its
- * validity, and access any associated error messages. It also writes the
- * field state to the context so child components (like inputs) can consume it.
- *
- * @param name - The dot-notation path of the field within the form schema.
- * @returns A reactive `FormFieldState` object bound to the specified field.
+ * @param name - The dot-notation path of the field.
  */
 export function formField<T>(name: string): FormFieldState<T> {
   const form = getForm<AnyType>();
@@ -47,16 +41,10 @@ export function formField<T>(name: string): FormFieldState<T> {
 const BOOL_INPUTS = new Set<InputType>([FORM_INPUT.checkbox, FORM_INPUT.radio, FORM_INPUT.toggle]);
 
 /**
- * Creates a reactive input state binding for form controls.
- *
- * This function bridges a UI input element to the underlying form field.
- * It handles two-way data binding, parses raw input values (like strings from DOM events)
- * into their appropriate data types, and stringifies complex data back for display.
- * It automatically consumes the parent `formField` context if available.
+ * Creates a reactive input controller for form elements.
  *
  * @param props - Input properties including `type`, `name`, `value`, and `checked`.
- * @param options - Optional custom `parse` and `stringify` functions for formatting.
- * @returns A reactive `FormInputState` object managing the input's state and validation.
+ * @param options - Optional custom `parse` and `stringify` functions.
  */
 export function formInput<T>(props: FormInputProps<T>, options?: FormInputOptions<T>): FormInputState {
   const { parse = defaultParse, stringify = defaultStringify } = options ?? ({} as FormInputOptions<T>);
@@ -86,7 +74,7 @@ export function formInput<T>(props: FormInputProps<T>, options?: FormInputOption
 
       self.locked = true;
 
-      if (field) field.value = parsed;
+      if (field) field.value = parsed as T;
       props.value = parsed as T;
 
       self.locked = false;
@@ -101,8 +89,8 @@ export function formInput<T>(props: FormInputProps<T>, options?: FormInputOption
       self.locked = true;
 
       props.checked = checked;
-      if ((type === FORM_INPUT.radio || type === FORM_INPUT.toggle) && checked && field) field.value = buffer.value;
-      if (type === FORM_INPUT.checkbox && field) field.value = checked;
+      if ((type === FORM_INPUT.radio || type === FORM_INPUT.toggle) && checked && field) field.value = buffer.value as T;
+      if (type === FORM_INPUT.checkbox && field) field.value = checked as T;
 
       self.locked = false;
     },

@@ -11,15 +11,9 @@ import { writePath } from './utils.js';
 /**
  * Creates a reactive form state based on a Zod schema.
  *
- * This function initializes a form context that manages values, errors,
- * and validation state. It automatically flattens the schema and data for
- * efficient deep property updates, and handles reactivity when integrated
- * with the Anchor reactivity system.
- *
  * @param schema - The Zod schema to validate the form against.
- * @param props - An object containing the initial `value` for the form. If the `props` object is reactive (Anchor bound), the form will automatically synchronize when `props.value` changes.
- * @param options - Configuration options for the form state (e.g., `strict`, `validateOnInit`, `onChange`).
- * @returns A reactive `FormState` object providing access to fields, errors, validation status, and reset capabilities.
+ * @param props - An object containing the initial `value` for the form.
+ * @param options - Configuration options for the form state.
  */
 export function formState<T extends LinkableSchema>(
   schema: T,
