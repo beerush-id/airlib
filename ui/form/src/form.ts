@@ -162,6 +162,9 @@ export function formState<T extends LinkableSchema>(
     get changed() {
       return changeStore.size > 0;
     },
+    get changeList() {
+      return changeStore;
+    },
     get valid() {
       return errorStore.size === 0;
     },

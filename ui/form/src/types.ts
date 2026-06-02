@@ -110,6 +110,7 @@ export type FormState<T extends ZodType> = {
   get valid(): boolean;
   get output(): output<T>;
   get changes(): Partial<output<T>>;
+  get changeList(): Map<string, AnyType>;
 
   get error(): Error | undefined;
   get status(): FormStatus;
@@ -132,6 +133,7 @@ export type FormFieldState<T> = {
   set value(value: T);
   get error(): string[] | undefined;
   get valid(): boolean;
+  get changed(): boolean;
   get disabled(): boolean;
   input(props: FormInputProps<T>, options?: FormInputOptions<T>): FormInputState;
 };
@@ -171,6 +173,7 @@ export type FormInputState = {
   get valid(): boolean;
   get checked(): boolean;
   set checked(checked: boolean);
+  get changed(): boolean;
   get disabled(): boolean;
   locked: boolean;
   settled(): void;

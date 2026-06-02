@@ -28,16 +28,21 @@ describe('formField', () => {
       field.value = 'hello';
       expect(field.value).toBeUndefined();
 
+      // changed getter (always false without form)
+      expect(field.changed).toBe(false);
+
       vi.restoreAllMocks();
     });
   });
 
   describe('With form context', () => {
     it('should interact with the form state properly', () => {
+      const changeStore = new Map<string, AnyType>();
       const mockForm = {
         fields: { test_field: 'initial_value' } as Record<string, AnyType>,
         errors: { test_field: ['invalid format'] } as Record<string, string[]>,
         pending: false,
+        changeList: changeStore,
       };
 
       let mockField: AnyType = undefined;
@@ -82,6 +87,13 @@ describe('formField', () => {
       // settled method uses form.fields
       mockForm.fields['test_field'] = 'settled_value';
       expect(field.value).toBe('settled_value');
+      // changed getter
+      expect(field.changed).toBe(false);
+      changeStore.set('test_field', 'new_value');
+      expect(field.changed).toBe(true);
+      changeStore.delete('test_field');
+      expect(field.changed).toBe(false);
+
       expect(writeSpy).toHaveBeenCalled();
 
       vi.restoreAllMocks();

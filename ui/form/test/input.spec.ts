@@ -6,7 +6,7 @@ import { formInput } from '../src/field.js';
 import type { AnyType, FormFieldState } from '../src/types.js';
 
 function mockField<T>(name: string, value: T, error?: string[]): FormFieldState<T> {
-  const state = mutable({ value, disabled: false });
+  const state = mutable({ value, disabled: false, changed: false });
   return {
     get name() {
       return name;
@@ -28,7 +28,13 @@ function mockField<T>(name: string, value: T, error?: string[]): FormFieldState<
     },
     set disabled(v: boolean) {
       state.disabled = v;
-    }
+    },
+    get changed() {
+      return state.changed;
+    },
+    set changed(v: boolean) {
+      state.changed = v;
+    },
   } as FormFieldState<T>;
 }
 
@@ -447,6 +453,31 @@ describe('formInput', () => {
       state.settled(); // should do nothing for boolean inputs
 
       expect(state.value).toBe('');
+
+      vi.restoreAllMocks();
+    });
+  });
+  describe('changed tracking', () => {
+    it('should reflect field.changed on input state', () => {
+      const field = mockField('username', 'John');
+      vi.spyOn(context, 'read').mockReturnValue(field);
+
+      const state = formInput({ name: 'username', type: 'text' });
+
+      expect(state.changed).toBe(false);
+
+      (field as AnyType).changed = true;
+      expect(state.changed).toBe(true);
+
+      vi.restoreAllMocks();
+    });
+
+    it('should default to false without field context', () => {
+      vi.spyOn(context, 'read').mockReturnValue(undefined);
+
+      const state = formInput({ name: 'test', type: 'text' });
+
+      expect(state.changed).toBe(false);
 
       vi.restoreAllMocks();
     });

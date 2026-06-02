@@ -31,6 +31,9 @@ export function formField<T>(name: string): FormFieldState<T> {
     get disabled() {
       return form?.pending ?? false;
     },
+    get changed() {
+      return form?.changeList.has(name) ?? false;
+    },
     input(props: FormInputProps<T>, options?: FormInputOptions<T>) {
       return formInput(props, options);
     },
@@ -81,6 +84,9 @@ export function formInput<T>(props: FormInputProps<T>, options?: FormInputOption
       props.value = parsed as T;
 
       self.locked = false;
+    },
+    get changed() {
+      return field?.changed ?? false;
     },
     get disabled() {
       return (props.disabled || field?.disabled) ?? false;

@@ -61,15 +61,23 @@ describe('FormState API', () => {
       expect(form.changed).toBe(true);
       expect(form.changes).toEqual({ address: { city: 'LA' } });
 
+      // changeList should track the raw changed paths
+      expect(form.changeList).toBeInstanceOf(Map);
+      expect(form.changeList.has('address.city')).toBe(true);
+      expect(form.changeList.size).toBe(1);
+
       // Mutate another field
       form.fields['name'] = 'Jane';
       expect(form.changes).toEqual({ name: 'Jane', address: { city: 'LA' } });
+      expect(form.changeList.has('name')).toBe(true);
+      expect(form.changeList.size).toBe(2);
 
       // Reverting to original data resets the change flag for that field
       form.fields['name'] = 'John';
       form.fields['address.city'] = 'NY';
       expect(form.changed).toBe(false);
       expect(form.changes).toEqual({});
+      expect(form.changeList.size).toBe(0);
     });
 
     it('should correctly rebuild the complete output hierarchy', () => {
@@ -475,16 +483,16 @@ describe('FormState API', () => {
       expect(form.changed).toBe(true);
 
       const handler = vi.fn().mockResolvedValue(undefined);
-      
+
       // Submit with settle = false
       await form.submit(handler, false);
 
       expect(form.status).toBe('success');
-      
+
       // Changes should be preserved
       expect(form.changed).toBe(true);
       expect(form.changes).toEqual({ name: 'Jane' });
-      
+
       // Form should remain submittable
       expect(form.canSubmit).toBe(true);
     });
@@ -497,12 +505,12 @@ describe('FormState API', () => {
       expect(form.changed).toBe(true);
 
       const handler = vi.fn().mockResolvedValue(undefined);
-      
+
       // Submit without explicitly passing the settle argument
       await form.submit(handler);
 
       expect(form.status).toBe('success');
-      
+
       // Changes should be preserved because form was configured with settleOnSubmit: false
       expect(form.changed).toBe(true);
       expect(form.changes).toEqual({ name: 'Jane' });
@@ -531,7 +539,9 @@ describe('FormState API', () => {
       form.fields['name'] = 'Jane'; // Make it submittable
 
       let resolvePromise: () => void;
-      const promise = new Promise<void>((r) => { resolvePromise = r; });
+      const promise = new Promise<void>((r) => {
+        resolvePromise = r;
+      });
       const handler = vi.fn().mockImplementation(() => promise);
 
       const sub1 = form.submit(handler);
