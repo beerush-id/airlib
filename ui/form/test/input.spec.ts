@@ -6,7 +6,7 @@ import { formInput } from '../src/field.js';
 import type { AnyType, FormFieldState } from '../src/types.js';
 
 function mockField<T>(name: string, value: T, error?: string[]): FormFieldState<T> {
-  const state = mutable(value);
+  const state = mutable({ value, disabled: false });
   return {
     get name() {
       return name;
@@ -23,6 +23,12 @@ function mockField<T>(name: string, value: T, error?: string[]): FormFieldState<
     get valid() {
       return !error;
     },
+    get disabled() {
+      return state.disabled;
+    },
+    set disabled(v: boolean) {
+      state.disabled = v;
+    }
   } as FormFieldState<T>;
 }
 
@@ -81,6 +87,10 @@ describe('formInput', () => {
 
       expect(state.valid).toBe(true);
       expect(state.error).toBeUndefined();
+      expect(state.disabled).toBe(false);
+
+      const disabledState = formInput({ name: 'test', disabled: true });
+      expect(disabledState.disabled).toBe(true);
 
       vi.restoreAllMocks();
     });
@@ -129,6 +139,25 @@ describe('formInput', () => {
 
       expect(state.valid).toBe(false);
       expect(state.error).toEqual(['invalid email']);
+
+      vi.restoreAllMocks();
+    });
+
+    it('should inherit disabled state from field or use props.disabled', () => {
+      const field = mockField('email', '');
+      vi.spyOn(context, 'read').mockImplementation((symbol) => {
+        if (symbol === FORM_FIELD_SYMBOL) return field;
+        return undefined;
+      });
+
+      const state1 = formInput({ type: 'email' });
+      expect(state1.disabled).toBe(false);
+
+      const state2 = formInput({ type: 'email', disabled: true });
+      expect(state2.disabled).toBe(true);
+
+      (field as AnyType).disabled = true; // using the mock setter we added
+      expect(state1.disabled).toBe(true); // inherits from field
 
       vi.restoreAllMocks();
     });

@@ -23,3 +23,10 @@ export const FORM_INPUT = {
 } as const;
 
 export const FORM_INVALID_INPUT = Symbol('airlib:form-invalid-input');
+
+export const FORM_STATUS = {
+  IDLE: 'idle',
+  PENDING: 'pending',
+  SUCCESS: 'success',
+  ERROR: 'error',
+} as const;

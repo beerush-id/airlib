@@ -285,6 +285,25 @@ describe('FormState API', () => {
   });
 
   describe('State Management', () => {
+    it('should ignore mutations and reset when locked', () => {
+      const props = { value: { name: 'Initial' } };
+      const form = formState(z.object({ name: z.string() }), props);
+
+      form.locked = true;
+
+      // Mutation should be ignored
+      form.fields['name'] = 'Changed';
+      expect(form.fields['name']).toBe('Initial');
+
+      // Reset should be ignored
+      const result = form.reset();
+      expect(result).toBe(form);
+
+      form.locked = false;
+      form.fields['name'] = 'Unlocked';
+      expect(form.fields['name']).toBe('Unlocked');
+    });
+
     it('should reset strictly to the initial state', () => {
       const props = {
         value: {
@@ -413,6 +432,115 @@ describe('FormState API', () => {
 
       // Internal stores MUST still be cleared to prevent memory leaks
       expect(form!.fields['name']).toBeUndefined();
+    });
+  });
+
+  describe('Form Submission', () => {
+    it('should handle successful submission and update status/pending', async () => {
+      const props = { value: { name: 'John' } };
+      const form = formState(z.object({ name: z.string() }), props);
+
+      expect(form.status).toBe('idle');
+      expect(form.pending).toBe(false);
+      expect(form.changed).toBe(false);
+      expect(form.canSubmit).toBe(false); // False because no changes
+      expect(form.error).toBeUndefined();
+
+      // Make a change so it can be submitted
+      form.fields['name'] = 'Jane';
+      expect(form.changed).toBe(true);
+      expect(form.canSubmit).toBe(true);
+
+      const handler = vi.fn().mockImplementation(async (data) => {
+        expect(form.status).toBe('pending');
+        expect(form.pending).toBe(true);
+        expect(form.canSubmit).toBe(false);
+        return Promise.resolve();
+      });
+
+      await form.submit(handler);
+
+      expect(handler).toHaveBeenCalledWith({ name: 'Jane' });
+      expect(form.status).toBe('success');
+      expect(form.pending).toBe(false);
+      expect(form.changed).toBe(false); // Changes are cleared by default settle behavior
+      expect(form.canSubmit).toBe(false);
+    });
+
+    it('should preserve changes after successful submission if settle is false', async () => {
+      const props = { value: { name: 'John' } };
+      const form = formState(z.object({ name: z.string() }), props);
+
+      form.fields['name'] = 'Jane';
+      expect(form.changed).toBe(true);
+
+      const handler = vi.fn().mockResolvedValue(undefined);
+      
+      // Submit with settle = false
+      await form.submit(handler, false);
+
+      expect(form.status).toBe('success');
+      
+      // Changes should be preserved
+      expect(form.changed).toBe(true);
+      expect(form.changes).toEqual({ name: 'Jane' });
+      
+      // Form should remain submittable
+      expect(form.canSubmit).toBe(true);
+    });
+
+    it('should respect settleOnSubmit false from form options', async () => {
+      const props = { value: { name: 'John' } };
+      const form = formState(z.object({ name: z.string() }), props, { settleOnSubmit: false });
+
+      form.fields['name'] = 'Jane';
+      expect(form.changed).toBe(true);
+
+      const handler = vi.fn().mockResolvedValue(undefined);
+      
+      // Submit without explicitly passing the settle argument
+      await form.submit(handler);
+
+      expect(form.status).toBe('success');
+      
+      // Changes should be preserved because form was configured with settleOnSubmit: false
+      expect(form.changed).toBe(true);
+      expect(form.changes).toEqual({ name: 'Jane' });
+      expect(form.canSubmit).toBe(true);
+    });
+
+    it('should handle failed submission and store the error', async () => {
+      const props = { value: { name: 'John' } };
+      const form = formState(z.object({ name: z.string() }), props);
+
+      form.fields['name'] = 'Jane'; // Make it submittable
+
+      const handlerError = new Error('Network failed');
+      const handler = vi.fn().mockRejectedValue(handlerError);
+
+      await form.submit(handler);
+
+      expect(form.status).toBe('error');
+      expect(form.error).toBe(handlerError);
+    });
+
+    it('should prevent overlapping submissions if form is already locked', async () => {
+      const props = { value: { name: 'John' } };
+      const form = formState(z.object({ name: z.string() }), props);
+
+      form.fields['name'] = 'Jane'; // Make it submittable
+
+      let resolvePromise: () => void;
+      const promise = new Promise<void>((r) => { resolvePromise = r; });
+      const handler = vi.fn().mockImplementation(() => promise);
+
+      const sub1 = form.submit(handler);
+      const sub2 = form.submit(handler);
+
+      resolvePromise!();
+      await Promise.all([sub1, sub2]);
+
+      expect(handler).toHaveBeenCalledTimes(1);
     });
   });
 });

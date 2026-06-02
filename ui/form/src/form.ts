@@ -1,12 +1,13 @@
 import { anchor, type LinkableSchema, mutable, onCleanup, subscribe } from '@anchorlib/core';
 import type { input, ZodType } from 'zod';
-import { FORM_SYMBOL } from './contant.js';
+import { FORM_STATUS, FORM_SYMBOL } from './contant.js';
 import { context } from './context.js';
 import { formField } from './field.js';
 import { flattenData, flattenError, unflattenData } from './flatten.js';
 import { getSchemaByPath } from './schema.js';
 import type { AnyType, FormState, FormStateOptions } from './types.js';
 import { writePath } from './utils.js';
+import type { FormStatus } from './types.ts';
 
 /**
  * Creates a reactive form state based on a Zod schema.
@@ -20,9 +21,15 @@ export function formState<T extends LinkableSchema>(
   props: { value?: input<T> },
   options?: FormStateOptions
 ): FormState<T> {
-  const { strict = true, validateOnInit = true, onChange } = options || ({} as FormStateOptions);
+  const { strict = true, validateOnInit = true, settleOnSubmit = true, onChange } = options || ({} as FormStateOptions);
   const inputStore = new Map<string, AnyType>();
   const flatSchema = new Map<string, ZodType>();
+  const state = mutable<{
+    status: FormStatus;
+    error?: Error;
+  }>({
+    status: FORM_STATUS.IDLE,
+  });
 
   const dataStore = mutable(new Map<string, AnyType>());
   const errorStore = mutable(new Map<string, string[]>());
@@ -124,6 +131,7 @@ export function formState<T extends LinkableSchema>(
         return dataStore.get(prop);
       },
       set(_, prop: string, value: AnyType) {
+        if (self.locked) return true;
         return setter(prop, value);
       },
     }
@@ -143,7 +151,6 @@ export function formState<T extends LinkableSchema>(
   );
 
   const self = {
-    setter,
     locked: false,
 
     get fields() {
@@ -164,11 +171,27 @@ export function formState<T extends LinkableSchema>(
     get changes() {
       return unflattenData(changeStore);
     },
+    get error() {
+      return state.error;
+    },
+    get status() {
+      return state.status;
+    },
+    get pending() {
+      return state.status === FORM_STATUS.PENDING;
+    },
+    get canSubmit() {
+      return self.valid && self.changed && !self.pending;
+    },
     field(fieldPath: string) {
       return formField(fieldPath);
     },
     reset() {
+      if (self.locked) return self;
       self.locked = true;
+
+      delete state.error;
+      state.status = FORM_STATUS.IDLE;
 
       dataStore.clear();
       flatSchema.clear();
@@ -184,6 +207,31 @@ export function formState<T extends LinkableSchema>(
 
       self.locked = false;
       return self;
+    },
+    async submit(handler, settle = settleOnSubmit) {
+      if (self.locked) return;
+      self.locked = true;
+
+      delete state.error;
+      state.status = FORM_STATUS.PENDING;
+
+      try {
+        await handler(unflattenData(anchor.get(dataStore)));
+        state.status = FORM_STATUS.SUCCESS;
+
+        if (settle) {
+          inputStore.clear();
+          for (const [path, value] of dataStore.entries()) {
+            inputStore.set(path, value);
+          }
+          changeStore.clear();
+        }
+      } catch (error) {
+        state.error = error as Error;
+        state.status = FORM_STATUS.ERROR;
+      } finally {
+        self.locked = false;
+      }
     },
   } as FormState<T>;
 

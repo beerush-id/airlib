@@ -1,5 +1,5 @@
 import type { input, output, ZodType } from 'zod';
-import { FORM_INPUT } from './contant.js';
+import { FORM_INPUT, FORM_STATUS } from './contant.js';
 
 type Primitive = null | undefined | string | number | boolean | symbol | bigint | Date;
 type IsTuple<T extends ReadonlyArray<any>> = number extends T['length'] ? false : true;
@@ -65,8 +65,9 @@ export type FormStateProps<T> = {
  */
 export type FormStateOptions = {
   strict?: boolean;
-  onChange?: (data: FormDataMap, errors: FormErrorMap) => void;
   validateOnInit?: boolean;
+  settleOnSubmit?: boolean;
+  onChange?: (data: FormDataMap, errors: FormErrorMap) => void;
 };
 
 /**
@@ -96,6 +97,8 @@ export type ContextBridge = {
   write: ContextWriter;
 };
 
+export type FormStatus = (typeof FORM_STATUS)[keyof typeof FORM_STATUS];
+
 /**
  * Represents the core reactive form state.
  * Manages data tracking, errors, schema validation, and synchronization.
@@ -108,11 +111,15 @@ export type FormState<T extends ZodType> = {
   get output(): output<T>;
   get changes(): Partial<output<T>>;
 
+  get error(): Error | undefined;
+  get status(): FormStatus;
+  get pending(): boolean;
+  get canSubmit(): boolean;
+
   locked: boolean;
   field<K extends DeepPaths<input<T>>>(field: K): FormFieldState<PathValue<input<T>, K>>;
   reset(): FormState<T>;
-  setter<T>(name: string, value: T, plain: true): T;
-  setter<T>(name: string, value: T, plain?: boolean): T | boolean;
+  submit(handler: (data: output<T>) => Promise<void> | void, settle?: boolean): Promise<void>;
 };
 
 /**
@@ -125,6 +132,7 @@ export type FormFieldState<T> = {
   set value(value: T);
   get error(): string[] | undefined;
   get valid(): boolean;
+  get disabled(): boolean;
   input(props: FormInputProps<T>, options?: FormInputOptions<T>): FormInputState;
 };
 
@@ -138,6 +146,7 @@ export type FormInputProps<T = unknown> = {
   name?: string;
   value?: T;
   checked?: boolean;
+  disabled?: boolean;
 };
 
 /**
@@ -162,6 +171,7 @@ export type FormInputState = {
   get valid(): boolean;
   get checked(): boolean;
   set checked(checked: boolean);
+  get disabled(): boolean;
   locked: boolean;
   settled(): void;
 };

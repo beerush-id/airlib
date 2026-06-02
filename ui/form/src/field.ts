@@ -28,6 +28,9 @@ export function formField<T>(name: string): FormFieldState<T> {
     get valid(): boolean {
       return !form?.errors[name];
     },
+    get disabled() {
+      return form?.pending ?? false;
+    },
     input(props: FormInputProps<T>, options?: FormInputOptions<T>) {
       return formInput(props, options);
     },
@@ -79,6 +82,9 @@ export function formInput<T>(props: FormInputProps<T>, options?: FormInputOption
 
       self.locked = false;
     },
+    get disabled() {
+      return (props.disabled || field?.disabled) ?? false;
+    },
     get checked() {
       return buffer.checked;
     },
@@ -89,7 +95,8 @@ export function formInput<T>(props: FormInputProps<T>, options?: FormInputOption
       self.locked = true;
 
       props.checked = checked;
-      if ((type === FORM_INPUT.radio || type === FORM_INPUT.toggle) && checked && field) field.value = buffer.value as T;
+      if ((type === FORM_INPUT.radio || type === FORM_INPUT.toggle) && checked && field)
+        field.value = buffer.value as T;
       if (type === FORM_INPUT.checkbox && field) field.value = checked as T;
 
       self.locked = false;

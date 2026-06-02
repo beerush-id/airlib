@@ -17,6 +17,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@anchorlib/core": "catalog:lib"
+  },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
     "@types/bun": "catalog:",
@@ -28,7 +31,6 @@
     "vitest": "catalog:"
   },
   "peerDependencies": {
-    "@anchorlib/core": "catalog:lib",
     "typescript": "catalog:lib",
     "zod": "catalog:lib"
   },

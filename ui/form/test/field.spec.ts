@@ -18,6 +18,9 @@ describe('formField', () => {
       // valid getter (always true without form)
       expect(field.valid).toBe(true);
 
+      // disabled getter (always false without form)
+      expect(field.disabled).toBe(false);
+
       // error getter (always undefined without form)
       expect(field.error).toBeUndefined();
 
@@ -34,6 +37,7 @@ describe('formField', () => {
       const mockForm = {
         fields: { test_field: 'initial_value' } as Record<string, AnyType>,
         errors: { test_field: ['invalid format'] } as Record<string, string[]>,
+        pending: false,
       };
 
       let mockField: AnyType = undefined;
@@ -58,6 +62,12 @@ describe('formField', () => {
 
       // valid getter
       expect(field.valid).toBe(false);
+
+      // disabled getter inherits from form.pending
+      mockForm.pending = true;
+      expect(field.disabled).toBe(true);
+      mockForm.pending = false;
+      expect(field.disabled).toBe(false);
 
       // value setter passes to form.setter
       field.value = 'new_value';

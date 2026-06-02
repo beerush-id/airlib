@@ -79,6 +79,7 @@ export const UserForm = setup<UserFormProps>((props) => {
         type={name.type} 
         name={name.name}
         value={name.value}
+        disabled={name.disabled}
         onInput={(e) => { name.value = e.currentTarget.value; }}
         onBlur={() => { name.settled(); }}
       />
@@ -87,6 +88,7 @@ export const UserForm = setup<UserFormProps>((props) => {
         type={age.type} 
         name={age.name}
         value={age.value}
+        disabled={age.disabled}
         onInput={(e) => { age.value = e.currentTarget.value; }}
         onBlur={() => { age.settled(); }}
       />
@@ -95,7 +97,7 @@ export const UserForm = setup<UserFormProps>((props) => {
 });
 ```
 
-The input controller handles two-way data binding, string parsing, and event synchronization for the underlying input element.
+The input controller handles two-way data binding, string parsing, event synchronization, and automatically inherits the form's `pending` state via the `disabled` property to lock inputs during network submission.
 
 ## Form Context
 To build composable input components without passing props, use the `formField` API to automatically inherit the form context.
@@ -115,6 +117,7 @@ export const TextInput = setup<{ name: string, label: string, type?: FormInputTy
         type={input.type}
         name={input.name}
         value={input.value}
+        disabled={input.disabled}
         onInput={(e) => { input.value = e.currentTarget.value; }}
         onBlur={() => { input.settled(); }}
       />
@@ -126,10 +129,45 @@ export const TextInput = setup<{ name: string, label: string, type?: FormInputTy
 
 The `formField` function automatically discovers the closest form provider in the component tree.
 
-## Component Usage
+## Form Submission
+The `.submit()` method handles the complete submission lifecycle. It executes the provided handler, tracks the network status (`IDLE`, `PENDING`, `SUCCESS`, `ERROR`), prevents concurrent race conditions by locking the form, and automatically maps its `pending` status down to the `disabled` state of all connected input fields. 
+
+Additionally, on a successful submission, the form natively cleans up its dirty state (dropping `form.changed` to `false`) making the submitted data the new baseline.
 
 ```tsx
-export const ProfileForm = setup(() => (
-  
-))
+export const ProfileForm = setup(() => {
+  const form = userForm({ value: { name: '', age: 0 } });
+
+  const saveProfile = async (data: { name: string, age: number }) => {
+    // Perform async network requests
+    await fetch('/api/user', { method: 'POST', body: JSON.stringify(data) });
+  };
+
+  return render(() => (
+    <form>
+      {/* ... Form inputs ... */}
+
+      {/* 
+        `canSubmit` automatically ensures the form is valid, has active changes, 
+        and is not currently pending.
+      */}
+      <button 
+        disabled={!form.canSubmit}
+        onClick={(e) => {
+          e.preventDefault();
+          form.submit(saveProfile);
+        }}
+      >
+        {form.pending ? 'Saving...' : 'Save Profile'}
+      </button>
+
+      {/* Surface runtime errors strictly typed to the form API */}
+      {form.status === 'error' && (
+        <div className="error-banner">{form.error?.message}</div>
+      )}
+    </form>
+  ));
+});
 ```
+
+By relying on `.submit(handler)`, developers completely avoid boilerplate loading-states, manual network try/catch blocks, and dirty-state reset procedures across the application.
