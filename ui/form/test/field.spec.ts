@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { FORM_SYMBOL } from '../src/contant.js';
+import { FORM_FIELD_SYMBOL, FORM_SYMBOL } from '../src/contant.js';
 import { context } from '../src/context.js';
 import { formField } from '../src/field.js';
 import type { AnyType } from '../src/types.js';
@@ -36,13 +36,17 @@ describe('formField', () => {
         errors: { test_field: ['invalid format'] } as Record<string, string[]>,
       };
 
+      let mockField: AnyType = undefined;
       vi.spyOn(context, 'read').mockImplementation((symbol) => {
         if (symbol === FORM_SYMBOL) return mockForm;
+        if (symbol === FORM_FIELD_SYMBOL) return mockField;
         return undefined;
       });
 
       // Context write will be called by formField, spy on it
-      const writeSpy = vi.spyOn(context, 'write').mockImplementation(() => {});
+      const writeSpy = vi.spyOn(context, 'write').mockImplementation((sym, val) => {
+        if (sym === FORM_FIELD_SYMBOL) mockField = val;
+      });
 
       const field = formField('test_field');
 
@@ -58,6 +62,12 @@ describe('formField', () => {
       // value setter passes to form.setter
       field.value = 'new_value';
       expect(field.value).toBe('new_value');
+
+      // input method returns formInputState
+      const inputState = field.input({ type: 'text' });
+      expect(inputState).toBeDefined();
+      expect(inputState.name).toBe('test_field');
+      expect(inputState.type).toBe('text');
 
       // settled method uses form.fields
       mockForm.fields['test_field'] = 'settled_value';

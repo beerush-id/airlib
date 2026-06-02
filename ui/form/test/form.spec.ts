@@ -121,11 +121,18 @@ describe('FormState API', () => {
       form.fields['address.zip'] = '123'; // zip requires min(5)
       expect(form.errors['address.zip']).toBeDefined();
 
+      // Make a valid child property change to verify changeStore cleanup
+      form.fields['address.city'] = 'Boston';
+      expect(form.changes).toHaveProperty('address.city');
+
       // Replace the parent object
       form.fields['address'] = { city: 'SF', zip: '94105' };
 
       // Verify the child error was cleaned up
       expect(form.errors['address.zip']).toBeUndefined();
+
+      // Verify the child change was cleaned up and replaced by parent change
+      expect(form.changes).toEqual({ address: { city: 'SF', zip: '94105' } });
 
       // The parent object should now be stored correctly
       expect(form.fields['address']).toEqual({ city: 'SF', zip: '94105' });
@@ -363,6 +370,16 @@ describe('FormState API', () => {
       field.value = 'test_value';
 
       expect(field.value).toBeUndefined();
+    });
+
+    it('should return a formField via form.field() shortcut', () => {
+      const props = { value: { name: 'Alice' } };
+      const form = formState(z.object({ name: z.string() }), props);
+
+      const field = form.field('name');
+      expect(field).toBeDefined();
+      expect(field.name).toBe('name');
+      expect(field.value).toBe('Alice');
     });
   });
 

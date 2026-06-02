@@ -2,6 +2,7 @@ import { anchor, type LinkableSchema, mutable, onCleanup, subscribe } from '@anc
 import type { input, ZodType } from 'zod';
 import { FORM_SYMBOL } from './contant.js';
 import { context } from './context.js';
+import { formField } from './field.js';
 import { flattenData, flattenError, unflattenData } from './flatten.js';
 import { getSchemaByPath } from './schema.js';
 import type { AnyType, FormState, FormStateOptions } from './types.js';
@@ -9,12 +10,12 @@ import { writePath } from './utils.js';
 
 /**
  * Creates a reactive form state based on a Zod schema.
- * 
+ *
  * This function initializes a form context that manages values, errors,
  * and validation state. It automatically flattens the schema and data for
  * efficient deep property updates, and handles reactivity when integrated
  * with the Anchor reactivity system.
- * 
+ *
  * @param schema - The Zod schema to validate the form against.
  * @param props - An object containing the initial `value` for the form. If the `props` object is reactive (Anchor bound), the form will automatically synchronize when `props.value` changes.
  * @param options - Configuration options for the form state (e.g., `strict`, `validateOnInit`, `onChange`).
@@ -66,6 +67,9 @@ export function formState<T extends LinkableSchema>(
     }
     for (const key of errorStore.keys()) {
       if (key.startsWith(startPath)) errorStore.delete(key);
+    }
+    for (const key of changeStore.keys()) {
+      if (key.startsWith(startPath)) changeStore.delete(key);
     }
   };
 
@@ -165,6 +169,9 @@ export function formState<T extends LinkableSchema>(
     },
     get changes() {
       return unflattenData(changeStore);
+    },
+    field(fieldPath: string) {
+      return formField(fieldPath);
     },
     reset() {
       self.locked = true;

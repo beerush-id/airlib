@@ -86,6 +86,7 @@ export type FormState<T extends ZodType> = {
   get changes(): Partial<output<T>>;
 
   locked: boolean;
+  field<K extends DeepPaths<input<T>>>(field: K): FormFieldState<PathValue<input<T>, K>>;
   reset(): FormState<T>;
   setter<T>(name: string, value: T, plain: true): T;
   setter<T>(name: string, value: T, plain?: boolean): T | boolean;
@@ -101,6 +102,7 @@ export type FormFieldState<T> = {
   set value(v: AnyType);
   get error(): string[] | undefined;
   get valid(): boolean;
+  input(props: FormInputProps<T>, options?: FormInputOptions<T>): FormInputState;
 };
 
 export type InputType = (typeof FORM_INPUT)[keyof typeof FORM_INPUT];
