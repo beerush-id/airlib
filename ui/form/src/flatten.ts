@@ -18,8 +18,10 @@ export function flattenData(store: Map<string, AnyType>, data: AnyType, path = '
   }
 
   if (Array.isArray(data)) {
+    if (path) store.set(path, data);
     data.forEach((item, i) => flattenData(store, item, path ? `${path}.${i}` : `${i}`));
   } else {
+    if (path) store.set(path, data);
     for (const [key, value] of Object.entries(data)) {
       flattenData(store, value, path ? `${path}.${key}` : key);
     }
