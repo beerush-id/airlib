@@ -1,6 +1,7 @@
-import { ZodError } from 'zod';
+import type { ZodError } from 'zod';
+import type { AnyType } from './types.js';
 
-export function flattenData(store: Map<string, any>, data: any, path = '') {
+export function flattenData(store: Map<string, AnyType>, data: AnyType, path = '') {
   if (data === undefined || data === null || typeof data !== 'object' || data instanceof Date) {
     if (path) {
       store.set(path, data);
@@ -25,8 +26,8 @@ export function flattenData(store: Map<string, any>, data: any, path = '') {
   }
 }
 
-export function unflattenData(flatData: Map<string, any>): any {
-  const result: any = {};
+export function unflattenData(flatData: Map<string, AnyType>): AnyType {
+  const result: AnyType = {};
 
   if (flatData.size === 0) {
     return result;

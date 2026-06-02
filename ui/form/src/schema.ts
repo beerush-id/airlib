@@ -1,12 +1,13 @@
 import type { ZodType } from 'zod';
+import type { AnyType } from './types.js';
 
 export function getSchemaByPath(schema: ZodType, path: string): ZodType | undefined {
   if (!path || path === 'root') return schema;
 
   const keys = path.split('.');
-  let current: any = schema;
+  let current: AnyType = schema;
 
-  const unwrap = (node: any) => {
+  const unwrap = (node: AnyType) => {
     let unwrapped = false;
     while (node && !unwrapped) {
       if (node.shape || node.element) {
