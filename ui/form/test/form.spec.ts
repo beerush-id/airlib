@@ -1,4 +1,4 @@
-import { createLifecycle, mutable } from '@anchorlib/core';
+import { createLifecycle, effect, mutable } from '@anchorlib/core';
 import { describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import type { AnyType, FormDataMap, FormErrorMap, FormState } from '../src/index.js';
@@ -62,22 +62,22 @@ describe('FormState API', () => {
       expect(form.changes).toEqual({ address: { city: 'LA' } });
 
       // changeList should track the raw changed paths
-      expect(form.changeList).toBeInstanceOf(Map);
-      expect(form.changeList.has('address.city')).toBe(true);
-      expect(form.changeList.size).toBe(1);
+      expect(form.changeList).toBeTypeOf('object');
+      expect(Object.hasOwn(form.changeList, 'address.city')).toBe(true);
+      expect(Object.keys(form.changeList).length).toBe(1);
 
       // Mutate another field
       form.fields['name'] = 'Jane';
       expect(form.changes).toEqual({ name: 'Jane', address: { city: 'LA' } });
-      expect(form.changeList.has('name')).toBe(true);
-      expect(form.changeList.size).toBe(2);
+      expect(Object.hasOwn(form.changeList, 'name')).toBe(true);
+      expect(Object.keys(form.changeList).length).toBe(2);
 
       // Reverting to original data resets the change flag for that field
       form.fields['name'] = 'John';
       form.fields['address.city'] = 'NY';
       expect(form.changed).toBe(false);
       expect(form.changes).toEqual({});
-      expect(form.changeList.size).toBe(0);
+      expect(Object.keys(form.changeList).length).toBe(0);
     });
 
     it('should correctly rebuild the complete output hierarchy', () => {
@@ -406,12 +406,12 @@ describe('FormState API', () => {
       });
 
       form.fields['name'] = 'Alice';
-      expect(changedData!.get('name')).toBe('Alice');
-      expect(validatedErrors!.size).toBe(0);
+      expect(changedData!['name']).toBe('Alice');
+      expect(Object.keys(validatedErrors!).length).toBe(0);
 
       form.fields['name'] = 'Al'; // Invalid length
-      expect(changedData!.get('name')).toBe('Alice');
-      expect(validatedErrors!.get('name')).toBeDefined();
+      expect(changedData!['name']).toBe('Alice');
+      expect(validatedErrors!['name']).toBeDefined();
     });
   });
 
@@ -674,6 +674,191 @@ describe('FormState API', () => {
       await Promise.all([sub1, sub2]);
 
       expect(handler).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Fine-Grained Reactivity', () => {
+    it('should only trigger the effect watching a specific field when that field changes', () => {
+      const props = {
+        value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
+      };
+      const form = formState(userSchema, props);
+
+      const nameSpy = vi.fn();
+      const ageSpy = vi.fn();
+
+      effect(() => {
+        nameSpy(form.fields['name']);
+      });
+      effect(() => {
+        ageSpy(form.fields['age']);
+      });
+
+      expect(nameSpy).toHaveBeenCalledTimes(1);
+      expect(ageSpy).toHaveBeenCalledTimes(1);
+
+      form.fields['name'] = 'Bob';
+
+      expect(nameSpy).toHaveBeenCalledTimes(2);
+      expect(ageSpy).toHaveBeenCalledTimes(1); // age effect must NOT re-run
+    });
+
+    it('should only trigger the error effect for the field that failed validation', () => {
+      const props = {
+        value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
+      };
+      const form = formState(userSchema, props);
+
+      const nameErrorSpy = vi.fn();
+      const ageErrorSpy = vi.fn();
+
+      effect(() => {
+        nameErrorSpy(form.errors['name']);
+      });
+      effect(() => {
+        ageErrorSpy(form.errors['age']);
+      });
+
+      expect(nameErrorSpy).toHaveBeenCalledTimes(1);
+      expect(ageErrorSpy).toHaveBeenCalledTimes(1);
+
+      // Trigger a validation error on name only
+      form.fields['name'] = 'Al'; // min(3) fails
+
+      expect(nameErrorSpy).toHaveBeenCalledTimes(2);
+      expect(ageErrorSpy).toHaveBeenCalledTimes(1); // age error effect must NOT re-run
+    });
+
+    it('should isolate nested field effects from sibling field mutations', () => {
+      const props = {
+        value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
+      };
+      const form = formState(userSchema, props);
+
+      const citySpy = vi.fn();
+      const zipSpy = vi.fn();
+
+      effect(() => {
+        citySpy(form.fields['address.city']);
+      });
+      effect(() => {
+        zipSpy(form.fields['address.zip']);
+      });
+
+      expect(citySpy).toHaveBeenCalledTimes(1);
+      expect(zipSpy).toHaveBeenCalledTimes(1);
+
+      form.fields['address.city'] = 'LA';
+
+      expect(citySpy).toHaveBeenCalledTimes(2);
+      expect(zipSpy).toHaveBeenCalledTimes(1); // zip effect must NOT re-run
+    });
+
+    it('should trigger changeSize effect only when changeSize value changes', () => {
+      const props = {
+        value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
+      };
+      const form = formState(userSchema, props);
+
+      const sizeSpy = vi.fn();
+      const nameSpy = vi.fn();
+
+      // Track the changed boolean (reads store.changeSize internally)
+      effect(() => {
+        sizeSpy(form.changed);
+      });
+      // Track name field independently
+      effect(() => {
+        nameSpy(form.fields['name']);
+      });
+
+      expect(sizeSpy).toHaveBeenCalledTimes(1);
+      expect(nameSpy).toHaveBeenCalledTimes(1);
+
+      // First change: changeSize 0 → 1
+      form.fields['name'] = 'Bob';
+      expect(sizeSpy).toHaveBeenCalledTimes(2);
+      expect(nameSpy).toHaveBeenCalledTimes(2);
+
+      // Second change on different field: changeSize 1 → 2
+      // sizeSpy re-runs because the tracked value (changeSize) changed
+      // nameSpy must NOT re-run — name didn't change
+      form.fields['address.city'] = 'LA';
+      expect(sizeSpy).toHaveBeenCalledTimes(3);
+      expect(nameSpy).toHaveBeenCalledTimes(2); // Fine-grained: name is isolated
+    });
+
+    it('should not trigger field effects when an unrelated field is reset to its original value', () => {
+      const props = {
+        value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
+      };
+      const form = formState(userSchema, props);
+
+      const nameSpy = vi.fn();
+
+      form.fields['name'] = 'Bob';
+      form.fields['age'] = 30;
+
+      effect(() => {
+        nameSpy(form.fields['name']);
+      });
+
+      expect(nameSpy).toHaveBeenCalledTimes(1);
+
+      // Revert age back to original — name effect must not fire
+      form.fields['age'] = 25;
+
+      expect(nameSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Touched Tracking', () => {
+    it('should automatically mark a field as touched on first mutation', () => {
+      const props = {
+        value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
+      };
+      const form = formState(userSchema, props);
+
+      expect(form.touched['name']).toBeUndefined();
+      expect(form.touched['age']).toBeUndefined();
+
+      form.fields['name'] = 'Bob';
+
+      expect(form.touched['name']).toBe(true);
+      expect(form.touched['age']).toBeUndefined(); // untouched
+    });
+
+    it('should persist touched even after reverting value to original', () => {
+      const props = {
+        value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
+      };
+      const form = formState(userSchema, props);
+
+      form.fields['name'] = 'Bob';
+      expect(form.touched['name']).toBe(true);
+      expect(form.changed).toBe(true);
+
+      // Revert to original
+      form.fields['name'] = 'Alice';
+      expect(form.changed).toBe(false); // no diff from initial
+      expect(form.touched['name']).toBe(true); // still touched — can't un-touch
+    });
+
+    it('should clear all touched state on reset', () => {
+      const props = {
+        value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
+      };
+      const form = formState(userSchema, props);
+
+      form.fields['name'] = 'Bob';
+      form.fields['age'] = 30;
+      expect(form.touched['name']).toBe(true);
+      expect(form.touched['age']).toBe(true);
+
+      form.reset();
+
+      expect(form.touched['name']).toBeUndefined();
+      expect(form.touched['age']).toBeUndefined();
     });
   });
 });

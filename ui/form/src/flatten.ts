@@ -1,10 +1,10 @@
 import type { ZodError } from 'zod';
 import type { AnyType } from './types.js';
 
-export function flattenData(store: Map<string, AnyType>, data: AnyType, path = '') {
+export function flattenData(store: Record<string, AnyType>, data: AnyType, path = '') {
   if (data === undefined || data === null || typeof data !== 'object' || data instanceof Date) {
     if (path) {
-      store.set(path, data);
+      store[path] = data;
     }
     return;
   }
@@ -12,40 +12,43 @@ export function flattenData(store: Map<string, AnyType>, data: AnyType, path = '
   const keys = Object.keys(data);
   if (keys.length === 0) {
     if (path) {
-      store.set(path, data);
+      store[path] = data;
     }
     return;
   }
 
   if (Array.isArray(data)) {
-    if (path) store.set(path, data);
+    if (path) store[path] = data;
     data.forEach((item, i) => flattenData(store, item, path ? `${path}.${i}` : `${i}`));
   } else {
-    if (path) store.set(path, data);
+    if (path) store[path] = data;
     for (const [key, value] of Object.entries(data)) {
       flattenData(store, value, path ? `${path}.${key}` : key);
     }
   }
 }
 
-export function unflattenData(flatData: Map<string, AnyType>): AnyType {
+export function unflattenData(flatData: Record<string, AnyType>): AnyType {
   const result: AnyType = {};
+  const keys = Object.keys(flatData);
 
-  if (flatData.size === 0) {
+  if (keys.length === 0) {
     return result;
   }
 
-  for (const [path, value] of flatData.entries()) {
+  for (const path of keys) {
+    const value = flatData[path];
+
     if (path === 'root' || !path) {
       return value;
     }
 
-    const keys = path.split('.');
+    const segments = path.split('.');
     let current = result;
 
-    for (let i = 0; i < keys.length - 1; i++) {
-      const key = keys[i];
-      const nextKey = keys[i + 1];
+    for (let i = 0; i < segments.length - 1; i++) {
+      const key = segments[i];
+      const nextKey = segments[i + 1];
 
       if (current[key] === undefined) {
         current[key] = /^\d+$/.test(nextKey) ? [] : {};
@@ -53,23 +56,23 @@ export function unflattenData(flatData: Map<string, AnyType>): AnyType {
       current = current[key];
     }
 
-    current[keys[keys.length - 1]] = value;
+    current[segments[segments.length - 1]] = value;
   }
 
   return result;
 }
 
-export function flattenError(store: Map<string, string[]>, error: ZodError) {
+export function flattenError(store: Record<string, string[]>, error: ZodError) {
   const issues = error.issues;
 
   for (const issue of issues) {
     const path = issue.path.join('.');
-    const existing = store.get(path);
+    const existing = store[path];
 
     if (existing) {
       existing.push(issue.message);
     } else {
-      store.set(path, [issue.message]);
+      store[path] = [issue.message];
     }
   }
 }

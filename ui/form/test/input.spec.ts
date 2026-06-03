@@ -6,7 +6,7 @@ import { formInput } from '../src/field.js';
 import type { AnyType, FormFieldState } from '../src/types.js';
 
 function mockField<T>(name: string, value: T, error?: string[]): FormFieldState<T> {
-  const state = mutable({ value, disabled: false, changed: false });
+  const state = mutable({ value, disabled: false, changed: false, touched: false });
   return {
     get name() {
       return name;
@@ -34,6 +34,9 @@ function mockField<T>(name: string, value: T, error?: string[]): FormFieldState<
     },
     set changed(v: boolean) {
       state.changed = v;
+    },
+    get touched() {
+      return state.touched;
     },
   } as FormFieldState<T>;
 }
@@ -478,6 +481,33 @@ describe('formInput', () => {
       const state = formInput({ name: 'test', type: 'text' });
 
       expect(state.changed).toBe(false);
+
+      vi.restoreAllMocks();
+    });
+  });
+  describe('touched tracking', () => {
+    it('should reflect field.touched on input state', () => {
+      const field = mockField('username', 'John');
+      vi.spyOn(context, 'read').mockReturnValue(field);
+
+      const state = formInput({ name: 'username', type: 'text' });
+
+      expect(state.touched).toBe(false);
+
+      // Trigger touch by writing to field value (which would call setter in real form)
+      // For the mock, we need to set the internal state directly
+      Object.defineProperty(field, 'touched', { get: () => true });
+      expect(state.touched).toBe(true);
+
+      vi.restoreAllMocks();
+    });
+
+    it('should default to false without field context', () => {
+      vi.spyOn(context, 'read').mockReturnValue(undefined);
+
+      const state = formInput({ name: 'test', type: 'text' });
+
+      expect(state.touched).toBe(false);
 
       vi.restoreAllMocks();
     });

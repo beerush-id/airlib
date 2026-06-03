@@ -53,8 +53,8 @@ export type FormErrors<T> = {
 
 // biome-ignore lint/suspicious/noExplicitAny: Expect any.
 export type AnyType = any;
-export type FormDataMap = Map<string, AnyType>;
-export type FormErrorMap = Map<string, string[]>;
+export type FormDataMap = Record<string, AnyType>;
+export type FormErrorMap = Record<string, string[]>;
 
 export type FormStateProps<T> = {
   value?: T;
@@ -107,10 +107,11 @@ export type FormState<T extends ZodType> = {
   get fields(): FormFields<input<T>>;
   get errors(): FormErrors<input<T>>;
   get changed(): boolean;
+  get touched(): Record<string, boolean>;
   get valid(): boolean;
   get output(): output<T>;
   get changes(): Partial<output<T>>;
-  get changeList(): Map<string, AnyType>;
+  get changeList(): Record<string, AnyType>;
 
   get error(): Error | undefined;
   get status(): FormStatus;
@@ -137,6 +138,7 @@ export type FormFieldState<T> = {
   get error(): string[] | undefined;
   get valid(): boolean;
   get changed(): boolean;
+  get touched(): boolean;
   get disabled(): boolean;
   input(props: FormInputProps<T>, options?: FormInputOptions<T>): FormInputState;
 };
@@ -177,6 +179,7 @@ export type FormInputState = {
   get checked(): boolean;
   set checked(checked: boolean);
   get changed(): boolean;
+  get touched(): boolean;
   get disabled(): boolean;
   locked: boolean;
   settled(): void;

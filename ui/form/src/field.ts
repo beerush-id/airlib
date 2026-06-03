@@ -32,7 +32,10 @@ export function formField<T>(name: string): FormFieldState<T> {
       return form?.pending ?? false;
     },
     get changed() {
-      return form?.changeList.has(name) ?? false;
+      return form ? Object.hasOwn(form.changeList, name) : false;
+    },
+    get touched() {
+      return form?.touched[name] ?? false;
     },
     input(props: FormInputProps<T>, options?: FormInputOptions<T>) {
       return formInput(props, options);
@@ -87,6 +90,9 @@ export function formInput<T>(props: FormInputProps<T>, options?: FormInputOption
     },
     get changed() {
       return field?.changed ?? false;
+    },
+    get touched() {
+      return field?.touched ?? false;
     },
     get disabled() {
       return (props.disabled || field?.disabled) ?? false;

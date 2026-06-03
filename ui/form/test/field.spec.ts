@@ -37,12 +37,14 @@ describe('formField', () => {
 
   describe('With form context', () => {
     it('should interact with the form state properly', () => {
-      const changeStore = new Map<string, AnyType>();
+      const changeStore: Record<string, AnyType> = {};
+      const touchedStore: Record<string, boolean> = {};
       const mockForm = {
         fields: { test_field: 'initial_value' } as Record<string, AnyType>,
         errors: { test_field: ['invalid format'] } as Record<string, string[]>,
         pending: false,
         changeList: changeStore,
+        touched: touchedStore,
       };
 
       let mockField: AnyType = undefined;
@@ -89,10 +91,15 @@ describe('formField', () => {
       expect(field.value).toBe('settled_value');
       // changed getter
       expect(field.changed).toBe(false);
-      changeStore.set('test_field', 'new_value');
+      changeStore['test_field'] = 'new_value';
       expect(field.changed).toBe(true);
-      changeStore.delete('test_field');
+      delete changeStore['test_field'];
       expect(field.changed).toBe(false);
+
+      // touched getter
+      expect(field.touched).toBe(false);
+      touchedStore['test_field'] = true;
+      expect(field.touched).toBe(true);
 
       expect(writeSpy).toHaveBeenCalled();
 

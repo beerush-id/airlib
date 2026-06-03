@@ -34,7 +34,7 @@ export function formState<T extends LinkableSchema>(
   options?: FormStateOptions
 ): FormState<T> {
   const { strict = true, validateOnInit = true, settleOnSubmit = true, onChange } = options || ({} as FormStateOptions);
-  const inputStore = new Map<string, AnyType>();
+  const inputStore: Record<string, AnyType> = {};
   const flatSchema = new Map<string, ZodType>();
   const state = mutable<{
     status: FormStatus;
@@ -43,30 +43,36 @@ export function formState<T extends LinkableSchema>(
     status: FORM_STATUS.IDLE,
   });
 
-  const dataStore = mutable(new Map<string, AnyType>());
-  const errorStore = mutable(new Map<string, string[]>());
-  const changeStore = mutable(new Map<string, AnyType>());
+  const store = mutable({
+    fields: {} as Record<string, AnyType>,
+    errors: {} as Record<string, string[]>,
+    changes: {} as Record<string, AnyType>,
+    touched: {} as Record<string, boolean>,
+    changeSize: 0,
+  });
 
   const cleanup = () => {
-    inputStore.clear();
+    for (const key of Object.keys(inputStore)) delete inputStore[key];
     flatSchema.clear();
 
-    dataStore.clear();
-    errorStore.clear();
-    changeStore.clear();
+    store.fields = {};
+    store.errors = {};
+    store.changes = {};
+    store.touched = {};
+    store.changeSize = 0;
   };
 
   const initialize = (data: AnyType) => {
     const validation = schema.safeParse(data);
     const inputData = validation.success ? validation.data : data;
 
-    flattenData(dataStore, inputData);
-    for (const [path, value] of dataStore.entries()) {
-      inputStore.set(path, value);
+    flattenData(store.fields, inputData);
+    for (const key of Object.keys(store.fields)) {
+      inputStore[key] = store.fields[key];
     }
 
     if (!validation.success && validateOnInit) {
-      flattenError(errorStore, validation.error);
+      flattenError(store.errors, validation.error);
     }
   };
 
@@ -75,37 +81,58 @@ export function formState<T extends LinkableSchema>(
 
     const startPath = `${path}.`;
 
-    for (const key of dataStore.keys()) {
-      if (key.startsWith(startPath)) dataStore.delete(key);
+    for (const key of Object.keys(store.fields)) {
+      if (key.startsWith(startPath)) delete store.fields[key];
     }
-    for (const key of errorStore.keys()) {
-      if (key.startsWith(startPath)) errorStore.delete(key);
+    for (const key of Object.keys(store.errors)) {
+      if (key.startsWith(startPath)) delete store.errors[key];
     }
-    for (const key of changeStore.keys()) {
-      if (key.startsWith(startPath)) changeStore.delete(key);
+    for (const key of Object.keys(store.changes)) {
+      if (key.startsWith(startPath)) {
+        delete store.changes[key];
+        store.changeSize--;
+      }
     }
   };
 
   const moveEntry = (from: string, to: string) => {
-    dataStore.set(to, dataStore.get(from));
-    errorStore.has(from) ? errorStore.set(to, errorStore.get(from)!) : errorStore.delete(to);
-    changeStore.has(from) ? changeStore.set(to, changeStore.get(from)) : changeStore.delete(to);
+    store.fields[to] = store.fields[from];
+    if (Object.hasOwn(store.errors, from)) {
+      store.errors[to] = store.errors[from];
+    } else {
+      delete store.errors[to];
+    }
+    if (Object.hasOwn(store.changes, from)) {
+      store.changes[to] = store.changes[from];
+    } else if (Object.hasOwn(store.changes, to)) {
+      delete store.changes[to];
+      store.changeSize--;
+    }
   };
 
   const deleteEntry = (path: string) => {
-    dataStore.delete(path);
-    errorStore.delete(path);
-    changeStore.delete(path);
+    delete store.fields[path];
+    delete store.errors[path];
+    if (Object.hasOwn(store.changes, path)) {
+      delete store.changes[path];
+      store.changeSize--;
+    }
   };
 
   const write = (prop: string, value: AnyType) => {
     cleanOrphans(prop, value);
-    dataStore.set(prop, value);
+    store.fields[prop] = value;
 
-    if (value === inputStore.get(prop)) {
-      changeStore.delete(prop);
+    if (value === inputStore[prop]) {
+      if (Object.hasOwn(store.changes, prop)) {
+        delete store.changes[prop];
+        store.changeSize--;
+      }
     } else {
-      changeStore.set(prop, value);
+      if (!Object.hasOwn(store.changes, prop)) {
+        store.changeSize++;
+      }
+      store.changes[prop] = value;
     }
 
     if (props.value) {
@@ -114,10 +141,11 @@ export function formState<T extends LinkableSchema>(
       self.locked = false;
     }
 
-    onChange?.(dataStore, errorStore);
+    onChange?.(store.fields, store.errors);
   };
 
   const setter = (prop: string, value: AnyType) => {
+    store.touched[prop] = true;
     const schemaPath = prop.replace(/\.\d+/g, '.$');
     if (!flatSchema.has(schemaPath)) {
       const flatLeaf = getSchemaByPath(schema, schemaPath);
@@ -138,12 +166,9 @@ export function formState<T extends LinkableSchema>(
     if (validation.success) {
       value = validation.data;
       write(prop, value);
-      errorStore.delete(prop);
+      delete store.errors[prop];
     } else {
-      errorStore.set(
-        prop,
-        validation.error.issues.map((i) => i.message)
-      );
+      store.errors[prop] = validation.error.issues.map((i) => i.message);
     }
 
     return true;
@@ -153,7 +178,7 @@ export function formState<T extends LinkableSchema>(
     {},
     {
       get(_, prop: string) {
-        const value = dataStore.get(prop);
+        const value = store.fields[prop];
         if (typeof value === 'object' && value !== null) {
           return prop.split('.').reduce((acc, key) => (acc as AnyType)[key], props.value);
         }
@@ -170,7 +195,7 @@ export function formState<T extends LinkableSchema>(
     {},
     {
       get(_, prop: string) {
-        return errorStore.get(prop);
+        return store.errors[prop];
       },
       set() {
         console.warn('[AIR Form] Violation: form.errors is read-only.');
@@ -189,19 +214,19 @@ export function formState<T extends LinkableSchema>(
       return errorProxy;
     },
     get changed() {
-      return changeStore.size > 0;
+      return store.changeSize > 0;
     },
     get changeList() {
-      return changeStore;
+      return store.changes;
     },
     get valid() {
-      return errorStore.size === 0;
+      return Object.keys(store.errors).length === 0;
     },
     get output() {
-      return unflattenData(dataStore);
+      return unflattenData(anchor.get(store.fields));
     },
     get changes() {
-      return unflattenData(changeStore);
+      return unflattenData(anchor.get(store.changes));
     },
     get error() {
       return state.error;
@@ -215,6 +240,9 @@ export function formState<T extends LinkableSchema>(
     get canSubmit() {
       return self.valid && self.changed && !self.pending;
     },
+    get touched() {
+      return store.touched;
+    },
     field(fieldPath: string) {
       return formField(fieldPath);
     },
@@ -225,17 +253,19 @@ export function formState<T extends LinkableSchema>(
       delete state.error;
       state.status = FORM_STATUS.IDLE;
 
-      dataStore.clear();
+      store.fields = {};
       flatSchema.clear();
-      errorStore.clear();
-      changeStore.clear();
+      store.errors = {};
+      store.changes = {};
+      store.touched = {};
+      store.changeSize = 0;
 
-      for (const [path, value] of inputStore.entries()) {
-        dataStore.set(path, value);
-        if (props.value) writePath(props.value, path, value);
+      for (const path of Object.keys(inputStore)) {
+        store.fields[path] = inputStore[path];
+        if (props.value) writePath(props.value, path, inputStore[path]);
       }
 
-      onChange?.(dataStore, errorStore);
+      onChange?.(store.fields, store.errors);
 
       self.locked = false;
       return self;
@@ -248,15 +278,16 @@ export function formState<T extends LinkableSchema>(
       state.status = FORM_STATUS.PENDING;
 
       try {
-        await handler(unflattenData(anchor.get(dataStore)), unflattenData(anchor.get(changeStore)));
+        await handler(unflattenData(anchor.get(store.fields)), unflattenData(anchor.get(store.changes)));
         state.status = FORM_STATUS.SUCCESS;
 
         if (settle) {
-          inputStore.clear();
-          for (const [path, value] of dataStore.entries()) {
-            inputStore.set(path, value);
+          for (const key of Object.keys(inputStore)) delete inputStore[key];
+          for (const path of Object.keys(store.fields)) {
+            inputStore[path] = store.fields[path];
           }
-          changeStore.clear();
+          store.changes = {};
+          store.changeSize = 0;
         }
       } catch (error) {
         state.error = error as Error;
@@ -283,23 +314,23 @@ export function formState<T extends LinkableSchema>(
 
     if (ArrayMutations.has(event.type as AnyType)) {
       const type = event.type as AnyType;
-      const store = dataStore.get(prop) as unknown[];
+      const current = store.fields[prop] as unknown[];
       const args = event.value as unknown[];
 
       if (type === 'push') {
-        const start = store.length;
+        const start = current.length;
         args.forEach((arg, i) => {
           setter(`${prop}.${start + i}`, arg);
         });
       } else if (type === 'pop') {
-        deleteEntry(`${prop}.${store.length - 1}`);
+        deleteEntry(`${prop}.${current.length - 1}`);
       } else if (type === 'shift') {
-        for (let i = 0; i < store.length - 1; i++) {
+        for (let i = 0; i < current.length - 1; i++) {
           moveEntry(`${prop}.${i + 1}`, `${prop}.${i}`);
         }
-        deleteEntry(`${prop}.${store.length - 1}`);
+        deleteEntry(`${prop}.${current.length - 1}`);
       } else if (type === 'unshift') {
-        for (let i = store.length - 1; i >= 0; i--) {
+        for (let i = current.length - 1; i >= 0; i--) {
           moveEntry(`${prop}.${i}`, `${prop}.${i + args.length}`);
         }
         args.forEach((arg, i) => {
@@ -308,7 +339,7 @@ export function formState<T extends LinkableSchema>(
       } else if (type === 'splice') {
         const [start, deleteCount = 0, ...items] = args as [number, number, ...unknown[]];
 
-        const remaining = store.slice(start + deleteCount);
+        const remaining = current.slice(start + deleteCount);
         remaining.forEach((_, i) => {
           moveEntry(`${prop}.${start + deleteCount + i}`, `${prop}.${start + items.length + i}`);
         });
@@ -317,13 +348,13 @@ export function formState<T extends LinkableSchema>(
           setter(`${prop}.${start + i}`, item);
         });
 
-        const newLength = store.length - deleteCount + items.length;
-        for (let i = newLength; i < store.length; i++) {
+        const newLength = current.length - deleteCount + items.length;
+        for (let i = newLength; i < current.length; i++) {
           deleteEntry(`${prop}.${i}`);
         }
       } else {
         // sort, reverse, fill, copyWithin — re-sync from actual array
-        for (const key of [...dataStore.keys()]) {
+        for (const key of Object.keys(store.fields)) {
           if (key.startsWith(`${prop}.`)) deleteEntry(key);
         }
 
