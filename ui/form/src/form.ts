@@ -5,6 +5,7 @@ import {
   type LinkableSchema,
   mutable,
   onCleanup,
+  type StateChange,
   subscribe,
   untrack,
 } from '@anchorlib/core';
@@ -112,6 +113,7 @@ export function formState<T extends LinkableSchema>(
       writePath(props.value, prop, value);
       self.locked = false;
     }
+
     onChange?.(dataStore, errorStore);
   };
 
@@ -273,21 +275,8 @@ export function formState<T extends LinkableSchema>(
     props.value = mutable((props.value as AnyType) ?? {});
   }
 
-  // Sync value changes.
-  let initialized = false;
-  effect(() => {
-    const value = props.value;
-    untrack(() => initialize(value));
-
-    if (initialized) {
-      onChange?.(dataStore, errorStore);
-    } else {
-      initialized = true;
-    }
-  });
-
   // Sync external leaf changes.
-  const unsubscribe = subscribe(props.value, (_, event) => {
+  const synchronize = (_: input<T>, event: StateChange) => {
     if (event.type === 'init' || self.locked) return;
 
     const prop = event.keys.join('.');
@@ -350,12 +339,16 @@ export function formState<T extends LinkableSchema>(
     } else {
       setter(prop, event.value);
     }
+  };
+
+  // Sync value changes.
+  effect(() => {
+    const value = props.value!;
+    untrack(() => initialize(value));
+    return untrack(() => subscribe(value, synchronize));
   });
 
-  onCleanup(() => {
-    unsubscribe();
-    cleanup();
-  });
+  onCleanup(cleanup);
 
   context.write(FORM_SYMBOL, self);
 

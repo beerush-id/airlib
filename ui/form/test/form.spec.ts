@@ -321,21 +321,14 @@ describe('FormState API', () => {
     });
 
     it('should run sync callbacks and flatten errors when replacing data with invalid payload', () => {
-      let onChangeCalled = false;
-
       const props = mutable({ value: undefined as AnyType });
-      const form = formState(userSchema, props, {
-        onChange: () => {
-          onChangeCalled = true;
-        },
-      });
+      const form = formState(userSchema, props);
 
       // Replace with partial/invalid data to trigger sync(!init) failure path
       props.value = { name: 'Al' };
 
       expect(form.valid).toBe(false);
       expect(form.errors['name']).toBeDefined(); // Hits line 30-31
-      expect(onChangeCalled).toBe(true); // Hits line 35-36
     });
   });
 
