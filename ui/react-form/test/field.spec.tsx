@@ -1,5 +1,5 @@
 import '@anchorlib/react/client';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { Field } from '../src/Field.js';
@@ -107,6 +107,186 @@ describe('Field', () => {
 
       expect(screen.getByTestId('field-value').textContent).toBe('John');
       expect(screen.getByTestId('field-name').textContent).toBe('name');
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('should link label to input via htmlFor and auto-id', () => {
+      render(
+        <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }}>
+          <Field name="name" label="Full Name" data-testid="field">
+            <TextInput data-testid="input" />
+          </Field>
+        </Form>
+      );
+
+      const label = screen.getByText('Full Name');
+      const input = screen.getByTestId('input') as HTMLInputElement;
+
+      expect(label.getAttribute('for')).toBe('name');
+      expect(input.id).toBe('name');
+    });
+
+    it('should add error id and role=alert on validation error', () => {
+      render(
+        <Form schema={userSchema} value={{ name: 'Al', email: 'john@test.com' }}>
+          <Field name="name" label="Name" errorClass="error-text" data-testid="field">
+            <TextInput data-testid="input" />
+          </Field>
+        </Form>
+      );
+
+      const field = screen.getByTestId('field');
+      const error = field.querySelector('.error-text') as HTMLElement;
+
+      expect(error).toBeDefined();
+      expect(error.id).toBe('name-error');
+      expect(error.getAttribute('role')).toBe('alert');
+    });
+
+    it('should set aria-invalid and aria-describedby on input when errors exist', () => {
+      render(
+        <Form schema={userSchema} value={{ name: 'Al', email: 'john@test.com' }}>
+          <Field name="name" label="Name" errorClass="error-text">
+            <TextInput data-testid="input" />
+          </Field>
+        </Form>
+      );
+
+      const input = screen.getByTestId('input') as HTMLInputElement;
+
+      expect(input.getAttribute('aria-invalid')).toBe('true');
+      expect(input.getAttribute('aria-describedby')).toBe('name-error');
+    });
+
+    it('should not set aria-invalid when field is valid', () => {
+      render(
+        <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }}>
+          <Field name="name" label="Name">
+            <TextInput data-testid="input" />
+          </Field>
+        </Form>
+      );
+
+      const input = screen.getByTestId('input') as HTMLInputElement;
+
+      expect(input.getAttribute('aria-invalid')).toBeNull();
+      expect(input.getAttribute('aria-describedby')).toBeNull();
+    });
+
+    it('should sanitize dot paths to dashes for ids', () => {
+      const nestedSchema = z.object({
+        address: z.object({ city: z.string().min(2) }),
+      });
+
+      render(
+        <Form schema={nestedSchema} value={{ address: { city: 'NY' } }}>
+          <Field name="address.city" label="City" data-testid="field">
+            <TextInput data-testid="input" />
+          </Field>
+        </Form>
+      );
+
+      const label = screen.getByText('City');
+      const input = screen.getByTestId('input') as HTMLInputElement;
+
+      expect(label.getAttribute('for')).toBe('address-city');
+      expect(input.id).toBe('address-city');
+    });
+  });
+
+  describe('Match prop', () => {
+    const passwordSchema = z.object({
+      password: z.string().min(6, 'Too short'),
+      confirmPassword: z.string().min(6, 'Too short'),
+    });
+
+    it('should expose matched state in render function', () => {
+      render(
+        <Form schema={passwordSchema} value={{ password: 'secret', confirmPassword: 'secret' }}>
+          <Field name="confirmPassword" match="password">
+            {(field) => (
+              <div>
+                <span data-testid="matched">{String(field.matched)}</span>
+                <span data-testid="valid">{String(field.valid)}</span>
+              </div>
+            )}
+          </Field>
+        </Form>
+      );
+
+      expect(screen.getByTestId('matched').textContent).toBe('true');
+      expect(screen.getByTestId('valid').textContent).toBe('true');
+    });
+
+    it('should show valid but not matched when values differ', () => {
+      render(
+        <Form schema={passwordSchema} value={{ password: 'secret', confirmPassword: 'abcdef' }}>
+          <Field name="confirmPassword" match="password">
+            {(field) => (
+              <div>
+                <span data-testid="matched">{String(field.matched)}</span>
+                <span data-testid="valid">{String(field.valid)}</span>
+              </div>
+            )}
+          </Field>
+        </Form>
+      );
+
+      expect(screen.getByTestId('valid').textContent).toBe('true');
+      expect(screen.getByTestId('matched').textContent).toBe('false');
+    });
+
+    it('should not leak match prop to the DOM', () => {
+      render(
+        <Form schema={passwordSchema} value={{ password: 'secret', confirmPassword: 'secret' }}>
+          <Field name="confirmPassword" match="password" data-testid="field">
+            <TextInput />
+          </Field>
+        </Form>
+      );
+
+      const field = screen.getByTestId('field');
+      expect(field.getAttribute('match')).toBeNull();
+    });
+  });
+
+  describe('Touched tracking', () => {
+    it('should expose touched state in render function', () => {
+      render(
+        <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }}>
+          <Field name="name">
+            {(field) => (
+              <div>
+                <span data-testid="touched">{String(field.touched)}</span>
+              </div>
+            )}
+          </Field>
+        </Form>
+      );
+
+      expect(screen.getByTestId('touched').textContent).toBe('false');
+    });
+
+    it('should become touched after input mutation', () => {
+      render(
+        <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }}>
+          <Field name="name">
+            {(field) => (
+              <div>
+                <TextInput data-testid="input" />
+                <span data-testid="touched">{String(field.touched)}</span>
+              </div>
+            )}
+          </Field>
+        </Form>
+      );
+
+      expect(screen.getByTestId('touched').textContent).toBe('false');
+
+      fireEvent.input(screen.getByTestId('input'), { target: { value: 'Jane' } });
+
+      expect(screen.getByTestId('touched').textContent).toBe('true');
     });
   });
 });

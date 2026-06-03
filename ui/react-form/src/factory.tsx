@@ -17,8 +17,9 @@ interface TypedFormProps<T> extends Omit<FormHTMLAttributes<HTMLFormElement>, 'o
   onSubmit?: (data: T, changes: Partial<T>, e: SubmitEvent<HTMLFormElement>) => Promise<void> | void;
 }
 
-interface TypedFieldProps<T> extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+interface TypedFieldProps<T, S extends ZodType> extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   name: DeepPaths<T>;
+  match?: DeepPaths<T> | ((form: FormState<S>) => boolean);
   label?: string;
   labelClass?: string;
   errorClass?: string;
@@ -26,7 +27,7 @@ interface TypedFieldProps<T> extends Omit<HTMLAttributes<HTMLDivElement>, 'child
 }
 
 type TypedForm<T extends ZodType> = ReturnType<typeof setup<TypedFormProps<input<T>>>> & {
-  Field: ReturnType<typeof setup<TypedFieldProps<input<T>>>>;
+  Field: ReturnType<typeof setup<TypedFieldProps<input<T>, T>>>;
   FieldList: <K extends DeepPaths<input<T>>>(props: {
     name: K;
     children: (items: NonNullable<PathValue<input<T>, K>> extends (infer U)[] ? U[] : never) => ReactNode;
@@ -43,6 +44,7 @@ export function createForm<T extends ZodType>(schema: T): TypedForm<T> {
 
     const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
       e.preventDefault();
+      e.stopPropagation();
       if ($props.onSubmit) {
         form.submit((data: AnyType, changes: AnyType) => $props.onSubmit(data, changes, e));
       }
@@ -55,10 +57,12 @@ export function createForm<T extends ZodType>(schema: T): TypedForm<T> {
     ));
   });
 
-  const Field = setup<TypedFieldProps<input<T>>>((props) => {
+  const Field = setup<TypedFieldProps<input<T>, T>>((props) => {
     const $props = props as AnyType;
-    const field = formField($props.name);
-    const rest = props.$omit(['name', 'label', 'labelClass', 'errorClass', 'children']);
+    const field = formField($props.name, $props.match);
+    const rest = props.$omit(['name', 'match', 'label', 'labelClass', 'errorClass', 'children']);
+    const fieldId = $props.name.replace(/\./g, '-');
+    const errorId = `${fieldId}-error`;
 
     return render(() => {
       if (typeof $props.children === 'function') {
@@ -67,13 +71,17 @@ export function createForm<T extends ZodType>(schema: T): TypedForm<T> {
 
       return (
         <div {...rest}>
-          {$props.label && <label className={$props.labelClass}>{$props.label}</label>}
+          {$props.label && (
+            <label htmlFor={fieldId} className={$props.labelClass}>
+              {$props.label}
+            </label>
+          )}
           {$props.children}
-          {field.error?.map((err) => (
-            <span className={$props.errorClass} key={err}>
-              {err}
+          {field.error && (
+            <span id={errorId} className={$props.errorClass} role="alert">
+              {field.error.join(', ')}
             </span>
-          ))}
+          )}
         </div>
       );
     });

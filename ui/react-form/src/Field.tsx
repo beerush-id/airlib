@@ -1,9 +1,11 @@
 import { setup, render } from '@anchorlib/react';
-import { formField, type FormFieldState } from '@airlib/form';
+import { formField, type FormFieldState, type FormState } from '@airlib/form';
 import type { HTMLAttributes, ReactNode } from 'react';
+import type { ZodType } from 'zod';
 
 export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   name: string;
+  match?: string | ((form: FormState<ZodType>) => boolean);
   label?: string;
   labelClass?: string;
   errorClass?: string;
@@ -11,8 +13,10 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
 }
 
 export const Field = setup<FieldProps>((props) => {
-  const rest = props.$omit(['name', 'label', 'labelClass', 'errorClass', 'children']);
-  const field = formField(props.name);
+  const rest = props.$omit(['name', 'match', 'label', 'labelClass', 'errorClass', 'children']);
+  const field = formField(props.name, props.match);
+  const fieldId = props.name.replace(/\./g, '-');
+  const errorId = `${fieldId}-error`;
 
   return render(() => {
     if (typeof props.children === 'function') {
@@ -21,13 +25,17 @@ export const Field = setup<FieldProps>((props) => {
 
     return (
       <div {...rest}>
-        {props.label && <label className={props.labelClass}>{props.label}</label>}
+        {props.label && (
+          <label htmlFor={fieldId} className={props.labelClass}>
+            {props.label}
+          </label>
+        )}
         {props.children}
-        {field.error?.map((err) => (
-          <span className={props.errorClass} key={err}>
-            {err}
+        {field.error && (
+          <span id={errorId} className={props.errorClass} role="alert">
+            {field.error.join(', ')}
           </span>
-        ))}
+        )}
       </div>
     );
   });

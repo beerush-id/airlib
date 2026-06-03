@@ -19,6 +19,7 @@ export const Form = setup<FormProps>((props) => {
 
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     if (props.onSubmit) {
       form.submit((data, changes) => props.onSubmit!(data, changes, e));
     }

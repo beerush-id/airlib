@@ -6,8 +6,10 @@ export function createInput<P, T = AnyType>(type: string, options?: FormInputOpt
   return setup<P>((props) => {
     (props as AnyType).type = type;
     const input = formInput(props as AnyType, options);
-    const rest = props.$omit(['value', 'type', 'name', 'disabled', 'onInput', 'onBlur'] as AnyType);
+    const rest = props.$omit(['value', 'type', 'name', 'id', 'disabled', 'onInput', 'onBlur'] as AnyType);
     const $props = props as AnyType;
+    const fieldId = $props.id || input.name.replace(/\./g, '-');
+    const errorId = `${fieldId}-error`;
 
     const handleInput = (e: InputEvent<HTMLInputElement>) => {
       input.value = e.currentTarget.value;
@@ -22,10 +24,13 @@ export function createInput<P, T = AnyType>(type: string, options?: FormInputOpt
     return render(() => (
       <input
         {...rest}
+        id={fieldId}
         type={input.type}
         name={input.name}
         value={input.value}
         disabled={input.disabled}
+        aria-invalid={input.error ? true : undefined}
+        aria-describedby={input.error ? errorId : undefined}
         onInput={handleInput}
         onBlur={handleBlur}
       />

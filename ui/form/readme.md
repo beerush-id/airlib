@@ -3,11 +3,12 @@
 AIR Form is a reactive, framework-agnostic form engine powered by Zod schemas.
 
 ## AIR Stack Integration
-To use AIR Form inside a reactive component, create a strictly typed form factory outside the component, and initialize the form state within the component's `setup` phase.
+
+To use AIR Form inside a reactive component, create a typed form factory outside the component, and initialize the form state within the component's `setup` phase.
 
 ```tsx
 import { setup, render } from '@anchorlib/react';
-import { formFactory } from '@airlib/form';
+import { formState } from '@airlib/form';
 import { z } from 'zod';
 
 const userSchema = z.object({
@@ -15,12 +16,8 @@ const userSchema = z.object({
   age: z.number().min(18, 'Must be an adult'),
 });
 
-// Create a strictly typed factory outside the component
-const userForm = formFactory(userSchema);
-
 export const UserForm = setup((props) => {
-  // Initialize the reactive form state inside the component
-  const form = userForm({ 
+  const form = formState(userSchema, { 
     value: { name: '', age: 0 } 
   });
 
@@ -32,17 +29,18 @@ export const UserForm = setup((props) => {
 });
 ```
 
-The factory guarantees that the initialized `formState` is strictly typed to the schema and properly integrated with the reactive rendering cycle.
+The `formState` function creates a reactive store typed to the schema and integrated with the reactive rendering cycle.
 
 ## Field Selection
-To access a specific field within the form, use the `.field()` method on the initialized form.
+
+To access a specific field within the form, use the `formField` function or the `.field()` method.
 
 ```tsx
-export const UserForm = setup((props) => {
-  const form = userForm({ value: { name: '', age: 0 } });
+import { formField } from '@airlib/form';
 
-  // Isolate a strictly typed field boundary
-  const name = form.field('name');
+export const UserForm = setup((props) => {
+  const form = formState(userSchema, { value: { name: '', age: 0 } });
+  const name = formField('name');
 
   return render(() => (
     <div>
@@ -56,20 +54,56 @@ export const UserForm = setup((props) => {
 });
 ```
 
-The `.field()` method provides a strictly typed reactive boundary for the specified field, allowing isolated state updates and error checking.
+Each field provides reactive access to `value`, `error`, `valid`, `changed`, `touched`, `matched`, and `disabled`.
+
+## Touched Tracking
+
+Fields are marked as touched when their value is first mutated. This happens inside the form's setter, requiring no manual `onBlur` handlers.
+
+```tsx
+const name = formField('name');
+
+// Before any mutation
+name.touched; // false
+
+// After value change
+name.value = 'Alice';
+name.touched; // true — stays true until reset
+```
+
+Touched state persists even if the value reverts to its original. A field can be `changed: false` but `touched: true` — "you were here."
+
+## Cross-Field Matching
+
+To validate that one field equals another, pass a `match` parameter to `formField`.
+
+```tsx
+const confirm = formField('confirmPassword', 'password');
+
+confirm.matched; // true when values are equal
+confirm.valid;   // schema validation only — independent of matched
+```
+
+For custom cross-field logic beyond equality, pass a function.
+
+```tsx
+const endDate = formField('endDate', (form) =>
+  form.fields['endDate'] > form.fields['startDate']
+);
+```
+
+The function runs inside an `effect`, so Anchor tracks which fields it reads and re-evaluates when any of them change.
+
+`valid` and `matched` are separate signals. `valid` is schema-only. `matched` is match-only. The view layer composes them however it wants.
 
 ## Input Controllers
+
 To bind a field to a UI input, use the `.input()` method to generate an input controller.
 
 ```tsx
-export type UserFormProps = {
-  value?: { name: string, age: number }
-};
-
 export const UserForm = setup<UserFormProps>((props) => {
-  const form = userForm(props);
+  const form = formState(userSchema, props);
   
-  // Generate input controllers
   const name = form.field('name').input({ type: 'text' });
   const age = form.field('age').input({ type: 'number' });
 
@@ -97,17 +131,17 @@ export const UserForm = setup<UserFormProps>((props) => {
 });
 ```
 
-The input controller handles two-way data binding, string parsing, event synchronization, and automatically inherits the form's `pending` state via the `disabled` property to lock inputs during network submission.
+The input controller handles two-way data binding, string parsing, event synchronization, and inherits the form's `pending` state via the `disabled` property to lock inputs during network submission.
 
 ## Form Context
-To build composable input components without passing props, use the `formField` API to automatically inherit the form context.
+
+To build composable input components without passing props, use the `formField` API to inherit the form context.
 
 ```tsx
 import { formField, FormInputType } from '@airlib/form';
 import { setup, render } from '@anchorlib/react';
 
 export const TextInput = setup<{ name: string, label: string, type?: FormInputType }>((props) => {
-  // Automatically reads the Form context from the tree
   const input = formField<string>(props.name).input(props);
 
   return render(() => (
@@ -127,19 +161,19 @@ export const TextInput = setup<{ name: string, label: string, type?: FormInputTy
 });
 ```
 
-The `formField` function automatically discovers the closest form provider in the component tree.
+The `formField` function discovers the closest form provider in the component tree.
 
 ## Form Submission
-The `.submit()` method handles the complete submission lifecycle. It executes the provided handler, tracks the network status (`IDLE`, `PENDING`, `SUCCESS`, `ERROR`), prevents concurrent race conditions by locking the form, and automatically maps its `pending` status down to the `disabled` state of all connected input fields. 
 
-Additionally, on a successful submission, the form natively cleans up its dirty state (dropping `form.changed` to `false`) making the submitted data the new baseline.
+The `.submit()` method handles the complete submission lifecycle. It executes the provided handler, tracks the network status (`IDLE`, `PENDING`, `SUCCESS`, `ERROR`), prevents concurrent race conditions by locking the form, and maps its `pending` status down to the `disabled` state of all connected input fields. 
+
+On a successful submission, the form cleans up its dirty state (dropping `form.changed` to `false`) making the submitted data the new baseline.
 
 ```tsx
 export const ProfileForm = setup(() => {
-  const form = userForm({ value: { name: '', age: 0 } });
+  const form = formState(userSchema, { value: { name: '', age: 0 } });
 
   const saveProfile = async (data: { name: string, age: number }) => {
-    // Perform async network requests
     await fetch('/api/user', { method: 'POST', body: JSON.stringify(data) });
   };
 
@@ -147,10 +181,6 @@ export const ProfileForm = setup(() => {
     <form>
       {/* ... Form inputs ... */}
 
-      {/* 
-        `canSubmit` automatically ensures the form is valid, has active changes, 
-        and is not currently pending.
-      */}
       <button 
         disabled={!form.canSubmit}
         onClick={(e) => {
@@ -161,7 +191,6 @@ export const ProfileForm = setup(() => {
         {form.pending ? 'Saving...' : 'Save Profile'}
       </button>
 
-      {/* Surface runtime errors strictly typed to the form API */}
       {form.status === 'error' && (
         <div className="error-banner">{form.error?.message}</div>
       )}
@@ -170,4 +199,4 @@ export const ProfileForm = setup(() => {
 });
 ```
 
-By relying on `.submit(handler)`, developers completely avoid boilerplate loading-states, manual network try/catch blocks, and dirty-state reset procedures across the application.
+By relying on `.submit(handler)`, developers avoid boilerplate loading-states, manual network try/catch blocks, and dirty-state reset procedures across the application.

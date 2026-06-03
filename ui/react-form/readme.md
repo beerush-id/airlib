@@ -1,6 +1,6 @@
 # AIR React Form
 
-Handling form states, validations, and complex data structures like arrays and nested objects in standard React can be verbose and hard to optimize for performance. `@airlib/react-form` provides reactive form components built on top of `@anchorlib/react` to solve this, ensuring high performance without unnecessary re-renders while giving a deeply type-safe structure.
+Handling form states, validations, and complex data structures like arrays and nested objects in standard React can be verbose and hard to optimize for performance. `@airlib/react-form` provides reactive form components built on top of `@anchorlib/react` to solve this, ensuring high performance without unnecessary re-renders while giving a deep type-safe structure.
 
 ## Creating Typed Forms
 
@@ -18,11 +18,11 @@ const userSchema = z.object({
 export const UserForm = createForm(userSchema);
 ```
 
-The `createForm` function returns form components (`Form`, `Field`, `FieldList`) that are deeply typed against the provided Zod schema, ensuring autocompletion and compile-time checks for all field names.
+The `createForm` function returns form components (`Form`, `Field`, `FieldList`) typed against the provided Zod schema, ensuring autocompletion and compile-time checks for all field names.
 
 ## Building Form Interfaces
 
-Building the UI requires binding inputs to the form state. The typed form provides everything needed to structure the form securely.
+Building the UI requires binding inputs to the form state. The typed form provides everything needed to structure the form with type safety.
 
 ```tsx
 import { UserForm } from './form';
@@ -48,7 +48,61 @@ export function ProfileEditor() {
 }
 ```
 
-The `UserForm.Field` wrapper automatically tracks errors and provides them to the UI, while components like `TextInput` and `EmailInput` seamlessly connect to the form state under the hood. The `FormSubmit` and `FormReset` buttons intelligently track form changes and validation status, automatically enabling or disabling based on the form's readiness.
+The `UserForm.Field` wrapper tracks errors and provides them to the UI, while components like `TextInput` and `EmailInput` connect to the form state under the hood. The `FormSubmit` and `FormReset` buttons track form changes and validation status, enabling or disabling based on the form's readiness.
+
+## Cross-Field Matching
+
+Fields that must match another field (like confirm password) use the `match` prop.
+
+```tsx
+const passwordSchema = z.object({
+  password: z.string().min(6),
+  confirmPassword: z.string().min(6),
+});
+
+const PasswordForm = createForm(passwordSchema);
+
+export function ChangePassword() {
+  return (
+    <PasswordForm onSubmit={save}>
+      <PasswordForm.Field name="password" label="Password">
+        <PasswordInput />
+      </PasswordForm.Field>
+
+      <PasswordForm.Field name="confirmPassword" match="password">
+        {(field) => (
+          <div>
+            <PasswordInput />
+            {field.touched && field.error?.map(err => <span key={err}>{err}</span>)}
+            {!field.matched && <span>Passwords don't match</span>}
+          </div>
+        )}
+      </PasswordForm.Field>
+
+      <FormSubmit>Change Password</FormSubmit>
+    </PasswordForm>
+  );
+}
+```
+
+The `match` prop accepts a field path for equality checks, or a function for custom cross-field logic. `valid` and `matched` are separate signals — `valid` is schema-only, `matched` is match-only — the view layer decides how to compose them.
+
+For custom logic beyond equality:
+
+```tsx
+<RangeForm.Field name="max" match={(form) => form.fields['max'] > form.fields['min']}>
+```
+
+## Accessibility
+
+`Field` and input components handle accessibility attributes out of the box:
+
+- `<label>` gets `htmlFor` linked to the input's auto-generated `id`
+- Error messages render with `role="alert"` and a stable `id`
+- Inputs get `aria-invalid` when errors exist
+- Inputs get `aria-describedby` pointing to the error element
+
+Dot-path field names are sanitized to dashes for valid HTML ids (`address.city` → `address-city`).
 
 ## Handling Form Arrays
 
@@ -91,18 +145,17 @@ export function TeamEditor() {
 }
 ```
 
-The `FieldList` exposes the array items directly to the render function, allowing direct reactive mutations like `.push()` on the array. Because this uses `@anchorlib/react` under the hood, these mutations are automatically tracked without the need for verbose state management hooks.
+The `FieldList` exposes the array items to the render function, allowing direct reactive mutations like `.push()` on the array. Because this uses `@anchorlib/react` under the hood, these mutations are tracked without the need for verbose state management hooks.
 
 ## Working With Custom Inputs
 
-Sometimes standard inputs are not enough. Building custom inputs that integrate seamlessly with the form state is trivial using the built-in `formInput` hook or the `createInput` factory.
+Sometimes standard inputs are not enough. Building custom inputs that integrate with the form state is trivial using the built-in `formInput` hook or the `createInput` factory.
 
 ```tsx
 import { setup, render } from '@anchorlib/react';
 import { formInput } from '@airlib/form';
 
 export const CustomInput = setup<{ name: string }>((props) => {
-  // Automatically connects to the form field state via the `name` prop
   const input = formInput(props);
 
   return render(() => (
@@ -119,4 +172,4 @@ export const CustomInput = setup<{ name: string }>((props) => {
 });
 ```
 
-Using `formInput()` instantly wires up the input state, validation rules, and error tracking based on the provided `name` prop. This eliminates boilerplate and wrapper components, keeping your custom fields extremely clean and performant. For even simpler standard inputs, you can simply use the `createInput('text')` factory.
+Using `formInput()` wires up the input state, validation rules, and error tracking based on the provided `name` prop. For simpler standard inputs, use the `createInput('text')` factory.
