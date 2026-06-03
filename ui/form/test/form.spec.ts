@@ -598,7 +598,7 @@ describe('FormState API', () => {
 
       await form.submit(handler);
 
-      expect(handler).toHaveBeenCalledWith({ name: 'Jane' });
+      expect(handler).toHaveBeenCalledWith({ name: 'Jane' }, expect.objectContaining({}));
       expect(form.status).toBe('success');
       expect(form.pending).toBe(false);
       expect(form.changed).toBe(false); // Changes are cleared by default settle behavior

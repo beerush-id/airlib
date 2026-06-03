@@ -233,7 +233,7 @@ export function formState<T extends LinkableSchema>(
       state.status = FORM_STATUS.PENDING;
 
       try {
-        await handler(unflattenData(anchor.get(dataStore)));
+        await handler(unflattenData(anchor.get(dataStore)), unflattenData(anchor.get(changeStore)));
         state.status = FORM_STATUS.SUCCESS;
 
         if (settle) {

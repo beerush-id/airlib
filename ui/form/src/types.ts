@@ -120,7 +120,10 @@ export type FormState<T extends ZodType> = {
   locked: boolean;
   field<K extends DeepPaths<input<T>>>(field: K): FormFieldState<PathValue<input<T>, K>>;
   reset(): FormState<T>;
-  submit(handler: (data: output<T>) => Promise<void> | void, settle?: boolean): Promise<void>;
+  submit(
+    handler: (data: output<T>, changes: Partial<output<T>>) => Promise<void> | void,
+    settle?: boolean
+  ): Promise<void>;
 };
 
 /**
