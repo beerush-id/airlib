@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { FORM_FIELD_SYMBOL, FORM_SYMBOL } from '../src/contant.js';
+import { FORM_FIELD_SYMBOL, FORM_SYMBOL } from '../src/constant.js';
 import { context } from '../src/context.js';
 import { formField } from '../src/field.js';
 import type { AnyType } from '../src/types.js';

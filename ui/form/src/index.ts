@@ -1,11 +1,11 @@
 import type { ZodType } from 'zod';
-import { FORM_SYMBOL } from './contant.js';
+import { FORM_SYMBOL } from './constant.js';
 import { context } from './context.js';
 import { formField } from './field.js';
 import { formState } from './form.js';
 import type { AnyType, FormFactory } from './types.js';
 
-export { FORM_FIELD_SYMBOL, FORM_INPUT, FORM_INVALID_INPUT, FORM_STATUS, FORM_SYMBOL } from './contant.js';
+export { FORM_FIELD_SYMBOL, FORM_INPUT, FORM_INVALID_INPUT, FORM_STATUS, FORM_SYMBOL } from './constant.js';
 export { getForm, getFormField, setContextBridge } from './context.js';
 export * from './field.js';
 export * from './form.js';

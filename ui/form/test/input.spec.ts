@@ -1,6 +1,6 @@
 import { mutable } from '@anchorlib/core';
 import { describe, expect, it, vi } from 'vitest';
-import { FORM_FIELD_SYMBOL } from '../src/contant.js';
+import { FORM_FIELD_SYMBOL } from '../src/constant.js';
 import { context } from '../src/context.js';
 import { formInput } from '../src/field.js';
 import type { AnyType, FormFieldState } from '../src/types.js';

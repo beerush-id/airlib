@@ -10,7 +10,7 @@ import {
   untrack,
 } from '@anchorlib/core';
 import { type input, type ZodType } from 'zod';
-import { FORM_STATUS, FORM_SYMBOL } from './contant.js';
+import { FORM_STATUS, FORM_SYMBOL } from './constant.js';
 import { context } from './context.js';
 import { formField } from './field.js';
 import { flattenData, flattenError, unflattenData } from './flatten.js';

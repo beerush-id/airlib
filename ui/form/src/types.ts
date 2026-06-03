@@ -1,5 +1,5 @@
 import type { input, output, ZodType } from 'zod';
-import { FORM_INPUT, FORM_STATUS } from './contant.js';
+import { FORM_INPUT, FORM_STATUS } from './constant.js';
 
 type Primitive = null | undefined | string | number | boolean | symbol | bigint | Date;
 type IsTuple<T extends ReadonlyArray<any>> = number extends T['length'] ? false : true;

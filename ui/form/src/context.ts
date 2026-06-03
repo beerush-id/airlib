@@ -1,6 +1,6 @@
 import { getContext, setContext } from '@anchorlib/core';
 import type { ZodType } from 'zod';
-import { FORM_FIELD_SYMBOL, FORM_SYMBOL } from './contant.js';
+import { FORM_FIELD_SYMBOL, FORM_SYMBOL } from './constant.js';
 import type { ContextBridge, FormFieldState, FormState } from './types.js';
 
 export const context: ContextBridge = {

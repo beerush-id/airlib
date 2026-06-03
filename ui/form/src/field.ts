@@ -1,5 +1,5 @@
 import { effect, mutable } from '@anchorlib/core';
-import { FORM_FIELD_SYMBOL, FORM_INPUT, FORM_INVALID_INPUT } from './contant.js';
+import { FORM_FIELD_SYMBOL, FORM_INPUT, FORM_INVALID_INPUT } from './constant.js';
 import { context, getForm, getFormField } from './context.js';
 import type { AnyType, FormFieldState, FormInputOptions, FormInputProps, FormInputState, InputType } from './types.js';
 
