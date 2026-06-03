@@ -1,0 +1,66 @@
+{
+  "type": "module",
+  "name": "@airlib/solid-form",
+  "version": "0.0.1",
+  "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beerush-id/airlib.git"
+  },
+  "bugs": {
+    "url": "https://github.com/beerush-id/airlib/issues"
+  },
+  "sideEffects": false,
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "solid": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "src"],
+  "directories": {
+    "dist": "dist",
+    "src": "src"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@solidjs/testing-library": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/user-event": "catalog:",
+    "@types/bun": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
+    "jsdom": "catalog:",
+    "publint": "catalog:",
+    "rimraf": "catalog:",
+    "solid-js": "catalog:lib",
+    "tsdown": "catalog:",
+    "unplugin-solid": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-solid": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@airlib/form": "workspace:*",
+    "@anchorlib/solid": "catalog:lib",
+    "solid-js": "catalog:lib",
+    "typescript": "catalog:lib",
+    "zod": "catalog:lib"
+  },
+  "scripts": {
+    "dev": "tsdown --watch",
+    "clean": "rimraf dist",
+    "build": "bun run clean && tsdown && publint",
+    "prepublish": "bun run format && bun run build",
+    "format": "biome format --write",
+    "test": "rimraf coverage && vitest --run",
+    "test:preview": "rimraf coverage && vitest --run && vite preview --outDir coverage"
+  },
+  "license": "MIT"
+}
