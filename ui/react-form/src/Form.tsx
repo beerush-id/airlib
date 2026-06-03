@@ -1,6 +1,6 @@
-import { setup, render } from '@anchorlib/react';
-import { formState, type AnyType } from '@airlib/form';
-import type { ZodType, output } from 'zod';
+import { render, setup } from '@anchorlib/react';
+import { type AnyType, formState } from '@airlib/form';
+import type { ZodType } from 'zod';
 import type { FormHTMLAttributes, SubmitEvent } from 'react';
 
 export interface FormProps extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {

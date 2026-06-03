@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { createForm } from '../src/factory.js';
 import { TextInput } from '../src/inputs/TextInput.js';
+import { mutable } from '@anchorlib/react';
 
 afterEach(cleanup);
 
@@ -177,5 +178,44 @@ describe('createForm', () => {
     );
 
     expect(screen.getByTestId('count').textContent).toBe('0');
+  });
+
+  it('should support array mutations like push() in FieldList', async () => {
+    const UserForm = createForm(userSchema);
+    const data = mutable({ name: 'John', email: 'j@t.com', tags: ['react'] });
+
+    renderComponent(
+      <UserForm value={data}>
+        <UserForm.FieldList name="tags">
+          {(items) => (
+            <>
+              {items.map((_, i) => (
+                <UserForm.Field name={`tags.${i}`} key={i}>
+                  <TextInput data-testid={`tag-${i}`} />
+                </UserForm.Field>
+              ))}
+              <button
+                data-testid="add-tag"
+                type="button"
+                onClick={() => {
+                  items.push('vue');
+                }}
+              >
+                Add Tag
+              </button>
+            </>
+          )}
+        </UserForm.FieldList>
+      </UserForm>
+    );
+
+    expect((screen.getByTestId('tag-0') as HTMLInputElement).value).toBe('react');
+    expect(screen.queryByTestId('tag-1')).toBeNull();
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('add-tag'));
+    });
+
+    expect((screen.getByTestId('tag-1') as HTMLInputElement).value).toBe('vue');
   });
 });

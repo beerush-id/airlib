@@ -2,6 +2,15 @@
   "type": "module",
   "name": "@airlib/react-form",
   "version": "0.0.1",
+  "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beerush-id/airlib.git"
+  },
+  "bugs": {
+    "url": "https://github.com/beerush-id/airlib/issues"
+  },
+  "sideEffects": false,
   "types": "./dist/index.d.ts",
   "module": "./dist/index.js",
   "exports": {
@@ -17,10 +26,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@airlib/form": "workspace:*",
-    "@anchorlib/react": "catalog:lib"
-  },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
     "@testing-library/react": "catalog:",
@@ -34,14 +39,18 @@
     "vitest": "catalog:"
   },
   "peerDependencies": {
+    "@airlib/form": "workspace:*",
+    "@anchorlib/react": "catalog:lib",
+    "react": "catalog:lib",
+    "react-dom": "catalog:lib",
     "typescript": "catalog:lib",
     "zod": "catalog:lib"
   },
   "scripts": {
     "dev": "tsdown --watch",
     "clean": "rimraf dist",
-    "build": "tsdown && publint",
-    "prepublish": "tsdown && publint",
+    "build": "bun run clean && tsdown && publint",
+    "prepublish": "bun run format && bun run build",
     "format": "biome format --write",
     "test": "rimraf coverage && vitest --run",
     "test:preview": "rimraf coverage && vitest --run && vite preview --outDir coverage"

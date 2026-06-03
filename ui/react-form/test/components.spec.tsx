@@ -458,6 +458,38 @@ describe('FieldList', () => {
 
     expect(screen.getByTestId('count').textContent).toBe('0');
   });
+
+  it('should support array mutations like push()', async () => {
+    render(
+      <Form schema={schema} value={{ tags: ['react'] }}>
+        <FieldList name="tags">
+          {(items) => (
+            <>
+              <ul data-testid="list">
+                {items.map((item, i) => (
+                  <li key={i} data-testid={`tag-${i}`}>
+                    {String(item)}
+                  </li>
+                ))}
+              </ul>
+              <button data-testid="add-tag" onClick={() => items.push('vue')}>
+                Add Tag
+              </button>
+            </>
+          )}
+        </FieldList>
+      </Form>
+    );
+
+    expect(screen.getByTestId('tag-0').textContent).toBe('react');
+    expect(screen.queryByTestId('tag-1')).toBeNull();
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('add-tag'));
+    });
+
+    expect(screen.getByTestId('tag-1').textContent).toBe('vue');
+  });
 });
 
 describe('FormReset', () => {

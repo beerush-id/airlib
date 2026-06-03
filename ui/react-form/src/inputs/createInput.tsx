@@ -1,6 +1,6 @@
-import { setup, render } from '@anchorlib/react';
-import { formInput, type AnyType, type FormInputOptions } from '@airlib/form';
-import type { InputEvent, FocusEvent } from 'react';
+import { type AnyType, formInput, type FormInputOptions } from '@airlib/form';
+import { render, setup } from '@anchorlib/react';
+import type { FocusEvent, InputEvent } from 'react';
 
 export function createInput<P, T = AnyType>(type: string, options?: FormInputOptions<T>) {
   return setup<P>((props) => {
