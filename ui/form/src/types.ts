@@ -137,6 +137,7 @@ export type FormFieldState<T> = {
   set value(value: T);
   get error(): string[] | undefined;
   get valid(): boolean;
+  get matched(): boolean;
   get changed(): boolean;
   get touched(): boolean;
   get disabled(): boolean;

@@ -861,4 +861,177 @@ describe('FormState API', () => {
       expect(form.touched['age']).toBeUndefined();
     });
   });
+
+  describe('Bound Validation', () => {
+    const passwordSchema = z.object({
+      password: z.string().min(6, 'Too short'),
+      confirmPassword: z.string().min(6, 'Too short'),
+    });
+
+    it('should mark field as matched when values are equal', () => {
+      const form = formState(passwordSchema, {
+        value: { password: 'secret', confirmPassword: 'secret' },
+      });
+
+      const confirm = formField('confirmPassword', 'password');
+
+      expect(confirm.matched).toBe(true);
+      expect(confirm.valid).toBe(true);
+    });
+
+    it('should mark field as not matched when values differ', () => {
+      const form = formState(passwordSchema, {
+        value: { password: 'secret', confirmPassword: 'secret' },
+      });
+
+      const confirm = formField('confirmPassword', 'password');
+
+      form.fields['confirmPassword'] = 'differ';
+
+      expect(confirm.matched).toBe(false);
+      expect(confirm.valid).toBe(true); // schema passes, matched is separate
+    });
+
+    it('should reactively update match when bound field changes', () => {
+      const form = formState(passwordSchema, {
+        value: { password: 'secret', confirmPassword: 'secret' },
+      });
+
+      const confirm = formField('confirmPassword', 'password');
+      expect(confirm.matched).toBe(true);
+
+      // Change the password field — confirm no longer matches
+      form.fields['password'] = 'newsecret';
+      expect(confirm.matched).toBe(false);
+
+      // Update confirm to match
+      form.fields['confirmPassword'] = 'newsecret';
+      expect(confirm.matched).toBe(true);
+    });
+
+    it('should default matched to true when no bound is specified', () => {
+      formState(passwordSchema, {
+        value: { password: 'secret', confirmPassword: 'other' },
+      });
+
+      const field = formField('password');
+
+      expect(field.matched).toBe(true);
+      expect(field.valid).toBe(true);
+    });
+
+    it('should combine schema validation and bound check in valid', () => {
+      const form = formState(passwordSchema, {
+        value: { password: 'secret', confirmPassword: 'secret' },
+      });
+
+      const confirm = formField('confirmPassword', 'password');
+      expect(confirm.valid).toBe(true);
+
+      // Break schema validation (too short) — setter rejects, value stays 'secret'
+      form.fields['confirmPassword'] = 'ab';
+      expect(confirm.valid).toBe(false); // schema error
+      expect(confirm.error).toBeDefined();
+      expect(confirm.matched).toBe(true); // value unchanged, still matches
+
+      // Valid length but doesn't match password
+      form.fields['confirmPassword'] = 'abcdef';
+      expect(confirm.error).toBeUndefined(); // schema passes
+      expect(confirm.matched).toBe(false); // doesn't match 'secret'
+      expect(confirm.valid).toBe(true); // schema passes — valid is schema-only
+
+      // Match password
+      form.fields['confirmPassword'] = 'secret';
+      expect(confirm.matched).toBe(true);
+      expect(confirm.valid).toBe(true);
+    });
+
+    it('should support a match function for custom cross-field validation', () => {
+      const rangeSchema = z.object({
+        min: z.number(),
+        max: z.number(),
+      });
+      const form = formState(rangeSchema, { value: { min: 0, max: 10 } });
+
+      const maxField = formField('max', (f) => f.fields['max'] > f.fields['min']);
+
+      expect(maxField.matched).toBe(true);
+
+      form.fields['min'] = 20;
+      expect(maxField.matched).toBe(false);
+
+      form.fields['max'] = 30;
+      expect(maxField.matched).toBe(true);
+    });
+
+    it('should reactively track all fields accessed inside match function', () => {
+      const rangeSchema = z.object({
+        min: z.number(),
+        max: z.number(),
+      });
+      const form = formState(rangeSchema, { value: { min: 5, max: 10 } });
+
+      const spy = vi.fn();
+      const maxField = formField('max', (f) => {
+        const result = f.fields['max'] > f.fields['min'];
+        spy();
+        return result;
+      });
+
+      const initialCalls = spy.mock.calls.length;
+
+      // Change min → match function re-evaluates
+      form.fields['min'] = 8;
+      expect(spy.mock.calls.length).toBeGreaterThan(initialCalls);
+      expect(maxField.matched).toBe(true);
+    });
+
+    it('should handle match function returning false initially', () => {
+      const rangeSchema = z.object({
+        min: z.number(),
+        max: z.number(),
+      });
+      const form = formState(rangeSchema, { value: { min: 10, max: 5 } });
+
+      const maxField = formField('max', (f) => f.fields['max'] > f.fields['min']);
+
+      expect(maxField.matched).toBe(false);
+      expect(maxField.valid).toBe(true); // schema passes — valid is schema-only
+
+      form.fields['max'] = 20;
+      expect(maxField.matched).toBe(true);
+      expect(maxField.valid).toBe(true);
+    });
+
+    it('should not create match effect when match is undefined', () => {
+      formState(passwordSchema, {
+        value: { password: 'secret', confirmPassword: 'different' },
+      });
+
+      const field = formField('confirmPassword');
+
+      // No match → always true, even though values differ
+      expect(field.matched).toBe(true);
+      expect(field.valid).toBe(true);
+    });
+
+    it('should support match function with multiple field dependencies', () => {
+      const schema = z.object({
+        a: z.number(),
+        b: z.number(),
+        sum: z.number(),
+      });
+      const form = formState(schema, { value: { a: 2, b: 3, sum: 5 } });
+
+      const sumField = formField('sum', (f) => f.fields['sum'] === f.fields['a'] + f.fields['b']);
+
+      expect(sumField.matched).toBe(true);
+
+      form.fields['a'] = 10;
+      expect(sumField.matched).toBe(false);
+
+      form.fields['sum'] = 13;
+      expect(sumField.matched).toBe(true);
+    });
+  });
 });

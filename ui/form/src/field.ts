@@ -7,9 +7,17 @@ import type { AnyType, FormFieldState, FormInputOptions, FormInputProps, FormInp
  * Creates a reactive reference to a specific form field.
  *
  * @param name - The dot-notation path of the field.
+ * @param match - Optional field path (equality) or function (custom) for cross-field validation.
  */
-export function formField<T>(name: string): FormFieldState<T> {
+export function formField<T>(name: string, match?: string | ((form: AnyType) => boolean)): FormFieldState<T> {
   const form = getForm<AnyType>();
+  const matched = match ? mutable({ value: true }) : { value: true };
+
+  if (match && form) {
+    effect(() => {
+      matched.value = typeof match === 'function' ? match(form) : form.fields[name] === form.fields[match];
+    });
+  }
 
   const self = {
     get name(): string {
@@ -27,6 +35,9 @@ export function formField<T>(name: string): FormFieldState<T> {
     },
     get valid(): boolean {
       return !form?.errors[name];
+    },
+    get matched(): boolean {
+      return matched.value;
     },
     get disabled() {
       return form?.pending ?? false;
