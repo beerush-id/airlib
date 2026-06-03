@@ -190,6 +190,136 @@ describe('FormState API', () => {
       expect(form.changed).toBe(true);
     });
 
+    it('should route external deep mutations through setter', () => {
+      const props = mutable({
+        value: { name: 'Alice', age: 25, address: { city: 'SF', zip: '94105' } },
+      } as AnyType);
+      const form = formState(userSchema, props);
+
+      expect(form.fields['name']).toBe('Alice');
+      expect(form.changed).toBe(false);
+
+      // External deep mutation — triggers subscription's else branch
+      props.value.name = 'Bob';
+
+      expect(form.fields['name']).toBe('Bob');
+      expect(form.changed).toBe(true);
+      expect(form.changes).toEqual({ name: 'Bob' });
+    });
+
+    it('should handle external array push mutation', () => {
+      const props = mutable({
+        value: { name: 'Alice', age: 25, address: { city: 'SF', zip: '94105' }, tags: ['admin'] },
+      } as AnyType);
+      const form = formState(userSchema, props);
+
+      props.value.tags.push('user');
+
+      expect(form.fields['tags.0']).toBe('admin');
+      expect(form.fields['tags.1']).toBe('user');
+      expect(form.changed).toBe(true);
+    });
+
+    it('should clean orphaned entries when array shrinks via external mutation', () => {
+      const props = mutable({
+        value: { name: 'Alice', age: 25, address: { city: 'SF', zip: '94105' }, tags: ['admin', 'user', 'editor'] },
+      } as AnyType);
+      const form = formState(userSchema, props);
+
+      expect(form.fields['tags.2']).toBe('editor');
+
+      // Splice removes 'user' and 'editor', shifts nothing
+      props.value.tags.splice(1, 2);
+
+      expect(form.fields['tags.0']).toBe('admin');
+      expect(form.fields['tags.1']).toBeUndefined();
+      expect(form.fields['tags.2']).toBeUndefined();
+      expect(form.errors['tags.1']).toBeUndefined();
+      expect(form.errors['tags.2']).toBeUndefined();
+    });
+
+    it('should handle external array pop mutation', () => {
+      const props = mutable({
+        value: { name: 'Alice', age: 25, address: { city: 'SF', zip: '94105' }, tags: ['admin', 'user'] },
+      } as AnyType);
+      const form = formState(userSchema, props);
+
+      expect(form.fields['tags.1']).toBe('user');
+
+      props.value.tags.pop();
+
+      expect(form.fields['tags.0']).toBe('admin');
+      expect(form.fields['tags.1']).toBeUndefined();
+    });
+
+    it('should handle external array shift mutation', () => {
+      const props = mutable({
+        value: { name: 'Alice', age: 25, address: { city: 'SF', zip: '94105' }, tags: ['admin', 'user', 'editor'] },
+      } as AnyType);
+      const form = formState(userSchema, props);
+
+      // Write valid value to create a change entry, then invalid to create an error
+      form.fields['tags.1'] = 'modified';
+      form.fields['tags.1'] = 0 as never;
+
+      expect(form.errors['tags.1']).toBeDefined();
+
+      props.value.tags.shift();
+
+      // Error from tags.1 should move to tags.0
+      expect(form.fields['tags.0']).toBe('modified');
+      expect(form.errors['tags.0']).toBeDefined();
+      expect(form.fields['tags.1']).toBe('editor');
+      expect(form.fields['tags.2']).toBeUndefined();
+    });
+
+    it('should handle external array unshift mutation', () => {
+      const props = mutable({
+        value: { name: 'Alice', age: 25, address: { city: 'SF', zip: '94105' }, tags: ['admin'] },
+      } as AnyType);
+      const form = formState(userSchema, props);
+
+      props.value.tags.unshift('root', 'super');
+
+      expect(form.fields['tags.0']).toBe('root');
+      expect(form.fields['tags.1']).toBe('super');
+      expect(form.fields['tags.2']).toBe('admin');
+    });
+
+    it('should handle external array splice with insertion', () => {
+      const props = mutable({
+        value: { name: 'Alice', age: 25, address: { city: 'SF', zip: '94105' }, tags: ['admin', 'user', 'editor'] },
+      } as AnyType);
+      const form = formState(userSchema, props);
+
+      // Remove 'user', insert 'mod' and 'super'
+      props.value.tags.splice(1, 1, 'mod', 'super');
+
+      expect(form.fields['tags.0']).toBe('admin');
+      expect(form.fields['tags.1']).toBe('mod');
+      expect(form.fields['tags.2']).toBe('super');
+      expect(form.fields['tags.3']).toBe('editor');
+    });
+
+    it('should handle external array sort and reverse mutations', () => {
+      const props = mutable({
+        value: { name: 'Alice', age: 25, address: { city: 'SF', zip: '94105' }, tags: ['user', 'admin', 'editor'] },
+      } as AnyType);
+      const form = formState(userSchema, props);
+
+      props.value.tags.reverse();
+
+      expect(form.fields['tags.0']).toBe('editor');
+      expect(form.fields['tags.1']).toBe('admin');
+      expect(form.fields['tags.2']).toBe('user');
+
+      props.value.tags.sort();
+
+      expect(form.fields['tags.0']).toBe('admin');
+      expect(form.fields['tags.1']).toBe('editor');
+      expect(form.fields['tags.2']).toBe('user');
+    });
+
     it('should run sync callbacks and flatten errors when replacing data with invalid payload', () => {
       let onChangeCalled = false;
 
