@@ -1,5 +1,14 @@
-import { anchor, type LinkableSchema, mutable, onCleanup, subscribe, ARRAY_MUTATIONS } from '@anchorlib/core';
-import { unknown, type input, type ZodType } from 'zod';
+import {
+  anchor,
+  ARRAY_MUTATIONS,
+  effect,
+  type LinkableSchema,
+  mutable,
+  onCleanup,
+  subscribe,
+  untrack,
+} from '@anchorlib/core';
+import { type input, type ZodType } from 'zod';
 import { FORM_STATUS, FORM_SYMBOL } from './contant.js';
 import { context } from './context.js';
 import { formField } from './field.js';
@@ -47,8 +56,8 @@ export function formState<T extends LinkableSchema>(
   };
 
   const initialize = (data: AnyType) => {
-    const validation = schema.safeParse(data || {});
-    const inputData = validation.success ? validation.data : data || {};
+    const validation = schema.safeParse(data);
+    const inputData = validation.success ? validation.data : data;
 
     flattenData(dataStore, inputData);
     for (const [path, value] of dataStore.entries()) {
@@ -142,7 +151,11 @@ export function formState<T extends LinkableSchema>(
     {},
     {
       get(_, prop: string) {
-        return dataStore.get(prop);
+        const value = dataStore.get(prop);
+        if (typeof value === 'object' && value !== null) {
+          return prop.split('.').reduce((acc, key) => (acc as AnyType)[key], props.value);
+        }
+        return value;
       },
       set(_, prop: string, value: AnyType) {
         if (self.locked) return true;
@@ -252,89 +265,97 @@ export function formState<T extends LinkableSchema>(
     },
   } as FormState<T>;
 
-  if (anchor.has(props)) {
-    const unsubscribe = subscribe(props, (_, event) => {
-      if (event.type === 'init') {
-        initialize(props.value);
-        return;
-      }
-      if (self.locked || event.keys[0] !== 'value') return;
-
-      let prop = event.keys.join('.');
-      if (prop === 'value') {
-        cleanup();
-        initialize(props.value);
-        onChange?.(dataStore, errorStore);
-      } else {
-        prop = prop.replace(/^value\./, '');
-
-        if (ArrayMutations.has(event.type as AnyType)) {
-          const type = event.type as AnyType;
-          const store = dataStore.get(prop) as unknown[];
-          const args = event.value as unknown[];
-
-          if (type === 'push') {
-            const start = store.length;
-            args.forEach((arg, i) => {
-              setter(`${prop}.${start + i}`, arg);
-            });
-          } else if (type === 'pop') {
-            deleteEntry(`${prop}.${store.length - 1}`);
-          } else if (type === 'shift') {
-            for (let i = 0; i < store.length - 1; i++) {
-              moveEntry(`${prop}.${i + 1}`, `${prop}.${i}`);
-            }
-            deleteEntry(`${prop}.${store.length - 1}`);
-          } else if (type === 'unshift') {
-            for (let i = store.length - 1; i >= 0; i--) {
-              moveEntry(`${prop}.${i}`, `${prop}.${i + args.length}`);
-            }
-            args.forEach((arg, i) => {
-              setter(`${prop}.${i}`, arg);
-            });
-          } else if (type === 'splice') {
-            const [start, deleteCount = 0, ...items] = args as [number, number, ...unknown[]];
-
-            const remaining = store.slice(start + deleteCount);
-            remaining.forEach((_, i) => {
-              moveEntry(`${prop}.${start + deleteCount + i}`, `${prop}.${start + items.length + i}`);
-            });
-
-            items.forEach((item, i) => {
-              setter(`${prop}.${start + i}`, item);
-            });
-
-            const newLength = store.length - deleteCount + items.length;
-            for (let i = newLength; i < store.length; i++) {
-              deleteEntry(`${prop}.${i}`);
-            }
-          } else {
-            // sort, reverse, fill, copyWithin — re-sync from actual array
-            for (const key of [...dataStore.keys()]) {
-              if (key.startsWith(`${prop}.`)) deleteEntry(key);
-            }
-
-            let actual: unknown = props.value;
-            for (const segment of prop.split('.')) {
-              actual = (actual as AnyType)[segment];
-            }
-
-            (actual as unknown[]).forEach((item, i) => {
-              setter(`${prop}.${i}`, item);
-            });
-          }
-        } else {
-          setter(prop, event.value);
-        }
-      }
-    });
-
-    onCleanup(unsubscribe);
-  } else {
-    initialize(props.value);
+  if (!anchor.has(props)) {
+    props = mutable(props);
   }
 
-  onCleanup(cleanup);
+  if (!anchor.has(props.value as AnyType)) {
+    props.value = mutable((props.value as AnyType) ?? {});
+  }
+
+  // Sync value changes.
+  let initialized = false;
+  effect(() => {
+    const value = props.value;
+    untrack(() => initialize(value));
+
+    if (initialized) {
+      onChange?.(dataStore, errorStore);
+    } else {
+      initialized = true;
+    }
+  });
+
+  // Sync external leaf changes.
+  const unsubscribe = subscribe(props.value, (_, event) => {
+    if (event.type === 'init' || self.locked) return;
+
+    const prop = event.keys.join('.');
+
+    if (ArrayMutations.has(event.type as AnyType)) {
+      const type = event.type as AnyType;
+      const store = dataStore.get(prop) as unknown[];
+      const args = event.value as unknown[];
+
+      if (type === 'push') {
+        const start = store.length;
+        args.forEach((arg, i) => {
+          setter(`${prop}.${start + i}`, arg);
+        });
+      } else if (type === 'pop') {
+        deleteEntry(`${prop}.${store.length - 1}`);
+      } else if (type === 'shift') {
+        for (let i = 0; i < store.length - 1; i++) {
+          moveEntry(`${prop}.${i + 1}`, `${prop}.${i}`);
+        }
+        deleteEntry(`${prop}.${store.length - 1}`);
+      } else if (type === 'unshift') {
+        for (let i = store.length - 1; i >= 0; i--) {
+          moveEntry(`${prop}.${i}`, `${prop}.${i + args.length}`);
+        }
+        args.forEach((arg, i) => {
+          setter(`${prop}.${i}`, arg);
+        });
+      } else if (type === 'splice') {
+        const [start, deleteCount = 0, ...items] = args as [number, number, ...unknown[]];
+
+        const remaining = store.slice(start + deleteCount);
+        remaining.forEach((_, i) => {
+          moveEntry(`${prop}.${start + deleteCount + i}`, `${prop}.${start + items.length + i}`);
+        });
+
+        items.forEach((item, i) => {
+          setter(`${prop}.${start + i}`, item);
+        });
+
+        const newLength = store.length - deleteCount + items.length;
+        for (let i = newLength; i < store.length; i++) {
+          deleteEntry(`${prop}.${i}`);
+        }
+      } else {
+        // sort, reverse, fill, copyWithin — re-sync from actual array
+        for (const key of [...dataStore.keys()]) {
+          if (key.startsWith(`${prop}.`)) deleteEntry(key);
+        }
+
+        let actual: unknown = props.value;
+        for (const segment of prop.split('.')) {
+          actual = (actual as AnyType)[segment];
+        }
+
+        (actual as unknown[]).forEach((item, i) => {
+          setter(`${prop}.${i}`, item);
+        });
+      }
+    } else {
+      setter(prop, event.value);
+    }
+  });
+
+  onCleanup(() => {
+    unsubscribe();
+    cleanup();
+  });
 
   context.write(FORM_SYMBOL, self);
 
