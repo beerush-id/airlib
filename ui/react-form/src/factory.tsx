@@ -50,12 +50,15 @@ export function createForm<T extends ZodType>(schema: T): TypedForm<T> {
       }
     };
 
-    return render(() => (
-      <form {...rest} onSubmit={handleSubmit}>
-        {$props.children}
-      </form>
-    ));
-  });
+    return render(
+      () => (
+        <form {...rest} onSubmit={handleSubmit}>
+          {$props.children}
+        </form>
+      ),
+      'FormView'
+    );
+  }, 'Form');
 
   const Field = setup<TypedFieldProps<input<T>, T>>((props) => {
     const $props = props as AnyType;
@@ -84,16 +87,16 @@ export function createForm<T extends ZodType>(schema: T): TypedForm<T> {
           )}
         </div>
       );
-    });
-  });
+    }, 'FieldView');
+  }, 'Field');
 
   const FieldList = setup<{ name: string; children: (items: AnyType[]) => ReactNode }>((props) => {
     const $props = props as AnyType;
     const field = formField<AnyType[]>($props.name);
     if (!Array.isArray(field.value)) field.value = [];
 
-    return render(() => $props.children(field.value));
-  });
+    return render(() => $props.children(field.value), 'FieldListView');
+  }, 'FieldList');
 
   return Object.assign(Form, {
     Field,

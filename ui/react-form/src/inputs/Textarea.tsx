@@ -18,14 +18,17 @@ export const Textarea = setup<TextareaProps>((props) => {
     props.onBlur?.(e);
   };
 
-  return render(() => (
-    <textarea
-      {...rest}
-      name={input.name}
-      value={input.value}
-      disabled={input.disabled}
-      onInput={handleInput}
-      onBlur={handleBlur}
-    />
-  ));
-});
+  return render(
+    () => (
+      <textarea
+        {...rest}
+        name={input.name}
+        value={input.value}
+        disabled={input.disabled}
+        onInput={handleInput}
+        onBlur={handleBlur}
+      />
+    ),
+    'TextareaView'
+  );
+}, 'Textarea');

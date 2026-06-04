@@ -14,14 +14,17 @@ export const Checkbox = setup<CheckboxProps>((props) => {
     props.onChange?.(e);
   };
 
-  return render(() => (
-    <input
-      {...rest}
-      type={input.type}
-      name={input.name}
-      checked={input.checked}
-      disabled={input.disabled}
-      onChange={handleChange}
-    />
-  ));
-});
+  return render(
+    () => (
+      <input
+        {...rest}
+        type={input.type}
+        name={input.name}
+        checked={input.checked}
+        disabled={input.disabled}
+        onChange={handleChange}
+      />
+    ),
+    'CheckboxView'
+  );
+}, 'Checkbox');

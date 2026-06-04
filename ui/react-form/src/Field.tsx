@@ -38,5 +38,5 @@ export const Field = setup<FieldProps>((props) => {
         )}
       </div>
     );
-  });
-});
+  }, 'FieldView');
+}, 'Field');

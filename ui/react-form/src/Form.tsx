@@ -25,9 +25,12 @@ export const Form = setup<FormProps>((props) => {
     }
   };
 
-  return render(() => (
-    <form {...rest} onSubmit={handleSubmit}>
-      {props.children}
-    </form>
-  ));
-});
+  return render(
+    () => (
+      <form {...rest} onSubmit={handleSubmit}>
+        {props.children}
+      </form>
+    ),
+    'FormView'
+  );
+}, 'Form');

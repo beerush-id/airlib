@@ -11,9 +11,12 @@ export const FormSubmit = setup<FormSubmitProps>((props) => {
   const form = getForm();
   const rest = props.$omit(['disabled', 'type', 'children']);
 
-  return render(() => (
-    <button {...rest} type="submit" disabled={!form?.canSubmit}>
-      {typeof props.children === 'function' ? props.children(form) : props.children}
-    </button>
-  ));
-});
+  return render(
+    () => (
+      <button {...rest} type="submit" disabled={!form?.canSubmit}>
+        {typeof props.children === 'function' ? props.children(form) : props.children}
+      </button>
+    ),
+    'FormSubmitView'
+  );
+}, 'FormSubmit');

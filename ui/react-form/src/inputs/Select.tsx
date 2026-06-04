@@ -13,9 +13,12 @@ export const Select = setup<SelectProps>((props) => {
     props.onChange?.(e);
   };
 
-  return render(() => (
-    <select {...rest} name={input.name} value={input.value} disabled={input.disabled} onChange={handleChange}>
-      {props.children}
-    </select>
-  ));
-});
+  return render(
+    () => (
+      <select {...rest} name={input.name} value={input.value} disabled={input.disabled} onChange={handleChange}>
+        {props.children}
+      </select>
+    ),
+    'SelectView'
+  );
+}, 'Select');

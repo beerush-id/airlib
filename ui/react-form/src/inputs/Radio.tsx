@@ -14,15 +14,18 @@ export const Radio = setup<RadioProps>((props) => {
     props.onChange?.(e);
   };
 
-  return render(() => (
-    <input
-      {...rest}
-      type={input.type}
-      name={input.name}
-      value={input.value}
-      checked={input.checked}
-      disabled={input.disabled}
-      onChange={handleChange}
-    />
-  ));
-});
+  return render(
+    () => (
+      <input
+        {...rest}
+        type={input.type}
+        name={input.name}
+        value={input.value}
+        checked={input.checked}
+        disabled={input.disabled}
+        onChange={handleChange}
+      />
+    ),
+    'RadioView'
+  );
+}, 'Radio');

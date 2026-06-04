@@ -16,9 +16,12 @@ export const FormReset = setup<FormResetProps>((props) => {
     props.onClick?.(e);
   };
 
-  return render(() => (
-    <button {...rest} type="button" disabled={!form?.changed} onClick={handleClick}>
-      {typeof props.children === 'function' ? props.children(form) : props.children}
-    </button>
-  ));
-});
+  return render(
+    () => (
+      <button {...rest} type="button" disabled={!form?.changed} onClick={handleClick}>
+        {typeof props.children === 'function' ? props.children(form) : props.children}
+      </button>
+    ),
+    'FormResetView'
+  );
+}, 'FormReset');

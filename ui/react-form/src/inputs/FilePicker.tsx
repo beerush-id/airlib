@@ -15,7 +15,8 @@ export const FilePicker = setup<FilePickerProps>((props) => {
     props.onChange?.(e);
   };
 
-  return render(() => (
-    <input {...rest} type="file" name={input.name} disabled={input.disabled} onChange={handleChange} />
-  ));
-});
+  return render(
+    () => <input {...rest} type="file" name={input.name} disabled={input.disabled} onChange={handleChange} />,
+    'FilePickerView'
+  );
+}, 'FilePicker');

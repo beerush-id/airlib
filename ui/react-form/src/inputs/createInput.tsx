@@ -3,6 +3,7 @@ import { render, setup } from '@anchorlib/react';
 import type { FocusEvent, InputEvent } from 'react';
 
 export function createInput<P, T = AnyType>(type: string, options?: FormInputOptions<T>) {
+  const name = type.charAt(0).toUpperCase() + type.slice(1) + 'Input';
   return setup<P>((props) => {
     (props as AnyType).type = type;
     const input = formInput(props as AnyType, options);
@@ -21,19 +22,22 @@ export function createInput<P, T = AnyType>(type: string, options?: FormInputOpt
       $props.onBlur?.(e);
     };
 
-    return render(() => (
-      <input
-        {...rest}
-        id={fieldId}
-        type={input.type}
-        name={input.name}
-        value={input.value}
-        disabled={input.disabled}
-        aria-invalid={input.error ? true : undefined}
-        aria-describedby={input.error ? errorId : undefined}
-        onInput={handleInput}
-        onBlur={handleBlur}
-      />
-    ));
-  });
+    return render(
+      () => (
+        <input
+          {...rest}
+          id={fieldId}
+          type={input.type}
+          name={input.name}
+          value={input.value}
+          disabled={input.disabled}
+          aria-invalid={input.error ? true : undefined}
+          aria-describedby={input.error ? errorId : undefined}
+          onInput={handleInput}
+          onBlur={handleBlur}
+        />
+      ),
+      `${name}View`
+    );
+  }, name);
 }
