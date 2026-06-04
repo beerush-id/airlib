@@ -1,7 +1,7 @@
 {
   "name": "airlib",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Monorepo for AIR Libraries",
   "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
   "repository": {
