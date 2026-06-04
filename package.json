@@ -1,7 +1,7 @@
 {
   "name": "airlib",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Monorepo for AIR Libraries",
   "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
   "repository": {
@@ -16,7 +16,8 @@
     "dev": "bpkg run dev",
     "format": "bpkg run format",
     "lint": "bpkg run lint",
-    "test": "bpkg run test"
+    "test": "bpkg run test",
+    "prepublish": "bpkg run prepublish -f irpc/* packages/* ui/* --sequential"
   },
   "devDependencies": {
     "@anchorlib/react": "^1.1.0",
