@@ -1,36 +1,55 @@
-import { describe, expect, it } from 'vitest';
+import { anchor, clearContextStore, createLifecycle } from '@anchorlib/core';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { formFactory } from '../src/index.js';
 
+const schema = z.object({
+  name: z.string(),
+  age: z.number(),
+});
+
+let scope: ReturnType<typeof createLifecycle>;
+
+beforeEach(() => {
+  clearContextStore();
+  anchor.configure({ globalScopeWarning: false });
+  scope = createLifecycle();
+});
+
+afterEach(() => {
+  scope.destroy();
+});
+
 describe('formFactory', () => {
-  const schema = z.object({
-    name: z.string(),
-    age: z.number(),
+  it('creates a form state from factory call', () => {
+    scope.run(() => {
+      const factory = formFactory(schema);
+      const form = factory({ value: { name: 'Alice', age: 25 } });
+
+      expect(form.fields['name']).toBe('Alice');
+      expect(form.fields['age']).toBe(25);
+    });
   });
 
-  it('should initialize a form state when called as a function', () => {
-    const factory = formFactory(schema);
-    const form = factory({ value: { name: 'Alice', age: 30 } });
+  it('factory.get() returns the current form', () => {
+    scope.run(() => {
+      const factory = formFactory(schema);
+      factory({ value: { name: 'Alice', age: 25 } });
 
-    expect(factory.get()).toBe(form);
-    expect(form).toBeDefined();
-    expect(form.fields.name).toBe('Alice');
-    expect(form.output.age).toBe(30);
+      const form = factory.get();
+      expect(form).toBeDefined();
+      expect(form!.fields['name']).toBe('Alice');
+    });
   });
 
-  it('should provide a field extraction method on the factory', () => {
-    const factory = formFactory(schema);
-    const form = factory({ value: { name: 'Bob', age: 25 } });
+  it('factory.field() returns a FormField', () => {
+    scope.run(() => {
+      const factory = formFactory(schema);
+      factory({ value: { name: 'Alice', age: 25 } });
 
-    // Ensure the factory field method works and syncs with the initialized form
-    const nameField = factory.field('name');
-    expect(nameField).toBeDefined();
-    expect(nameField.name).toBe('name');
-    expect(nameField.value).toBe('Bob');
-
-    // Mutating via the extracted field should update the form state
-    nameField.value = 'Charlie';
-    expect(nameField.value).toBe('Charlie');
-    expect(form.fields.name).toBe('Charlie');
+      const field = factory.field('name');
+      expect(field).toBeDefined();
+      expect(field.name).toBe('name');
+    });
   });
 });

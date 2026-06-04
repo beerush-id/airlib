@@ -1,387 +1,235 @@
-import {
-  anchor,
-  ARRAY_MUTATIONS,
-  effect,
-  type LinkableSchema,
-  mutable,
-  onCleanup,
-  type StateChange,
-  subscribe,
-  untrack,
-} from '@anchorlib/core';
-import { type input, type ZodType } from 'zod';
+import { anchor, captureStack, effect, onCleanup, subscribe, untrack } from '@anchorlib/core';
+import type { input, ZodObject } from 'zod';
 import { FORM_STATUS, FORM_SYMBOL } from './constant.js';
-import { context } from './context.js';
+import { context, FormContext, schemaOf } from './context.js';
 import { formField } from './field.js';
-import { flattenData, flattenError, unflattenData } from './flatten.js';
-import { getSchemaByPath } from './schema.js';
-import type { AnyType, FormState, FormStateOptions } from './types.js';
-import { writePath } from './utils.js';
-import type { FormStatus } from './types.ts';
+import { initField } from './init.js';
+import { synchronize } from './sync.js';
+import type { AnyType, FormErrors, FormFields, FormStateOptions } from './types.js';
+import { readPath, unflattenData, writePath } from './utils.js';
+import { setter, wipeChildren } from './write.js';
 
-const ArrayMutations = new Set(ARRAY_MUTATIONS);
+export class FormState<T extends ZodObject> {
+  tracking = false;
+
+  get fields(): FormFields<input<T>> {
+    return this.#dataProxy;
+  }
+
+  get errors(): FormErrors<input<T>> {
+    return this.#errorProxy;
+  }
+
+  get changed() {
+    return this.#ctx.changeKeys.size > 0;
+  }
+
+  get changeList() {
+    return this.#ctx.store.changes;
+  }
+
+  get valid() {
+    return this.#ctx.errorKeys.size === 0;
+  }
+
+  get output() {
+    return structuredClone(anchor.get(this.#ctx.props.value!));
+  }
+
+  get changes() {
+    return unflattenData(anchor.get(this.#ctx.store.changes));
+  }
+
+  get error() {
+    return this.#ctx.store.error;
+  }
+
+  get status() {
+    return this.#ctx.store.status;
+  }
+
+  get pending() {
+    return this.#ctx.store.status === FORM_STATUS.PENDING;
+  }
+
+  get canSubmit() {
+    return this.valid && this.changed && !this.pending;
+  }
+
+  get touched() {
+    return this.#ctx.store.touched;
+  }
+
+  readonly #ctx: FormContext<AnyType>;
+  readonly #dataProxy: AnyType;
+  readonly #errorProxy: AnyType;
+
+  constructor(schema: T, props: { value?: Partial<input<T>> } = {}, options?: FormStateOptions) {
+    this.#ctx = new FormContext(schema as AnyType, props as AnyType, options);
+
+    this.#dataProxy = new Proxy({}, {
+      get: (_, prop: string) => {
+        initField(this.#ctx, prop);
+        return readPath(this.#ctx.props.value, prop);
+      },
+      set: (_, prop: string, value: AnyType) => {
+        if (this.#ctx.locked) return true;
+        return setter(this.#ctx, prop, value);
+      },
+    } as ProxyHandler<Record<string, unknown>>);
+
+    this.#errorProxy = new Proxy(
+      {},
+      {
+        get: (_, prop: string) => {
+          return this.#ctx.store.errors[prop];
+        },
+        set: () => {
+          console.warn('[AIR Form] Violation: form.errors is read-only.');
+          return true;
+        },
+      }
+    );
+
+    this.#initializeFromSchema();
+
+    let initialized = false;
+
+    effect(() => {
+      const value = this.#ctx.props.value!;
+
+      untrack(() => {
+        if (initialized) {
+          this.#ctx.cleanup();
+          this.#ctx.applyShell();
+          this.#initializeFromSchema();
+        }
+      });
+
+      initialized = true;
+      return untrack(() => subscribe(value, (v, e) => synchronize(this.#ctx, v, e)));
+    });
+
+    onCleanup(() => this.#ctx.cleanup());
+
+    context.write(FORM_SYMBOL, this);
+  }
+
+  field(fieldPath: string) {
+    return formField(fieldPath);
+  }
+
+  public schemaOf(field: string) {
+    const result = schemaOf(this.#ctx, field);
+    if (!result) {
+      captureStack.violation.general(
+        'Unknown Field Access',
+        `Field "${field}" is not defined in the schema.`,
+        new Error(`Unknown schema field: ${field}`),
+        [
+          'To prevent unexpected behavior, make sure to:',
+          '- Explicitly define all fields in your form schema.',
+          '- Never assign a value to a field without a defined schema.',
+          'Allowing untracked fields to enter your form state can cause data integrity issues.',
+        ],
+        this.schemaOf
+      );
+    }
+    return result;
+  }
+
+  public isRequired(path: string) {
+    return this.schemaOf(path)?.required ?? false;
+  }
+
+  public clear() {
+    if (this.#ctx.locked) return this;
+    this.#ctx.locked = true;
+
+    this.#ctx.cleanupSource();
+    this.#ctx.cleanup();
+    this.#ctx.applyShell();
+
+    this.#ctx.options.onChange?.(this.#ctx.store.changes, this.#ctx.store.errors);
+    this.#ctx.locked = false;
+    return this;
+  }
+
+  public reset() {
+    if (this.#ctx.locked) return this;
+    this.#ctx.locked = true;
+
+    for (const path of this.#ctx.changeKeys) {
+      const baselineValue = this.#ctx.baseline.get(path);
+
+      if (baselineValue !== null && typeof baselineValue === 'object') {
+        wipeChildren(this.#ctx, path);
+      }
+
+      writePath(this.#ctx.props.value, path, baselineValue);
+
+      delete this.#ctx.store.changes[path];
+      delete this.#ctx.store.touched[path];
+
+      const schema = schemaOf(this.#ctx, path);
+      if (schema && schema.type !== 'object' && schema.type !== 'array') {
+        const result = schema.shape.safeParse(baselineValue);
+        if (result.success) {
+          this.#ctx.errorKeys.delete(path);
+          delete this.#ctx.store.errors[path];
+        } else {
+          this.#ctx.store.errors[path] = result.error.issues.map((i: AnyType) => i.message);
+          this.#ctx.errorKeys.add(path);
+        }
+      }
+    }
+
+    this.#ctx.changeKeys.clear();
+    delete this.#ctx.store.error;
+
+    this.#ctx.options.onChange?.(this.#ctx.store.changes, this.#ctx.store.errors);
+    this.#ctx.locked = false;
+    return this;
+  }
+
+  public async submit(handler: AnyType, settle = this.#ctx.options.settleOnSubmit) {
+    if (this.#ctx.locked) return;
+    this.#ctx.locked = true;
+
+    delete this.#ctx.store.error;
+    this.#ctx.store.status = FORM_STATUS.PENDING;
+
+    try {
+      await handler(this.output, this.changes);
+      this.#ctx.store.status = FORM_STATUS.SUCCESS;
+
+      if (settle) {
+        this.#ctx.applyShell();
+        this.#ctx.store.touched = {};
+      }
+    } catch (error) {
+      this.#ctx.store.error = error as Error;
+      this.#ctx.store.status = FORM_STATUS.ERROR;
+    } finally {
+      this.#ctx.locked = false;
+    }
+  }
+
+  #initializeFromSchema(): void {
+    for (const key of this.#ctx.schemas.keys()) {
+      if (key.includes('.$')) continue;
+      initField(this.#ctx, key);
+    }
+  }
+}
 
 /**
  * Creates a reactive form state based on a Zod schema.
- *
- * @param schema - The Zod schema to validate the form against.
- * @param props - An object containing the initial `value` for the form.
- * @param options - Configuration options for the form state.
  */
-export function formState<T extends LinkableSchema>(
+export function formState<T extends ZodObject>(
   schema: T,
-  props: { value?: input<T> },
+  props: { value?: Partial<input<T>> } = {},
   options?: FormStateOptions
 ): FormState<T> {
-  const { strict = true, validateOnInit = true, settleOnSubmit = true, onChange } = options || ({} as FormStateOptions);
-  const inputStore: Record<string, AnyType> = {};
-  const flatSchema = new Map<string, ZodType>();
-  const state = mutable<{
-    status: FormStatus;
-    error?: Error;
-  }>({
-    status: FORM_STATUS.IDLE,
-  });
-
-  const store = mutable({
-    fields: {} as Record<string, AnyType>,
-    errors: {} as Record<string, string[]>,
-    changes: {} as Record<string, AnyType>,
-    touched: {} as Record<string, boolean>,
-    changeSize: 0,
-  });
-
-  const cleanup = () => {
-    for (const key of Object.keys(inputStore)) delete inputStore[key];
-    flatSchema.clear();
-
-    store.fields = {};
-    store.errors = {};
-    store.changes = {};
-    store.touched = {};
-    store.changeSize = 0;
-  };
-
-  const initialize = (data: AnyType) => {
-    const validation = schema.safeParse(data);
-    const inputData = validation.success ? validation.data : data;
-
-    flattenData(store.fields, inputData);
-    for (const key of Object.keys(store.fields)) {
-      inputStore[key] = store.fields[key];
-    }
-
-    if (!validation.success && validateOnInit) {
-      flattenError(store.errors, validation.error);
-    }
-  };
-
-  const cleanOrphans = (path: string, value: unknown) => {
-    if (value === null || typeof value !== 'object') return;
-
-    const startPath = `${path}.`;
-
-    for (const key of Object.keys(store.fields)) {
-      if (key.startsWith(startPath)) delete store.fields[key];
-    }
-    for (const key of Object.keys(store.errors)) {
-      if (key.startsWith(startPath)) delete store.errors[key];
-    }
-    for (const key of Object.keys(store.changes)) {
-      if (key.startsWith(startPath)) {
-        delete store.changes[key];
-        store.changeSize--;
-      }
-    }
-  };
-
-  const moveEntry = (from: string, to: string) => {
-    store.fields[to] = store.fields[from];
-    if (Object.hasOwn(store.errors, from)) {
-      store.errors[to] = store.errors[from];
-    } else {
-      delete store.errors[to];
-    }
-    if (Object.hasOwn(store.changes, from)) {
-      store.changes[to] = store.changes[from];
-    } else if (Object.hasOwn(store.changes, to)) {
-      delete store.changes[to];
-      store.changeSize--;
-    }
-  };
-
-  const deleteEntry = (path: string) => {
-    delete store.fields[path];
-    delete store.errors[path];
-    if (Object.hasOwn(store.changes, path)) {
-      delete store.changes[path];
-      store.changeSize--;
-    }
-  };
-
-  const write = (prop: string, value: AnyType) => {
-    cleanOrphans(prop, value);
-    store.fields[prop] = value;
-
-    if (value === inputStore[prop]) {
-      if (Object.hasOwn(store.changes, prop)) {
-        delete store.changes[prop];
-        store.changeSize--;
-      }
-    } else {
-      if (!Object.hasOwn(store.changes, prop)) {
-        store.changeSize++;
-      }
-      store.changes[prop] = value;
-    }
-
-    if (props.value) {
-      self.locked = true;
-      writePath(props.value, prop, value);
-      self.locked = false;
-    }
-
-    onChange?.(store.fields, store.errors);
-  };
-
-  const setter = (prop: string, value: AnyType) => {
-    store.touched[prop] = true;
-    const schemaPath = prop.replace(/\.\d+/g, '.$');
-    if (!flatSchema.has(schemaPath)) {
-      const flatLeaf = getSchemaByPath(schema, schemaPath);
-      if (flatLeaf) flatSchema.set(schemaPath, flatLeaf);
-    }
-
-    const leafSchema = flatSchema.get(schemaPath);
-    if (!leafSchema) {
-      if (!strict) {
-        write(prop, value);
-      }
-
-      return true;
-    }
-
-    const validation = leafSchema.safeParse(value);
-
-    if (validation.success) {
-      value = validation.data;
-      write(prop, value);
-      delete store.errors[prop];
-    } else {
-      store.errors[prop] = validation.error.issues.map((i) => i.message);
-    }
-
-    return true;
-  };
-
-  const dataProxy = new Proxy(
-    {},
-    {
-      get(_, prop: string) {
-        const value = store.fields[prop];
-        if (typeof value === 'object' && value !== null) {
-          return prop.split('.').reduce((acc, key) => (acc as AnyType)[key], props.value);
-        }
-        return value;
-      },
-      set(_, prop: string, value: AnyType) {
-        if (self.locked) return true;
-        return setter(prop, value);
-      },
-    }
-  );
-
-  const errorProxy = new Proxy(
-    {},
-    {
-      get(_, prop: string) {
-        return store.errors[prop];
-      },
-      set() {
-        console.warn('[AIR Form] Violation: form.errors is read-only.');
-        return true;
-      },
-    }
-  );
-
-  const self = {
-    locked: false,
-
-    get fields() {
-      return dataProxy as input<T>;
-    },
-    get errors() {
-      return errorProxy;
-    },
-    get changed() {
-      return store.changeSize > 0;
-    },
-    get changeList() {
-      return store.changes;
-    },
-    get valid() {
-      return Object.keys(store.errors).length === 0;
-    },
-    get output() {
-      return unflattenData(anchor.get(store.fields));
-    },
-    get changes() {
-      return unflattenData(anchor.get(store.changes));
-    },
-    get error() {
-      return state.error;
-    },
-    get status() {
-      return state.status;
-    },
-    get pending() {
-      return state.status === FORM_STATUS.PENDING;
-    },
-    get canSubmit() {
-      return self.valid && self.changed && !self.pending;
-    },
-    get touched() {
-      return store.touched;
-    },
-    field(fieldPath: string) {
-      return formField(fieldPath);
-    },
-    reset() {
-      if (self.locked) return self;
-      self.locked = true;
-
-      delete state.error;
-      state.status = FORM_STATUS.IDLE;
-
-      store.fields = {};
-      flatSchema.clear();
-      store.errors = {};
-      store.changes = {};
-      store.touched = {};
-      store.changeSize = 0;
-
-      for (const path of Object.keys(inputStore)) {
-        store.fields[path] = inputStore[path];
-        if (props.value) writePath(props.value, path, inputStore[path]);
-      }
-
-      onChange?.(store.fields, store.errors);
-
-      self.locked = false;
-      return self;
-    },
-    async submit(handler, settle = settleOnSubmit) {
-      if (self.locked) return;
-      self.locked = true;
-
-      delete state.error;
-      state.status = FORM_STATUS.PENDING;
-
-      try {
-        await handler(unflattenData(anchor.get(store.fields)), unflattenData(anchor.get(store.changes)));
-        state.status = FORM_STATUS.SUCCESS;
-
-        if (settle) {
-          for (const key of Object.keys(inputStore)) delete inputStore[key];
-          for (const path of Object.keys(store.fields)) {
-            inputStore[path] = store.fields[path];
-          }
-          store.changes = {};
-          store.changeSize = 0;
-        }
-      } catch (error) {
-        state.error = error as Error;
-        state.status = FORM_STATUS.ERROR;
-      } finally {
-        self.locked = false;
-      }
-    },
-  } as FormState<T>;
-
-  if (!anchor.has(props)) {
-    props = mutable(props);
-  }
-
-  if (!anchor.has(props.value as AnyType)) {
-    props.value = mutable((props.value as AnyType) ?? {});
-  }
-
-  // Sync external leaf changes.
-  const synchronize = (_: input<T>, event: StateChange) => {
-    if (event.type === 'init' || self.locked) return;
-
-    const prop = event.keys.join('.');
-
-    if (ArrayMutations.has(event.type as AnyType)) {
-      const type = event.type as AnyType;
-      const current = store.fields[prop] as unknown[];
-      const args = event.value as unknown[];
-
-      if (type === 'push') {
-        const start = current.length;
-        args.forEach((arg, i) => {
-          setter(`${prop}.${start + i}`, arg);
-        });
-      } else if (type === 'pop') {
-        deleteEntry(`${prop}.${current.length - 1}`);
-      } else if (type === 'shift') {
-        for (let i = 0; i < current.length - 1; i++) {
-          moveEntry(`${prop}.${i + 1}`, `${prop}.${i}`);
-        }
-        deleteEntry(`${prop}.${current.length - 1}`);
-      } else if (type === 'unshift') {
-        for (let i = current.length - 1; i >= 0; i--) {
-          moveEntry(`${prop}.${i}`, `${prop}.${i + args.length}`);
-        }
-        args.forEach((arg, i) => {
-          setter(`${prop}.${i}`, arg);
-        });
-      } else if (type === 'splice') {
-        const [start, deleteCount = 0, ...items] = args as [number, number, ...unknown[]];
-
-        const remaining = current.slice(start + deleteCount);
-        remaining.forEach((_, i) => {
-          moveEntry(`${prop}.${start + deleteCount + i}`, `${prop}.${start + items.length + i}`);
-        });
-
-        items.forEach((item, i) => {
-          setter(`${prop}.${start + i}`, item);
-        });
-
-        const newLength = current.length - deleteCount + items.length;
-        for (let i = newLength; i < current.length; i++) {
-          deleteEntry(`${prop}.${i}`);
-        }
-      } else {
-        // sort, reverse, fill, copyWithin — re-sync from actual array
-        for (const key of Object.keys(store.fields)) {
-          if (key.startsWith(`${prop}.`)) deleteEntry(key);
-        }
-
-        let actual: unknown = props.value;
-        for (const segment of prop.split('.')) {
-          actual = (actual as AnyType)[segment];
-        }
-
-        (actual as unknown[]).forEach((item, i) => {
-          setter(`${prop}.${i}`, item);
-        });
-      }
-    } else {
-      setter(prop, event.value);
-    }
-  };
-
-  // Sync value changes.
-  effect(() => {
-    const value = props.value!;
-    untrack(() => initialize(value));
-    return untrack(() => subscribe(value, synchronize));
-  });
-
-  onCleanup(cleanup);
-
-  context.write(FORM_SYMBOL, self);
-
-  return self;
+  return new FormState(schema, props, options);
 }

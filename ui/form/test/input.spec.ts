@@ -1,515 +1,536 @@
-import { mutable } from '@anchorlib/core';
-import { describe, expect, it, vi } from 'vitest';
-import { FORM_FIELD_SYMBOL } from '../src/constant.js';
-import { context } from '../src/context.js';
-import { formInput } from '../src/field.js';
-import type { AnyType, FormFieldState } from '../src/types.js';
+import { anchor, clearContextStore, createLifecycle } from '@anchorlib/core';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { z } from 'zod';
+import { FORM_INPUT } from '../src/constant.js';
+import { formField } from '../src/field.js';
+import { formState } from '../src/form.js';
+import type { FormInputProps } from '../src/input.js';
+import { FormInput, formInput } from '../src/input.js';
 
-function mockField<T>(name: string, value: T, error?: string[]): FormFieldState<T> {
-  const state = mutable({ value, disabled: false, changed: false, touched: false });
-  return {
-    get name() {
-      return name;
-    },
-    get value() {
-      return state.value;
-    },
-    set value(v: AnyType) {
-      state.value = v;
-    },
-    get error() {
-      return error;
-    },
-    get valid() {
-      return !error;
-    },
-    get disabled() {
-      return state.disabled;
-    },
-    set disabled(v: boolean) {
-      state.disabled = v;
-    },
-    get changed() {
-      return state.changed;
-    },
-    set changed(v: boolean) {
-      state.changed = v;
-    },
-    get touched() {
-      return state.touched;
-    },
-  } as FormFieldState<T>;
-}
+const schema = z.object({
+  name: z.string(),
+  age: z.number(),
+  active: z.boolean(),
+  role: z.string(),
+  birthday: z.date(),
+});
 
-describe('formInput', () => {
-  describe('Standalone (no field context)', () => {
-    it('should initialize buffer from props.value', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
+let scope: ReturnType<typeof createLifecycle>;
 
-      const state = formInput({ name: 'age', type: 'number', value: 42 });
+beforeEach(() => {
+  clearContextStore();
+  anchor.configure({ globalScopeWarning: false });
+  scope = createLifecycle();
+});
 
-      expect(state.name).toBe('age');
-      expect(state.type).toBe('number');
-      expect(state.value).toBe('42');
+afterEach(() => {
+  scope.destroy();
+});
 
-      vi.restoreAllMocks();
+describe('FormInput', () => {
+  describe('Text input', () => {
+    it('syncs string value from field', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        const field = formField('name');
+        const input = new FormInput({ type: FORM_INPUT.text });
+
+        expect(input.name).toBe('name');
+        expect(input.type).toBe(FORM_INPUT.text);
+        expect(input.value).toBe('Alice');
+      });
     });
 
-    it('should fallback to props.name or empty string', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
+    it('writes back to field on value assignment', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
 
-      const state1 = formInput({ type: 'text', name: 'custom' });
-      expect(state1.name).toBe('custom');
+        formField('name');
+        const input = new FormInput({ type: FORM_INPUT.text });
 
-      const state2 = formInput({ type: 'text' } as any);
-      expect(state2.name).toBe('');
-
-      vi.restoreAllMocks();
-    });
-
-    it('should default type to text', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-
-      const state = formInput({ name: 'username' });
-
-      expect(state.type).toBe('text');
-      expect(state.value).toBe('');
-
-      vi.restoreAllMocks();
-    });
-
-    it('should update buffer on write', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-
-      const state = formInput({ name: 'username' });
-      state.value = 'hello';
-
-      expect(state.value).toBe('hello');
-
-      vi.restoreAllMocks();
-    });
-
-    it('should default valid to true and error to undefined without field', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-
-      const state = formInput({ name: 'test' });
-
-      expect(state.valid).toBe(true);
-      expect(state.error).toBeUndefined();
-      expect(state.disabled).toBe(false);
-
-      const disabledState = formInput({ name: 'test', disabled: true });
-      expect(disabledState.disabled).toBe(true);
-
-      vi.restoreAllMocks();
+        input.value = 'Bob';
+        expect(form.fields['name']).toBe('Bob');
+      });
     });
   });
 
-  describe('With field context', () => {
-    it('should initialize buffer from field.value', () => {
-      const field = mockField('price', 99.99);
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
+  describe('Number input', () => {
+    it('parses string to number', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('age');
+        const input = new FormInput({ type: FORM_INPUT.number });
+
+        input.value = '30';
+        expect(form.fields['age']).toBe(30);
       });
-
-      const state = formInput({ type: 'number' });
-
-      expect(state.name).toBe('price');
-      expect(state.value).toBe('99.99');
-
-      vi.restoreAllMocks();
     });
 
-    it('should write parsed value to field', () => {
-      const field = mockField('price', 0);
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
+    it('rejects invalid number input', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('age');
+        const input = new FormInput({ type: FORM_INPUT.number });
+
+        input.value = 'not-a-number';
+        expect(form.fields['age']).toBe(25);
       });
-
-      const state = formInput({ type: 'number' });
-      state.value = '25.5';
-
-      expect(state.value).toBe('25.5');
-      expect(field.value).toBe(25.5);
-
-      vi.restoreAllMocks();
-    });
-
-    it('should pass through error and valid from field', () => {
-      const field = mockField('email', '', ['invalid email']);
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
-      });
-
-      const state = formInput({ type: 'email' });
-
-      expect(state.valid).toBe(false);
-      expect(state.error).toEqual(['invalid email']);
-
-      vi.restoreAllMocks();
-    });
-
-    it('should inherit disabled state from field or use props.disabled', () => {
-      const field = mockField('email', '');
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
-      });
-
-      const state1 = formInput({ type: 'email' });
-      expect(state1.disabled).toBe(false);
-
-      const state2 = formInput({ type: 'email', disabled: true });
-      expect(state2.disabled).toBe(true);
-
-      (field as AnyType).disabled = true; // using the mock setter we added
-      expect(state1.disabled).toBe(true); // inherits from field
-
-      vi.restoreAllMocks();
     });
   });
 
-  describe('Parse guard', () => {
-    it('should skip writing NaN to field for number type', () => {
-      const field = mockField('count', 10);
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
+  describe('Checkbox input', () => {
+    it('toggles boolean via checked property', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('active');
+        const input = new FormInput({ type: FORM_INPUT.checkbox });
+
+        expect(input.checked).toBe(true);
+
+        input.checked = false;
+        expect(form.fields['active']).toBe(false);
+        expect(input.checked).toBe(false);
       });
-
-      const state = formInput({ type: 'number' });
-      state.value = 'abc';
-
-      expect(state.value).toBe('abc');
-      expect(field.value).toBe(10);
-
-      vi.restoreAllMocks();
-    });
-
-    it('should skip writing NaN for range type', () => {
-      const field = mockField('slider', 50);
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
-      });
-
-      const state = formInput({ type: 'range' });
-      state.value = 'not-a-number';
-
-      expect(state.value).toBe('not-a-number');
-      expect(field.value).toBe(50);
-
-      vi.restoreAllMocks();
     });
   });
 
-  describe('Checkbox type', () => {
-    it('should fallback to props.checked or false', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
+  describe('Radio input', () => {
+    it('tracks selected option via checked', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
 
-      const state1 = formInput({ type: 'checkbox', checked: true });
-      expect(state1.checked).toBe(true);
+        formField('role');
+        const adminInput = new FormInput({ type: FORM_INPUT.radio, value: 'admin' });
 
-      const state2 = formInput({ type: 'checkbox' });
-      expect(state2.checked).toBe(false);
+        expect(adminInput.checked).toBe(true);
 
-      const field = mockField('agree', undefined);
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
+        // Simulate selecting a different radio
+        form.fields['role'] = 'user';
+        expect(adminInput.checked).toBe(false);
       });
-      const state3 = formInput({ type: 'checkbox', checked: true });
-      expect(state3.checked).toBe(true);
-
-      vi.restoreAllMocks();
     });
 
-    it('should parse to boolean', () => {
-      const field = mockField('agree', false);
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
+    it('writes value to field when checked', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('role');
+        const userInput = new FormInput({ type: FORM_INPUT.radio, value: 'user' });
+
+        userInput.checked = true;
+        expect(form.fields['role']).toBe('user');
       });
-
-      const state = formInput({ type: 'checkbox' });
-      expect(state.value).toBe('');
-      expect(state.checked).toBe(false);
-
-      state.checked = true;
-      expect(field.value).toBe(true);
-
-      state.checked = false;
-      expect(field.value).toBe(false);
-
-      vi.restoreAllMocks();
     });
   });
 
-  describe('Custom parse/stringify', () => {
-    it('should use custom functions from options', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
+  describe('Date input', () => {
+    it('formats Date to YYYY-MM-DD string', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-06-15') },
+        });
 
-      const state = formInput(
-        { name: 'price', value: 1999 },
-        {
-          parse: (raw) => Number(raw.replace(/[^0-9]/g, '')),
-          stringify: (value) => `$${value}`,
-        }
-      );
+        formField('birthday');
+        const input = new FormInput({ type: FORM_INPUT.date });
 
-      expect(state.value).toBe('$1999');
-
-      state.value = '$2500';
-      expect(state.value).toBe('$2500');
-
-      vi.restoreAllMocks();
-    });
-  });
-
-  describe('Text passthrough types', () => {
-    it('should pass through string identity for text types', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-
-      for (const type of ['text', 'email', 'url', 'tel', 'password', 'search', 'hidden', 'color'] as const) {
-        const state = formInput({ name: 'field', type, value: 'test' });
-        expect(state.value).toBe('test');
-
-        state.value = 'updated';
-        expect(state.value).toBe('updated');
-      }
-
-      vi.restoreAllMocks();
-    });
-  });
-
-  describe('Date types', () => {
-    it('should pass through string for date type', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-
-      const state = formInput({ name: 'dob', type: 'date', value: '2026-06-02' });
-      expect(state.value).toBe('2026-06-02');
-
-      state.value = '2026-12-25';
-      expect(state.value).toBe('2026-12-25');
-
-      vi.restoreAllMocks();
-    });
-
-    it('should stringify datetime-local correctly', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-      const date = new Date(2026, 5, 2, 14, 30);
-      const state = formInput({ name: 'event', type: 'datetime-local', value: date as any });
-
-      expect(state.value).toBe('2026-06-02T14:30');
-      vi.restoreAllMocks();
-    });
-
-    it('should stringify time correctly', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-      const date = new Date(2026, 5, 2, 14, 30);
-      const state = formInput({ name: 'alarm', type: 'time', value: date as any });
-
-      expect(state.value).toBe('14:30');
-      vi.restoreAllMocks();
-    });
-
-    it('should stringify month correctly', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-      const date = new Date(2026, 5, 2);
-      const state = formInput({ name: 'expiry', type: 'month', value: date as any });
-
-      expect(state.value).toBe('2026-06');
-      vi.restoreAllMocks();
-    });
-
-    it('should stringify week correctly', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-      const date = new Date(2026, 0, 1); // Jan 1, 2026
-      const state = formInput({ name: 'week', type: 'week', value: date as any });
-
-      expect(state.value).toBe('2026-W01');
-      vi.restoreAllMocks();
-    });
-
-    it('should return invalid input when parsing empty string for dates', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-      const state = formInput({ type: 'date' });
-      state.value = '';
-      expect(state.value).toBe('');
-      vi.restoreAllMocks();
-    });
-
-    it('should handle invalid string dates in stringify gracefully', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-
-      const types = ['date', 'datetime-local', 'time', 'month', 'week'] as const;
-      for (const type of types) {
-        const state = formInput({ name: 'invalid', type, value: 'not-a-valid-date' });
-        expect(state.value).toBe('');
-      }
-
-      vi.restoreAllMocks();
-    });
-
-    it('should handle invalid dates in stringify gracefully', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-      const invalidDate = new Date('invalid');
-
-      const state = formInput({ name: 'invalid', type: 'datetime-local', value: invalidDate as any });
-      expect(state.value).toBe('');
-
-      vi.restoreAllMocks();
-    });
-
-    it('should skip writing invalid dates to field on input', () => {
-      const field = mockField('date', new Date());
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
+        expect(input.value).toBe('2000-06-15');
       });
-
-      const state = formInput({ type: 'date' });
-      const initialFieldVal = field.value;
-
-      state.value = 'not-a-date';
-      expect(state.value).toBe('not-a-date'); // buffer is updated
-      expect(field.value).toBe(initialFieldVal); // field is not updated
-
-      vi.restoreAllMocks();
-    });
-  });
-
-  describe('Radio and Toggle types', () => {
-    it('should sync checked status based on field value matching props value', () => {
-      const field = mockField('theme', 'dark');
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
-      });
-
-      const state = formInput({ type: 'radio', value: 'light' });
-      expect(state.checked).toBe(false);
-
-      field.value = 'light';
-      expect(state.checked).toBe(true);
-      expect(state.value).toBe('light');
-
-      vi.restoreAllMocks();
     });
 
-    it('should write value to field when checked', () => {
-      const field = mockField('theme', 'dark');
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
+    it('parses date string back to Date', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-06-15') },
+        });
+
+        formField('birthday');
+        const input = new FormInput({ type: FORM_INPUT.date });
+
+        input.value = '2024-12-25';
+        expect(form.fields['birthday']).toBeInstanceOf(Date);
       });
-
-      const state = formInput({ type: 'toggle', value: 'light' });
-      state.checked = true;
-
-      expect(field.value).toBe('light');
-      vi.restoreAllMocks();
     });
   });
 
   describe('settled', () => {
-    it('should re-sync from props if field exists but value is undefined', () => {
-      const field = mockField('name', undefined);
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_FIELD_SYMBOL) return field;
-        return undefined;
+    it('re-syncs buffer from field value when locked', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('name');
+        const input = new FormInput({ type: FORM_INPUT.text });
+
+        // Simulate a locked state (mid-composition)
+        input.locked = true;
+        input.settled();
+
+        expect(input.locked).toBe(false);
+        expect(input.value).toBe('Alice');
       });
-
-      const props = { name: 'name', type: 'text' as const, value: 'Default' };
-      const state = formInput(props);
-      state.settled();
-      expect(state.value).toBe('Default');
-
-      vi.restoreAllMocks();
     });
 
-    it('should re-sync text input from props if field is absent', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-      const props = { name: 'name', type: 'text' as const, value: 'John' };
-      const state = formInput(props);
-      expect(state.value).toBe('John');
+    it('skips settled for boolean inputs', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
 
-      props.value = 'Jane';
-      state.settled();
-      expect(state.value).toBe('Jane');
+        formField('active');
+        const input = new FormInput({ type: FORM_INPUT.checkbox });
 
-      vi.restoreAllMocks();
-    });
+        input.locked = true;
+        input.settled();
 
-    it('should skip boolean inputs on settled', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-      const props = { name: 'agree', type: 'checkbox' as const, checked: true };
-      const state = formInput(props);
-
-      expect(state.checked).toBe(true);
-      expect(state.value).toBe(''); // checkbox has no text value
-
-      props.checked = false;
-      state.settled(); // should do nothing for boolean inputs
-
-      expect(state.value).toBe('');
-
-      vi.restoreAllMocks();
+        // locked stays true because bool inputs skip settled
+        expect(input.locked).toBe(true);
+      });
     });
   });
-  describe('changed tracking', () => {
-    it('should reflect field.changed on input state', () => {
-      const field = mockField('username', 'John');
-      vi.spyOn(context, 'read').mockReturnValue(field);
 
-      const state = formInput({ name: 'username', type: 'text' });
+  describe('Standalone (no field context)', () => {
+    it('reads/writes props directly without a form field', () => {
+      scope.run(() => {
+        const props: FormInputProps<string> = { type: FORM_INPUT.text, value: 'standalone' };
+        const input = formInput(props);
 
-      expect(state.changed).toBe(false);
+        expect(input.value).toBe('standalone');
 
-      (field as AnyType).changed = true;
-      expect(state.changed).toBe(true);
-
-      vi.restoreAllMocks();
-    });
-
-    it('should default to false without field context', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
-
-      const state = formInput({ name: 'test', type: 'text' });
-
-      expect(state.changed).toBe(false);
-
-      vi.restoreAllMocks();
+        input.value = 'updated';
+        expect(props.value).toBe('updated');
+      });
     });
   });
-  describe('touched tracking', () => {
-    it('should reflect field.touched on input state', () => {
-      const field = mockField('username', 'John');
-      vi.spyOn(context, 'read').mockReturnValue(field);
 
-      const state = formInput({ name: 'username', type: 'text' });
+  describe('Custom parse/stringify', () => {
+    it('uses custom parse function', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
 
-      expect(state.touched).toBe(false);
+        formField('name');
+        const input = new FormInput({ type: FORM_INPUT.text }, { parse: (raw: string) => raw.toUpperCase() });
 
-      // Trigger touch by writing to field value (which would call setter in real form)
-      // For the mock, we need to set the internal state directly
-      Object.defineProperty(field, 'touched', { get: () => true });
-      expect(state.touched).toBe(true);
-
-      vi.restoreAllMocks();
+        input.value = 'bob';
+        expect(form.fields['name']).toBe('BOB');
+      });
     });
 
-    it('should default to false without field context', () => {
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
+    it('uses custom stringify function', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
 
-      const state = formInput({ name: 'test', type: 'text' });
+        formField('name');
+        const input = new FormInput({ type: FORM_INPUT.text }, { stringify: (value: string) => value.toLowerCase() });
 
-      expect(state.touched).toBe(false);
+        expect(input.value).toBe('alice');
+      });
+    });
+  });
 
-      vi.restoreAllMocks();
+  it('reflects error and valid from parent field', () => {
+    scope.run(() => {
+      const minSchema = z.object({ name: z.string().min(3) });
+      formState(minSchema, { value: { name: 'Alice' } });
+
+      formField('name');
+      const input = new FormInput({ type: FORM_INPUT.text });
+
+      expect(input.valid).toBe(true);
+      expect(input.error).toBeUndefined();
+
+      input.value = 'Al';
+      expect(input.valid).toBe(false);
+      expect(input.error).toBeDefined();
+    });
+  });
+
+  describe('Field state getters', () => {
+    it('reflects changed from field', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('name');
+        const input = new FormInput({ type: FORM_INPUT.text });
+
+        expect(input.changed).toBe(false);
+
+        input.value = 'Bob';
+        expect(input.changed).toBe(true);
+      });
+    });
+
+    it('reflects touched from field', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('name');
+        const input = new FormInput({ type: FORM_INPUT.text });
+
+        expect(input.touched).toBe(false);
+
+        input.value = 'Bob';
+        expect(input.touched).toBe(true);
+      });
+    });
+
+    it('reflects disabled from field (pending state)', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('name');
+        const input = new FormInput({ type: FORM_INPUT.text });
+
+        expect(input.disabled).toBe(false);
+
+        // Pending disables fields
+        input.value = 'Bob';
+        const promise = form.submit(async () => {
+          expect(input.disabled).toBe(true);
+        });
+
+        return promise;
+      });
+    });
+
+    it('reflects required from field', () => {
+      scope.run(() => {
+        const reqSchema = z.object({ required: z.string(), optional: z.string().optional() });
+        formState(reqSchema, { value: { required: 'yes' } as any });
+
+        formField('required');
+        const input = new FormInput({ type: FORM_INPUT.text });
+        expect(input.required).toBe(true);
+      });
+    });
+  });
+
+  describe('Date format branches', () => {
+    it('formats datetime-local', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-06-15T14:30:00') },
+        });
+
+        formField('birthday');
+        const input = new FormInput({ type: FORM_INPUT.datetimeLocal });
+
+        expect(input.value).toMatch(/^2000-06-15T\d{2}:\d{2}$/);
+      });
+    });
+
+    it('formats time', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-06-15T14:30:00') },
+        });
+
+        formField('birthday');
+        const input = new FormInput({ type: FORM_INPUT.time });
+
+        expect(input.value).toMatch(/^\d{2}:\d{2}$/);
+      });
+    });
+
+    it('formats month', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-06-15') },
+        });
+
+        formField('birthday');
+        const input = new FormInput({ type: FORM_INPUT.month });
+
+        expect(input.value).toBe('2000-06');
+      });
+    });
+
+    it('formats week', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-06-15') },
+        });
+
+        formField('birthday');
+        const input = new FormInput({ type: FORM_INPUT.week });
+
+        expect(input.value).toMatch(/^\d{4}-W\d{2}$/);
+      });
+    });
+
+    it('returns empty string for invalid dates', () => {
+      scope.run(() => {
+        const dateSchema = z.object({ d: z.any() });
+        formState(dateSchema, { value: { d: 'not-a-date' } });
+
+        formField('d');
+        const dateInput = new FormInput({ type: FORM_INPUT.date });
+        expect(dateInput.value).toBe('');
+
+        const dtInput = new FormInput({ type: FORM_INPUT.datetimeLocal });
+        expect(dtInput.value).toBe('');
+
+        const timeInput = new FormInput({ type: FORM_INPUT.time });
+        expect(timeInput.value).toBe('');
+
+        const monthInput = new FormInput({ type: FORM_INPUT.month });
+        expect(monthInput.value).toBe('');
+
+        const weekInput = new FormInput({ type: FORM_INPUT.week });
+        expect(weekInput.value).toBe('');
+      });
+    });
+
+    it('parses invalid date input', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-06-15') },
+        });
+
+        formField('birthday');
+        const input = new FormInput({ type: FORM_INPUT.date });
+
+        input.value = 'invalid-date';
+        // Invalid date is rejected
+        expect(form.fields['birthday']).toBeInstanceOf(Date);
+      });
+    });
+  });
+
+  describe('standalone (no field)', () => {
+    it('changed/touched/valid/disabled/required default without field', () => {
+      scope.run(() => {
+        const input = new FormInput({ type: FORM_INPUT.text, name: 'standalone' });
+
+        expect(input.changed).toBe(false);
+        expect(input.touched).toBe(false);
+        expect(input.valid).toBe(true);
+        expect(input.disabled).toBe(false);
+        expect(input.required).toBe(false);
+        expect(input.error).toBeUndefined();
+      });
+    });
+
+    it('name falls back to props.name without field', () => {
+      scope.run(() => {
+        const input = new FormInput({ type: FORM_INPUT.text, name: 'fallback' });
+        expect(input.name).toBe('fallback');
+      });
+    });
+
+    it('name defaults to empty string without field or props.name', () => {
+      scope.run(() => {
+        const input = new FormInput({ type: FORM_INPUT.text });
+        expect(input.name).toBe('');
+      });
+    });
+
+    it('defaults to text type when type is omitted', () => {
+      scope.run(() => {
+        const input = new FormInput({} as any);
+        expect(input.type).toBe(FORM_INPUT.text);
+      });
+    });
+
+    it('writes to props.value without field', () => {
+      scope.run(() => {
+        const props: any = { type: FORM_INPUT.text, value: 'hello' };
+        const input = new FormInput(props);
+
+        input.value = 'world';
+        expect(props.value).toBe('world');
+      });
+    });
+
+    it('checked setter writes to props.checked without field', () => {
+      scope.run(() => {
+        const props: any = { type: FORM_INPUT.checkbox };
+        const input = new FormInput(props);
+
+        input.checked = true;
+        expect(props.checked).toBe(true);
+      });
+    });
+
+    it('checkbox effect reads from props.checked without field', () => {
+      scope.run(() => {
+        const props: any = { type: FORM_INPUT.checkbox, checked: true };
+        const input = new FormInput(props);
+
+        expect(input.checked).toBe(true);
+      });
+    });
+
+    it('text effect reads from props.value without field', () => {
+      scope.run(() => {
+        const props: any = { type: FORM_INPUT.text, value: 'hello' };
+        const input = new FormInput(props);
+
+        expect(input.value).toBe('hello');
+      });
+    });
+
+    it('settled resets buffer after invalid parse', () => {
+      scope.run(() => {
+        const props: any = { type: FORM_INPUT.number, value: 42 };
+        const input = new FormInput(props);
+
+        input.value = 'not-a-number';
+        expect(input.locked).toBe(true);
+
+        input.settled();
+        expect(input.locked).toBe(false);
+      });
+    });
+
+    it('required falls back to props.required', () => {
+      scope.run(() => {
+        const input = new FormInput({ type: FORM_INPUT.text, required: true } as any);
+        expect(input.required).toBe(true);
+      });
+    });
+
+    it('disabled uses props.disabled', () => {
+      scope.run(() => {
+        const input = new FormInput({ type: FORM_INPUT.text, disabled: true } as any);
+        expect(input.disabled).toBe(true);
+      });
+    });
+
+    it('defaultStringify returns empty string for null/undefined', () => {
+      scope.run(() => {
+        const props: any = { type: FORM_INPUT.date, value: null };
+        const input = new FormInput(props);
+        expect(input.value).toBe('');
+      });
     });
   });
 });

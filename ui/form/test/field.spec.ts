@@ -1,109 +1,251 @@
-import { describe, expect, it, vi } from 'vitest';
-import { FORM_FIELD_SYMBOL, FORM_SYMBOL } from '../src/constant.js';
-import { context } from '../src/context.js';
+import { anchor, clearContextStore, createLifecycle } from '@anchorlib/core';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { z } from 'zod';
 import { formField } from '../src/field.js';
-import type { AnyType } from '../src/types.js';
+import { formState } from '../src/form.js';
 
-describe('formField', () => {
-  describe('Standalone (no form context)', () => {
-    it('should initialize and manage state independently', () => {
-      // Ensure there is no form context
-      vi.spyOn(context, 'read').mockReturnValue(undefined);
+const schema = z.object({
+  name: z.string().min(3),
+  age: z.number(),
+  password: z.string().min(6),
+  confirmPassword: z.string().min(6),
+});
 
-      const field = formField('standalone_field');
+let scope: ReturnType<typeof createLifecycle>;
 
-      // name getter
-      expect(field.name).toBe('standalone_field');
+beforeEach(() => {
+  clearContextStore();
+  anchor.configure({ globalScopeWarning: false });
+  scope = createLifecycle();
+});
 
-      // valid getter (always true without form)
-      expect(field.valid).toBe(true);
+afterEach(() => {
+  scope.destroy();
+});
 
-      // disabled getter (always false without form)
-      expect(field.disabled).toBe(false);
+describe('FormField', () => {
+  it('reads and writes through the parent form', () => {
+    scope.run(() => {
+      const form = formState(schema, {
+        value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
+      });
 
-      // error getter (always undefined without form)
-      expect(field.error).toBeUndefined();
+      const field = formField('name');
 
-      // value setter early return
-      field.value = 'hello';
-      expect(field.value).toBeUndefined();
+      expect(field.name).toBe('name');
+      expect(field.value).toBe('Alice');
 
-      // changed getter (always false without form)
-      expect(field.changed).toBe(false);
-
-      vi.restoreAllMocks();
+      field.value = 'Bob';
+      expect(field.value).toBe('Bob');
+      expect(form.fields['name']).toBe('Bob');
     });
   });
 
-  describe('With form context', () => {
-    it('should interact with the form state properly', () => {
-      const changeStore: Record<string, AnyType> = {};
-      const touchedStore: Record<string, boolean> = {};
-      const mockForm = {
-        fields: { test_field: 'initial_value' } as Record<string, AnyType>,
-        errors: { test_field: ['invalid format'] } as Record<string, string[]>,
-        pending: false,
-        changeList: changeStore,
-        touched: touchedStore,
-      };
-
-      let mockField: AnyType = undefined;
-      vi.spyOn(context, 'read').mockImplementation((symbol) => {
-        if (symbol === FORM_SYMBOL) return mockForm;
-        if (symbol === FORM_FIELD_SYMBOL) return mockField;
-        return undefined;
+  it('reflects form errors', () => {
+    scope.run(() => {
+      formState(schema, {
+        value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
       });
 
-      // Context write will be called by formField, spy on it
-      const writeSpy = vi.spyOn(context, 'write').mockImplementation((sym, val) => {
-        if (sym === FORM_FIELD_SYMBOL) mockField = val;
-      });
+      const field = formField('name');
 
-      const field = formField('test_field');
+      expect(field.valid).toBe(true);
+      expect(field.error).toBeUndefined();
 
-      // Effect will immediately sync field.value with form.fields
-      expect(field.value).toBe('initial_value');
-
-      // error getter
-      expect(field.error).toEqual(['invalid format']);
-
-      // valid getter
+      field.value = 'Al';
       expect(field.valid).toBe(false);
+      expect(field.error).toBeDefined();
+    });
+  });
 
-      // disabled getter inherits from form.pending
-      mockForm.pending = true;
-      expect(field.disabled).toBe(true);
-      mockForm.pending = false;
+  it('reflects changed and touched state', () => {
+    scope.run(() => {
+      formState(schema, {
+        value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
+      });
+
+      const field = formField('name');
+
+      expect(field.changed).toBe(false);
+      expect(field.touched).toBe(false);
+
+      field.value = 'Bob';
+      expect(field.changed).toBe(true);
+      expect(field.touched).toBe(true);
+    });
+  });
+
+  it('reflects disabled from form pending state', async () => {
+    await scope.run(async () => {
+      const form = formState(schema, {
+        value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
+      });
+
+      const field = formField('name');
       expect(field.disabled).toBe(false);
 
-      // value setter passes to form.setter
-      field.value = 'new_value';
-      expect(field.value).toBe('new_value');
+      form.fields['name'] = 'Bob';
 
-      // input method returns formInputState
-      const inputState = field.input({ type: 'text' });
-      expect(inputState).toBeDefined();
-      expect(inputState.name).toBe('test_field');
-      expect(inputState.type).toBe('text');
+      let resolve: () => void;
+      const promise = new Promise<void>((r) => {
+        resolve = r;
+      });
 
-      // settled method uses form.fields
-      mockForm.fields['test_field'] = 'settled_value';
-      expect(field.value).toBe('settled_value');
-      // changed getter
-      expect(field.changed).toBe(false);
-      changeStore['test_field'] = 'new_value';
-      expect(field.changed).toBe(true);
-      delete changeStore['test_field'];
-      expect(field.changed).toBe(false);
+      const submitPromise = form.submit(() => promise);
 
-      // touched getter
-      expect(field.touched).toBe(false);
-      touchedStore['test_field'] = true;
-      expect(field.touched).toBe(true);
+      expect(field.disabled).toBe(true);
 
-      expect(writeSpy).toHaveBeenCalled();
+      resolve!();
+      await submitPromise;
 
-      vi.restoreAllMocks();
+      expect(field.disabled).toBe(false);
+    });
+  });
+
+  it('derives required from schema by default', () => {
+    scope.run(() => {
+      formState(schema, {
+        value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
+      });
+
+      const field = formField('name');
+      expect(field.required).toBe(true);
+    });
+  });
+
+  it('overrides required with boolean', () => {
+    scope.run(() => {
+      formState(schema, {
+        value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
+      });
+
+      const field = formField('name', undefined, false);
+      expect(field.required).toBe(false);
+    });
+  });
+
+  it('overrides required with function', () => {
+    scope.run(() => {
+      formState(schema, {
+        value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
+      });
+
+      let toggle = true;
+      const field = formField('name', undefined, () => toggle);
+
+      expect(field.required).toBe(true);
+      toggle = false;
+      expect(field.required).toBe(false);
+    });
+  });
+
+  describe('Match', () => {
+    it('matches by field path (string)', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'x', age: 25, password: 'secret', confirmPassword: 'secret' },
+        });
+
+        const field = formField('confirmPassword', 'password');
+
+        expect(field.matched).toBe(true);
+
+        form.fields['confirmPassword'] = 'differ';
+        expect(field.matched).toBe(false);
+      });
+    });
+
+    it('matches by custom function', () => {
+      scope.run(() => {
+        const rangeSchema = z.object({ min: z.number(), max: z.number() });
+        const form = formState(rangeSchema, { value: { min: 0, max: 10 } });
+
+        const field = formField('max', (f: any) => f.fields['max'] > f.fields['min']);
+
+        expect(field.matched).toBe(true);
+
+        form.fields['min'] = 20;
+        expect(field.matched).toBe(false);
+
+        form.fields['max'] = 30;
+        expect(field.matched).toBe(true);
+      });
+    });
+
+    it('defaults to matched=true when no match is specified', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'x', age: 25, password: 'secret', confirmPassword: 'different' },
+        });
+
+        const field = formField('confirmPassword');
+        expect(field.matched).toBe(true);
+      });
+    });
+  });
+
+  it('creates FormInput via input() method', () => {
+    scope.run(() => {
+      formState(schema, {
+        value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
+      });
+
+      const field = formField('name');
+      const input = field.input({ type: 'text' });
+
+      expect(input).toBeDefined();
+      expect(input.name).toBe('name');
+    });
+  });
+
+  it('handles writes to unknown fields gracefully', () => {
+    scope.run(() => {
+      const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      formState(schema, {});
+
+      const field = formField('unknown_field');
+      field.value = 'test';
+
+      expect(field.value).toBeUndefined();
+      errSpy.mockRestore();
+    });
+  });
+
+  describe('standalone (no form)', () => {
+    it('value setter is a no-op without form', () => {
+      scope.run(() => {
+        const field = formField('name');
+        field.value = 'test';
+        expect(field.value).toBeUndefined();
+      });
+    });
+
+    it('disabled returns false without form', () => {
+      scope.run(() => {
+        const field = formField('name');
+        expect(field.disabled).toBe(false);
+      });
+    });
+
+    it('required falls back to false without form', () => {
+      scope.run(() => {
+        const field = formField('name');
+        expect(field.required).toBe(false);
+      });
+    });
+
+    it('changed returns false without form', () => {
+      scope.run(() => {
+        const field = formField('name');
+        expect(field.changed).toBe(false);
+      });
+    });
+
+    it('touched returns false without form', () => {
+      scope.run(() => {
+        const field = formField('name');
+        expect(field.touched).toBe(false);
+      });
     });
   });
 });
