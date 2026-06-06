@@ -638,4 +638,44 @@ describe('FormState', () => {
       });
     });
   });
+
+  describe('Per-field operations', () => {
+    it('clearField clears a single field', () => {
+      scope.run(() => {
+        const form = formState(userSchema, {
+          value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
+        });
+
+        form.clearField('name');
+        expect(form.fields['name']).toBeUndefined();
+        expect(form.fields['age']).toBe(25);
+      });
+    });
+
+    it('resetField restores a single field', () => {
+      scope.run(() => {
+        const form = formState(userSchema, {
+          value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
+        });
+
+        form.fields['name'] = 'Bob';
+        form.fields['age'] = 99;
+
+        form.resetField('name');
+        expect(form.fields['name']).toBe('Alice');
+        expect(form.fields['age']).toBe(99);
+      });
+    });
+
+    it('clearField/resetField return this for chaining', () => {
+      scope.run(() => {
+        const form = formState(userSchema, {
+          value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
+        });
+
+        const result = form.clearField('name').resetField('age');
+        expect(result).toBe(form);
+      });
+    });
+  });
 });

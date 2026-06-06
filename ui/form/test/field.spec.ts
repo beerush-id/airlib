@@ -247,5 +247,52 @@ describe('FormField', () => {
         expect(field.touched).toBe(false);
       });
     });
+
+    it('clear is a no-op without form', () => {
+      scope.run(() => {
+        const field = formField('name');
+        expect(() => field.clear()).not.toThrow();
+      });
+    });
+
+    it('reset is a no-op without form', () => {
+      scope.run(() => {
+        const field = formField('name');
+        expect(() => field.reset()).not.toThrow();
+      });
+    });
+  });
+
+  describe('clear & reset', () => {
+    it('clear resets field to schema default', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
+        });
+
+        const field = formField('name');
+        field.value = 'Bob';
+        expect(field.changed).toBe(true);
+
+        field.clear();
+        expect(field.value).toBeUndefined();
+        expect(field.changed).toBe(true);
+      });
+    });
+
+    it('reset restores field to baseline', () => {
+      scope.run(() => {
+        const form = formState(schema, {
+          value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
+        });
+
+        const field = formField('name');
+        field.value = 'Bob';
+
+        field.reset();
+        expect(field.value).toBe('Alice');
+        expect(field.changed).toBe(false);
+      });
+    });
   });
 });

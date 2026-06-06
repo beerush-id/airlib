@@ -533,4 +533,135 @@ describe('FormInput', () => {
       });
     });
   });
+
+  describe('clear & reset', () => {
+    it('clear restores buffer via field', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('name');
+        const input = new FormInput({ type: FORM_INPUT.text });
+
+        input.value = 'Bob';
+        expect(input.value).toBe('Bob');
+
+        input.clear();
+        expect(input.value).toBe('');
+      });
+    });
+
+    it('reset restores buffer via field', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('name');
+        const input = new FormInput({ type: FORM_INPUT.text });
+
+        input.value = 'Bob';
+        input.reset();
+        expect(input.value).toBe('Alice');
+      });
+    });
+
+    it('unlocks before reset after invalid parse', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('age');
+        const input = new FormInput({ type: FORM_INPUT.number });
+
+        input.value = 'abc';
+        expect(input.locked).toBe(true);
+
+        input.reset();
+        expect(input.locked).toBe(false);
+        expect(input.value).toBe('25');
+      });
+    });
+
+    it('unlocks before clear after invalid parse', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('age');
+        const input = new FormInput({ type: FORM_INPUT.number });
+
+        input.value = 'abc';
+        expect(input.locked).toBe(true);
+
+        input.clear();
+        expect(input.locked).toBe(false);
+      });
+    });
+
+    it('standalone clear empties buffer and props', () => {
+      scope.run(() => {
+        const props: any = { type: FORM_INPUT.text, value: 'hello' };
+        const input = new FormInput(props);
+
+        input.clear();
+        expect(input.value).toBe('');
+        expect(props.value).toBeUndefined();
+      });
+    });
+
+    it('standalone reset restores initial value', () => {
+      scope.run(() => {
+        const props: any = { type: FORM_INPUT.text, value: 'initial' };
+        const input = new FormInput(props);
+
+        input.value = 'changed';
+        expect(input.value).toBe('changed');
+
+        input.reset();
+        expect(input.value).toBe('initial');
+        expect(props.value).toBe('initial');
+      });
+    });
+
+    it('standalone checkbox clear resets checked', () => {
+      scope.run(() => {
+        const props: any = { type: FORM_INPUT.checkbox, checked: true };
+        const input = new FormInput(props);
+
+        input.clear();
+        expect(input.checked).toBe(false);
+        expect(props.checked).toBeUndefined();
+      });
+    });
+
+    it('standalone checkbox reset restores initial checked', () => {
+      scope.run(() => {
+        const props: any = { type: FORM_INPUT.checkbox, checked: true };
+        const input = new FormInput(props);
+
+        input.checked = false;
+        input.reset();
+        expect(props.checked).toBe(true);
+      });
+    });
+
+    it('reset syncs checkbox buffer via field', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
+        });
+
+        formField('active');
+        const input = new FormInput({ type: FORM_INPUT.checkbox });
+
+        input.checked = false;
+        input.reset();
+        expect(input.checked).toBe(true);
+      });
+    });
+  });
 });

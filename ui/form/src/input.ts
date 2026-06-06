@@ -1,4 +1,4 @@
-import { effect, mutable } from '@anchorlib/core';
+import { effect, mutable, untrack } from '@anchorlib/core';
 import { FORM_INPUT, FORM_INVALID_INPUT } from './constant.js';
 import { getFormField } from './context.js';
 import type { FormField } from './field.js';
@@ -96,6 +96,7 @@ export class FormInput<T> {
   #type: InputType;
   #name: string;
   #buffer: { value: string; checked: boolean };
+  #initial: { value?: T; checked?: boolean };
   #parse: (raw: string, type: InputType) => unknown;
   #stringify: (value: T, type: InputType) => string;
 
@@ -107,6 +108,7 @@ export class FormInput<T> {
     this.#type = props.type ?? FORM_INPUT.text;
     this.#name = this.#field?.name ?? props.name ?? '';
     this.#buffer = mutable({ value: '', checked: false });
+    this.#initial = { value: props.value, checked: props.checked };
     this.#parse = parse;
     this.#stringify = stringify as (value: T, type: InputType) => string;
 
@@ -140,6 +142,42 @@ export class FormInput<T> {
     const value = this.#field ? this.#field.value : this.#props.value;
     this.#buffer.value = this.#stringify(value as T, this.#type);
     this.locked = false;
+  }
+
+  clear() {
+    this.locked = false;
+    if (this.#field) {
+      this.#field.clear();
+      this.#syncBuffer();
+    } else {
+      this.#buffer.value = '';
+      this.#buffer.checked = false;
+      this.#props.value = undefined;
+      this.#props.checked = undefined;
+    }
+  }
+
+  reset() {
+    this.locked = false;
+    if (this.#field) {
+      this.#field.reset();
+      this.#syncBuffer();
+    } else {
+      this.#buffer.value = this.#stringify(this.#initial.value as T, this.#type);
+      this.#buffer.checked = this.#initial.checked ?? false;
+      this.#props.value = this.#initial.value;
+      this.#props.checked = this.#initial.checked;
+    }
+  }
+
+  #syncBuffer() {
+    untrack(() => {
+      if (BOOL_INPUTS.has(this.#type)) {
+        this.#buffer.checked = Boolean(this.#field?.value);
+      } else {
+        this.#buffer.value = this.#stringify(this.#field?.value as T, this.#type);
+      }
+    });
   }
 }
 

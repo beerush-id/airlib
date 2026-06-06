@@ -74,6 +74,14 @@ export class FormField<T> {
   input(props: FormInputProps<T>, options?: FormInputOptions<T>) {
     return new FormInput(props, options);
   }
+
+  clear() {
+    this.#form?.clearField(this.#name);
+  }
+
+  reset() {
+    this.#form?.resetField(this.#name);
+  }
 }
 
 /** @deprecated Use `FormField` instead. */

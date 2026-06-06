@@ -7,7 +7,7 @@ import { initField } from './init.js';
 import { synchronize } from './sync.js';
 import type { AnyType, FormErrors, FormFields, FormStateOptions } from './types.js';
 import { readPath, unflattenData, writePath } from './utils.js';
-import { setter, wipeChildren } from './write.js';
+import { clearField, resetField, setter, wipeChildren } from './write.js';
 
 export class FormState<T extends ZodObject> {
   tracking = false;
@@ -140,6 +140,16 @@ export class FormState<T extends ZodObject> {
 
   public isRequired(path: string) {
     return this.schemaOf(path)?.required ?? false;
+  }
+
+  public clearField(path: string) {
+    clearField(this.#ctx, path);
+    return this;
+  }
+
+  public resetField(path: string) {
+    resetField(this.#ctx, path);
+    return this;
   }
 
   public clear() {
