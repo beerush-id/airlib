@@ -82,6 +82,48 @@ export class FormField<T> {
   reset() {
     this.#form?.resetField(this.#name);
   }
+
+  remove() {
+    const ref = this.#arrayRef();
+    if (!ref) return;
+    ref.array.splice(ref.index, 1);
+  }
+
+  moveUp(count = 1) {
+    const ref = this.#arrayRef();
+    if (!ref) return;
+
+    const target = ref.index - count;
+    if (target < 0) return;
+
+    const [item] = ref.array.splice(ref.index, 1);
+    ref.array.splice(target, 0, item);
+  }
+
+  moveDown(count = 1) {
+    const ref = this.#arrayRef();
+    if (!ref) return;
+
+    const target = ref.index + count;
+    if (target >= ref.array.length) return;
+
+    const [item] = ref.array.splice(ref.index, 1);
+    ref.array.splice(target, 0, item);
+  }
+
+  #arrayRef(): { array: AnyType[]; index: number } | undefined {
+    if (!this.#form) return;
+
+    const segments = this.#name.split('.');
+    const last = segments[segments.length - 1];
+    if (!/^\d+$/.test(last)) return;
+
+    const arrayPath = segments.slice(0, -1).join('.');
+    const array = this.#form.fields[arrayPath];
+    if (!Array.isArray(array)) return;
+
+    return { array, index: Number(last) };
+  }
 }
 
 /** @deprecated Use `FormField` instead. */

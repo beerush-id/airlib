@@ -295,4 +295,128 @@ describe('FormField', () => {
       });
     });
   });
+
+  describe('Array element operations', () => {
+    const listSchema = z.object({
+      items: z.array(z.string()),
+    });
+
+    it('remove splices element from parent array', () => {
+      scope.run(() => {
+        const form = formState(listSchema, {
+          value: { items: ['A', 'B', 'C'] },
+        });
+
+        const field = formField('items.1');
+        field.remove();
+        expect(form.fields['items']).toEqual(['A', 'C']);
+      });
+    });
+
+    it('moveUp swaps element with previous', () => {
+      scope.run(() => {
+        const form = formState(listSchema, {
+          value: { items: ['A', 'B', 'C'] },
+        });
+
+        const field = formField('items.2');
+        field.moveUp();
+        expect(form.fields['items']).toEqual(['A', 'C', 'B']);
+      });
+    });
+
+    it('moveDown swaps element with next', () => {
+      scope.run(() => {
+        const form = formState(listSchema, {
+          value: { items: ['A', 'B', 'C'] },
+        });
+
+        const field = formField('items.0');
+        field.moveDown();
+        expect(form.fields['items']).toEqual(['B', 'A', 'C']);
+      });
+    });
+
+    it('moveUp with count moves multiple positions', () => {
+      scope.run(() => {
+        const form = formState(listSchema, {
+          value: { items: ['A', 'B', 'C', 'D'] },
+        });
+
+        const field = formField('items.3');
+        field.moveUp(2);
+        expect(form.fields['items']).toEqual(['A', 'D', 'B', 'C']);
+      });
+    });
+
+    it('moveDown with count moves multiple positions', () => {
+      scope.run(() => {
+        const form = formState(listSchema, {
+          value: { items: ['A', 'B', 'C', 'D'] },
+        });
+
+        const field = formField('items.0');
+        field.moveDown(2);
+        expect(form.fields['items']).toEqual(['B', 'C', 'A', 'D']);
+      });
+    });
+
+    it('moveUp is no-op at first position', () => {
+      scope.run(() => {
+        const form = formState(listSchema, {
+          value: { items: ['A', 'B', 'C'] },
+        });
+
+        const field = formField('items.0');
+        field.moveUp();
+        expect(form.fields['items']).toEqual(['A', 'B', 'C']);
+      });
+    });
+
+    it('moveDown is no-op at last position', () => {
+      scope.run(() => {
+        const form = formState(listSchema, {
+          value: { items: ['A', 'B', 'C'] },
+        });
+
+        const field = formField('items.2');
+        field.moveDown();
+        expect(form.fields['items']).toEqual(['A', 'B', 'C']);
+      });
+    });
+
+    it('remove/move is no-op on non-array field', () => {
+      scope.run(() => {
+        formState(schema, {
+          value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
+        });
+
+        const field = formField('name');
+        expect(() => field.remove()).not.toThrow();
+        expect(() => field.moveUp()).not.toThrow();
+        expect(() => field.moveDown()).not.toThrow();
+      });
+    });
+
+    it('remove/move is no-op without form', () => {
+      scope.run(() => {
+        const field = formField('items.0');
+        expect(() => field.remove()).not.toThrow();
+        expect(() => field.moveUp()).not.toThrow();
+        expect(() => field.moveDown()).not.toThrow();
+      });
+    });
+
+    it('remove/move is no-op when parent is not an array', () => {
+      scope.run(() => {
+        const objSchema = z.object({
+          data: z.object({ 0: z.string() }),
+        });
+        formState(objSchema as any, { value: { data: { 0: 'val' } } });
+
+        const field = formField('data.0');
+        expect(() => field.remove()).not.toThrow();
+      });
+    });
+  });
 });
