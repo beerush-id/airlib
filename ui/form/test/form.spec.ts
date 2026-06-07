@@ -236,9 +236,11 @@ describe('FormState', () => {
 
     it('reset wipes children when restoring object-typed baseline', () => {
       scope.run(() => {
+        const handler = vi.fn();
         const form = formState(userSchema, {
           value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' }, tags: ['new_user'] },
         });
+        form.subscribe(handler);
 
         form.fields['address'] = { city: 'LA', zip: '90001' };
         expect(form.changed).toBe(true);
@@ -248,6 +250,7 @@ describe('FormState', () => {
         expect(form.changed).toBe(false);
         expect(form.output.address.city).toBe('NY');
         expect(form.output.address.zip).toBe('10001');
+        expect(handler).toHaveBeenCalledWith({ type: 'reset' });
       });
     });
 
@@ -293,13 +296,16 @@ describe('FormState', () => {
 
     it('clear wipes source and fills defaults', () => {
       scope.run(() => {
+        const handler = vi.fn();
         const props = { value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } } };
         const form = formState(userSchema, props);
+        form.subscribe(handler);
 
         form.clear();
 
         expect(props.value.name).toBeUndefined();
         expect(form.output.tags).toEqual(['new_user']);
+        expect(handler).toHaveBeenCalledWith({ type: 'clear' });
       });
     });
 
