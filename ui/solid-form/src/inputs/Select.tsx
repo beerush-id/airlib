@@ -41,7 +41,7 @@ export const Select = setup<SelectProps>((props) => {
 
   return (
     <select
-      ref={ref}
+      ref={(el) => (ref = el)}
       {...restProps}
       name={input.name}
       value={input.value}
