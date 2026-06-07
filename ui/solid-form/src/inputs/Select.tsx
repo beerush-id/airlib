@@ -1,6 +1,6 @@
 import { type AnyType, formInput } from '@airlib/form';
 import { derived, setup } from '@anchorlib/solid';
-import type { JSX as Jsx } from 'solid-js';
+import { createEffect, type JSX as Jsx } from 'solid-js';
 import { getInputClasses, INPUT_OPTIONS_KEYS, SELECT_OPTIONS, SELECT_OPTIONS_KEYS } from '../config.js';
 
 export interface SelectProps extends Jsx.SelectHTMLAttributes<HTMLSelectElement> {
@@ -20,6 +20,11 @@ export const Select = setup<SelectProps>((props) => {
   ]);
   const { baseClass, errorClass } = getInputClasses(SELECT_OPTIONS);
 
+  let ref: HTMLSelectElement | undefined;
+  createEffect(() => {
+    if (ref) ref.value = input.value;
+  });
+
   const handleChange = (e: Event) => {
     input.value = (e.currentTarget as HTMLSelectElement).value;
     if (typeof props.onChange === 'function') {
@@ -36,6 +41,7 @@ export const Select = setup<SelectProps>((props) => {
 
   return (
     <select
+      ref={ref}
       {...restProps}
       name={input.name}
       value={input.value}

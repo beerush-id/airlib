@@ -1,6 +1,7 @@
 /** @jsxImportSource solid-js */
 
 import { cleanup, fireEvent, render, screen } from '@solidjs/testing-library';
+import { act } from 'react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { Field } from '../src/Field.js';
@@ -62,13 +63,21 @@ describe('Field', () => {
       render(() => (
         <Form schema={userSchema} value={{ name: 'Al', email: 'john@test.com' }}>
           <Field name="name" label="Name" errorClass="error-text" data-testid="field">
-            <TextInput />
+            <TextInput data-testid="input" />
           </Field>
         </Form>
       ));
 
+      const input = screen.getByTestId('input');
+      expect((input as HTMLInputElement).value).toBe('Al');
+
+      act(() => {
+        fireEvent.input(input, { target: { value: 'A' } });
+      });
+
       const field = screen.getByTestId('field');
       const error = field.querySelector('.error-text');
+
       expect(error).toBeDefined();
       expect(error?.textContent).toContain('Name too short');
     });
@@ -135,6 +144,13 @@ describe('Field', () => {
           </Field>
         </Form>
       ));
+
+      const input = screen.getByTestId('input');
+      expect((input as HTMLInputElement).value).toBe('Al');
+
+      act(() => {
+        fireEvent.input(input, { target: { value: 'A' } });
+      });
 
       const field = screen.getByTestId('field');
       const error = field.querySelector('.error-text') as HTMLElement;

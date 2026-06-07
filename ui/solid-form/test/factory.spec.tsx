@@ -2,8 +2,9 @@
 
 import { mutable } from '@anchorlib/solid';
 import { cleanup, fireEvent, render as renderComponent, screen } from '@solidjs/testing-library';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { act } from 'react';
 import { For } from 'solid-js';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { createForm } from '../src/factory.js';
 import { TextInput } from '../src/inputs/TextInput.js';
@@ -95,10 +96,17 @@ describe('createForm', () => {
     renderComponent(() => (
       <UserForm value={{ name: 'Al', email: 'john@test.com' }}>
         <UserForm.Field name="name" label="Name" errorClass="error-text" data-testid="field">
-          <TextInput />
+          <TextInput data-testid="input" />
         </UserForm.Field>
       </UserForm>
     ));
+
+    const input = screen.getByTestId('input') as HTMLInputElement;
+    expect(input.value).toBe('Al');
+
+    act(() => {
+      fireEvent.input(input, { target: { value: 'A' } });
+    });
 
     const error = screen.getByTestId('field').querySelector('.error-text');
     expect(error).not.toBeNull();
