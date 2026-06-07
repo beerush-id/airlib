@@ -180,7 +180,10 @@ export class FormState<T extends ZodObject> {
     this.#ctx.locked = true;
 
     for (const path of this.#ctx.changeKeys) {
-      const baselineValue = this.#ctx.baseline.get(path);
+      let baselineValue = this.#ctx.baseline.get(path);
+      if (typeof baselineValue === 'object' && baselineValue !== null) {
+        baselineValue = structuredClone(baselineValue);
+      }
 
       if (baselineValue !== null && typeof baselineValue === 'object') {
         wipeChildren(this.#ctx, path);
