@@ -10,9 +10,9 @@ if [ -z "$VERSION" ]; then
   exit 1
 fi
 
-echo "Flattening peer dependencies to ^$VERSION..."
+echo "Flattening peer dependencies to $VERSION..."
 
-bpkg info set peerDependencies.@airlib/form="^$VERSION" -f \
+bpkg info set peerDependencies.@airlib/form="$VERSION" -f \
   ui/react-form \
   ui/solid-form
 
