@@ -16,8 +16,10 @@
     "dev": "bpkg run dev",
     "format": "bpkg run format",
     "lint": "bpkg run lint",
-    "test": "bpkg run test",
-    "prepublish": "bpkg run prepublish -f irpc/* packages/* ui/* --sequential"
+    "prepublish": "bpkg run prepublish -f irpc/* packages/* ui/* --sequential",
+    "test": "rimraf docs/.vitepress/dist/coverage && vitest --run",
+    "test:all": "rimraf docs/.vitepress/dist/coverage && vitest --run",
+    "test:preview": "rimraf docs/.vitepress/dist/coverage && vitest --run && vite preview --outDir docs/.vitepress/dist/coverage"
   },
   "devDependencies": {
     "@anchorlib/react": "catalog:",
