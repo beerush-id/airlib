@@ -113,9 +113,16 @@ describe('Form', () => {
   });
 
   it('should fallback to default options when errorClass is omitted', async () => {
-    const handleSubmit = async () => { throw new Error('Submit error'); };
+    const handleSubmit = async () => {
+      throw new Error('Submit error');
+    };
     render(() => (
-      <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }} data-testid="form-fallback" onSubmit={handleSubmit}>
+      <Form
+        schema={userSchema}
+        value={{ name: 'John', email: 'john@test.com' }}
+        data-testid="form-fallback"
+        onSubmit={handleSubmit}
+      >
         <button type="submit">Submit</button>
       </Form>
     ));
@@ -125,13 +132,27 @@ describe('Form', () => {
   });
 
   it('should cover all class branches for error in Form', async () => {
-    const handleSubmit = async () => { throw new Error('Submit error'); };
+    const handleSubmit = async () => {
+      throw new Error('Submit error');
+    };
     render(() => (
       <div>
-        <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }} data-testid="form-c" class="my-c" onSubmit={handleSubmit}>
+        <Form
+          schema={userSchema}
+          value={{ name: 'John', email: 'john@test.com' }}
+          data-testid="form-c"
+          class="my-c"
+          onSubmit={handleSubmit}
+        >
           <button type="submit">Submit</button>
         </Form>
-        <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }} data-testid="form-e" errorClass="my-e" onSubmit={handleSubmit}>
+        <Form
+          schema={userSchema}
+          value={{ name: 'John', email: 'john@test.com' }}
+          data-testid="form-e"
+          errorClass="my-e"
+          onSubmit={handleSubmit}
+        >
           <button type="submit">Submit</button>
         </Form>
       </div>
@@ -144,10 +165,12 @@ describe('Form', () => {
 
   it('should use globally configured FORM_OPTIONS when props are omitted', async () => {
     configureForm({
-      form: { class: 'global-c', errorClass: 'global-e' }
+      form: { class: 'global-c', errorClass: 'global-e' },
     });
-    
-    const handleSubmit = async () => { throw new Error('err'); };
+
+    const handleSubmit = async () => {
+      throw new Error('err');
+    };
     render(() => (
       <Form schema={userSchema} value={{ name: 'x', email: 'x' }} data-testid="global-form" onSubmit={handleSubmit}>
         <button type="submit">Submit</button>
@@ -161,24 +184,33 @@ describe('Form', () => {
     // Trigger error
     fireEvent.submit(form);
     await new Promise((r) => setTimeout(r, 10));
-    
+
     // Now it uses FORM_OPTIONS.class AND FORM_OPTIONS.errorClass
     expect(form.className).toContain('global-c');
     expect(form.className).toContain('global-e');
-    
+
     // Reset config
     configureForm({ form: { class: undefined, errorClass: undefined } });
   });
 
   it('should evaluate right side of ?? by passing explicit undefined', async () => {
     configureForm({
-      form: { class: 'global-c', errorClass: 'global-e' }
+      form: { class: 'global-c', errorClass: 'global-e' },
     });
-    
-    const handleSubmit = async () => { throw new Error('err'); };
+
+    const handleSubmit = async () => {
+      throw new Error('err');
+    };
     // Pass explicitly undefined so Object.hasOwn is true, bypassing the forEach fallback
     render(() => (
-      <Form schema={userSchema} value={{ name: 'x', email: 'x' }} class={undefined} errorClass={undefined} data-testid="global-form-explicit" onSubmit={handleSubmit}>
+      <Form
+        schema={userSchema}
+        value={{ name: 'x', email: 'x' }}
+        class={undefined}
+        errorClass={undefined}
+        data-testid="global-form-explicit"
+        onSubmit={handleSubmit}
+      >
         <button type="submit">Submit</button>
       </Form>
     ));
@@ -186,10 +218,10 @@ describe('Form', () => {
     const form = screen.getByTestId('global-form-explicit');
     fireEvent.submit(form);
     await new Promise((r) => setTimeout(r, 10));
-    
+
     expect(form.className).toContain('global-c');
     expect(form.className).toContain('global-e');
-    
+
     configureForm({ form: { class: undefined, errorClass: undefined } });
   });
 });

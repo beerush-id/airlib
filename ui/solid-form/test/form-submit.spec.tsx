@@ -124,7 +124,9 @@ describe('FormSubmit', () => {
 
     render(() => (
       <Form schema={schema} value={{ name: 'John' }} onSubmit={handleSubmit}>
-        <Field name="name"><TextInput data-testid="input" /></Field>
+        <Field name="name">
+          <TextInput data-testid="input" />
+        </Field>
         <FormSubmit data-testid="btn-fallback">Save</FormSubmit>
       </Form>
     ));

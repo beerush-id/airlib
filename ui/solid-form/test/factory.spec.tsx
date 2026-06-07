@@ -296,10 +296,18 @@ describe('createForm', () => {
   it('should use formOptions and fieldOptions when props are missing', async () => {
     const CustomForm = createForm(userSchema, {
       form: { class: 'f-class', errorClass: 'f-err' },
-      field: { class: 'fld-class', errorClass: 'fld-err', labelClass: 'lbl-class', requiredClass: 'req-class', requiredLabel: '(*)' }
+      field: {
+        class: 'fld-class',
+        errorClass: 'fld-err',
+        labelClass: 'lbl-class',
+        requiredClass: 'req-class',
+        requiredLabel: '(*)',
+      },
     });
 
-    const handleSubmit = async () => { throw new Error('err'); };
+    const handleSubmit = async () => {
+      throw new Error('err');
+    };
 
     renderComponent(() => (
       <CustomForm value={{ name: 'Al', email: 'j@t.com', tags: [] }} data-testid="c-form" onSubmit={handleSubmit}>
@@ -309,19 +317,17 @@ describe('createForm', () => {
         <CustomForm.Field name={'' as any}>
           <TextInput />
         </CustomForm.Field>
-        <CustomForm.FieldList name={'' as any}>
-          {() => <span />}
-        </CustomForm.FieldList>
+        <CustomForm.FieldList name={'' as any}>{() => <span />}</CustomForm.FieldList>
         <button type="submit">Submit</button>
       </CustomForm>
     ));
 
     const form = screen.getByTestId('c-form');
     expect(form.className).toContain('f-class');
-    
+
     const field = screen.getByTestId('c-field');
     expect(field.className).toContain('fld-class');
-    
+
     expect(screen.getByText('(*)')).toBeDefined();
     expect(screen.getByText('Name').className).toContain('lbl-class');
 
@@ -345,7 +351,7 @@ describe('createForm', () => {
         <button type="submit">Submit</button>
       </CustomForm>
     ));
-    
+
     const form = screen.getByTestId('p-form');
     fireEvent.submit(form);
     expect(form.className).toContain('f-pend');
@@ -353,7 +359,9 @@ describe('createForm', () => {
 
   it('should hit global defaults when neither props nor options provide classes', async () => {
     const GlobalForm = createForm(userSchema);
-    const handleSubmit = async () => { throw new Error('err'); };
+    const handleSubmit = async () => {
+      throw new Error('err');
+    };
 
     renderComponent(() => (
       <GlobalForm value={{ name: 'Al', email: 'j@t.com', tags: [] }} onSubmit={handleSubmit}>
@@ -363,10 +371,10 @@ describe('createForm', () => {
         <GlobalForm.Field name={'' as any}>
           <TextInput />
         </GlobalForm.Field>
-        <GlobalForm.FieldList name={'' as any}>
-          {() => <span />}
-        </GlobalForm.FieldList>
-        <button type="submit" data-testid="g-btn">Submit</button>
+        <GlobalForm.FieldList name={'' as any}>{() => <span />}</GlobalForm.FieldList>
+        <button type="submit" data-testid="g-btn">
+          Submit
+        </button>
       </GlobalForm>
     ));
 
@@ -382,36 +390,40 @@ describe('createForm', () => {
 
     renderComponent(() => (
       <GlobalForm value={{ name: 'John', email: 'j@t.com', tags: [] }} onSubmit={handleSubmit}>
-        <button type="submit" data-testid="g-pend-btn">Submit</button>
+        <button type="submit" data-testid="g-pend-btn">
+          Submit
+        </button>
       </GlobalForm>
     ));
-    
+
     fireEvent.submit(screen.getByTestId('g-pend-btn'));
   });
 
   it('should use explicit props over options for all classes', async () => {
     const TestForm = createForm(userSchema, {
       form: { class: 'x', errorClass: 'x', pendingClass: 'x' },
-      field: { class: 'x', errorClass: 'x', labelClass: 'x', requiredClass: 'x', requiredLabel: 'x' }
+      field: { class: 'x', errorClass: 'x', labelClass: 'x', requiredClass: 'x', requiredLabel: 'x' },
     });
-    const handleSubmit = async () => { throw new Error('err'); };
+    const handleSubmit = async () => {
+      throw new Error('err');
+    };
 
     renderComponent(() => (
-      <TestForm 
-        value={{ name: 'Al', email: 'j@t.com', tags: [] }} 
-        class="prop-class" 
-        errorClass="prop-err" 
-        data-testid="prop-form" 
+      <TestForm
+        value={{ name: 'Al', email: 'j@t.com', tags: [] }}
+        class="prop-class"
+        errorClass="prop-err"
+        data-testid="prop-form"
         onSubmit={handleSubmit}
       >
-        <TestForm.Field 
-          name="name" 
-          label="Name" 
-          class="prop-fld" 
-          errorClass="prop-fld-err" 
-          labelClass="prop-lbl" 
-          requiredClass="prop-req" 
-          requiredLabel="(R)" 
+        <TestForm.Field
+          name="name"
+          label="Name"
+          class="prop-fld"
+          errorClass="prop-fld-err"
+          labelClass="prop-lbl"
+          requiredClass="prop-req"
+          requiredLabel="(R)"
         >
           <TextInput data-testid="prop-input" />
         </TestForm.Field>
@@ -434,7 +446,9 @@ describe('createForm', () => {
 
   it('should handle options with empty objects (optional chaining branches)', async () => {
     const EmptyForm = createForm(userSchema, { form: {}, field: {} });
-    const handleSubmit = async () => { throw new Error('err'); };
+    const handleSubmit = async () => {
+      throw new Error('err');
+    };
 
     renderComponent(() => (
       <EmptyForm value={{ name: 'Al', email: 'j@t.com', tags: [] }} onSubmit={handleSubmit}>
@@ -444,10 +458,10 @@ describe('createForm', () => {
         <EmptyForm.Field name={'' as any}>
           <TextInput />
         </EmptyForm.Field>
-        <EmptyForm.FieldList name={'' as any}>
-          {() => <span />}
-        </EmptyForm.FieldList>
-        <button type="submit" data-testid="e-btn">Submit</button>
+        <EmptyForm.FieldList name={'' as any}>{() => <span />}</EmptyForm.FieldList>
+        <button type="submit" data-testid="e-btn">
+          Submit
+        </button>
       </EmptyForm>
     ));
 
@@ -462,21 +476,27 @@ describe('createForm', () => {
 
     renderComponent(() => (
       <EmptyForm value={{ name: 'John', email: 'j@t.com', tags: [] }} onSubmit={handleSubmit}>
-        <button type="submit" data-testid="e-pend-btn">Submit</button>
+        <button type="submit" data-testid="e-pend-btn">
+          Submit
+        </button>
       </EmptyForm>
     ));
-    
+
     fireEvent.submit(screen.getByTestId('e-pend-btn'));
   });
 
   it('should cover all class branches for factory error and pending', async () => {
     const TestForm = createForm(userSchema);
-    
+
     // Test class only
-    const handleSubmitErr = async () => { throw new Error('err'); };
+    const handleSubmitErr = async () => {
+      throw new Error('err');
+    };
     renderComponent(() => (
       <TestForm value={{ name: 'Al', email: 'j@t.com', tags: [] }} class="c-only" onSubmit={handleSubmitErr}>
-        <button type="submit" data-testid="btn-c">Submit</button>
+        <button type="submit" data-testid="btn-c">
+          Submit
+        </button>
       </TestForm>
     ));
     fireEvent.submit(screen.getByTestId('btn-c'));
@@ -485,16 +505,25 @@ describe('createForm', () => {
     // Test pending explicitly with both
     const handleSubmitPend = () => new Promise<void>((r) => setTimeout(r, 100));
     renderComponent(() => (
-      <TestForm value={{ name: 'Al', email: 'j@t.com', tags: [] }} class="c-both" pendingClass="p-both" onSubmit={handleSubmitPend}>
-        <button type="submit" data-testid="btn-p">Submit</button>
+      <TestForm
+        value={{ name: 'Al', email: 'j@t.com', tags: [] }}
+        class="c-both"
+        pendingClass="p-both"
+        onSubmit={handleSubmitPend}
+      >
+        <button type="submit" data-testid="btn-p">
+          Submit
+        </button>
       </TestForm>
     ));
     fireEvent.submit(screen.getByTestId('btn-p'));
-    
+
     // Test pending with pendingClass only
     renderComponent(() => (
       <TestForm value={{ name: 'Al', email: 'j@t.com', tags: [] }} pendingClass="p-only" onSubmit={handleSubmitPend}>
-        <button type="submit" data-testid="btn-p-only">Submit</button>
+        <button type="submit" data-testid="btn-p-only">
+          Submit
+        </button>
       </TestForm>
     ));
     fireEvent.submit(screen.getByTestId('btn-p-only'));
@@ -502,12 +531,14 @@ describe('createForm', () => {
 
   it('should evaluate right side of final ?? fallback with truthy global FORM_OPTIONS', async () => {
     configureForm({
-      form: { class: 'global-f-c', errorClass: 'global-f-e', pendingClass: 'global-f-p' }
+      form: { class: 'global-f-c', errorClass: 'global-f-e', pendingClass: 'global-f-p' },
     });
     const GlobalForm = createForm(userSchema);
-    
+
     // Error test
-    const handleSubmitErr = async () => { throw new Error('err'); };
+    const handleSubmitErr = async () => {
+      throw new Error('err');
+    };
     renderComponent(() => (
       <GlobalForm value={{ name: 'Al', email: 'j@t.com', tags: [] }} data-testid="gf-err" onSubmit={handleSubmitErr}>
         <button type="submit">Submit</button>
@@ -524,21 +555,30 @@ describe('createForm', () => {
       </GlobalForm>
     ));
     fireEvent.submit(screen.getByTestId('gf-pend'));
-    
+
     configureForm({
-      form: { class: undefined, errorClass: undefined, pendingClass: undefined }
+      form: { class: undefined, errorClass: undefined, pendingClass: undefined },
     });
   });
 
   it('should evaluate right side of factory ?? fallbacks by passing explicit undefined to formOptions', async () => {
     const OptForm = createForm(userSchema, {
-      form: { class: 'opt-c', errorClass: 'opt-e', pendingClass: 'opt-p' }
+      form: { class: 'opt-c', errorClass: 'opt-e', pendingClass: 'opt-p' },
     });
-    
+
     // Error test
-    const handleSubmitErr = async () => { throw new Error('err'); };
+    const handleSubmitErr = async () => {
+      throw new Error('err');
+    };
     renderComponent(() => (
-      <OptForm value={{ name: 'Al', email: 'j@t.com', tags: [] }} class={undefined} errorClass={undefined} pendingClass={undefined} data-testid="of-err" onSubmit={handleSubmitErr}>
+      <OptForm
+        value={{ name: 'Al', email: 'j@t.com', tags: [] }}
+        class={undefined}
+        errorClass={undefined}
+        pendingClass={undefined}
+        data-testid="of-err"
+        onSubmit={handleSubmitErr}
+      >
         <button type="submit">Submit</button>
       </OptForm>
     ));
@@ -548,7 +588,14 @@ describe('createForm', () => {
     // Pending test
     const handleSubmitPend = () => new Promise<void>((r) => setTimeout(r, 100));
     renderComponent(() => (
-      <OptForm value={{ name: 'Al', email: 'j@t.com', tags: [] }} class={undefined} errorClass={undefined} pendingClass={undefined} data-testid="of-pend" onSubmit={handleSubmitPend}>
+      <OptForm
+        value={{ name: 'Al', email: 'j@t.com', tags: [] }}
+        class={undefined}
+        errorClass={undefined}
+        pendingClass={undefined}
+        data-testid="of-pend"
+        onSubmit={handleSubmitPend}
+      >
         <button type="submit">Submit</button>
       </OptForm>
     ));

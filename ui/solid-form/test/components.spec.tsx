@@ -577,7 +577,7 @@ describe('FilePicker', () => {
         </Field>
       </Form>
     ));
-    
+
     const input = screen.getByTestId('input');
     fireEvent.input(input, { target: { value: 'A' } });
 
@@ -650,9 +650,7 @@ describe('FieldList', () => {
     const Schema = z.object({ tags: z.array(z.string()).default([]) });
     render(() => (
       <Form schema={Schema} value={{ tags: ['react', 'vue'] }}>
-        <FieldList name={'' as any}>
-          {(items: any[]) => <span>{items.length}</span>}
-        </FieldList>
+        <FieldList name={'' as any}>{(items: any[]) => <span>{items.length}</span>}</FieldList>
       </Form>
     ));
     expect(screen.getByText('[FieldListError]: Name property is required!')).toBeDefined();
