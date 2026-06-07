@@ -70,17 +70,19 @@ export class FormInput<T> {
   }
 
   set checked(value: boolean) {
-    this.locked = true;
+    untrack(() => {
+      this.locked = true;
 
-    const checked = Boolean(value);
-    this.#buffer.checked = checked;
+      const checked = Boolean(value);
+      this.#buffer.checked = checked;
 
-    if (!this.#field) this.#props.checked = checked;
-    if ((this.type === FORM_INPUT.radio || this.type === FORM_INPUT.toggle) && checked && this.#field)
-      this.#field.value = this.#buffer.value as T;
-    if (this.type === FORM_INPUT.checkbox && this.#field) this.#field.value = checked as T;
+      if (!this.#field) this.#props.checked = checked;
+      if ((this.type === FORM_INPUT.radio || this.type === FORM_INPUT.toggle) && checked && this.#field)
+        this.#field.value = this.#buffer.value as T;
+      if (this.type === FORM_INPUT.checkbox && this.#field) this.#field.value = checked as T;
 
-    this.locked = false;
+      this.locked = false;
+    });
   }
 
   get error() {
@@ -114,56 +116,65 @@ export class FormInput<T> {
         const checked = this.#field?.value === value;
         if (this.locked) return;
 
-        this.#buffer.value = value as string;
-        this.#buffer.checked = checked;
+        untrack(() => {
+          this.#buffer.value = value as string;
+          this.#buffer.checked = checked;
+        });
       });
     } else if (this.type === FORM_INPUT.checkbox) {
       effect(() => {
         const checked = (this.#field ? this.#field.value : props.checked) ?? false;
         if (this.locked) return;
-        this.#buffer.checked = checked as boolean;
+        untrack(() => (this.#buffer.checked = checked as boolean));
       });
     } else {
       effect(() => {
         const value = this.#field ? this.#field.value : props.value;
         if (this.locked) return;
-        this.#buffer.value = this.#stringify(value as T, this.type);
+        untrack(() => (this.#buffer.value = this.#stringify(value as T, this.type)));
       });
     }
   }
 
   settled() {
-    if (BOOL_INPUTS.has(this.type) || !this.locked) return;
+    untrack(() => {
+      if (BOOL_INPUTS.has(this.type) || !this.locked) return;
 
-    const value = this.#field ? this.#field.value : this.#props.value;
-    this.#buffer.value = this.#stringify(value as T, this.type);
-    this.locked = false;
+      const value = this.#field ? this.#field.value : this.#props.value;
+      this.#buffer.value = this.#stringify(value as T, this.type);
+      this.locked = false;
+    });
   }
 
   clear() {
-    this.locked = false;
-    if (this.#field) {
-      this.#field.clear();
-      this.#syncBuffer();
-    } else {
-      this.#buffer.value = '';
-      this.#buffer.checked = false;
-      this.#props.value = undefined;
-      this.#props.checked = undefined;
-    }
+    untrack(() => {
+      this.locked = false;
+      if (this.#field) {
+        this.#field.clear();
+        this.#syncBuffer();
+      } else {
+        this.#buffer.value = '';
+        this.#buffer.checked = false;
+        this.#props.value = undefined;
+        this.#props.checked = undefined;
+      }
+    });
   }
 
   reset() {
-    this.locked = false;
-    if (this.#field) {
-      this.#field.reset();
-      this.#syncBuffer();
-    } else {
-      this.#buffer.value = this.#stringify(this.#initial.value as T, this.type);
-      this.#buffer.checked = this.#initial.checked ?? false;
-      this.#props.value = this.#initial.value;
-      this.#props.checked = this.#initial.checked;
-    }
+    untrack(() => {
+      this.locked = false;
+
+      if (this.#field) {
+        this.#field.reset();
+        this.#syncBuffer();
+      } else {
+        this.#buffer.value = this.#stringify(this.#initial.value as T, this.type);
+        this.#buffer.checked = this.#initial.checked ?? false;
+        this.#props.value = this.#initial.value;
+        this.#props.checked = this.#initial.checked;
+      }
+    });
   }
 
   #syncBuffer() {
