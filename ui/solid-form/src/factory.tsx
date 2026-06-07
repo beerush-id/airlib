@@ -139,7 +139,7 @@ export function createForm<T extends ZodObject<ZodRawShape>>(
     (props) => {
       const $props = props as AnyType;
       const field = formField<AnyType[]>(() => $props.name);
-      if (!Array.isArray(field.value)) field.value = [];
+      if (field.name && !Array.isArray(field.value)) field.value = [];
 
       return createMemo(() => {
         if (!field.name) {
