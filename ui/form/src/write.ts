@@ -131,7 +131,10 @@ export function resetField(ctx: FormContext<AnyType>, prop: string): void {
     return;
   }
 
-  const baselineValue = ctx.baseline.get(prop);
+  let baselineValue = ctx.baseline.get(prop);
+  if (typeof baselineValue === 'object' && baselineValue !== null) {
+    baselineValue = structuredClone(baselineValue);
+  }
 
   if (baselineValue !== null && typeof baselineValue === 'object') {
     wipeChildren(ctx, prop);
