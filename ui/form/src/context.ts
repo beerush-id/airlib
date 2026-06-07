@@ -158,12 +158,10 @@ export class FormContext<T extends ZodObject> {
     this.errorKeys.clear();
     this.changeKeys.clear();
 
-    anchor.assign(this.store, {
-      errors: {},
-      changes: {},
-      touched: false,
-      status: FORM_STATUS.IDLE,
-    });
+    this.store.errors = {};
+    this.store.changes = {};
+    this.store.touched = false;
+    this.store.status = FORM_STATUS.IDLE;
 
     return this;
   }
