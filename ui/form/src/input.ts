@@ -37,16 +37,18 @@ export class FormInput<T> {
   }
 
   set value(raw: string) {
-    this.locked = true;
-    this.#buffer.value = raw;
+    untrack(() => {
+      this.locked = true;
+      this.#buffer.value = raw;
 
-    const parsed = this.#parse(raw, this.type);
-    if (parsed === FORM_INVALID_INPUT) return;
+      const parsed = this.#parse(raw, this.type);
+      if (parsed === FORM_INVALID_INPUT) return;
 
-    if (this.#field) this.#field.value = parsed as T;
-    else this.#props.value = parsed as T;
+      if (this.#field) this.#field.value = parsed as T;
+      else this.#props.value = parsed as T;
 
-    this.locked = false;
+      this.locked = false;
+    });
   }
 
   get changed() {
