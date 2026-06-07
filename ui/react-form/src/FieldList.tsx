@@ -11,7 +11,7 @@ export interface FieldListProps<T = AnyType> {
 
 export const FieldList = setup<FieldListProps>((props) => {
   const field = formField<AnyType[]>(props.name);
-  if (!Array.isArray(field.value)) field.value = [];
+  if (field.name && !Array.isArray(field.value)) field.value = [];
 
   return render(() => {
     if (!field.name) {

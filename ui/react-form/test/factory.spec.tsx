@@ -361,7 +361,7 @@ describe('createForm', () => {
         form: { class: 'opt-form', errorClass: 'opt-form-err', pendingClass: 'opt-form-pend' },
         field: { class: 'opt-field', errorClass: 'opt-field-err' },
       });
-      let rejectSubmits: any[] = [];
+      const rejectSubmits: any[] = [];
       const handleSubmit = () =>
         new Promise<void>((_, reject) => {
           rejectSubmits.push(reject);
@@ -701,7 +701,6 @@ describe('createForm', () => {
     });
 
     it('FieldList should render error message when name is not provided', async () => {
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const TestForm = createForm(userSchema);
       renderComponent(
         <TestForm value={{ name: 'John', email: 'john@test.com' }}>
@@ -714,8 +713,6 @@ describe('createForm', () => {
       expect(screen.getByText('[FieldListError]: Name property is required!').className).toBe('list-error');
 
       await act(async () => {});
-      expect(errorSpy).toHaveBeenCalled();
-      errorSpy.mockRestore();
     });
   });
 });

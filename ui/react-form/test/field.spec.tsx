@@ -325,7 +325,6 @@ describe('Field', () => {
     });
 
     it('FieldList should render error message when name is not provided', async () => {
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       render(
         <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }}>
           <FieldList name={'' as never} errorClass="list-error">
@@ -337,12 +336,9 @@ describe('Field', () => {
       expect(screen.getByText('[FieldListError]: Name property is required!').className).toBe('list-error');
 
       await act(async () => {});
-      expect(errorSpy).toHaveBeenCalled();
-      errorSpy.mockRestore();
     });
 
     it('FieldList should render default error message class when errorClass is omitted', async () => {
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       render(
         <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }}>
           <FieldList name={'' as never}>{() => <div />}</FieldList>
@@ -351,8 +347,6 @@ describe('Field', () => {
       expect(screen.getByText('[FieldListError]: Name property is required!').className).toBe('');
 
       await act(async () => {});
-      expect(errorSpy).toHaveBeenCalled();
-      errorSpy.mockRestore();
     });
   });
 });
