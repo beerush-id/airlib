@@ -18,6 +18,7 @@ export function synchronize(ctx: FormContext<AnyType>, _: AnyType, event: StateC
   const prop = event.keys.join('.');
 
   if (ArrayMutations.has(event.type as AnyType)) {
+    ctx.changeKeys.add(prop);
     syncArray(ctx, prop);
   } else {
     syncPrimitive(ctx, prop, event.value);

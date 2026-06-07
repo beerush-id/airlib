@@ -1,4 +1,4 @@
-import { effect, mutable } from '@anchorlib/core';
+import { effect, mutable, onCleanup } from '@anchorlib/core';
 import { FORM_FIELD_SYMBOL } from './constant.js';
 import { context, getForm } from './context.js';
 import type { FormInputOptions, FormInputProps } from './input.js';
@@ -71,6 +71,12 @@ export class FormField<T> {
         this.#matched.value = typeof match === 'function' ? match(form) : form.fields[this.name] === form.fields[match];
       });
     }
+    if (this.#form) {
+      const unsubscribe = this.#form.subscribe(({ type }) => {
+        if (type === 'reset' || type === 'submit') this.#touched.value = false;
+      });
+      onCleanup(unsubscribe);
+    }
 
     context.write(FORM_FIELD_SYMBOL, this);
   }
@@ -85,6 +91,7 @@ export class FormField<T> {
 
   reset() {
     this.#form?.resetField(this.name);
+    this.#touched.value = false;
   }
 
   remove() {

@@ -1,4 +1,4 @@
-import type { ZodType } from 'zod';
+import type { output, ZodObject, ZodType } from 'zod';
 import type { FORM_STATUS } from './constant.js';
 
 // biome-ignore lint/suspicious/noExplicitAny: Expect any.
@@ -30,6 +30,26 @@ export type FormContextStore = {
   changes: Record<string, AnyType>;
   touched: boolean;
 };
+
+export type FormSubmitHandler<T extends ZodObject> = (
+  data: output<T>,
+  changes: Partial<output<T>>
+) => Promise<void> | void;
+
+export type FormEvent<T extends ZodObject> =
+  | {
+      type: 'reset' | 'clear';
+    }
+  | {
+      type: 'change';
+      path: string;
+      value: AnyType;
+    }
+  | {
+      type: 'submit';
+      data: output<T>;
+      changes: Partial<output<T>>;
+    };
 
 type Primitive = null | undefined | string | number | boolean | symbol | bigint | Date;
 type IsTuple<T extends ReadonlyArray<AnyType>> = number extends T['length'] ? false : true;

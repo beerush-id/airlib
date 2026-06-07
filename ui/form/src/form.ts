@@ -1,11 +1,11 @@
 import { anchor, captureStack, effect, onCleanup, subscribe, untrack } from '@anchorlib/core';
-import type { input, ZodObject } from 'zod';
+import type { input, output, ZodObject } from 'zod';
 import { FORM_STATUS, FORM_SYMBOL } from './constant.js';
 import { context, FormContext, schemaOf } from './context.js';
 import { formField } from './field.js';
 import { initField } from './init.js';
 import { synchronize } from './sync.js';
-import type { AnyType, FormErrors, FormFields, FormStateOptions } from './types.js';
+import type { AnyType, FormErrors, FormEvent, FormFields, FormStateOptions, FormSubmitHandler } from './types.js';
 import { readPath, unflattenData, writePath } from './utils.js';
 import { clearField, resetField, setter, wipeChildren } from './write.js';
 
@@ -63,6 +63,7 @@ export class FormState<T extends ZodObject> {
   readonly #ctx: FormContext<AnyType>;
   readonly #dataProxy: AnyType;
   readonly #errorProxy: AnyType;
+  readonly #subscribers = new Set<(event: FormEvent<T>) => void>();
 
   constructor(schema: T, props: { value?: Partial<input<T>> } = {}, options?: FormStateOptions) {
     this.#ctx = new FormContext(schema as AnyType, props as AnyType, options);
@@ -74,7 +75,11 @@ export class FormState<T extends ZodObject> {
       },
       set: (_, prop: string, value: AnyType) => {
         if (this.#ctx.locked) return true;
-        return setter(this.#ctx, prop, value);
+        const res = setter(this.#ctx, prop, value);
+        for (const subscriber of this.#subscribers) {
+          subscriber({ type: 'change', path: prop, value });
+        }
+        return res;
       },
     } as ProxyHandler<Record<string, unknown>>);
 
@@ -162,6 +167,11 @@ export class FormState<T extends ZodObject> {
 
     this.#ctx.options.onChange?.(this.#ctx.store.changes, this.#ctx.store.errors);
     this.#ctx.locked = false;
+
+    for (const subscriber of this.#subscribers) {
+      subscriber({ type: 'clear' });
+    }
+
     return this;
   }
 
@@ -179,7 +189,6 @@ export class FormState<T extends ZodObject> {
       writePath(this.#ctx.props.value, path, baselineValue);
 
       delete this.#ctx.store.changes[path];
-      this.#ctx.store.touched = false;
 
       const schema = schemaOf(this.#ctx, path);
       if (schema && schema.type !== 'object' && schema.type !== 'array') {
@@ -195,27 +204,40 @@ export class FormState<T extends ZodObject> {
     }
 
     this.#ctx.changeKeys.clear();
+    this.#ctx.store.touched = false;
     delete this.#ctx.store.error;
 
     this.#ctx.options.onChange?.(this.#ctx.store.changes, this.#ctx.store.errors);
     this.#ctx.locked = false;
+
+    for (const subscriber of this.#subscribers) {
+      subscriber({ type: 'reset' });
+    }
+
     return this;
   }
 
-  public async submit(handler: AnyType, settle = this.#ctx.options.settleOnSubmit) {
+  public async submit(handler: FormSubmitHandler<T>, settle = this.#ctx.options.settleOnSubmit) {
     if (this.#ctx.locked) return;
     this.#ctx.locked = true;
+
+    const data = this.output as output<T>;
+    const changes = this.changes as Partial<output<T>>;
 
     delete this.#ctx.store.error;
     this.#ctx.store.status = FORM_STATUS.PENDING;
 
     try {
-      await handler(this.output, this.changes);
+      await handler(data, changes);
       this.#ctx.store.status = FORM_STATUS.SUCCESS;
 
       if (settle) {
         this.#ctx.applyShell();
         this.#ctx.store.touched = false;
+      }
+
+      for (const subscriber of this.#subscribers) {
+        subscriber({ type: 'submit', data, changes });
       }
     } catch (error) {
       this.#ctx.store.error = error as Error;
@@ -223,6 +245,11 @@ export class FormState<T extends ZodObject> {
     } finally {
       this.#ctx.locked = false;
     }
+  }
+
+  public subscribe(handler: (event: FormEvent<T>) => void) {
+    this.#subscribers.add(handler);
+    return () => this.#subscribers.delete(handler);
   }
 
   #initializeFromSchema(): void {
