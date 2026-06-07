@@ -16,7 +16,6 @@ export function wipeChildren(ctx: FormContext<AnyType>, parentPath: string): voi
     ctx.initialized.delete(childPath);
     delete ctx.store.errors[childPath];
     delete ctx.store.changes[childPath];
-    delete ctx.store.touched[childPath];
     ctx.errorKeys.delete(childPath);
     ctx.changeKeys.delete(childPath);
     ctx.fieldChildren.delete(childPath);
@@ -49,7 +48,6 @@ function writeToSource(ctx: FormContext<AnyType>, prop: string, value: AnyType):
  */
 export function setter(ctx: FormContext<AnyType>, prop: string, value: AnyType): boolean {
   initField(ctx, prop);
-  ctx.store.touched[prop] = true;
 
   const fieldSchema = schemaOf(ctx, prop);
   if (!fieldSchema) {
@@ -84,6 +82,7 @@ export function setter(ctx: FormContext<AnyType>, prop: string, value: AnyType):
     ctx.errorKeys.add(prop);
   }
 
+  ctx.store.touched = true;
   return true;
 }
 
@@ -117,7 +116,6 @@ export function clearField(ctx: FormContext<AnyType>, prop: string): void {
     ctx.errorKeys.add(prop);
   }
 
-  delete ctx.store.touched[prop];
   detectChanged(ctx, prop, defaultValue);
   ctx.initialized.add(prop);
   ctx.options.onChange?.(ctx.store.changes, ctx.store.errors);
@@ -157,7 +155,6 @@ export function resetField(ctx: FormContext<AnyType>, prop: string): void {
     }
   }
 
-  delete ctx.store.touched[prop];
   ctx.changeKeys.delete(prop);
   delete ctx.store.changes[prop];
   ctx.initialized.add(prop);

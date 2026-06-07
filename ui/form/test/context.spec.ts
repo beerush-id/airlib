@@ -79,7 +79,7 @@ describe('FormContext', () => {
 
     // No defaults in schema — no changes
     expect(ctx.store.changes).toEqual({});
-    expect(ctx.store.touched).toEqual({});
+    expect(ctx.store.touched).toBeFalsy();
   });
 
   it('merges options with defaults', () => {
@@ -96,7 +96,7 @@ describe('FormContext', () => {
     ctx.changeKeys.add('name');
     ctx.store.errors['name'] = ['error'];
     ctx.store.changes['name'] = 'test';
-    ctx.store.touched['name'] = true;
+    ctx.store.touched = true;
 
     ctx.cleanup();
 
@@ -105,7 +105,7 @@ describe('FormContext', () => {
     expect(ctx.changeKeys.size).toBe(0);
     expect(ctx.store.errors).toEqual({});
     expect(ctx.store.changes).toEqual({});
-    expect(ctx.store.touched).toEqual({});
+    expect(ctx.store.touched).toBeFalsy();
     expect(ctx.store.status).toBe('idle');
   });
 

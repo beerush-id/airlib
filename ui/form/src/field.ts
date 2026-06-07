@@ -7,24 +7,25 @@ import type { AnyType } from './types.js';
 
 export class FormField<T> {
   get name(): string {
-    return this.#name;
+    return typeof this.#name === 'function' ? this.#name() : this.#name;
   }
 
   get value(): T {
-    return this.#form?.fields[this.#name];
+    return this.#form?.fields[this.name] as T;
   }
 
   set value(value: T) {
     if (!this.#form) return;
-    this.#form.fields[this.#name] = value;
+    this.#form.fields[this.name] = value;
+    this.#touched.value = true;
   }
 
   get error(): string[] | undefined {
-    return this.#form?.errors[this.#name];
+    return this.#form?.errors[this.name];
   }
 
   get valid(): boolean {
-    return !this.#form?.errors[this.#name];
+    return !this.#form?.errors[this.name];
   }
 
   get matched(): boolean {
@@ -36,35 +37,38 @@ export class FormField<T> {
   }
 
   get required() {
-    const req = this.#required;
-    if (typeof req === 'function') return req();
-    if (typeof req === 'boolean') return req;
-    return this.#form?.isRequired(this.#name) ?? false;
+    if (typeof this.#required === 'function') return this.#required();
+    if (typeof this.#required === 'boolean') return this.#required;
+    return this.#form?.isRequired(this.name) ?? false;
   }
 
   get changed() {
-    return this.#form ? Object.hasOwn(this.#form.changeList, this.#name) : false;
+    return this.#form ? Object.hasOwn(this.#form.changeList, this.name) : false;
   }
 
   get touched() {
-    return this.#form?.touched[this.#name] ?? false;
+    return this.#touched.value;
   }
 
-  #name: string;
-  #form: AnyType;
-  #matched: { value: boolean };
-  #required?: boolean | (() => boolean);
+  readonly #name: string | (() => string);
+  readonly #form = getForm();
+  readonly #matched: { value: boolean };
+  readonly #touched = mutable(false);
+  readonly #required?: boolean | (() => boolean);
 
-  constructor(name: string, match?: string | ((form: AnyType) => boolean), required?: boolean | (() => boolean)) {
+  constructor(
+    name: string | (() => string),
+    match?: string | ((form: AnyType) => boolean),
+    required?: boolean | (() => boolean)
+  ) {
     this.#name = name;
-    this.#form = getForm<AnyType>();
     this.#matched = match ? mutable({ value: true }) : { value: true };
     this.#required = required;
 
     if (match && this.#form) {
       const form = this.#form;
       effect(() => {
-        this.#matched.value = typeof match === 'function' ? match(form) : form.fields[name] === form.fields[match];
+        this.#matched.value = typeof match === 'function' ? match(form) : form.fields[this.name] === form.fields[match];
       });
     }
 
@@ -76,11 +80,11 @@ export class FormField<T> {
   }
 
   clear() {
-    this.#form?.clearField(this.#name);
+    this.#form?.clearField(this.name);
   }
 
   reset() {
-    this.#form?.resetField(this.#name);
+    this.#form?.resetField(this.name);
   }
 
   remove() {
@@ -114,7 +118,7 @@ export class FormField<T> {
   #arrayRef(): { array: AnyType[]; index: number } | undefined {
     if (!this.#form) return;
 
-    const segments = this.#name.split('.');
+    const segments = this.name.split('.');
     const last = segments[segments.length - 1];
     if (!/^\d+$/.test(last)) return;
 
@@ -133,7 +137,7 @@ export type FormFieldState<T> = FormField<T>;
  * Creates a reactive reference to a specific form field.
  */
 export function formField<T>(
-  name: string,
+  name: string | (() => string),
   match?: string | ((form: AnyType) => boolean),
   required?: boolean | (() => boolean)
 ): FormField<T> {

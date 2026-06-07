@@ -47,7 +47,7 @@ describe('FormField', () => {
         value: { name: 'Alice', age: 25, password: 'secret', confirmPassword: 'secret' },
       });
 
-      const field = formField('name');
+      const field = formField(() => 'name');
 
       expect(field.valid).toBe(true);
       expect(field.error).toBeUndefined();

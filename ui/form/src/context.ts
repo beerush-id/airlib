@@ -75,7 +75,7 @@ export class FormContext<T extends ZodObject> {
     status: FORM_STATUS.IDLE,
     errors: {},
     changes: {},
-    touched: {},
+    touched: false,
   });
 
   public errorKeys = mutable(new Set<string>());
@@ -161,7 +161,7 @@ export class FormContext<T extends ZodObject> {
     anchor.assign(this.store, {
       errors: {},
       changes: {},
-      touched: {},
+      touched: false,
       status: FORM_STATUS.IDLE,
     });
 

@@ -29,12 +29,7 @@ export function synchronize(ctx: FormContext<AnyType>, _: AnyType, event: StateC
  */
 function syncPrimitive(ctx: FormContext<AnyType>, prop: string, value: AnyType): void {
   initField(ctx, prop);
-
-  const wasTouched = ctx.store.touched[prop];
   setter(ctx, prop, value);
-  if (!wasTouched) {
-    delete ctx.store.touched[prop];
-  }
 }
 
 /**

@@ -181,10 +181,10 @@ describe('FormState', () => {
           value: { name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } },
         });
 
-        expect(form.touched['name']).toBeUndefined();
+        expect(form.touched).toBe(false);
 
         form.fields['name'] = 'Bob';
-        expect(form.touched['name']).toBe(true);
+        expect(form.touched).toBe(true);
       });
     });
 
@@ -198,7 +198,7 @@ describe('FormState', () => {
         form.fields['name'] = 'Alice';
 
         expect(form.changed).toBe(false);
-        expect(form.touched['name']).toBe(true);
+        expect(form.touched).toBe(true);
       });
     });
 
@@ -211,7 +211,7 @@ describe('FormState', () => {
         form.fields['name'] = 'Bob';
         form.reset();
 
-        expect(form.touched['name']).toBeUndefined();
+        expect(form.touched).toBe(false);
       });
     });
   });

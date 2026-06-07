@@ -54,11 +54,11 @@ describe('setter', () => {
   it('marks fields as touched', () => {
     const { ctx } = createCtx({ name: 'Alice', age: 25, address: { city: 'NY', zip: '10001' } });
 
-    expect(ctx.store.touched['name']).toBeUndefined();
+    expect(ctx.store.touched).toBeFalsy();
 
     setter(ctx, 'name', 'Bob');
 
-    expect(ctx.store.touched['name']).toBe(true);
+    expect(ctx.store.touched).toBe(true);
   });
 
   it('tracks changes against baseline', () => {
@@ -112,12 +112,11 @@ describe('wipeChildren', () => {
     setter(ctx, 'address.city', 'LA');
     setter(ctx, 'address.zip', '123');
 
-    expect(ctx.store.touched['address.city']).toBe(true);
+    expect(ctx.store.touched).toBe(true);
     expect(ctx.store.errors['address.zip']).toBeDefined();
 
     wipeChildren(ctx, 'address');
 
-    expect(ctx.store.touched['address.city']).toBeUndefined();
     expect(ctx.store.errors['address.zip']).toBeUndefined();
     expect(ctx.initialized.has('address.city')).toBe(false);
   });
@@ -138,7 +137,6 @@ describe('clearField', () => {
 
     // String default is undefined (no .default() on name schema)
     expect(value.name).toBeUndefined();
-    expect(ctx.store.touched['name']).toBeUndefined();
   });
 
   it('resets field with .default() to its defined default', () => {
@@ -164,7 +162,6 @@ describe('resetField', () => {
 
     expect(value.name).toBe('Alice');
     expect(ctx.changeKeys.has('name')).toBe(false);
-    expect(ctx.store.touched['name']).toBeUndefined();
   });
 
   it('falls back to clearField when no baseline exists', () => {
@@ -177,7 +174,6 @@ describe('resetField', () => {
 
     // clearField sets to schema default (undefined for string without .default())
     expect(value.name).toBeUndefined();
-    expect(ctx.store.touched['name']).toBeUndefined();
   });
 
   it('resets to invalid baseline and populates errors', () => {

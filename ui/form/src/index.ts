@@ -13,7 +13,7 @@ export * from './types.js';
 
 export type FormFactory<T extends ZodObject> = ((props: { value?: AnyType }) => FormState<T>) & {
   get(): FormState<T> | undefined;
-  field<K extends string>(field: K): ReturnType<typeof formField>;
+  field<K extends string>(field: K | (() => K)): ReturnType<typeof formField>;
 };
 
 /**

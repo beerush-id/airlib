@@ -69,7 +69,7 @@ export class FormState<T extends ZodObject> {
 
     this.#dataProxy = new Proxy({}, {
       get: (_, prop: string) => {
-        initField(this.#ctx, prop);
+        // initField(this.#ctx, prop);
         return readPath(this.#ctx.props.value, prop);
       },
       set: (_, prop: string, value: AnyType) => {
@@ -179,7 +179,7 @@ export class FormState<T extends ZodObject> {
       writePath(this.#ctx.props.value, path, baselineValue);
 
       delete this.#ctx.store.changes[path];
-      delete this.#ctx.store.touched[path];
+      this.#ctx.store.touched = false;
 
       const schema = schemaOf(this.#ctx, path);
       if (schema && schema.type !== 'object' && schema.type !== 'array') {
@@ -215,7 +215,7 @@ export class FormState<T extends ZodObject> {
 
       if (settle) {
         this.#ctx.applyShell();
-        this.#ctx.store.touched = {};
+        this.#ctx.store.touched = false;
       }
     } catch (error) {
       this.#ctx.store.error = error as Error;

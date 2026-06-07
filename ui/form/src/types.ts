@@ -28,12 +28,12 @@ export type FormContextStore = {
   error?: Error;
   errors: Record<string, string[]>;
   changes: Record<string, AnyType>;
-  touched: Record<string, boolean>;
+  touched: boolean;
 };
 
 type Primitive = null | undefined | string | number | boolean | symbol | bigint | Date;
-type IsTuple<T extends ReadonlyArray<any>> = number extends T['length'] ? false : true;
-type TupleKeys<T extends ReadonlyArray<any>> = Exclude<keyof T, keyof any[]>;
+type IsTuple<T extends ReadonlyArray<AnyType>> = number extends T['length'] ? false : true;
+type TupleKeys<T extends ReadonlyArray<AnyType>> = Exclude<keyof T, keyof AnyType[]>;
 
 type Join<K, P> = K extends string | number
   ? P extends string | number

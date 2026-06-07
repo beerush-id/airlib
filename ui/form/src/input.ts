@@ -25,11 +25,11 @@ export class FormInput<T> {
   locked = false;
 
   get name() {
-    return this.#name;
+    return this.#field?.name ?? this.#props.name ?? '';
   }
 
   get type() {
-    return this.#type;
+    return this.#props?.type ?? FORM_INPUT.text;
   }
 
   get value() {
@@ -40,7 +40,7 @@ export class FormInput<T> {
     this.locked = true;
     this.#buffer.value = raw;
 
-    const parsed = this.#parse(raw, this.#type);
+    const parsed = this.#parse(raw, this.type);
     if (parsed === FORM_INVALID_INPUT) return;
 
     if (this.#field) this.#field.value = parsed as T;
@@ -76,9 +76,9 @@ export class FormInput<T> {
     this.#buffer.checked = checked;
 
     if (!this.#field) this.#props.checked = checked;
-    if ((this.#type === FORM_INPUT.radio || this.#type === FORM_INPUT.toggle) && checked && this.#field)
+    if ((this.type === FORM_INPUT.radio || this.type === FORM_INPUT.toggle) && checked && this.#field)
       this.#field.value = this.#buffer.value as T;
-    if (this.#type === FORM_INPUT.checkbox && this.#field) this.#field.value = checked as T;
+    if (this.type === FORM_INPUT.checkbox && this.#field) this.#field.value = checked as T;
 
     this.locked = false;
   }
@@ -91,28 +91,24 @@ export class FormInput<T> {
     return this.#field?.valid ?? true;
   }
 
-  #field: FormField<T> | undefined;
-  #props: FormInputProps<T>;
-  #type: InputType;
-  #name: string;
-  #buffer: { value: string; checked: boolean };
-  #initial: { value?: T; checked?: boolean };
-  #parse: (raw: string, type: InputType) => unknown;
-  #stringify: (value: T, type: InputType) => string;
+  readonly #field: FormField<T> | undefined;
+  readonly #props: FormInputProps<T>;
+  readonly #buffer: { value: string; checked: boolean };
+  readonly #initial: { value?: T; checked?: boolean };
+  readonly #parse: (raw: string, type: InputType) => unknown;
+  readonly #stringify: (value: T, type: InputType) => string;
 
   constructor(props: FormInputProps<T>, options?: FormInputOptions<T>) {
     const { parse = defaultParse, stringify = defaultStringify } = options ?? ({} as FormInputOptions<T>);
 
     this.#field = getFormField<T>();
     this.#props = props;
-    this.#type = props.type ?? FORM_INPUT.text;
-    this.#name = this.#field?.name ?? props.name ?? '';
     this.#buffer = mutable({ value: '', checked: false });
     this.#initial = { value: props.value, checked: props.checked };
     this.#parse = parse;
     this.#stringify = stringify as (value: T, type: InputType) => string;
 
-    if (this.#type === FORM_INPUT.radio || this.#type === FORM_INPUT.toggle) {
+    if (this.type === FORM_INPUT.radio || this.type === FORM_INPUT.toggle) {
       effect(() => {
         const value = props.value;
         const checked = this.#field?.value === value;
@@ -121,7 +117,7 @@ export class FormInput<T> {
         this.#buffer.value = value as string;
         this.#buffer.checked = checked;
       });
-    } else if (this.#type === FORM_INPUT.checkbox) {
+    } else if (this.type === FORM_INPUT.checkbox) {
       effect(() => {
         const checked = (this.#field ? this.#field.value : props.checked) ?? false;
         if (this.locked) return;
@@ -131,16 +127,16 @@ export class FormInput<T> {
       effect(() => {
         const value = this.#field ? this.#field.value : props.value;
         if (this.locked) return;
-        this.#buffer.value = this.#stringify(value as T, this.#type);
+        this.#buffer.value = this.#stringify(value as T, this.type);
       });
     }
   }
 
   settled() {
-    if (BOOL_INPUTS.has(this.#type) || !this.locked) return;
+    if (BOOL_INPUTS.has(this.type) || !this.locked) return;
 
     const value = this.#field ? this.#field.value : this.#props.value;
-    this.#buffer.value = this.#stringify(value as T, this.#type);
+    this.#buffer.value = this.#stringify(value as T, this.type);
     this.locked = false;
   }
 
@@ -163,7 +159,7 @@ export class FormInput<T> {
       this.#field.reset();
       this.#syncBuffer();
     } else {
-      this.#buffer.value = this.#stringify(this.#initial.value as T, this.#type);
+      this.#buffer.value = this.#stringify(this.#initial.value as T, this.type);
       this.#buffer.checked = this.#initial.checked ?? false;
       this.#props.value = this.#initial.value;
       this.#props.checked = this.#initial.checked;
@@ -172,10 +168,10 @@ export class FormInput<T> {
 
   #syncBuffer() {
     untrack(() => {
-      if (BOOL_INPUTS.has(this.#type)) {
+      if (BOOL_INPUTS.has(this.type)) {
         this.#buffer.checked = Boolean(this.#field?.value);
       } else {
-        this.#buffer.value = this.#stringify(this.#field?.value as T, this.#type);
+        this.#buffer.value = this.#stringify(this.#field?.value as T, this.type);
       }
     });
   }
