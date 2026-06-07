@@ -97,6 +97,17 @@ describe('Field', () => {
       expect(field.getAttribute('labelClass')).toBeNull();
       expect(field.getAttribute('errorClass')).toBeNull();
     });
+
+    it('should render an error when name is not provided', () => {
+      render(() => (
+        <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }}>
+          <Field name={'' as any} data-testid="field">
+            <TextInput />
+          </Field>
+        </Form>
+      ));
+      expect(screen.getByText('[FieldError]: Name property is required!')).toBeDefined();
+    });
   });
 
   describe('Headless mode', () => {

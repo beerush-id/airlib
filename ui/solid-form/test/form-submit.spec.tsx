@@ -97,4 +97,40 @@ describe('FormSubmit', () => {
     expect(screen.getByTestId('btn').textContent).toBe('Submit');
     expect((screen.getByTestId('btn') as HTMLButtonElement).disabled).toBe(true);
   });
+
+  it('should apply pending class when form is submitting', async () => {
+    const handleSubmit = () => new Promise<void>((resolve) => setTimeout(resolve, 100));
+
+    render(() => (
+      <Form schema={schema} value={{ name: 'John' }} onSubmit={handleSubmit}>
+        <Field name="name">
+          <TextInput data-testid="input" />
+        </Field>
+        <FormSubmit data-testid="btn" pendingClass="submitting">
+          Save
+        </FormSubmit>
+      </Form>
+    ));
+
+    fireEvent.input(screen.getByTestId('input'), { target: { value: 'Jane' } });
+    const btn = screen.getByTestId('btn');
+    fireEvent.click(btn);
+
+    expect(btn.className).toContain('submitting');
+  });
+
+  it('should fallback to default options when pendingClass is omitted', async () => {
+    const handleSubmit = () => new Promise<void>((resolve) => setTimeout(resolve, 100));
+
+    render(() => (
+      <Form schema={schema} value={{ name: 'John' }} onSubmit={handleSubmit}>
+        <Field name="name"><TextInput data-testid="input" /></Field>
+        <FormSubmit data-testid="btn-fallback">Save</FormSubmit>
+      </Form>
+    ));
+
+    fireEvent.input(screen.getByTestId('input'), { target: { value: 'Jane' } });
+    const btn = screen.getByTestId('btn-fallback');
+    fireEvent.click(btn);
+  });
 });

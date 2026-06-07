@@ -160,4 +160,37 @@ describe('Checkbox', () => {
     fireEvent.click(screen.getByTestId('checkbox'));
     expect(changeCalled).toBe(true);
   });
+
+  it('should apply error class when touched and invalid', () => {
+    const errorSchema = z.object({ agree: z.boolean().refine((v) => v === true, 'Required') });
+
+    render(() => (
+      <Form schema={errorSchema} value={{ agree: false }}>
+        <Field name="agree">
+          <Checkbox data-testid="checkbox-error" errorClass="check-error" />
+        </Field>
+      </Form>
+    ));
+
+    const checkbox = screen.getByTestId('checkbox-error');
+    fireEvent.change(checkbox, { target: { checked: true } });
+    fireEvent.change(checkbox, { target: { checked: false } });
+    expect(checkbox.className).toContain('check-error');
+  });
+
+  it('should fallback to default options when errorClass is omitted', () => {
+    const errorSchema = z.object({ agree: z.boolean().refine((v) => v === true, 'Required') });
+
+    render(() => (
+      <Form schema={errorSchema} value={{ agree: false }}>
+        <Field name="agree">
+          <Checkbox data-testid="checkbox-fallback" />
+        </Field>
+      </Form>
+    ));
+
+    const checkbox = screen.getByTestId('checkbox-fallback');
+    fireEvent.change(checkbox, { target: { checked: true } });
+    fireEvent.change(checkbox, { target: { checked: false } });
+  });
 });
