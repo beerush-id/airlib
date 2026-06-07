@@ -1,28 +1,48 @@
-import { setup } from '@anchorlib/solid';
-import { formInput, type AnyType } from '@airlib/form';
-import { createEffect, type JSX } from 'solid-js';
+import { type AnyType, formInput } from '@airlib/form';
+import { derived, setup } from '@anchorlib/solid';
+import type { JSX as Jsx } from 'solid-js';
+import { getInputClasses, INPUT_OPTIONS_KEYS, SELECT_OPTIONS, SELECT_OPTIONS_KEYS } from '../config.js';
 
-export interface SelectProps extends JSX.SelectHTMLAttributes<HTMLSelectElement> {}
+export interface SelectProps extends Jsx.SelectHTMLAttributes<HTMLSelectElement> {
+  errorClass?: string;
+}
 
 export const Select = setup<SelectProps>((props) => {
   const input = formInput(props as AnyType);
-  const rest = props.$omit(['value', 'name', 'disabled', 'onChange']);
-  let ref: HTMLSelectElement | undefined;
-
-  createEffect(() => {
-    if (ref) ref.value = input.value;
-  });
+  const restProps = props.$omit([
+    'value',
+    'name',
+    'disabled',
+    'class',
+    'onChange',
+    ...(SELECT_OPTIONS_KEYS as never[]),
+    ...(INPUT_OPTIONS_KEYS as never[]),
+  ]);
+  const { baseClass, errorClass } = getInputClasses(SELECT_OPTIONS);
 
   const handleChange = (e: Event) => {
     input.value = (e.currentTarget as HTMLSelectElement).value;
     if (typeof props.onChange === 'function') {
-      props.onChange(e as any);
+      props.onChange(e as AnyType);
     }
   };
 
+  const className = derived(() => {
+    if (input.touched && input.error) {
+      return [props.class ?? baseClass, props.errorClass ?? errorClass].filter(Boolean).join(' ');
+    }
+    return props.class ?? baseClass;
+  });
+
   return (
-    /* v8 ignore next */
-    <select ref={ref} {...rest} name={input.name} disabled={input.disabled} onChange={handleChange}>
+    <select
+      {...restProps}
+      name={input.name}
+      value={input.value}
+      disabled={input.disabled}
+      class={className.value}
+      onChange={handleChange}
+    >
       {props.children}
     </select>
   );

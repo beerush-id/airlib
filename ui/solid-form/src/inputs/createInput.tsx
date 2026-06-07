@@ -1,5 +1,7 @@
-import { type AnyType, formInput, type FormInputOptions } from '@airlib/form';
-import { setup } from '@anchorlib/solid';
+import type { AnyType, FormInputOptions } from '@airlib/form';
+import { formInput } from '@airlib/form';
+import { derived, setup } from '@anchorlib/solid';
+import { getInputClasses, getSpecificOptions, INPUT_OPTIONS_KEYS } from '../config.js';
 
 export function createInput<P extends Record<string, AnyType>, T = AnyType>(
   type: string,
@@ -7,34 +9,52 @@ export function createInput<P extends Record<string, AnyType>, T = AnyType>(
 ) {
   return setup<P>((props) => {
     (props as AnyType).type = type;
+
+    const { options: specificOptions, keys: specificOptionKeys } = getSpecificOptions(type);
+    const { baseClass, errorClass } = getInputClasses(specificOptions!);
+    const restProps = props.$omit([
+      'value',
+      'type',
+      'name',
+      'id',
+      'class',
+      'disabled',
+      'onInput',
+      'onBlur',
+      ...specificOptionKeys,
+      ...INPUT_OPTIONS_KEYS,
+    ]);
     const input = formInput(props as AnyType, options);
-    const rest = props.$omit(['value', 'type', 'name', 'id', 'disabled', 'onInput', 'onBlur'] as AnyType);
     const $props = props as AnyType;
     const fieldId = () => $props.id || input.name.replace(/\./g, '-');
     const errorId = () => `${fieldId()}-error`;
 
     const handleInput = (e: Event) => {
       input.value = (e.currentTarget as HTMLInputElement).value;
-      if (typeof $props.onInput === 'function') {
-        $props.onInput(e as any);
-      }
+      $props.onInput?.(e as AnyType);
     };
 
     const handleBlur = (e: Event) => {
       input.settled();
-      if (typeof $props.onBlur === 'function') {
-        $props.onBlur(e as any);
-      }
+      $props.onBlur?.(e as AnyType);
     };
+
+    const className = derived(() => {
+      if (input.touched && input.error) {
+        return [$props.class ?? baseClass, $props.errorClass ?? errorClass].filter(Boolean).join(' ');
+      }
+      return $props.class ?? baseClass;
+    });
 
     return (
       <input
-        {...rest}
+        {...restProps}
         id={fieldId()}
         type={input.type}
         name={input.name}
         value={input.value}
         disabled={input.disabled}
+        class={className.value}
         aria-invalid={input.error ? true : undefined}
         aria-describedby={input.error ? errorId() : undefined}
         onInput={handleInput}
