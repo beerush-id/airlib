@@ -439,6 +439,19 @@ describe('FormInput', () => {
       });
     });
 
+    it('changed/touched/valid/disabled/required default without field and name', () => {
+      scope.run(() => {
+        const input = new FormInput({ type: FORM_INPUT.text });
+
+        expect(input.changed).toBe(false);
+        expect(input.touched).toBe(false);
+        expect(input.valid).toBe(true);
+        expect(input.disabled).toBe(false);
+        expect(input.required).toBe(false);
+        expect(input.error).toBeUndefined();
+      });
+    });
+
     it('name falls back to props.name without field', () => {
       scope.run(() => {
         const input = new FormInput({ type: FORM_INPUT.text, name: 'fallback' });

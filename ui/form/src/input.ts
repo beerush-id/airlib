@@ -1,7 +1,7 @@
 import { effect, mutable, untrack } from '@anchorlib/core';
 import { FORM_INPUT, FORM_INVALID_INPUT } from './constant.js';
 import { getFormField } from './context.js';
-import type { FormField } from './field.js';
+import { type FormField, formField } from './field.js';
 
 export type InputType = (typeof FORM_INPUT)[keyof typeof FORM_INPUT];
 
@@ -106,6 +106,9 @@ export class FormInput<T> {
     const { parse = defaultParse, stringify = defaultStringify } = options ?? ({} as FormInputOptions<T>);
 
     this.#field = getFormField<T>();
+    if (!this.#field && props.name) {
+      this.#field = formField(() => props.name!);
+    }
     this.#props = props;
     this.#buffer = mutable({ value: '', checked: false });
     this.#initial = { value: props.value, checked: props.checked };

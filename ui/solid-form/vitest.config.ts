@@ -11,6 +11,7 @@ export default defineConfig({
     jsxImportSource: 'solid-js',
   },
   test: {
+    setupFiles: ['test/setup.ts'],
     globals: true,
     environment: 'jsdom',
     include: ['test/**/*.{test,spec}.{ts,js,tsx,jsx}'],
