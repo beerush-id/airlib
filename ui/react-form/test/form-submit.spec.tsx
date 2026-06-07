@@ -97,4 +97,48 @@ describe('FormSubmit', () => {
     expect(screen.getByTestId('btn').textContent).toBe('Submit');
     expect((screen.getByTestId('btn') as HTMLButtonElement).disabled).toBe(true);
   });
+
+  it('should apply pendingClass when form is pending', async () => {
+    // To make form pending, we trigger onSubmit with a promise
+    let resolveSubmit!: () => void;
+    const handleSubmit = () => {
+      return new Promise<void>((resolve) => {
+        resolveSubmit = resolve;
+      });
+    };
+
+    render(
+      <Form schema={schema} value={{ name: 'John' }} onSubmit={handleSubmit}>
+        <Field name="name">
+          <TextInput data-testid="input" />
+        </Field>
+        <FormSubmit data-testid="btn" className="btn-base" pendingClass="btn-pending">
+          Save
+        </FormSubmit>
+      </Form>
+    );
+
+    // Make a change
+    await act(async () => {
+      fireEvent.input(screen.getByTestId('input'), { target: { value: 'Jane' } });
+    });
+
+    const btn = screen.getByTestId('btn') as HTMLButtonElement;
+    expect(btn.className).toBe('btn-base');
+
+    // Trigger submit
+    await act(async () => {
+      fireEvent.click(btn);
+    });
+
+    // Form is now pending
+    expect(btn.className).toBe('btn-base btn-pending');
+
+    // Complete the submission
+    await act(async () => {
+      resolveSubmit();
+    });
+
+    expect(btn.className).toBe('btn-base');
+  });
 });

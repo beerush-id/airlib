@@ -118,7 +118,7 @@ export function createForm<T extends ZodObject<ZodRawShape>>(
               {$props.label}
               {field.required && (
                 <span className={$props.requiredClass ?? fieldOptions?.requiredClass ?? FIELD_OPTIONS.requiredClass}>
-                  {$props.requiredLabel ?? fieldOptions?.requiredLabel}
+                  {$props.requiredLabel ?? fieldOptions?.requiredLabel ?? FIELD_OPTIONS.requiredLabel}
                 </span>
               )}
             </label>

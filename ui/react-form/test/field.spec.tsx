@@ -1,8 +1,9 @@
 import '@anchorlib/react/client';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { Field } from '../src/Field.js';
+import { FieldList } from '../src/FieldList.js';
 import { Form } from '../src/Form.js';
 import { TextInput } from '../src/index.js';
 
@@ -61,16 +62,23 @@ describe('Field', () => {
       render(
         <Form schema={userSchema} value={{ name: 'Al', email: 'john@test.com' }}>
           <Field name="name" label="Name" errorClass="error-text" data-testid="field">
-            <TextInput />
+            <TextInput data-testid="input" />
           </Field>
         </Form>
       );
 
       // The engine validates on init — 'Al' is < 3 chars
       const field = screen.getByTestId('field');
-      const error = field.querySelector('.error-text');
+      let error = field.querySelector('.error-text');
+      expect(error).toBeNull(); // not touched yet
+
+      // touch it
+      const input = screen.getByTestId('input');
+      fireEvent.input(input, { target: { value: 'A' } });
+
+      error = field.querySelector('.error-text');
       expect(error).toBeDefined();
-      expect(error).toBeNull();
+      expect(error?.textContent).toBe('Name too short');
     });
 
     it('should not leak name, label, labelClass, errorClass to the DOM', () => {
@@ -285,6 +293,66 @@ describe('Field', () => {
       fireEvent.input(screen.getByTestId('input'), { target: { value: 'Jane' } });
 
       expect(screen.getByTestId('touched').textContent).toBe('true');
+    });
+  });
+
+  describe('Missing properties fallback', () => {
+    it('should render error message when name is not provided', async () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      render(
+        <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }}>
+          <Field name={'' as never} errorClass="custom-error">
+            <TextInput data-testid="input" />
+          </Field>
+        </Form>
+      );
+      expect(screen.getByText('[FieldError]: Name property is required!')).toBeDefined();
+      expect(screen.getByText('[FieldError]: Name property is required!').className).toBe('custom-error');
+      errorSpy.mockRestore();
+    });
+
+    it('should render default error message class when name is not provided and errorClass is omitted', async () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      render(
+        <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }}>
+          <Field name={'' as never}>
+            <TextInput data-testid="input" />
+          </Field>
+        </Form>
+      );
+      expect(screen.getByText('[FieldError]: Name property is required!').className).toBe('');
+      errorSpy.mockRestore();
+    });
+
+    it('FieldList should render error message when name is not provided', async () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      render(
+        <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }}>
+          <FieldList name={'' as never} errorClass="list-error">
+            {() => <div />}
+          </FieldList>
+        </Form>
+      );
+      expect(screen.getByText('[FieldListError]: Name property is required!')).toBeDefined();
+      expect(screen.getByText('[FieldListError]: Name property is required!').className).toBe('list-error');
+
+      await act(async () => {});
+      expect(errorSpy).toHaveBeenCalled();
+      errorSpy.mockRestore();
+    });
+
+    it('FieldList should render default error message class when errorClass is omitted', async () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      render(
+        <Form schema={userSchema} value={{ name: 'John', email: 'john@test.com' }}>
+          <FieldList name={'' as never}>{() => <div />}</FieldList>
+        </Form>
+      );
+      expect(screen.getByText('[FieldListError]: Name property is required!').className).toBe('');
+
+      await act(async () => {});
+      expect(errorSpy).toHaveBeenCalled();
+      errorSpy.mockRestore();
     });
   });
 });
