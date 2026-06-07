@@ -4,8 +4,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { Field } from '../src/Field.js';
 import { Form } from '../src/Form.js';
-import { Checkbox } from '../src/inputs/Checkbox.js';
-import { TextInput } from '../src/inputs/index.js';
+import { Checkbox, TextInput } from '../src/index.js';
 
 afterEach(cleanup);
 

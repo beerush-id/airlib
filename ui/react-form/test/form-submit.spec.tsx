@@ -6,8 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { Field } from '../src/Field.js';
 import { Form } from '../src/Form.js';
-import { FormSubmit } from '../src/FormSubmit.js';
-import { TextInput } from '../src/inputs/TextInput.js';
+import { FormSubmit, TextInput } from '../src/index.js';
 
 afterEach(cleanup);
 

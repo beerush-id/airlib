@@ -13,6 +13,7 @@ export {
   type InputType,
 } from '@airlib/form';
 
+export * from './config.js';
 export * from './Field.js';
 export * from './FieldList.js';
 export * from './Form.js';

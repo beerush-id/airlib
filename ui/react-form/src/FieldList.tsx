@@ -1,15 +1,27 @@
-import { setup, render } from '@anchorlib/react';
-import { formField, type AnyType } from '@airlib/form';
+import { type AnyType, formField } from '@airlib/form';
+import { render, setup } from '@anchorlib/react';
 import type { ReactNode } from 'react';
+import { FIELD_OPTIONS } from './config.js';
 
 export interface FieldListProps<T = AnyType> {
   name: string;
   children: (items: T[]) => ReactNode;
+  errorClass?: string;
 }
 
 export const FieldList = setup<FieldListProps>((props) => {
   const field = formField<AnyType[]>(props.name);
   if (!Array.isArray(field.value)) field.value = [];
 
-  return render(() => props.children(field.value), 'FieldListView');
+  return render(() => {
+    if (!field.name) {
+      return (
+        <span className={props.errorClass ?? FIELD_OPTIONS.errorClass}>
+          [FieldListError]: Name property is required!
+        </span>
+      );
+    }
+
+    return props.children(field.value);
+  }, 'FieldListView');
 }, 'FieldList');

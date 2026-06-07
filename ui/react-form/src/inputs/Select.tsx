@@ -1,21 +1,47 @@
-import { setup, render } from '@anchorlib/react';
-import { formInput, type AnyType } from '@airlib/form';
-import type { SelectHTMLAttributes, ChangeEvent } from 'react';
+import { type AnyType, formInput } from '@airlib/form';
+import { derived, render, setup } from '@anchorlib/react';
+import type { ChangeEvent, SelectHTMLAttributes } from 'react';
+import { getInputClasses, INPUT_OPTIONS_KEYS, SELECT_OPTIONS, SELECT_OPTIONS_KEYS } from '../config.js';
 
-export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {}
+export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+  errorClass?: string;
+}
 
 export const Select = setup<SelectProps>((props) => {
+  const rest = props.$omit([
+    'value',
+    'name',
+    'disabled',
+    'className',
+    'onChange',
+    ...(SELECT_OPTIONS_KEYS as never[]),
+    ...(INPUT_OPTIONS_KEYS as never[]),
+  ]);
   const input = formInput(props as AnyType);
-  const rest = props.$omit(['value', 'name', 'disabled', 'onChange']);
+
+  const { baseClass, errorClass } = getInputClasses(SELECT_OPTIONS);
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     input.value = e.currentTarget.value;
     props.onChange?.(e);
   };
+  const className = derived(() => {
+    if (input.touched && input.error) {
+      return [props.className ?? baseClass, props.errorClass ?? errorClass].filter(Boolean).join(' ');
+    }
+    return props.className ?? baseClass;
+  });
 
   return render(
     () => (
-      <select {...rest} name={input.name} value={input.value} disabled={input.disabled} onChange={handleChange}>
+      <select
+        {...rest}
+        name={input.name}
+        value={input.value}
+        disabled={input.disabled}
+        className={className.value}
+        onChange={handleChange}
+      >
         {props.children}
       </select>
     ),

@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { Field } from '../src/Field.js';
 import { Form } from '../src/Form.js';
-import { TextInput } from '../src/inputs/TextInput.js';
+import { TextInput } from '../src/index.js';
 
 afterEach(cleanup);
 
