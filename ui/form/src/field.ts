@@ -1,4 +1,4 @@
-import { effect, mutable, onCleanup } from '@anchorlib/core';
+import { effect, mutable, onCleanup, untrack } from '@anchorlib/core';
 import { FORM_FIELD_SYMBOL } from './constant.js';
 import { context, getForm } from './context.js';
 import type { FormInputOptions, FormInputProps } from './input.js';
@@ -68,12 +68,17 @@ export class FormField<T> {
     if (match && this.#form) {
       const form = this.#form;
       effect(() => {
-        this.#matched.value = typeof match === 'function' ? match(form) : form.fields[this.name] === form.fields[match];
-        if (this.#matched.value) {
-          this.#form!.unblock(this.name);
-        } else {
-          this.#form!.block(this.name);
-        }
+        const matched = typeof match === 'function' ? match(form) : form.fields[this.name] === form.fields[match];
+
+        untrack(() => {
+          this.#matched.value = matched;
+
+          if (this.#matched.value) {
+            this.#form!.unblock(this.name);
+          } else {
+            this.#form!.block(this.name);
+          }
+        });
       });
     }
     if (this.#form) {
