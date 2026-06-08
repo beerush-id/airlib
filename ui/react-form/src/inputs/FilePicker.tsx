@@ -1,6 +1,6 @@
-import { setup, render, derived } from '@anchorlib/react';
-import { formInput, type AnyType } from '@airlib/form';
-import type { InputHTMLAttributes, ChangeEvent } from 'react';
+import { type AnyType, formInput } from '@airlib/form';
+import { derived, render, setup } from '@anchorlib/react';
+import type { ChangeEvent, InputHTMLAttributes } from 'react';
 import { FILE_OPTIONS, FILE_OPTIONS_KEYS, getInputClasses, INPUT_OPTIONS_KEYS } from '../config.js';
 
 export interface FilePickerProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value'> {
@@ -29,7 +29,7 @@ export const FilePicker = setup<FilePickerProps>((props) => {
   };
 
   const className = derived(() => {
-    if (input.touched && input.error) {
+    if (input.touched && (input.error || !input.matched)) {
       return [props.className ?? baseClass, props.errorClass ?? errorClass].filter(Boolean).join(' ');
     }
     return props.className ?? baseClass;

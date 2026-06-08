@@ -42,7 +42,7 @@ export function createInput<P, T = AnyType>(type: string, options?: FormInputOpt
     };
 
     const className = derived(() => {
-      if (input.touched && input.error) {
+      if (input.touched && (input.error || !input.matched)) {
         return [$props.className ?? baseClass, $props.errorClass ?? errorClass].filter(Boolean).join(' ');
       }
       return $props.className ?? baseClass;

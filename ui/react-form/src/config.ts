@@ -15,6 +15,7 @@ export const FIELD_OPTIONS = {
   errorClass: '',
   requiredLabel: '*',
   requiredClass: '',
+  mismatchLabel: '',
 };
 export const FIELD_OPTIONS_KEYS = Object.keys(FIELD_OPTIONS);
 export type FieldDefaultOptions = Partial<typeof FIELD_OPTIONS>;

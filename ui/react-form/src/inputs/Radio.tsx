@@ -1,6 +1,6 @@
-import { setup, render, derived } from '@anchorlib/react';
-import { formInput, type AnyType } from '@airlib/form';
-import type { InputHTMLAttributes, ChangeEvent } from 'react';
+import { type AnyType, formInput } from '@airlib/form';
+import { derived, render, setup } from '@anchorlib/react';
+import type { ChangeEvent, InputHTMLAttributes } from 'react';
 import { getInputClasses, INPUT_OPTIONS_KEYS, RADIO_OPTIONS, RADIO_OPTIONS_KEYS } from '../config.js';
 
 export interface RadioProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -30,7 +30,7 @@ export const Radio = setup<RadioProps>((props) => {
   };
 
   const className = derived(() => {
-    if (input.touched && input.error) {
+    if (input.touched && (input.error || !input.matched)) {
       return [props.className ?? baseClass, props.errorClass ?? errorClass].filter(Boolean).join(' ');
     }
     return props.className ?? baseClass;

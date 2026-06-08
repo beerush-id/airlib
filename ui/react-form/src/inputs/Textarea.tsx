@@ -1,6 +1,6 @@
-import { setup, render, derived } from '@anchorlib/react';
-import { formInput, type AnyType } from '@airlib/form';
-import type { TextareaHTMLAttributes, InputEvent, FocusEvent } from 'react';
+import { type AnyType, formInput } from '@airlib/form';
+import { derived, render, setup } from '@anchorlib/react';
+import type { FocusEvent, InputEvent, TextareaHTMLAttributes } from 'react';
 import { getInputClasses, INPUT_OPTIONS_KEYS, TEXTAREA_OPTIONS, TEXTAREA_OPTIONS_KEYS } from '../config.js';
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -33,7 +33,7 @@ export const Textarea = setup<TextareaProps>((props) => {
   };
 
   const className = derived(() => {
-    if (input.touched && input.error) {
+    if (input.touched && (input.error || !input.matched)) {
       return [props.className ?? baseClass, props.errorClass ?? errorClass].filter(Boolean).join(' ');
     }
     return props.className ?? baseClass;
