@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { createForm } from '../src/factory.js';
 import { TextInput } from '../src/index.js';
+import { FIELD_OPTIONS } from '../src/config.js';
 
 afterEach(cleanup);
 
@@ -713,6 +714,78 @@ describe('createForm', () => {
       expect(screen.getByText('[FieldListError]: Name property is required!').className).toBe('list-error');
 
       await act(async () => {});
+    });
+  });
+
+  describe('Match prop', () => {
+    const passwordSchema = z.object({
+      password: z.string().min(6, 'Too short'),
+      confirmPassword: z.string().min(6, 'Too short'),
+    });
+
+    it('should display mismatchLabel in structured Field when values differ', () => {
+      const PasswordForm = createForm(passwordSchema);
+
+      renderComponent(
+        <PasswordForm value={{ password: 'secret', confirmPassword: 'abcdef' }}>
+          <PasswordForm.Field
+            name="confirmPassword"
+            match="password"
+            mismatchLabel="Passwords do not match!"
+            data-testid="field"
+          >
+            <TextInput />
+          </PasswordForm.Field>
+        </PasswordForm>
+      );
+
+      const field = screen.getByTestId('field');
+      const error = field.querySelector('[role="alert"]');
+      expect(error).toBeDefined();
+      expect(error?.textContent).toBe('Passwords do not match!');
+    });
+
+    it('should use provided errorClass for mismatchLabel', () => {
+      const PasswordForm = createForm(passwordSchema);
+
+      renderComponent(
+        <PasswordForm value={{ password: 'secret', confirmPassword: 'abcdef' }}>
+          <PasswordForm.Field
+            name="confirmPassword"
+            match="password"
+            mismatchLabel="Passwords do not match!"
+            errorClass="custom-mismatch-error"
+            data-testid="field"
+          >
+            <TextInput />
+          </PasswordForm.Field>
+        </PasswordForm>
+      );
+
+      const field = screen.getByTestId('field');
+      const error = field.querySelector('[role="alert"]');
+      expect(error?.className).toBe('custom-mismatch-error');
+    });
+
+    it('should fallback to default errorClass when fieldOptions is missing', () => {
+      const PasswordForm = createForm(passwordSchema, { field: {} as any });
+
+      renderComponent(
+        <PasswordForm value={{ password: 'secret', confirmPassword: 'abcdef' }}>
+          <PasswordForm.Field
+            name="confirmPassword"
+            match="password"
+            mismatchLabel="Passwords do not match!"
+            data-testid="field"
+          >
+            <TextInput />
+          </PasswordForm.Field>
+        </PasswordForm>
+      );
+
+      const field = screen.getByTestId('field');
+      const error = field.querySelector('[role="alert"]');
+      expect(error?.className).toBe(FIELD_OPTIONS.errorClass);
     });
   });
 });

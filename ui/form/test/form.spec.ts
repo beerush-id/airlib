@@ -691,10 +691,10 @@ describe('FormState', () => {
       scope.run(() => {
         const schema = z.object({
           password: z.string(),
-          confirmPassword: z.string()
+          confirmPassword: z.string(),
         });
         const form = formState(schema, {
-          value: { password: 'abc', confirmPassword: 'def' }
+          value: { password: 'abc', confirmPassword: 'def' },
         });
 
         const confirmField = formField('confirmPassword', 'password');
@@ -703,7 +703,7 @@ describe('FormState', () => {
         expect(form.blocked).toBe(true);
 
         form.fields['confirmPassword'] = 'abc';
-        
+
         expect(confirmField.matched).toBe(true);
         expect(form.blocked).toBe(false);
       });
@@ -712,12 +712,12 @@ describe('FormState', () => {
     it('handles manual double-blocking gracefully', () => {
       scope.run(() => {
         const form = formState(userSchema, { value: {} as any });
-        
+
         expect(form.blocked).toBe(false);
-        
+
         form.block('custom_block');
         expect(form.blocked).toBe(true);
-        
+
         // Double-block
         form.block('custom_block');
         expect(form.blocked).toBe(true);
@@ -727,13 +727,13 @@ describe('FormState', () => {
     it('handles manual double-unblocking gracefully', () => {
       scope.run(() => {
         const form = formState(userSchema, { value: {} as any });
-        
+
         form.block('custom_block');
         expect(form.blocked).toBe(true);
-        
+
         form.unblock('custom_block');
         expect(form.blocked).toBe(false);
-        
+
         // Double-unblock
         form.unblock('custom_block');
         expect(form.blocked).toBe(false);
