@@ -35,12 +35,14 @@ describe('FormInput', () => {
           value: { name: 'Alice', age: 25, active: true, role: 'admin', birthday: new Date('2000-01-01') },
         });
 
-        const field = formField('name');
+        formField('name');
         const input = new FormInput({ type: FORM_INPUT.text });
 
         expect(input.name).toBe('name');
         expect(input.type).toBe(FORM_INPUT.text);
         expect(input.value).toBe('Alice');
+        // Matched default to true.
+        expect(input.matched).toBe(true);
       });
     });
 
@@ -217,6 +219,8 @@ describe('FormInput', () => {
 
         input.value = 'updated';
         expect(props.value).toBe('updated');
+        // Fallback to true.
+        expect(input.matched).toBe(true);
       });
     });
   });

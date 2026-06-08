@@ -2,6 +2,7 @@ import { anchor, clearContextStore, createLifecycle, mutable } from '@anchorlib/
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { formState } from '../src/form.js';
+import { formField } from '../src/field.js';
 
 const userSchema = z.object({
   name: z.string().min(3, 'Name too short'),
@@ -681,6 +682,61 @@ describe('FormState', () => {
 
         const result = form.clearField('name').resetField('age');
         expect(result).toBe(form);
+      });
+    });
+  });
+
+  describe('Blocking & Unblocking', () => {
+    it('blocks the form when field match condition fails and unblocks when it passes', () => {
+      scope.run(() => {
+        const schema = z.object({
+          password: z.string(),
+          confirmPassword: z.string()
+        });
+        const form = formState(schema, {
+          value: { password: 'abc', confirmPassword: 'def' }
+        });
+
+        const confirmField = formField('confirmPassword', 'password');
+
+        expect(confirmField.matched).toBe(false);
+        expect(form.blocked).toBe(true);
+
+        form.fields['confirmPassword'] = 'abc';
+        
+        expect(confirmField.matched).toBe(true);
+        expect(form.blocked).toBe(false);
+      });
+    });
+
+    it('handles manual double-blocking gracefully', () => {
+      scope.run(() => {
+        const form = formState(userSchema, { value: {} as any });
+        
+        expect(form.blocked).toBe(false);
+        
+        form.block('custom_block');
+        expect(form.blocked).toBe(true);
+        
+        // Double-block
+        form.block('custom_block');
+        expect(form.blocked).toBe(true);
+      });
+    });
+
+    it('handles manual double-unblocking gracefully', () => {
+      scope.run(() => {
+        const form = formState(userSchema, { value: {} as any });
+        
+        form.block('custom_block');
+        expect(form.blocked).toBe(true);
+        
+        form.unblock('custom_block');
+        expect(form.blocked).toBe(false);
+        
+        // Double-unblock
+        form.unblock('custom_block');
+        expect(form.blocked).toBe(false);
       });
     });
   });
