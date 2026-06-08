@@ -95,6 +95,10 @@ export class FormInput<T> {
     return this.#field?.valid ?? true;
   }
 
+  get matched() {
+    return this.#field?.matched ?? true;
+  }
+
   readonly #field: FormField<T> | undefined;
   readonly #props: FormInputProps<T>;
   readonly #buffer: { value: string; checked: boolean };

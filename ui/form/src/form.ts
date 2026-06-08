@@ -52,8 +52,12 @@ export class FormState<T extends ZodObject> {
     return this.#ctx.store.status === FORM_STATUS.PENDING;
   }
 
+  get blocked() {
+    return this.#ctx.blockedKeys.size > 0;
+  }
+
   get canSubmit() {
-    return this.valid && this.changed && !this.pending;
+    return this.valid && this.changed && !this.blocked && !this.pending;
   }
 
   get touched() {
@@ -122,6 +126,22 @@ export class FormState<T extends ZodObject> {
 
   field(fieldPath: string) {
     return formField(fieldPath);
+  }
+
+  public block(key: string) {
+    untrack(() => {
+      if (this.#ctx.blockedKeys.has(key)) return;
+      this.#ctx.blockedKeys.add(key);
+    });
+    return this;
+  }
+
+  public unblock(key: string) {
+    untrack(() => {
+      if (!this.#ctx.blockedKeys.has(key)) return;
+      this.#ctx.blockedKeys.delete(key);
+    });
+    return this;
   }
 
   public schemaOf(field: string) {

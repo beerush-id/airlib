@@ -69,13 +69,21 @@ export class FormField<T> {
       const form = this.#form;
       effect(() => {
         this.#matched.value = typeof match === 'function' ? match(form) : form.fields[this.name] === form.fields[match];
+        if (this.#matched.value) {
+          this.#form!.unblock(this.name);
+        } else {
+          this.#form!.block(this.name);
+        }
       });
     }
     if (this.#form) {
       const unsubscribe = this.#form.subscribe(({ type }) => {
         if (type === 'reset' || type === 'submit') this.#touched.value = false;
       });
-      onCleanup(unsubscribe);
+      onCleanup(() => {
+        unsubscribe();
+        this.#form!.unblock(this.name);
+      });
     }
 
     context.write(FORM_FIELD_SYMBOL, this);

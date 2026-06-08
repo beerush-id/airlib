@@ -80,6 +80,7 @@ export class FormContext<T extends ZodObject> {
 
   public errorKeys = mutable(new Set<string>());
   public changeKeys = mutable(new Set<string>());
+  public blockedKeys = mutable(new Set<string>());
 
   public baseline = new Map<string, AnyType>();
   public inputSnapshot: Partial<input<T>> = {};
@@ -157,6 +158,7 @@ export class FormContext<T extends ZodObject> {
     this.fieldChildren.clear();
     this.errorKeys.clear();
     this.changeKeys.clear();
+    this.blockedKeys.clear();
 
     this.store.errors = {};
     this.store.changes = {};
