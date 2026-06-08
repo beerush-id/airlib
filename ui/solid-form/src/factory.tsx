@@ -130,6 +130,15 @@ export function createForm<T extends ZodObject<ZodRawShape>>(
               )}
             </For>
           )}
+          {field.valid && !field.matched && $props.mismatchLabel && (
+            <span
+              id={errorId()}
+              class={$props.errorClass ?? fieldOptions?.errorClass ?? FIELD_OPTIONS.errorClass}
+              role="alert"
+            >
+              {$props.mismatchLabel}
+            </span>
+          )}
         </div>
       );
     }) as AnyType;

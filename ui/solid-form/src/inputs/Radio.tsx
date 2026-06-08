@@ -31,7 +31,7 @@ export const Radio = setup<RadioProps>((props) => {
   };
 
   const className = derived(() => {
-    if (input.touched && input.error) {
+    if (input.touched && (input.error || !input.matched)) {
       return [props.class ?? baseClass, props.errorClass ?? errorClass].filter(Boolean).join(' ');
     }
     return props.class ?? baseClass;

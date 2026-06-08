@@ -52,6 +52,11 @@ export const Field = setup<FieldProps>((props) => {
             )}
           </For>
         )}
+        {field.valid && !field.matched && props.mismatchLabel && (
+          <span id={errorId()} class={props.errorClass ?? FIELD_OPTIONS.errorClass} role="alert">
+            {props.mismatchLabel}
+          </span>
+        )}
       </div>
     );
   }) as AnyType;
