@@ -276,6 +276,21 @@ describe('Field', () => {
       const field = screen.getByTestId('field');
       expect(field.getAttribute('match')).toBeNull();
     });
+
+    it('should display mismatchLabel when values differ', () => {
+      render(() => (
+        <Form schema={passwordSchema} value={{ password: 'secret', confirmPassword: 'abcdef' }}>
+          <Field name="confirmPassword" match="password" mismatchLabel="Passwords do not match!" data-testid="field">
+            <TextInput />
+          </Field>
+        </Form>
+      ));
+
+      const field = screen.getByTestId('field');
+      const error = field.querySelector('[role="alert"]');
+      expect(error).toBeDefined();
+      expect(error?.textContent).toBe('Passwords do not match!');
+    });
   });
 
   describe('Touched tracking', () => {
