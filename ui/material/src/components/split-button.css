@@ -1,0 +1,129 @@
+@theme {
+  --split-button-height: var(--air-button-height, 40px);
+  --split-button-radius-outer: calc(var(--split-button-height) / 2); /* Prevent CSS proportional radius scaling bug */
+  --split-button-radius-inner: var(--radius-sm, 8px);
+  --split-button-gap: calc(var(--spacing) * 0.5);
+}
+
+/* Container */
+@utility split-button-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--split-button-gap);
+  height: var(--split-button-height);
+}
+
+/* Base style for both halves */
+@utility split-button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  font-size: var(--air-button-font-size, var(--font-label-large-size));
+  font-weight: var(--font-label-large-weight);
+  letter-spacing: var(--font-label-large-tracking);
+  line-height: var(--air-button-line-height, var(--font-label-large-line-height));
+
+  border: 1px solid transparent;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  transition: background-color var(--duration-short) var(--ease-standard);
+}
+
+/* Primary Action Area */
+@utility split-button-primary {
+  @apply split-button-base;
+  flex: 1;
+  padding: 0 var(--air-button-padding-x);
+  gap: var(--air-button-gap);
+  border-top-left-radius: var(--split-button-radius-outer);
+  border-bottom-left-radius: var(--split-button-radius-outer);
+  border-top-right-radius: var(--split-button-radius-inner);
+  border-bottom-right-radius: var(--split-button-radius-inner);
+
+  /* Smart Icon Padding for Primary Action */
+  &:has(> *:first-child:not(:last-child):is(.material-symbols-outlined, svg, img)) {
+    padding-left: var(--air-button-icon-padding-x, calc(var(--spacing) * 4));
+  }
+}
+
+/* Trailing Action Area (Dropdown Arrow) */
+@utility split-button-trailing {
+  @apply split-button-base;
+  padding: 0 calc(var(--air-button-padding-x) * 0.5);
+  border-top-left-radius: var(--split-button-radius-inner);
+  border-bottom-left-radius: var(--split-button-radius-inner);
+  border-top-right-radius: var(--split-button-radius-outer);
+  border-bottom-right-radius: var(--split-button-radius-outer);
+}
+
+/* Color Variants */
+@utility split-button-filled {
+  & > .split-button-primary,
+  & > .split-button-trailing {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, var(--color-on-primary) 8%, var(--color-primary));
+    }
+
+    &:focus-visible:not(:disabled) {
+      background-color: color-mix(in srgb, var(--color-on-primary) 12%, var(--color-primary));
+    }
+  }
+}
+
+@utility split-button-tonal {
+  & > .split-button-primary,
+  & > .split-button-trailing {
+    background-color: var(--color-secondary-container);
+    color: var(--color-on-secondary-container);
+
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
+    }
+
+    &:focus-visible:not(:disabled) {
+      background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
+    }
+  }
+}
+
+@utility split-button-elevated {
+  & > .split-button-primary,
+  & > .split-button-trailing {
+    background-color: var(--color-surface-container-low);
+    color: var(--color-primary);
+    box-shadow: var(--elevation-1);
+
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-container-low));
+    }
+
+    &:focus-visible:not(:disabled) {
+      background-color: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface-container-low));
+    }
+  }
+}
+
+@utility split-button-outlined {
+  & > .split-button-primary,
+  & > .split-button-trailing {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-outline);
+
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+    }
+
+    &:focus-visible:not(:disabled) {
+      background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+      border-color: var(--color-primary);
+    }
+  }
+}

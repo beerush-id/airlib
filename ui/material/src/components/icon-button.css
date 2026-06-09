@@ -1,0 +1,235 @@
+@theme {
+  --air-icon-button-size: calc(var(--spacing) * 10);
+  --air-icon-button-icon-size: calc(var(--spacing) * 6);
+  --air-icon-button-radius: var(--radius-full);
+}
+
+/* Base Layout */
+@utility icon-button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--air-icon-button-size);
+  height: var(--air-icon-button-size);
+  border-radius: var(--air-icon-button-radius);
+
+  /* Resets */
+  border: none;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  padding: 0;
+
+  /* Ensure icon scales perfectly */
+  font-size: var(--air-icon-button-icon-size);
+  line-height: 1;
+
+  & > svg,
+  & > span,
+  & > i {
+    font-size: inherit !important;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    fill: currentColor;
+  }
+
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    color var(--duration-short) var(--ease-standard),
+    border-color var(--duration-short) var(--ease-standard);
+
+  /* A11y 48x48 minimum hit area */
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: max(100%, calc(var(--spacing) * 12)); /* 48px */
+    height: max(100%, calc(var(--spacing) * 12));
+    z-index: -1;
+  }
+}
+
+/* Common Disabled State */
+@utility icon-button-disabled {
+  cursor: not-allowed !important;
+  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent) !important;
+  border-color: transparent !important;
+  background-color: transparent !important;
+  pointer-events: none !important;
+}
+
+@utility icon-button-filled-disabled {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent) !important;
+}
+
+/* Standard (Low Emphasis) */
+@utility icon-button-standard-surface {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 0%, transparent);
+  color: var(--color-on-surface-variant);
+}
+
+@utility icon-button-standard-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, transparent);
+}
+
+@utility icon-button-standard-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 12%, transparent);
+}
+
+@utility icon-button-standard-pressed {
+  color: var(--color-primary);
+}
+
+/* Filled (High Emphasis) */
+@utility icon-button-filled-surface {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+@utility icon-button-filled-hover {
+  background-color: color-mix(in srgb, var(--color-on-primary) 8%, var(--color-primary));
+}
+
+@utility icon-button-filled-focus {
+  background-color: color-mix(in srgb, var(--color-on-primary) 12%, var(--color-primary));
+}
+
+@utility icon-button-filled-unpressed {
+  background-color: var(--color-surface-variant);
+  color: var(--color-primary);
+}
+
+/* Filled Tonal (Medium Emphasis) */
+@utility icon-button-tonal-surface {
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+@utility icon-button-tonal-hover {
+  background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
+}
+
+@utility icon-button-tonal-focus {
+  background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
+}
+
+@utility icon-button-tonal-unpressed {
+  background-color: var(--color-surface-variant);
+  color: var(--color-on-surface-variant);
+}
+
+/* Outlined (Medium Emphasis) */
+@utility icon-button-outlined-surface {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 0%, transparent);
+  color: var(--color-on-surface-variant);
+  border: calc(var(--shadow-base) * 1) solid var(--color-outline);
+}
+
+@utility icon-button-outlined-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, transparent);
+}
+
+@utility icon-button-outlined-focus {
+  border-color: var(--color-on-surface);
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
+}
+
+@utility icon-button-outlined-pressed {
+  background-color: var(--color-inverse-surface);
+  color: var(--color-inverse-on-surface);
+  border-color: transparent;
+}
+
+/* Composed Utilities */
+@utility icon-button {
+  @apply icon-button-base icon-button-standard-surface;
+
+  &:hover:not(:disabled) {
+    @apply icon-button-standard-hover;
+  }
+  &:focus-visible:not(:disabled) {
+    @apply icon-button-standard-focus;
+  }
+  &:active:not(:disabled) {
+    @apply icon-button-standard-pressed;
+  }
+  &:disabled {
+    @apply icon-button-disabled;
+  }
+}
+
+@utility icon-button-filled {
+  @apply icon-button-base icon-button-filled-surface;
+
+  &:hover:not(:disabled) {
+    @apply icon-button-filled-hover;
+  }
+  &:focus-visible:not(:disabled) {
+    @apply icon-button-filled-focus;
+  }
+  &:disabled {
+    @apply icon-button-disabled icon-button-filled-disabled;
+  }
+}
+
+@utility icon-button-tonal {
+  @apply icon-button-base icon-button-tonal-surface;
+
+  &:hover:not(:disabled) {
+    @apply icon-button-tonal-hover;
+  }
+  &:focus-visible:not(:disabled) {
+    @apply icon-button-tonal-focus;
+  }
+  &:disabled {
+    @apply icon-button-disabled icon-button-filled-disabled;
+  }
+}
+
+@utility icon-button-outlined {
+  @apply icon-button-base icon-button-outlined-surface;
+
+  &:hover:not(:disabled) {
+    @apply icon-button-outlined-hover;
+  }
+  &:focus-visible:not(:disabled) {
+    @apply icon-button-outlined-focus;
+  }
+  &:active:not(:disabled) {
+    @apply icon-button-outlined-pressed;
+  }
+  &:disabled {
+    @apply icon-button-disabled;
+  }
+}
+
+/* Icon Button Sizes */
+@utility icon-button-xs {
+  --air-icon-button-size: calc(var(--spacing) * 6);
+  --air-icon-button-icon-size: calc(var(--spacing) * 4);
+}
+@utility icon-button-sm {
+  --air-icon-button-size: calc(var(--spacing) * 8);
+  --air-icon-button-icon-size: calc(var(--spacing) * 5);
+}
+@utility icon-button-md {
+  --air-icon-button-size: calc(var(--spacing) * 10);
+  --air-icon-button-icon-size: calc(var(--spacing) * 6);
+}
+@utility icon-button-lg {
+  --air-icon-button-size: calc(var(--spacing) * 12);
+  --air-icon-button-icon-size: calc(var(--spacing) * 7);
+}
+@utility icon-button-xl {
+  --air-icon-button-size: calc(var(--spacing) * 14);
+  --air-icon-button-icon-size: calc(var(--spacing) * 8);
+}

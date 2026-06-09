@@ -1,0 +1,71 @@
+@theme {
+  --bottom-sheet-radius: var(--radius-xl);
+  --bottom-sheet-max-width: 40rem; /* 640px */
+}
+
+/* Base Layout */
+@utility bottom-sheet-base {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: 100%;
+  max-width: var(--bottom-sheet-max-width);
+  border-radius: var(--bottom-sheet-radius) var(--bottom-sheet-radius) 0 0;
+  z-index: 50;
+
+  transition: transform var(--duration-medium) var(--ease-emphasized-decelerate);
+
+  &[data-state='open'] {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Surface Visuals */
+@utility bottom-sheet-surface {
+  background-color: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+}
+
+@utility bottom-sheet-handle-base {
+  width: calc(var(--spacing) * 8); /* 32px */
+  height: calc(var(--spacing) * 1); /* 4px */
+  border-radius: var(--radius-full);
+  margin: calc(var(--spacing) * 4) auto calc(var(--spacing) * 4); /* 16px auto */
+  opacity: 0.5;
+}
+
+@utility bottom-sheet-handle-surface {
+  background-color: var(--color-outline);
+}
+
+@utility bottom-sheet-scrim-base {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-medium) var(--ease-standard);
+
+  &[data-state='open'] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@utility bottom-sheet-scrim-surface {
+  background-color: color-mix(in srgb, var(--color-scrim) 32%, transparent);
+}
+
+/* Composed Utilities */
+@utility bottom-sheet {
+  @apply bottom-sheet-base bottom-sheet-surface;
+}
+
+@utility bottom-sheet-handle {
+  @apply bottom-sheet-handle-base bottom-sheet-handle-surface;
+}
+
+@utility bottom-sheet-scrim {
+  @apply bottom-sheet-scrim-base bottom-sheet-scrim-surface;
+}

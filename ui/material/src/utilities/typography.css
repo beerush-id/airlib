@@ -1,0 +1,156 @@
+@utility text-display-large {
+  font-size: var(--font-display-large-size);
+  font-weight: var(--font-display-large-weight);
+  letter-spacing: var(--font-display-large-tracking);
+  line-height: var(--font-display-large-line-height);
+}
+@utility text-display-medium {
+  font-size: var(--font-display-medium-size);
+  font-weight: var(--font-display-medium-weight);
+  letter-spacing: var(--font-display-medium-tracking);
+  line-height: var(--font-display-medium-line-height);
+}
+@utility text-display-small {
+  font-size: var(--font-display-small-size);
+  font-weight: var(--font-display-small-weight);
+  letter-spacing: var(--font-display-small-tracking);
+  line-height: var(--font-display-small-line-height);
+}
+@utility text-headline-large {
+  font-size: var(--font-headline-large-size);
+  font-weight: var(--font-headline-large-weight);
+  letter-spacing: var(--font-headline-large-tracking);
+  line-height: var(--font-headline-large-line-height);
+}
+@utility text-headline-medium {
+  font-size: var(--font-headline-medium-size);
+  font-weight: var(--font-headline-medium-weight);
+  letter-spacing: var(--font-headline-medium-tracking);
+  line-height: var(--font-headline-medium-line-height);
+}
+@utility text-headline-small {
+  font-size: var(--font-headline-small-size);
+  font-weight: var(--font-headline-small-weight);
+  letter-spacing: var(--font-headline-small-tracking);
+  line-height: var(--font-headline-small-line-height);
+}
+@utility text-title-large {
+  font-size: var(--font-title-large-size);
+  font-weight: var(--font-title-large-weight);
+  letter-spacing: var(--font-title-large-tracking);
+  line-height: var(--font-title-large-line-height);
+}
+@utility text-title-medium {
+  font-size: var(--font-title-medium-size);
+  font-weight: var(--font-title-medium-weight);
+  letter-spacing: var(--font-title-medium-tracking);
+  line-height: var(--font-title-medium-line-height);
+}
+@utility text-title-small {
+  font-size: var(--font-title-small-size);
+  font-weight: var(--font-title-small-weight);
+  letter-spacing: var(--font-title-small-tracking);
+  line-height: var(--font-title-small-line-height);
+}
+@utility text-body-large {
+  font-size: var(--font-body-large-size);
+  font-weight: var(--font-body-large-weight);
+  letter-spacing: var(--font-body-large-tracking);
+  line-height: var(--font-body-large-line-height);
+}
+@utility text-body-medium {
+  font-size: var(--font-body-medium-size);
+  font-weight: var(--font-body-medium-weight);
+  letter-spacing: var(--font-body-medium-tracking);
+  line-height: var(--font-body-medium-line-height);
+}
+@utility text-body-small {
+  font-size: var(--font-body-small-size);
+  font-weight: var(--font-body-small-weight);
+  letter-spacing: var(--font-body-small-tracking);
+  line-height: var(--font-body-small-line-height);
+}
+@utility text-label-large {
+  font-size: var(--font-label-large-size);
+  font-weight: var(--font-label-large-weight);
+  letter-spacing: var(--font-label-large-tracking);
+  line-height: var(--font-label-large-line-height);
+}
+@utility text-label-medium {
+  font-size: var(--font-label-medium-size);
+  font-weight: var(--font-label-medium-weight);
+  letter-spacing: var(--font-label-medium-tracking);
+  line-height: var(--font-label-medium-line-height);
+}
+@utility text-label-small {
+  font-size: var(--font-label-small-size);
+  font-weight: var(--font-label-small-weight);
+  letter-spacing: var(--font-label-small-tracking);
+  line-height: var(--font-label-small-line-height);
+}
+
+/* Expressive Emphasized Typography */
+@utility text-display-large-emphasized {
+  @apply text-display-large;
+  font-weight: 500;
+}
+@utility text-display-medium-emphasized {
+  @apply text-display-medium;
+  font-weight: 500;
+}
+@utility text-display-small-emphasized {
+  @apply text-display-small;
+  font-weight: 500;
+}
+
+@utility text-headline-large-emphasized {
+  @apply text-headline-large;
+  font-weight: 500;
+}
+@utility text-headline-medium-emphasized {
+  @apply text-headline-medium;
+  font-weight: 500;
+}
+@utility text-headline-small-emphasized {
+  @apply text-headline-small;
+  font-weight: 500;
+}
+
+@utility text-title-large-emphasized {
+  @apply text-title-large;
+  font-weight: 500;
+}
+@utility text-title-medium-emphasized {
+  @apply text-title-medium;
+  font-weight: 600;
+}
+@utility text-title-small-emphasized {
+  @apply text-title-small;
+  font-weight: 600;
+}
+
+@utility text-body-large-emphasized {
+  @apply text-body-large;
+  font-weight: 500;
+}
+@utility text-body-medium-emphasized {
+  @apply text-body-medium;
+  font-weight: 500;
+}
+@utility text-body-small-emphasized {
+  @apply text-body-small;
+  font-weight: 500;
+}
+
+@utility text-label-large-emphasized {
+  @apply text-label-large;
+  font-weight: 600;
+}
+@utility text-label-medium-emphasized {
+  @apply text-label-medium;
+  font-weight: 600;
+}
+@utility text-label-small-emphasized {
+  @apply text-label-small;
+  font-weight: 600;
+}

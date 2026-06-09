@@ -1,0 +1,92 @@
+@theme {
+  --time-picker-unit-size: calc(var(--spacing) * 24); /* 96px */
+}
+
+/* Base Layout */
+@utility time-picker-base {
+  display: inline-flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl);
+  padding: calc(var(--spacing) * 6);
+}
+
+/* Surface Visuals */
+@utility time-picker-surface {
+  background-color: var(--color-surface-container-high);
+}
+
+@utility time-picker-display {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing) * 4);
+}
+
+/* Base Unit Layout */
+@utility time-picker-unit-base {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--time-picker-unit-size);
+  height: var(--time-picker-unit-size);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+
+  /* Display Large */
+  font-size: var(--font-display-large-size);
+  font-weight: var(--font-display-large-weight);
+
+  /* Reset */
+  border: none;
+  outline: none;
+
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    color var(--duration-short) var(--ease-standard);
+}
+
+/* Default Unit Surface */
+@utility time-picker-unit-surface {
+  background-color: var(--color-surface-variant);
+  color: var(--color-on-surface);
+}
+
+@utility time-picker-unit-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-variant));
+}
+
+/* Selected Unit Surface */
+@utility time-picker-unit-selected-surface {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+@utility time-picker-unit-selected-hover {
+  background-color: color-mix(in srgb, var(--color-on-primary-container) 8%, var(--color-primary-container));
+}
+
+@utility time-picker-separator {
+  font-size: var(--font-display-large-size);
+  font-weight: var(--font-display-large-weight);
+  color: var(--color-on-surface);
+}
+
+/* Composed Utilities */
+@utility time-picker {
+  @apply time-picker-base time-picker-surface;
+}
+
+@utility time-picker-unit {
+  @apply time-picker-unit-base time-picker-unit-surface;
+
+  &:hover:not(:disabled) {
+    @apply time-picker-unit-hover;
+  }
+
+  &[aria-selected='true'] {
+    @apply time-picker-unit-selected-surface;
+
+    &:hover:not(:disabled) {
+      @apply time-picker-unit-selected-hover;
+    }
+  }
+}

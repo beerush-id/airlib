@@ -1,0 +1,26 @@
+/* Base Ripple Utility */
+@utility ripple-container {
+  overflow: hidden;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@utility ripple {
+  position: absolute;
+  border-radius: 50%;
+  /* Ripple color uses currentColor to match the text color dynamically */
+  background-color: currentColor;
+  opacity: var(--opacity-pressed);
+  transform: scale(0);
+  animation: ripple-expand 0.4s cubic-bezier(0.2, 0, 0, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes ripple-expand {
+  to {
+    transform: scale(1);
+  }
+}

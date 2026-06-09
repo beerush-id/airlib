@@ -1,0 +1,177 @@
+/* Component Variables */
+@theme {
+  --tabs-height: calc(var(--spacing) * 12); /* 48px */
+  --tabs-indicator-height: calc(var(--spacing) * 0.75); /* 3px */
+}
+
+/* Tab List Layout */
+@utility tab-list-base {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Tab List Surface */
+@utility tab-list-surface {
+  background-color: var(--color-surface-container-low);
+  overflow: hidden;
+}
+
+/* Tab Content */
+@utility tab-content {
+  background-color: var(--color-surface-container-low);
+  overflow: hidden;
+}
+
+/* Segmented Structure */
+@utility tab {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 0.5); /* 2px gap */
+
+  --_inner-radius: var(--radius-sm);
+  --_outer-radius: var(--card-radius, var(--radius-xl));
+
+  & > * {
+    border-radius: var(--_inner-radius);
+  }
+
+  & > *:first-child {
+    border-top-left-radius: var(--_outer-radius);
+    border-top-right-radius: var(--_outer-radius);
+  }
+
+  & > *:last-child {
+    border-bottom-left-radius: var(--_outer-radius);
+    border-bottom-right-radius: var(--_outer-radius);
+  }
+}
+
+/* Tab Button Base Layout */
+@utility tab-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--tabs-height);
+  padding: 0 calc(var(--spacing) * 4);
+
+  /* Typography: Title Small */
+  font-size: var(--font-title-small-size);
+  font-weight: var(--font-title-small-weight);
+  letter-spacing: var(--font-title-small-tracking);
+  white-space: nowrap;
+
+  /* Resets */
+  border: none;
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 0%, transparent);
+  outline: none;
+  cursor: pointer;
+  position: relative;
+
+  transition:
+    color var(--duration-short) var(--ease-standard),
+    background-color var(--duration-short) var(--ease-standard);
+}
+
+@utility tab-indicator-base {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--tabs-indicator-height);
+  border-radius: var(--tabs-indicator-height) var(--tabs-indicator-height) 0 0;
+  opacity: 0;
+  transition: opacity var(--duration-short) var(--ease-standard);
+}
+
+/* Tab Surface */
+/* Tab Surface */
+@utility tab-item-surface {
+  color: var(--color-on-surface-variant);
+}
+
+@utility tab-item-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, transparent);
+}
+
+@utility tab-item-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 12%, transparent);
+}
+
+@utility tab-item-selected-surface {
+  color: var(--color-primary);
+}
+
+@utility tab-item-selected-hover {
+  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+@utility tab-item-selected-focus {
+  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+/* Tab Indicator Surface */
+@utility tab-indicator-surface {
+  background-color: var(--color-primary);
+}
+
+@utility tab-indicator-selected {
+  opacity: 1;
+}
+
+@utility tab-item-disabled {
+  cursor: not-allowed !important;
+  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent) !important;
+  pointer-events: none !important;
+}
+
+/* Composed Utilities */
+@utility tab-list {
+  @apply tab-list-base tab-list-surface;
+}
+
+@utility tab-item {
+  @apply tab-base tab-item-surface;
+
+  &:hover:not(:disabled) {
+    @apply tab-item-hover;
+  }
+
+  &:focus-visible:not(:disabled) {
+    @apply tab-item-focus;
+  }
+
+  &[aria-selected='true'] {
+    @apply tab-item-selected-surface;
+
+    &:hover:not(:disabled) {
+      @apply tab-item-selected-hover;
+    }
+
+    &:focus-visible:not(:disabled) {
+      @apply tab-item-selected-focus;
+    }
+  }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    @apply tab-item-disabled;
+  }
+}
+
+@utility tab-indicator {
+  @apply tab-indicator-base tab-indicator-surface;
+
+  .tab-item[aria-selected='true'] & {
+    @apply tab-indicator-selected;
+  }
+}

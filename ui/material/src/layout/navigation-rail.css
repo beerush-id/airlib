@@ -1,0 +1,142 @@
+@theme {
+  --nav-rail-width: calc(var(--spacing) * 20); /* 80px */
+}
+
+/* Base Layout */
+@utility navigation-rail-base {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: var(--nav-rail-width);
+  height: 100%;
+  padding: calc(var(--spacing) * 4) 0;
+  gap: calc(var(--spacing) * 3);
+
+  /* Fixed to left */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+}
+
+/* Surface Visuals */
+@utility navigation-rail-surface {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface-variant);
+  border-right: 1px solid var(--color-outline-variant);
+}
+
+/* Item Base Layout */
+@utility navigation-rail-item-base {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--spacing) * 18); /* 72px */
+  min-height: calc(var(--spacing) * 14); /* 56px */
+  gap: calc(var(--spacing) * 1);
+  cursor: pointer;
+  border-radius: var(--radius-md); /* Slightly wider hover target area */
+
+  /* Reset */
+  border: none;
+  background-color: transparent;
+  outline: none;
+
+  /* Label Medium */
+  font-size: var(--font-label-medium-size);
+  font-weight: var(--font-label-medium-weight);
+
+  transition: color var(--duration-short) var(--ease-standard);
+}
+
+/* Item Surface Visuals */
+@utility navigation-rail-item-surface {
+  color: var(--color-on-surface-variant);
+}
+
+@utility navigation-rail-item-selected-surface {
+  color: var(--color-on-surface);
+}
+
+/* Icon Container Layout */
+@utility nav-rail-icon-container-base {
+  width: calc(var(--spacing) * 14); /* 56px pill */
+  height: calc(var(--spacing) * 8); /* 32px */
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    color var(--duration-short) var(--ease-standard);
+}
+
+/* Icon Container Visuals */
+@utility nav-rail-icon-container-surface {
+  background-color: transparent;
+  color: inherit;
+}
+
+@utility nav-rail-icon-container-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, transparent);
+}
+
+@utility nav-rail-icon-container-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 12%, transparent);
+}
+
+@utility nav-rail-icon-container-selected-surface {
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+@utility nav-rail-icon-container-selected-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-secondary-container));
+}
+
+@utility nav-rail-icon-container-selected-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-secondary-container));
+}
+
+/* Composed Utilities */
+@utility navigation-rail {
+  @apply navigation-rail-base navigation-rail-surface;
+}
+
+@utility navigation-rail-item {
+  @apply navigation-rail-item-base navigation-rail-item-surface;
+
+  &[aria-selected='true'] {
+    @apply navigation-rail-item-selected-surface;
+  }
+}
+
+@utility nav-rail-icon-container {
+  @apply nav-rail-icon-container-base nav-rail-icon-container-surface;
+
+  /* Hover when item is not selected */
+  .navigation-rail-item:hover:not([aria-selected='true']) & {
+    @apply nav-rail-icon-container-hover;
+  }
+
+  /* Focus when item is not selected */
+  .navigation-rail-item:focus-visible:not([aria-selected='true']) & {
+    @apply nav-rail-icon-container-focus;
+  }
+
+  /* Selected */
+  .navigation-rail-item[aria-selected='true'] & {
+    @apply nav-rail-icon-container-selected-surface;
+  }
+
+  /* Selected Hover */
+  .navigation-rail-item[aria-selected='true']:hover & {
+    @apply nav-rail-icon-container-selected-hover;
+  }
+
+  /* Selected Focus */
+  .navigation-rail-item[aria-selected='true']:focus-visible & {
+    @apply nav-rail-icon-container-selected-focus;
+  }
+}

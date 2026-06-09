@@ -1,0 +1,294 @@
+@theme {
+  --air-text-field-height: calc(var(--spacing) * 14);
+  --air-text-field-radius: var(--radius-md);
+  --air-text-field-padding-x: calc(var(--spacing) * 4);
+  --air-text-field-icon-padding-x: calc(var(--spacing) * 12);
+  --air-text-field-font-size: var(--font-body-large-size);
+}
+
+/* The Wrapper Base */
+@utility text-field-base {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  margin-top: calc(var(--spacing) * 2); /* 8px room for floating label */
+
+  /* Smart Icon Padding Setup */
+  --_leading-padding: var(--air-text-field-padding-x);
+  --_trailing-padding: var(--air-text-field-padding-x);
+
+  &:has(> :is(.material-symbols-outlined, svg, img, .icon-button) ~ :is(.text-field-input, .text-field-input-filled)) {
+    --_leading-padding: var(--air-text-field-icon-padding-x);
+  }
+
+  &:has(> :is(.text-field-input, .text-field-input-filled) ~ :is(.material-symbols-outlined, svg, img, .icon-button)) {
+    --_trailing-padding: var(--air-text-field-icon-padding-x);
+  }
+
+  /* Select Dropdown Arrow using Mask */
+  &:has(.select-input, .select-input-filled) {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      background-color: var(--color-on-surface-variant);
+      mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-width='1.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      pointer-events: none;
+      transition: background-color var(--duration-short) var(--ease-standard);
+    }
+
+    &:has(:is(.select-input, .select-input-filled):focus)::after {
+      background-color: var(--color-primary);
+    }
+  }
+}
+
+/* Composed Root Wrapper */
+@utility text-field {
+  @apply text-field-base text-field-floating;
+}
+
+/* Floating Label Logic (Pure CSS) */
+@utility text-field-floating {
+  & .text-field-label {
+    position: absolute;
+    top: calc((var(--air-text-field-height) - 1.5em) / 2);
+    left: calc(var(--_leading-padding, var(--air-text-field-padding-x)) + 1px);
+    margin-left: calc(var(--spacing) * -1);
+    margin-bottom: 0;
+    pointer-events: none;
+    padding: 0 var(--spacing);
+    border-radius: var(--air-text-field-radius);
+
+    font-size: var(--font-body-large-size);
+    line-height: 1.5;
+    background-color: transparent;
+
+    /* Hardware accelerated animation */
+    transform-origin: left top;
+    transform: translateY(0) scale(1);
+    will-change: transform, color, background-color;
+    transition:
+      transform var(--duration-short) var(--ease-standard),
+      color var(--duration-short) var(--ease-standard),
+      background-color var(--duration-short) var(--ease-standard);
+  }
+
+  /* Default (Outlined) Floating State */
+  &:has(.text-field-input:focus) .text-field-label,
+  &:has(.text-field-input:not(:placeholder-shown)) .text-field-label,
+  &:has(.textarea-input:focus) .text-field-label,
+  &:has(.textarea-input:not(:placeholder-shown)) .text-field-label,
+  &:has(.select-input) .text-field-label,
+  &:has(.text-field-input:-webkit-autofill) .text-field-label {
+    /* Dynamic calc: Move center to top border ((height - 1.5em)/-2) and adjust for scale(-0.5625em) */
+    transform: translateY(calc(((var(--air-text-field-height) - 1.5em) / -2) - 0.5625em)) scale(0.75);
+    background-color: var(--color-ghost-surface);
+  }
+
+  /* Filled Floating State Override */
+  &:has(.text-field-input-filled:focus) .text-field-label,
+  &:has(.text-field-input-filled:not(:placeholder-shown)) .text-field-label,
+  &:has(.textarea-input-filled:focus) .text-field-label,
+  &:has(.textarea-input-filled:not(:placeholder-shown)) .text-field-label,
+  &:has(.select-input-filled) .text-field-label,
+  &:has(.text-field-input-filled:-webkit-autofill) .text-field-label {
+    /* Move the scaled label proportionally to the top area */
+    transform: translateY(calc((var(--air-text-field-height) - 1.5em) / -4)) scale(0.75);
+    background-color: transparent;
+  }
+}
+
+/* Label Visuals */
+@utility text-field-label-base {
+  display: block;
+  font-size: var(--font-body-small-size);
+  margin-bottom: calc(var(--spacing) * 1);
+}
+
+/* Composed Label */
+@utility text-field-label {
+  @apply text-field-label-base;
+  color: var(--color-on-surface-variant);
+}
+
+@utility text-field-label-focus {
+  color: var(--color-primary);
+}
+
+@utility text-field-label-error {
+  color: var(--color-error);
+}
+
+/* The Input Base Layout */
+@utility text-field-input-base {
+  width: 100%;
+  height: var(--air-text-field-height);
+  padding: 0 var(--_trailing-padding, var(--air-text-field-padding-x)) 0
+    var(--_leading-padding, var(--air-text-field-padding-x));
+  border-radius: var(--air-text-field-radius);
+  box-sizing: border-box;
+  font-size: var(--air-text-field-font-size);
+  font-weight: var(--font-body-large-weight);
+  letter-spacing: var(--font-body-large-tracking);
+  outline: none;
+  transition:
+    border-color var(--duration-short) var(--ease-standard),
+    box-shadow var(--duration-short) var(--ease-standard);
+
+  &::placeholder {
+    color: transparent;
+    transition: color var(--duration-short) var(--ease-standard);
+  }
+}
+
+/* Input Outlined Variant */
+@utility text-field-outlined-surface {
+  border: 1px solid var(--color-outline);
+  background-color: transparent;
+  color: var(--color-on-surface);
+}
+
+@utility text-field-outlined-focus {
+  border-color: var(--color-primary);
+  box-shadow: inset 0 0 0 1px var(--color-primary);
+}
+
+/* Input Filled Variant */
+@utility text-field-filled-surface {
+  border: none;
+  border-bottom: 1px solid var(--color-on-surface-variant);
+  border-radius: var(--air-text-field-radius) var(--air-text-field-radius) 0 0;
+  background-color: var(--color-surface-container-highest);
+  color: var(--color-on-surface);
+  box-shadow: none;
+  /* Push text down to make room for floating label */
+  padding-top: calc(var(--spacing) * 4);
+}
+
+@utility text-field-filled-focus {
+  border-color: var(--color-primary);
+  border-bottom-width: 2px;
+  box-shadow: none;
+}
+
+/* Common Input Utilities */
+@utility text-field-input-placeholder-visible {
+  &::placeholder {
+    color: var(--color-on-surface-variant);
+  }
+}
+
+@utility text-field-input-error {
+  border-color: var(--color-error);
+}
+
+@utility text-field-input-disabled {
+  opacity: 0.38 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+/* Supporting Text */
+@utility text-field-supporting-base {
+  font-size: var(--font-body-small-size);
+  margin-top: calc(var(--spacing) * 1);
+  padding: 0 var(--air-text-field-padding-x);
+}
+
+@utility text-field-supporting-surface {
+  color: var(--color-on-surface-variant);
+}
+
+@utility text-field-supporting-error {
+  color: var(--color-error);
+}
+
+/* Composed Utilities */
+@utility text-field-input {
+  @apply text-field-input-base text-field-outlined-surface;
+
+  &:focus {
+    @apply text-field-outlined-focus text-field-input-placeholder-visible;
+  }
+
+  &:disabled {
+    @apply text-field-input-disabled;
+  }
+}
+
+@utility text-field-input-filled {
+  @apply text-field-input-base text-field-filled-surface;
+
+  &:focus {
+    @apply text-field-filled-focus text-field-input-placeholder-visible;
+  }
+
+  &:disabled {
+    @apply text-field-input-disabled;
+  }
+}
+
+/* Select Input Utilities */
+@utility select-input {
+  @apply text-field-input;
+  appearance: none;
+  padding-right: 48px; /* Make room for the arrow */
+}
+
+@utility select-input-filled {
+  @apply text-field-input-filled;
+  appearance: none;
+  padding-right: 48px;
+}
+
+/* Textarea Input Utilities */
+@utility textarea-input {
+  @apply text-field-input;
+  height: auto;
+  min-height: calc(var(--air-text-field-height) * 2);
+  padding-top: calc(var(--spacing) * 3);
+  padding-bottom: calc(var(--spacing) * 3);
+  resize: vertical;
+}
+
+@utility textarea-input-filled {
+  @apply text-field-input-filled;
+  height: auto;
+  min-height: calc(var(--air-text-field-height) * 2);
+  padding-top: calc(var(--spacing) * 6);
+  padding-bottom: calc(var(--spacing) * 3);
+  resize: vertical;
+}
+
+@utility text-field-supporting-text {
+  @apply text-field-supporting-base text-field-supporting-surface;
+}
+
+@utility text-field-error {
+  @apply text-field-supporting-base text-field-supporting-error;
+}
+
+/* Text Field Sizes */
+@utility text-field-sm {
+  --air-text-field-height: calc(var(--spacing) * 10);
+  --air-text-field-padding-x: calc(var(--spacing) * 3);
+  --air-text-field-font-size: var(--font-body-medium-size);
+}
+@utility text-field-md {
+  --air-text-field-height: calc(var(--spacing) * 14);
+  --air-text-field-padding-x: calc(var(--spacing) * 4);
+  --air-text-field-font-size: var(--font-body-large-size);
+}
+@utility text-field-lg {
+  --air-text-field-height: calc(var(--spacing) * 16);
+  --air-text-field-padding-x: calc(var(--spacing) * 5);
+  --air-text-field-font-size: var(--font-body-large-size);
+}

@@ -1,0 +1,64 @@
+@theme {
+  --search-bar-height: calc(var(--spacing) * 14); /* 56px */
+}
+
+/* Base Layout */
+@utility search-bar-base {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--search-bar-height);
+  border-radius: var(--radius-full);
+  padding: 0 calc(var(--spacing) * 4);
+  gap: calc(var(--spacing) * 4);
+  box-sizing: border-box;
+
+  transition: background-color var(--duration-short) var(--ease-standard);
+}
+
+/* Visual Surface */
+@utility search-bar-surface {
+  background-color: var(--color-surface-container-high);
+}
+
+@utility search-bar-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-high));
+}
+
+@utility search-bar-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-high));
+}
+
+@utility search-bar-input-base {
+  flex: 1;
+  height: 100%;
+  border: none;
+  outline: none;
+  background-color: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
+  color: var(--color-on-surface);
+
+  /* Body Large */
+  font-size: var(--font-body-large-size);
+  font-weight: var(--font-body-large-weight);
+
+  &::placeholder {
+    color: var(--color-on-surface-variant);
+  }
+}
+
+/* Composed Utilities */
+@utility search-bar {
+  @apply search-bar-base search-bar-surface;
+
+  &:hover {
+    @apply search-bar-hover;
+  }
+
+  &:has(.search-bar-input:focus) {
+    @apply search-bar-focus;
+  }
+}
+
+@utility search-bar-input {
+  @apply search-bar-input-base;
+}

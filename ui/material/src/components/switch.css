@@ -1,0 +1,148 @@
+@theme {
+  --switch-track-width: calc(var(--spacing) * 13); /* 52px */
+  --switch-track-height: calc(var(--spacing) * 8); /* 32px */
+  --switch-handle-size: calc(var(--spacing) * 6); /* 24px */
+  --switch-handle-active-size: calc(var(--spacing) * 8); /* 32px */
+}
+
+/* Base Track */
+@utility switch-base {
+  display: inline-flex;
+  align-items: center;
+  width: var(--switch-track-width);
+  height: var(--switch-track-height);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  position: relative;
+  box-sizing: border-box;
+
+  /* Layout Resets */
+  outline: none;
+  padding: 0;
+
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    border-color var(--duration-short) var(--ease-standard);
+}
+
+/* Track Visuals */
+@utility switch-track {
+  border: 2px solid var(--color-outline);
+  background-color: var(--color-surface-variant);
+}
+
+@utility switch-track-checked {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+@utility switch-track-disabled {
+  border-color: var(--color-on-surface);
+  opacity: 0.12;
+  cursor: not-allowed;
+}
+
+/* Base Handle */
+@utility switch-handle {
+  position: absolute;
+  left: calc(var(--spacing) * 1.5); /* 6px resting unselected */
+  width: calc(var(--spacing) * 4); /* 16px resting unselected */
+  height: calc(var(--spacing) * 4);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    left var(--duration-short) var(--ease-standard),
+    width var(--duration-short) var(--ease-standard),
+    height var(--duration-short) var(--ease-standard),
+    background-color var(--duration-short) var(--ease-standard),
+    box-shadow var(--duration-short) var(--ease-standard),
+    transform var(--duration-short) var(--ease-standard);
+}
+
+/* Handle Visuals */
+@utility switch-handle-surface {
+  background-color: var(--color-outline);
+}
+
+@utility switch-handle-checked {
+  left: calc(100% - var(--switch-handle-size) - 2px);
+  width: var(--switch-handle-size);
+  height: var(--switch-handle-size);
+  background-color: var(--color-on-primary);
+}
+
+@utility switch-handle-hover {
+  width: var(--switch-handle-size);
+  height: var(--switch-handle-size);
+  left: calc(var(--spacing) * 0.5); /* 2px */
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-on-surface-variant) 8%, transparent);
+}
+
+@utility switch-handle-checked-hover {
+  left: calc(100% - var(--switch-handle-size) - 2px);
+  transform: translate3d(-2px, 0, 0);
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+@utility switch-handle-focus {
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-on-surface-variant) 12%, transparent);
+}
+
+@utility switch-handle-checked-focus {
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+/* Handle SVG Base */
+@utility switch-icon {
+  width: calc(var(--spacing) * 4);
+  height: calc(var(--spacing) * 4);
+  fill: var(--color-surface-variant);
+  opacity: 0;
+  transition: opacity var(--duration-short) var(--ease-standard);
+}
+
+@utility switch-icon-checked {
+  opacity: 1;
+  fill: var(--color-primary);
+}
+
+/* Composed Utilities */
+@utility switch {
+  @apply switch-base switch-track;
+
+  &[aria-checked='true'] {
+    @apply switch-track-checked;
+  }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    @apply switch-track-disabled;
+  }
+}
+
+@utility switch-thumb {
+  @apply switch-handle switch-handle-surface;
+
+  .switch:hover:not(:disabled) & {
+    @apply switch-handle-hover;
+  }
+
+  .switch:focus-visible:not(:disabled) & {
+    @apply switch-handle-focus;
+  }
+
+  .switch[aria-checked='true'] & {
+    @apply switch-handle-checked;
+  }
+
+  .switch[aria-checked='true']:hover:not(:disabled) & {
+    @apply switch-handle-checked-hover;
+  }
+
+  .switch[aria-checked='true']:focus-visible:not(:disabled) & {
+    @apply switch-handle-checked-focus;
+  }
+}

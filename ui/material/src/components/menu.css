@@ -1,0 +1,110 @@
+/* Component Variables */
+@theme {
+  --menu-min-width: calc(var(--spacing) * 28); /* 112px */
+  --menu-radius: var(--radius-xs);
+  --menu-padding-y: calc(var(--spacing) * 2); /* 8px */
+
+  --menu-item-height: calc(var(--spacing) * 12); /* 48px */
+  --menu-item-padding-x: calc(var(--spacing) * 3); /* 12px */
+}
+
+/* Menu Surface (the floating container) */
+@utility menu-surface {
+  position: absolute;
+  z-index: 200;
+  min-width: var(--menu-min-width);
+  background-color: var(--color-surface-container);
+  border-radius: var(--menu-radius);
+  padding: var(--menu-padding-y) 0;
+  margin: 0;
+  list-style: none;
+
+  /* Reset */
+  box-sizing: border-box;
+  outline: none;
+
+  /* Animation */
+  opacity: 0;
+  transform: scale(0.95);
+  transform-origin: top left;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  visibility: hidden;
+
+  &[data-state='open'] {
+    opacity: 1;
+    transform: scale(1);
+    visibility: visible;
+  }
+}
+
+/* Menu Item Base */
+@utility menu-item-base {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--menu-item-height);
+  padding: 0 var(--menu-item-padding-x);
+  box-sizing: border-box;
+
+  /* Typography: Label Large */
+  font-size: var(--font-label-large-size);
+  font-weight: var(--font-label-large-weight);
+  letter-spacing: var(--font-label-large-tracking);
+  text-align: left;
+
+  /* Resets (if applied to a button) */
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    color var(--duration-short) var(--ease-standard);
+}
+
+/* Default Visuals */
+@utility menu-item-surface {
+  background-color: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
+  color: var(--color-on-surface);
+}
+
+/* Interactive States */
+@utility menu-item-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface) 8%, transparent);
+}
+
+@utility menu-item-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
+}
+
+@utility menu-item-disabled {
+  cursor: not-allowed !important;
+  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent) !important;
+  background-color: transparent !important;
+  pointer-events: none !important;
+}
+
+/* Composed Utilities */
+@utility menu {
+  @apply menu-surface;
+}
+
+@utility menu-item {
+  @apply menu-item-base menu-item-surface;
+
+  &:hover:not(:disabled) {
+    @apply menu-item-hover;
+  }
+
+  &:focus-visible:not(:disabled) {
+    @apply menu-item-focus;
+  }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    @apply menu-item-disabled;
+  }
+}

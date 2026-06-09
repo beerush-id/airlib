@@ -1,0 +1,138 @@
+@theme {
+  --nav-bar-height: calc(var(--spacing) * 20); /* 80px */
+}
+
+/* Base Layout */
+@utility navigation-bar-base {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  height: var(--nav-bar-height);
+
+  /* Typically fixed to bottom */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 40;
+}
+
+/* Surface Visuals */
+@utility navigation-bar-surface {
+  background-color: var(--color-surface-container);
+  color: var(--color-on-surface-variant);
+}
+
+/* Item Base Layout */
+@utility navigation-bar-item-base {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: calc(var(--spacing) * 16); /* 64px */
+  height: 100%;
+  gap: calc(var(--spacing) * 1);
+  cursor: pointer;
+
+  /* Reset */
+  border: none;
+  background-color: transparent;
+  outline: none;
+
+  /* Label Medium */
+  font-size: var(--font-label-medium-size);
+  font-weight: var(--font-label-medium-weight);
+
+  transition: color var(--duration-short) var(--ease-standard);
+}
+
+/* Item Surface Visuals */
+@utility navigation-bar-item-surface {
+  color: var(--color-on-surface-variant);
+}
+
+@utility navigation-bar-item-selected-surface {
+  color: var(--color-on-surface);
+}
+
+/* Icon Container Layout */
+@utility nav-icon-container-base {
+  width: calc(var(--spacing) * 16); /* 64px */
+  height: calc(var(--spacing) * 8); /* 32px */
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    color var(--duration-short) var(--ease-standard);
+}
+
+/* Icon Container Visuals */
+@utility nav-icon-container-surface {
+  background-color: transparent;
+  color: inherit;
+}
+
+@utility nav-icon-container-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, transparent);
+}
+
+@utility nav-icon-container-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 12%, transparent);
+}
+
+@utility nav-icon-container-selected-surface {
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+@utility nav-icon-container-selected-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-secondary-container));
+}
+
+@utility nav-icon-container-selected-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-secondary-container));
+}
+
+/* Composed Utilities */
+@utility navigation-bar {
+  @apply navigation-bar-base navigation-bar-surface;
+}
+
+@utility navigation-bar-item {
+  @apply navigation-bar-item-base navigation-bar-item-surface;
+
+  &[aria-selected='true'] {
+    @apply navigation-bar-item-selected-surface;
+  }
+}
+
+@utility nav-icon-container {
+  @apply nav-icon-container-base nav-icon-container-surface;
+
+  /* Hover when item is not selected */
+  .navigation-bar-item:hover:not([aria-selected='true']) & {
+    @apply nav-icon-container-hover;
+  }
+
+  /* Focus when item is not selected */
+  .navigation-bar-item:focus-visible:not([aria-selected='true']) & {
+    @apply nav-icon-container-focus;
+  }
+
+  /* Selected */
+  .navigation-bar-item[aria-selected='true'] & {
+    @apply nav-icon-container-selected-surface;
+  }
+
+  /* Selected Hover */
+  .navigation-bar-item[aria-selected='true']:hover & {
+    @apply nav-icon-container-selected-hover;
+  }
+
+  /* Selected Focus */
+  .navigation-bar-item[aria-selected='true']:focus-visible & {
+    @apply nav-icon-container-selected-focus;
+  }
+}

@@ -1,0 +1,106 @@
+@theme {
+  --radio-target: calc(var(--spacing) * 12); /* 48px */
+  --radio-size: calc(var(--spacing) * 5); /* 20px */
+}
+
+@utility radio-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--radio-target);
+  height: var(--radio-target);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  position: relative;
+
+  /* Reset */
+  border: none;
+  background-color: transparent;
+  outline: none;
+  transition: background-color var(--duration-short) var(--ease-standard);
+}
+
+@utility radio-visual {
+  width: var(--radio-size);
+  height: var(--radio-size);
+  border-radius: 50%;
+  border: 2px solid var(--color-on-surface-variant);
+  box-sizing: border-box;
+  position: relative;
+
+  transition: border-color var(--duration-short) var(--ease-standard);
+}
+
+@utility radio-visual-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  transition: transform var(--duration-short) var(--ease-standard);
+}
+
+/* Composable States */
+@utility radio-checked {
+  border-color: var(--color-primary);
+}
+
+@utility radio-checked-dot {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+@utility radio-disabled {
+  border-color: var(--color-on-surface) !important;
+  opacity: 0.38 !important;
+  pointer-events: none !important;
+}
+
+@utility radio-disabled-dot {
+  background-color: var(--color-on-surface) !important;
+}
+
+@utility radio-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, transparent);
+}
+
+@utility radio-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 12%, transparent);
+}
+
+@utility radio-checked-hover {
+  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+@utility radio-checked-focus {
+  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+/* Composed Utilities */
+@utility radio {
+  @apply radio-base;
+
+  &:hover:not(:disabled) {
+    @apply radio-hover;
+  }
+
+  &:focus-visible:not(:disabled) {
+    @apply radio-focus;
+  }
+
+  &[aria-checked='true']:hover:not(:disabled) {
+    @apply radio-checked-hover;
+  }
+
+  &[aria-checked='true']:focus-visible:not(:disabled) {
+    @apply radio-checked-focus;
+  }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}

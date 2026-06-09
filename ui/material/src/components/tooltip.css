@@ -1,0 +1,73 @@
+/* Component Variables */
+@theme {
+  --tooltip-plain-padding-x: calc(var(--spacing) * 2); /* 8px */
+  --tooltip-plain-padding-y: calc(var(--spacing) * 1); /* 4px */
+
+  --tooltip-rich-padding-x: calc(var(--spacing) * 4); /* 16px */
+  --tooltip-rich-padding-y: calc(var(--spacing) * 3); /* 12px */
+}
+
+/* Base Tooltip Structure */
+@utility tooltip-base {
+  position: absolute;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--duration-short) var(--ease-standard),
+    visibility var(--duration-short) var(--ease-standard);
+  box-sizing: border-box;
+
+  /* When the tooltip logic activates it, it will apply a class or data-state to show it */
+  &[data-state='visible'] {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Plain Tooltip Layout */
+@utility tooltip-plain-layout {
+  border-radius: var(--radius-xs);
+  padding: var(--tooltip-plain-padding-y) var(--tooltip-plain-padding-x);
+
+  /* Typography: Label Small / Body Small */
+  font-size: var(--font-body-small-size);
+  font-weight: var(--font-body-small-weight);
+  letter-spacing: var(--font-body-small-tracking);
+}
+
+/* Plain Tooltip Surface */
+@utility tooltip-plain-surface {
+  background-color: var(--color-inverse-surface);
+  color: var(--color-inverse-on-surface);
+}
+
+/* Rich Tooltip Layout */
+@utility tooltip-rich-layout {
+  border-radius: var(--radius-md);
+  padding: var(--tooltip-rich-padding-y) var(--tooltip-rich-padding-x);
+
+  /* Typography: Body Medium */
+  font-size: var(--font-body-medium-size);
+  font-weight: var(--font-body-medium-weight);
+  letter-spacing: var(--font-body-medium-tracking);
+
+  /* Rich tooltips can be interactive */
+  pointer-events: auto;
+}
+
+/* Rich Tooltip Surface */
+@utility tooltip-rich-surface {
+  background-color: var(--color-surface-variant);
+  color: var(--color-on-surface-variant);
+}
+
+/* Composed Utilities */
+@utility tooltip-plain {
+  @apply tooltip-base tooltip-plain-layout tooltip-plain-surface;
+}
+
+@utility tooltip-rich {
+  @apply tooltip-base tooltip-rich-layout tooltip-rich-surface;
+}

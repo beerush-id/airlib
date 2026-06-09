@@ -1,0 +1,262 @@
+@theme {
+  --air-button-height: calc(var(--spacing) * 10);
+  --air-button-padding-x: calc(var(--spacing) * 6);
+  --air-button-icon-padding-x: calc(var(--spacing) * 4);
+  --air-button-gap: calc(var(--spacing) * 2);
+  --air-button-radius: var(--radius-full);
+  --air-button-font-size: var(--font-label-large-size);
+  --air-button-line-height: var(--font-label-large-line-height);
+}
+
+/* Base Structure */
+@utility button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--air-button-gap);
+  height: var(--air-button-height);
+  padding: 0 var(--air-button-padding-x);
+  border-radius: var(--air-button-radius);
+
+  /* Typography */
+  font-size: var(--air-button-font-size);
+  font-weight: var(--font-label-large-weight);
+  letter-spacing: var(--font-label-large-tracking);
+  line-height: var(--air-button-line-height);
+
+  /* Resets */
+  border: 1px solid transparent;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  box-sizing: border-box;
+
+  /* Smart Icon Padding (M3 Spec: 16px on icon sides, 24px on text sides) */
+  &:has(> *:first-child:not(:last-child):is(.material-symbols-outlined, svg, img)) {
+    padding-left: var(--air-button-icon-padding-x);
+  }
+
+  &:has(> *:last-child:not(:first-child):is(.material-symbols-outlined, svg, img)) {
+    padding-right: var(--air-button-icon-padding-x);
+  }
+
+  &:has(> *:first-child:is(.material-symbols-outlined, svg, img)):has(
+      > *:last-child:is(.material-symbols-outlined, svg, img)
+    ) {
+    padding-left: var(--air-button-icon-padding-x);
+    padding-right: var(--air-button-icon-padding-x);
+  }
+
+  /* Shared Transitions */
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    color var(--duration-short) var(--ease-standard),
+    border-color var(--duration-short) var(--ease-standard);
+}
+
+/* Disabled State Utility */
+@utility button-disabled {
+  cursor: not-allowed !important;
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent) !important;
+  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent) !important;
+  border-color: transparent !important;
+}
+
+/* Filled Button (High Emphasis) */
+@utility button-filled-surface {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+@utility button-filled-hover {
+  background-color: color-mix(in srgb, var(--color-on-primary) 8%, var(--color-primary));
+}
+
+@utility button-filled-focus {
+  background-color: color-mix(in srgb, var(--color-on-primary) 12%, var(--color-primary));
+}
+
+/* Elevated Button (High Emphasis) */
+@utility button-elevated-surface {
+  background-color: var(--color-surface-container-low);
+  color: var(--color-primary);
+}
+
+@utility button-elevated-hover {
+  background-color: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-container-low));
+}
+
+@utility button-elevated-focus {
+  background-color: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface-container-low));
+}
+
+/* Filled Tonal (Medium Emphasis) */
+@utility button-tonal-surface {
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+@utility button-tonal-hover {
+  background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
+}
+
+@utility button-tonal-focus {
+  background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
+}
+
+/* Outlined (Medium Emphasis) */
+@utility button-outlined-surface {
+  background-color: color-mix(in srgb, var(--color-primary) 0%, transparent);
+  color: var(--color-primary);
+  /* 1px equivalent border using math */
+  border: calc(var(--shadow-base) * 1) solid var(--color-outline);
+}
+
+@utility button-outlined-hover {
+  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+@utility button-outlined-focus {
+  border-color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+/* Text Button (Low Emphasis) */
+@utility button-text-surface {
+  background-color: color-mix(in srgb, var(--color-primary) 0%, transparent);
+  color: var(--color-primary);
+  /* Text buttons have tighter padding */
+  padding: 0 calc(var(--air-button-padding-x) * 0.5); /* 12px */
+}
+
+@utility button-text-hover {
+  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+@utility button-text-focus {
+  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+/* Composed Utilities */
+@utility button {
+  @apply button-base button-filled-surface;
+
+  &:hover:not(:disabled) {
+    @apply button-filled-hover;
+  }
+
+  &:focus-visible:not(:disabled) {
+    @apply button-filled-focus;
+  }
+
+  &:disabled {
+    @apply button-disabled;
+  }
+}
+
+@utility button-elevated {
+  @apply button-base button-elevated-surface;
+
+  &:hover:not(:disabled) {
+    @apply button-elevated-hover;
+  }
+
+  &:focus-visible:not(:disabled) {
+    @apply button-elevated-focus;
+  }
+
+  &:disabled {
+    @apply button-disabled;
+  }
+}
+
+@utility button-tonal {
+  @apply button-base button-tonal-surface;
+
+  &:hover:not(:disabled) {
+    @apply button-tonal-hover;
+  }
+
+  &:focus-visible:not(:disabled) {
+    @apply button-tonal-focus;
+  }
+
+  &:disabled {
+    @apply button-disabled;
+  }
+}
+
+@utility button-outlined {
+  @apply button-base button-outlined-surface;
+
+  &:hover:not(:disabled) {
+    @apply button-outlined-hover;
+  }
+
+  &:focus-visible:not(:disabled) {
+    @apply button-outlined-focus;
+  }
+
+  &:disabled {
+    @apply button-disabled;
+  }
+}
+
+@utility button-text {
+  @apply button-base button-text-surface;
+
+  &:hover:not(:disabled) {
+    @apply button-text-hover;
+  }
+
+  &:focus-visible:not(:disabled) {
+    @apply button-text-focus;
+  }
+
+  &:disabled {
+    @apply button-disabled;
+  }
+}
+
+/* Button Sizes (M3 Expressive) */
+@utility button-xs {
+  --air-button-height: calc(var(--spacing) * 6);
+  --air-button-padding-x: calc(var(--spacing) * 2);
+  --air-button-icon-padding-x: calc(var(--spacing) * 1);
+  --air-button-gap: calc(var(--spacing) * 1);
+  --air-button-font-size: var(--font-label-small-size);
+  --air-button-line-height: var(--font-label-small-line-height);
+}
+@utility button-sm {
+  --air-button-height: calc(var(--spacing) * 8);
+  --air-button-padding-x: calc(var(--spacing) * 4);
+  --air-button-icon-padding-x: calc(var(--spacing) * 2.5);
+  --air-button-gap: calc(var(--spacing) * 1.5);
+  --air-button-font-size: var(--font-label-medium-size);
+  --air-button-line-height: var(--font-label-medium-line-height);
+}
+@utility button-md {
+  --air-button-height: calc(var(--spacing) * 10);
+  --air-button-padding-x: calc(var(--spacing) * 6);
+  --air-button-icon-padding-x: calc(var(--spacing) * 4);
+  --air-button-gap: calc(var(--spacing) * 2);
+  --air-button-font-size: var(--font-label-large-size);
+  --air-button-line-height: var(--font-label-large-line-height);
+}
+@utility button-lg {
+  --air-button-height: calc(var(--spacing) * 12);
+  --air-button-padding-x: calc(var(--spacing) * 8);
+  --air-button-icon-padding-x: calc(var(--spacing) * 5.5);
+  --air-button-gap: calc(var(--spacing) * 2.5);
+  --air-button-font-size: var(--font-title-small-size);
+  --air-button-line-height: var(--font-title-small-line-height);
+}
+@utility button-xl {
+  --air-button-height: calc(var(--spacing) * 14);
+  --air-button-padding-x: calc(var(--spacing) * 10);
+  --air-button-icon-padding-x: calc(var(--spacing) * 7);
+  --air-button-gap: calc(var(--spacing) * 3);
+  --air-button-font-size: var(--font-title-medium-size);
+  --air-button-line-height: var(--font-title-medium-line-height);
+}

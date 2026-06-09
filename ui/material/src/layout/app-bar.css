@@ -1,0 +1,45 @@
+@theme {
+  --app-bar-height: calc(var(--spacing) * 16); /* 64px standard */
+}
+
+/* Base Layout */
+@utility app-bar-base {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: var(--app-bar-height);
+  padding: 0 calc(var(--spacing) * 4); /* 16px */
+  box-sizing: border-box;
+
+  /* Transitions for scroll elevation */
+  transition: background-color var(--duration-short) var(--ease-standard);
+}
+
+/* Surface Visuals */
+@utility app-bar-surface {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+}
+
+@utility app-bar-surface-scrolled {
+  background-color: var(--color-surface-container-high);
+}
+
+@utility app-bar-title {
+  font-size: var(--font-title-large-size);
+  font-weight: var(--font-title-large-weight);
+  letter-spacing: var(--font-title-large-tracking);
+  margin: 0;
+  flex: 1;
+  padding-left: calc(var(--spacing) * 4);
+}
+
+/* Composed Utilities */
+@utility app-bar {
+  @apply app-bar-base app-bar-surface;
+
+  &[data-scrolled='true'] {
+    @apply app-bar-surface-scrolled;
+  }
+}

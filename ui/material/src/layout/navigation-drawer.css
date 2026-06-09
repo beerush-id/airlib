@@ -1,0 +1,71 @@
+@theme {
+  --drawer-width: 22.5rem; /* 360px */
+  --drawer-radius: var(--radius-lg);
+}
+
+/* Base Layout */
+@utility drawer-base {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: var(--drawer-width);
+  z-index: 50;
+  overflow-y: auto;
+
+  /* Assume left drawer by default */
+  left: 0;
+  border-radius: 0 var(--drawer-radius) var(--drawer-radius) 0;
+
+  /* Animation */
+  transform: translateX(-100%);
+  transition: transform var(--duration-medium) var(--ease-emphasized-decelerate);
+
+  &[data-state='open'] {
+    transform: translateX(0);
+  }
+
+  /* Standard/Persistent drawer modifier */
+  &.drawer-persistent {
+    position: relative;
+    border-radius: 0;
+    transform: none; /* Always visible */
+  }
+}
+
+/* Surface Visuals */
+@utility drawer-surface {
+  background-color: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+
+  &.drawer-persistent {
+    background-color: var(--color-surface);
+    border-right: 1px solid var(--color-outline-variant);
+  }
+}
+
+@utility drawer-scrim-base {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-medium) var(--ease-standard);
+
+  &[data-state='open'] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@utility drawer-scrim-surface {
+  background-color: color-mix(in srgb, var(--color-scrim) 32%, transparent);
+}
+
+/* Composed Utilities */
+@utility drawer {
+  @apply drawer-base drawer-surface;
+}
+
+@utility drawer-scrim {
+  @apply drawer-scrim-base drawer-scrim-surface;
+}

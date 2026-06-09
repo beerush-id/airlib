@@ -1,0 +1,76 @@
+@theme {
+  --side-sheet-radius: var(--radius-xl); /* 28px */
+  --side-sheet-max-width: 25rem; /* 400px */
+}
+
+/* Base Layout */
+@utility side-sheet-base {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: var(--side-sheet-max-width);
+  z-index: 50;
+
+  transition: transform var(--duration-medium) var(--ease-emphasized-decelerate);
+}
+
+/* Right Anchored (Default) */
+@utility side-sheet-right {
+  right: 0;
+  border-radius: var(--side-sheet-radius) 0 0 var(--side-sheet-radius);
+  transform: translateX(100%);
+
+  &[data-state='open'] {
+    transform: translateX(0);
+  }
+}
+
+/* Left Anchored */
+@utility side-sheet-left {
+  left: 0;
+  border-radius: 0 var(--side-sheet-radius) var(--side-sheet-radius) 0;
+  transform: translateX(-100%);
+
+  &[data-state='open'] {
+    transform: translateX(0);
+  }
+}
+
+/* Surface Visuals */
+@utility side-sheet-surface {
+  background-color: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+
+  /* Divider on the edge touching the screen edge usually isn't needed, but 
+     sometimes used on the inner edge depending on elevation setup. 
+     M3 uses tonal elevation primarily. */
+}
+
+@utility side-sheet-scrim-base {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-medium) var(--ease-standard);
+
+  &[data-state='open'] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@utility side-sheet-scrim-surface {
+  background-color: color-mix(in srgb, var(--color-scrim) 32%, transparent);
+}
+
+/* Composed Utilities */
+@utility side-sheet {
+  /* Default to right anchored */
+  @apply side-sheet-base side-sheet-right side-sheet-surface;
+}
+
+@utility side-sheet-scrim {
+  @apply side-sheet-scrim-base side-sheet-scrim-surface;
+}

@@ -1,0 +1,121 @@
+@theme {
+  --list-item-min-height: calc(var(--spacing) * 14); /* 56px */
+}
+
+@utility list-view {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  /* Segmented setup */
+  gap: calc(var(--spacing) * 0.5);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+@utility list-view-filled {
+  background-color: var(--color-surface-container-low);
+}
+
+/* Item Filled Variant */
+@utility list-view-item-filled {
+  background-color: var(--color-surface-container);
+  border-radius: var(--radius-sm); /* Inner segmentation radius */
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container));
+  }
+
+  &:focus-visible {
+    background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container));
+  }
+
+  &[aria-selected='true'] {
+    background-color: var(--color-secondary-container);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
+    }
+    &:focus-visible {
+      background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
+    }
+  }
+}
+
+/* Base Layout for List Item */
+@utility list-view-item-base {
+  display: flex;
+  align-items: center;
+  min-height: var(--list-item-min-height); /* 56px */
+  padding: calc(var(--spacing) * 3.5) calc(var(--spacing) * 4); /* 14px 16px */
+  gap: calc(var(--spacing) * 4); /* 16px */
+  box-sizing: border-box;
+
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    color var(--duration-short) var(--ease-standard);
+}
+
+/* Default Visuals */
+@utility list-view-item-surface {
+  background-color: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
+  color: var(--color-on-surface);
+}
+
+/* Interactive States */
+@utility list-view-item-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface) 8%, transparent);
+}
+
+@utility list-view-item-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
+}
+
+@utility list-view-item-selected-surface {
+  --color-ghost-surface: var(--color-secondary-container);
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+@utility list-view-item-selected-focus {
+  background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
+}
+
+@utility list-view-item-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+@utility list-view-item-supporting-text {
+  font-size: var(--font-body-medium-size);
+  font-weight: var(--font-body-medium-weight);
+  line-height: var(--font-body-medium-line-height);
+  color: var(--color-on-surface-variant);
+}
+
+/* Composed Utilities */
+@utility list-view-item {
+  @apply list-view-item-base list-view-item-surface;
+
+  cursor: pointer;
+
+  &:hover {
+    @apply list-view-item-hover;
+  }
+
+  &:focus-visible {
+    @apply list-view-item-focus;
+  }
+
+  &[aria-selected='true'] {
+    @apply list-view-item-selected-surface;
+
+    &:focus-visible {
+      @apply list-view-item-selected-focus;
+    }
+  }
+}

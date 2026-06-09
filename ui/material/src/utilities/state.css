@@ -1,0 +1,26 @@
+/* Base State Layer Utility */
+@utility state-layer {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* By default, state layers use the on-surface color, but components can override this */
+    background-color: var(--state-layer-color, var(--color-on-surface));
+    opacity: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    transition:
+      opacity var(--duration-short) var(--ease-standard),
+      background-color var(--duration-short) var(--ease-standard);
+  }
+  &:hover::before {
+    opacity: var(--opacity-hover);
+  }
+  &:focus-visible::before {
+    opacity: var(--opacity-focus);
+  }
+  &:active::before {
+    opacity: var(--opacity-pressed);
+  }
+}

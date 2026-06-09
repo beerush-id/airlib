@@ -1,0 +1,43 @@
+/* Layout utilities */
+@utility divider-base {
+  border: none;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+@utility divider-horizontal-layout {
+  width: 100%;
+  height: 1px;
+}
+
+@utility divider-vertical-layout {
+  width: 1px;
+  height: 100%;
+}
+
+@utility divider-inset-layout {
+  width: calc(100% - calc(var(--spacing) * 4)); /* Leaves 16px margin */
+  margin-left: calc(var(--spacing) * 4);
+}
+
+/* Visual utilities */
+@utility divider-surface {
+  background-color: var(--color-outline-variant);
+}
+
+@utility divider-primary-surface {
+  background-color: var(--color-primary);
+}
+
+/* Composed Utilities */
+@utility divider {
+  @apply divider-base divider-horizontal-layout divider-surface;
+}
+
+@utility divider-vertical {
+  @apply divider-base divider-vertical-layout divider-surface;
+}
+
+@utility divider-inset {
+  @apply divider-base divider-horizontal-layout divider-inset-layout divider-surface;
+}

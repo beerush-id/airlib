@@ -1,0 +1,172 @@
+@theme {
+  --slider-track-height: calc(var(--spacing) * 4); /* 16px */
+  --slider-handle-size: calc(var(--spacing) * 11); /* 44px */
+  --slider-handle-width: calc(var(--spacing) * 1); /* 4px */
+  --slider-handle-gap: calc(var(--spacing) * 1); /* 4px visual split */
+}
+
+/* Base Layout for Custom Slider */
+@utility slider-base {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: var(--slider-handle-size);
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+}
+
+@utility slider-track-base {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: var(--slider-track-height);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+@utility slider-track-active-base {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+@utility slider-handle-base {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--slider-handle-size);
+  height: var(--slider-handle-size);
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-full);
+    transition: transform var(--duration-short) var(--ease-standard);
+  }
+
+  &:active::after {
+    transform: scale(1.1);
+  }
+}
+
+/* Primary Color Utilities for Custom Slider */
+@utility slider-track-secondary {
+  background-color: var(--color-secondary-container);
+}
+
+@utility slider-track-active-primary {
+  background-color: var(--color-primary);
+}
+
+@utility slider-handle-primary {
+  &::after {
+    background-color: var(--color-primary);
+  }
+}
+
+@utility slider-handle-hover {
+  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+/* Native Input Variant Base */
+@utility slider {
+  appearance: none;
+  width: 100%;
+  height: var(--slider-track-height);
+  border-radius: var(--radius-full);
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  margin: calc(var(--slider-handle-size) / 2) 0;
+
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: var(--slider-track-height);
+    border-radius: var(--radius-full);
+    background-color: transparent;
+  }
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: var(--slider-handle-width);
+    height: var(--slider-handle-size);
+    border-radius: var(--radius-full);
+    margin-top: calc((var(--slider-track-height) - var(--slider-handle-size)) / 2);
+    transition:
+      box-shadow var(--duration-short) var(--ease-standard),
+      transform var(--duration-short) var(--ease-standard);
+  }
+
+  &::-moz-range-track {
+    width: 100%;
+    height: var(--slider-track-height);
+    border-radius: var(--radius-full);
+    background-color: transparent;
+  }
+
+  &::-moz-range-progress {
+    height: var(--slider-track-height);
+    border-radius: var(--radius-full);
+  }
+
+  &::-moz-range-thumb {
+    width: var(--slider-handle-width);
+    height: var(--slider-handle-size);
+    border-radius: var(--radius-full);
+    border: none;
+    transition:
+      box-shadow var(--duration-short) var(--ease-standard),
+      transform var(--duration-short) var(--ease-standard);
+  }
+
+  &:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+  }
+}
+
+/* Native Input Primary Color Utility */
+@utility slider-native-primary-surface {
+  background-color: var(--color-secondary-container);
+  --_slider-hover-color: transparent;
+
+  &:active,
+  &:focus-visible {
+    --_slider-hover-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  }
+
+  &::-webkit-slider-thumb {
+    background-color: var(--color-primary);
+    box-shadow:
+      0 0 0 10px var(--_slider-hover-color),
+      calc(var(--slider-handle-gap) * -1) 0 0 0 var(--color-ghost-surface),
+      var(--slider-handle-gap) 0 0 0 var(--color-ghost-surface);
+  }
+
+  &::-moz-range-progress {
+    background-color: var(--color-primary);
+  }
+
+  &::-moz-range-thumb {
+    background-color: var(--color-primary);
+    box-shadow:
+      0 0 0 10px var(--_slider-hover-color),
+      calc(var(--slider-handle-gap) * -1) 0 0 0 var(--color-ghost-surface),
+      var(--slider-handle-gap) 0 0 0 var(--color-ghost-surface);
+  }
+}
+
+/* Composed Utilities */
+@utility slider-primary {
+  @apply slider slider-native-primary-surface;
+}

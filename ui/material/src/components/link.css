@@ -1,0 +1,90 @@
+/* ── Link Utilities ── */
+
+/* Inline Link — for body text, paragraph links */
+@utility link {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--duration-short) var(--ease-standard);
+
+  &:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
+    text-underline-offset: 3px;
+  }
+
+  &:visited {
+    color: var(--color-tertiary);
+
+    &:hover {
+      text-decoration-color: color-mix(in srgb, var(--color-tertiary) 60%, transparent);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+}
+
+/* Nav Link — subtle, no underline, for navbars and sidebars */
+@utility link-nav {
+  color: var(--color-on-surface-variant);
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--duration-short) var(--ease-standard);
+
+  &:hover {
+    color: var(--color-on-surface);
+  }
+
+  &[aria-current='page'] {
+    color: var(--color-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+}
+
+/* Standalone Link — heavier weight, call-to-action style */
+@utility link-standalone {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing) * 1);
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    color var(--duration-short) var(--ease-standard),
+    gap var(--duration-short) var(--ease-standard);
+
+  /* Arrow affordance via pseudo-element */
+  &::after {
+    content: '→';
+    display: inline-block;
+    transition: transform var(--duration-short) var(--ease-standard);
+  }
+
+  &:hover {
+    color: var(--color-primary);
+    gap: calc(var(--spacing) * 2);
+
+    &::after {
+      transform: translateX(4px);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+}

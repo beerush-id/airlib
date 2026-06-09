@@ -1,0 +1,103 @@
+@theme {
+  --segmented-height: calc(var(--spacing) * 10);
+  --segmented-radius-outer: calc(var(--segmented-height) / 2);
+  --segmented-radius-inner: var(--radius-sm, 8px);
+  --segmented-gap: calc(var(--spacing) * 0.5);
+}
+
+@utility segmented-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--segmented-gap);
+}
+
+/* Base Layout */
+@utility segmented-button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--segmented-height);
+  padding: 0 calc(var(--spacing) * 3);
+  gap: calc(var(--spacing) * 2);
+
+  /* Typography: Label Large */
+  font-size: var(--font-label-large-size);
+  font-weight: var(--font-label-large-weight);
+  line-height: var(--font-label-large-line-height);
+
+  /* Reset */
+  border: none;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  /* Inner radius default */
+  border-radius: var(--segmented-radius-inner);
+
+  &:first-child {
+    border-top-left-radius: var(--segmented-radius-outer);
+    border-bottom-left-radius: var(--segmented-radius-outer);
+  }
+
+  &:last-child {
+    border-top-right-radius: var(--segmented-radius-outer);
+    border-bottom-right-radius: var(--segmented-radius-outer);
+  }
+
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    color var(--duration-short) var(--ease-standard);
+}
+
+/* Default State */
+@utility segmented-button-surface {
+  background-color: var(--color-surface-container);
+  color: var(--color-on-surface);
+}
+
+@utility segmented-button-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container));
+}
+
+@utility segmented-button-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container));
+}
+
+/* Selected/Pressed State */
+@utility segmented-button-selected-surface {
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+@utility segmented-button-selected-hover {
+  background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
+}
+
+@utility segmented-button-selected-focus {
+  background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
+}
+
+/* Composed Utilities */
+@utility segmented-button {
+  @apply segmented-button-base segmented-button-surface;
+
+  &:hover:not(:disabled) {
+    @apply segmented-button-hover;
+  }
+
+  &:focus-visible:not(:disabled) {
+    @apply segmented-button-focus;
+  }
+
+  &[aria-pressed='true'] {
+    @apply segmented-button-selected-surface;
+
+    &:hover:not(:disabled) {
+      @apply segmented-button-selected-hover;
+    }
+
+    &:focus-visible:not(:disabled) {
+      @apply segmented-button-selected-focus;
+    }
+  }
+}

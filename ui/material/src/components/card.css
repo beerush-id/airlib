@@ -1,0 +1,175 @@
+@theme {
+  --card-radius: var(--radius-xl); /* 28px standard container radius */
+  --card-padding: calc(var(--spacing) * 6); /* 24px standard padding */
+}
+
+/* Base Layout and Typography */
+@utility card-base {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+
+  /* Typography: Body Medium default */
+  font-size: var(--font-body-medium-size);
+  color: var(--color-on-surface);
+
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    border-color var(--duration-short) var(--ease-standard);
+}
+
+/* Elevated Card */
+@utility card-elevated-surface {
+  --color-ghost-surface: var(--color-surface-container-low);
+  background-color: var(--color-surface-container-low);
+  border: none;
+}
+
+@utility card-elevated-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-low));
+}
+
+@utility card-elevated-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-low));
+}
+
+/* Filled Card */
+@utility card-filled-surface {
+  --color-ghost-surface: var(--color-surface-container-highest);
+  background-color: var(--color-surface-container-highest);
+  border: none;
+}
+
+@utility card-filled-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-highest));
+}
+
+@utility card-filled-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-highest));
+}
+
+/* Outlined Card */
+@utility card-outlined-surface {
+  --color-ghost-surface: var(--color-surface);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-outline-variant);
+}
+
+@utility card-outlined-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface));
+  border-color: var(--color-outline);
+}
+
+@utility card-outlined-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface));
+  border-color: var(--color-outline);
+}
+
+/* Optional Interactive Modifier */
+@utility card-interactive {
+  cursor: pointer;
+}
+
+/* Composed Utilities */
+@utility card {
+  @apply card-base card-elevated-surface;
+
+  &.card-interactive:hover {
+    @apply card-elevated-hover;
+  }
+
+  &.card-interactive:focus-visible {
+    @apply card-elevated-focus;
+  }
+}
+
+@utility card-filled {
+  @apply card-base card-filled-surface;
+
+  &.card-interactive:hover {
+    @apply card-filled-hover;
+  }
+
+  &.card-interactive:focus-visible {
+    @apply card-filled-focus;
+  }
+}
+
+@utility card-outlined {
+  @apply card-base card-outlined-surface;
+
+  &.card-interactive:hover {
+    @apply card-outlined-hover;
+  }
+
+  &.card-interactive:focus-visible {
+    @apply card-outlined-focus;
+  }
+}
+
+/* Card Content Structure */
+@utility card-header {
+  padding: var(--card-padding);
+  padding-bottom: calc(var(--card-padding) / 2);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 1);
+}
+
+@utility card-title {
+  @apply text-title-medium;
+  margin: 0;
+  color: var(--color-on-surface);
+}
+
+@utility card-subtitle {
+  @apply text-body-medium;
+  margin: 0;
+  color: var(--color-on-surface-variant);
+}
+
+@utility card-body {
+  padding: var(--card-padding);
+  flex-grow: 1;
+}
+
+/* Remove top padding if body follows header */
+.card-header + .card-body {
+  padding-top: 0;
+}
+
+@utility card-actions {
+  padding: var(--card-padding);
+  padding-top: calc(var(--card-padding) / 2);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: calc(var(--spacing) * 2);
+}
+
+/* Segmented Card Group */
+@utility card-group {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 0.5); /* 2px gap between segments */
+
+  --_inner-radius: var(--radius-sm);
+  --_outer-radius: var(--card-radius, var(--radius-md));
+
+  & > * {
+    border-radius: var(--_inner-radius);
+  }
+
+  & > *:first-child {
+    border-top-left-radius: var(--_outer-radius);
+    border-top-right-radius: var(--_outer-radius);
+  }
+
+  & > *:last-child {
+    border-bottom-left-radius: var(--_outer-radius);
+    border-bottom-right-radius: var(--_outer-radius);
+  }
+}
