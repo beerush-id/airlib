@@ -36,74 +36,12 @@ body {
 
 /* ── Layout ── */
 .layout-main {
-  @apply flex flex-col items-center justify-center pt-24 px-8 pb-8 text-center;
+  @apply flex flex-col items-center pt-24 px-6 pb-16 text-center;
 }
 
-/* ── Logo Row ── */
-.logo-row {
-  @apply flex items-center justify-center gap-4 mb-8;
-}
 
-.logo-link {
-  @apply flex items-center justify-center p-6 rounded-2xl transition-all duration-300;
-}
 
-.logo-link:hover {
-  @apply scale-105;
-  filter: drop-shadow(0 0 2rem var(--logo-glow, rgba(0, 0, 0, 0.1)));
-}
-
-.logo-link img {
-  @apply h-24 w-auto transition-[filter] duration-300;
-}
-
-.logo-anchor {
-  --logo-glow: var(--color-anchor-glow);
-}
-.logo-vite {
-  --logo-glow: var(--color-vite-glow);
-}
-.logo-react {
-  --logo-glow: var(--color-react-glow);
-}
-
-.logo-separator {
-  @apply text-3xl font-extralight text-outline-variant select-none leading-none;
-}
-
-/* ── Hero ── */
-.hero-heading {
-  @apply font-bold leading-tight mb-2 tracking-tight;
-  font-size: var(--font-display-large-size);
-}
-
-.hero-heading .brand-anchor {
-  color: var(--color-anchor);
-}
-.hero-heading .brand-vite {
-  color: var(--color-vite);
-}
-.hero-heading .brand-react {
-  color: var(--color-react);
-}
-.hero-heading .brand-dim {
-  @apply text-on-surface-variant font-light;
-}
-
-.hero-subtitle {
-  @apply text-on-surface-variant mb-10 font-light;
-  font-size: var(--font-title-medium-size);
-}
-
-/* ── Custom Utilities ── */
-.counter-demo {
-  @apply flex flex-col items-center gap-4 w-full;
-}
-
-.counter-row {
-  @apply flex items-center justify-center gap-4;
-}
-
+/* ── Legacy (other pages still use these) ── */
 .code-hint {
   @apply text-on-surface-variant mt-4;
   font-size: var(--font-body-medium-size);
@@ -117,54 +55,4 @@ body {
 .docs-hint {
   @apply text-on-surface-variant mt-6;
   font-size: var(--font-body-medium-size);
-}
-
-.features {
-  @apply grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl mb-10;
-}
-
-.feature-icon {
-  @apply text-2xl mb-3;
-}
-
-/* ── Logo Animations ── */
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.logo-react img {
-  animation: logo-spin 20s linear infinite;
-}
-
-@keyframes logo-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-.logo-anchor img {
-  animation: logo-float 3s ease-in-out infinite;
-}
-
-@keyframes logo-pulse {
-  0%,
-  100% {
-    filter: brightness(1);
-  }
-  50% {
-    filter: brightness(1.2);
-  }
-}
-
-.logo-vite img {
-  animation: logo-pulse 4s ease-in-out infinite;
 }
