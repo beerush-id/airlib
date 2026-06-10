@@ -2,11 +2,13 @@
 
 /* Inline Link — for body text, paragraph links */
 @utility link {
+  @apply cursor-pointer no-underline;
+  @apply focus-ring;
   color: var(--color-primary);
   font-weight: 500;
-  text-decoration: none;
-  cursor: pointer;
-  transition: color var(--duration-short) var(--ease-standard);
+  transition:
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 
   &:hover {
     color: var(--color-primary);
@@ -24,19 +26,19 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
     border-radius: var(--radius-xs);
   }
 }
 
 /* Nav Link — subtle, no underline, for navbars and sidebars */
 @utility link-nav {
+  @apply cursor-pointer no-underline;
+  @apply focus-ring;
   color: var(--color-on-surface-variant);
-  text-decoration: none;
   font-weight: 500;
-  cursor: pointer;
-  transition: color var(--duration-short) var(--ease-standard);
+  transition:
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 
   &:hover {
     color: var(--color-on-surface);
@@ -47,29 +49,26 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
     border-radius: var(--radius-xs);
   }
 }
 
 /* Standalone Link — heavier weight, call-to-action style */
 @utility link-standalone {
-  display: inline-flex;
-  align-items: center;
+  @apply inline-flex items-center cursor-pointer no-underline;
+  @apply focus-ring;
   gap: calc(var(--spacing) * 1);
   color: var(--color-primary);
-  text-decoration: none;
   font-weight: 600;
-  cursor: pointer;
   transition:
     color var(--duration-short) var(--ease-standard),
-    gap var(--duration-short) var(--ease-standard);
+    gap var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 
   /* Arrow affordance via pseudo-element */
   &::after {
     content: '→';
-    display: inline-block;
+    @apply inline-block;
     transition: transform var(--duration-short) var(--ease-standard);
   }
 
@@ -83,8 +82,6 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
     border-radius: var(--radius-xs);
   }
 }

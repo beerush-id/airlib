@@ -5,12 +5,9 @@
 
 /* Base Layout and Typography */
 @utility card-base {
-  display: flex;
-  flex-direction: column;
+  @apply flex flex-col relative;
+  @apply overflow-hidden box-border;
   border-radius: var(--card-radius);
-  overflow: hidden;
-  position: relative;
-  box-sizing: border-box;
 
   /* Typography: Body Medium default */
   font-size: var(--font-body-medium-size);
@@ -18,7 +15,8 @@
 
   transition:
     background-color var(--duration-short) var(--ease-standard),
-    border-color var(--duration-short) var(--ease-standard);
+    border-color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 }
 
 /* Elevated Card */
@@ -70,7 +68,7 @@
 
 /* Optional Interactive Modifier */
 @utility card-interactive {
-  cursor: pointer;
+  @apply cursor-pointer focus-ring;
 }
 
 /* Composed Utilities */
@@ -112,11 +110,10 @@
 
 /* Card Content Structure */
 @utility card-header {
+  @apply flex flex-col;
   padding: var(--card-padding);
   padding-bottom: calc(var(--card-padding) / 2);
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing) * 1);
+  gap: var(--spacing);
 }
 
 @utility card-title {
@@ -142,18 +139,15 @@
 }
 
 @utility card-actions {
+  @apply flex items-center justify-end;
   padding: var(--card-padding);
   padding-top: calc(var(--card-padding) / 2);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
   gap: calc(var(--spacing) * 2);
 }
 
 /* Segmented Card Group */
 @utility card-group {
-  display: flex;
-  flex-direction: column;
+  @apply flex flex-col;
   gap: calc(var(--spacing) * 0.5); /* 2px gap between segments */
 
   --_inner-radius: var(--radius-sm);

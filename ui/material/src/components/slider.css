@@ -1,50 +1,37 @@
 @theme {
   --slider-track-height: calc(var(--spacing) * 4); /* 16px */
   --slider-handle-size: calc(var(--spacing) * 11); /* 44px */
-  --slider-handle-width: calc(var(--spacing) * 1); /* 4px */
-  --slider-handle-gap: calc(var(--spacing) * 1); /* 4px visual split */
+  --slider-handle-width: var(--spacing); /* 4px */
+  --slider-handle-gap: var(--spacing); /* 4px visual split */
 }
 
 /* Base Layout for Custom Slider */
 @utility slider-base {
-  display: flex;
-  align-items: center;
-  position: relative;
-  width: 100%;
+  @apply flex items-center relative w-full;
+  @apply box-border cursor-pointer;
+  @apply focus-ring;
   height: var(--slider-handle-size);
-  cursor: pointer;
-  outline: none;
-  box-sizing: border-box;
+  transition: outline-color var(--duration-short) var(--ease-standard);
 }
 
 @utility slider-track-base {
-  position: absolute;
-  top: 50%;
+  @apply absolute top-1/2 w-full overflow-hidden;
   transform: translateY(-50%);
-  width: 100%;
   height: var(--slider-track-height);
   border-radius: var(--radius-full);
-  overflow: hidden;
 }
 
 @utility slider-track-active-base {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
+  @apply absolute inset-y-0 left-0;
 }
 
 @utility slider-handle-base {
-  position: absolute;
-  top: 50%;
+  @apply absolute top-1/2 flex items-center justify-center;
   transform: translate(-50%, -50%);
   width: var(--slider-handle-size);
   height: var(--slider-handle-size);
   border-radius: var(--radius-full);
   background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   &::after {
     content: '';
@@ -80,14 +67,12 @@
 
 /* Native Input Variant Base */
 @utility slider {
+  @apply relative w-full cursor-pointer focus-ring;
   appearance: none;
-  width: 100%;
   height: var(--slider-track-height);
   border-radius: var(--radius-full);
-  outline: none;
-  cursor: pointer;
-  position: relative;
   margin: calc(var(--slider-handle-size) / 2) 0;
+  transition: outline-color var(--duration-short) var(--ease-standard);
 
   &::-webkit-slider-runnable-track {
     width: 100%;
@@ -137,15 +122,18 @@
 
 /* Native Input Primary Color Utility */
 @utility slider-native-primary-surface {
-  background-color: var(--color-secondary-container);
   --_slider-hover-color: transparent;
+  background-color: var(--color-secondary-container);
+  transition: all 0.2s ease-in-out;
 
   &:active,
   &:focus-visible {
     --_slider-hover-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    background-color: var(--color-surface-container-highest);
   }
 
   &::-webkit-slider-thumb {
+    transition: all 0.2s ease-in-out;
     background-color: var(--color-primary);
     box-shadow:
       0 0 0 10px var(--_slider-hover-color),
@@ -158,6 +146,7 @@
   }
 
   &::-moz-range-thumb {
+    transition: all 0.2s ease-in-out;
     background-color: var(--color-primary);
     box-shadow:
       0 0 0 10px var(--_slider-hover-color),

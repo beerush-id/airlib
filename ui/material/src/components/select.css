@@ -2,7 +2,7 @@
 
 @utility select-trigger {
   /* Inherits text-field-base but resets cursor to pointer */
-  cursor: pointer;
+  @apply cursor-pointer;
 }
 
 @utility select-caret {

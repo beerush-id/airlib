@@ -10,9 +10,9 @@
 
 /* Base Structure */
 @utility button-base {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @apply inline-flex items-center justify-center;
+  @apply select-none box-border focus-ring;
+
   gap: var(--air-button-gap);
   height: var(--air-button-height);
   padding: 0 var(--air-button-padding-x);
@@ -26,12 +26,21 @@
 
   /* Resets */
   border: 1px solid transparent;
-  outline: none;
-  cursor: pointer;
-  user-select: none;
   text-decoration: none;
-  box-sizing: border-box;
 
+  /* Shared Transitions */
+  transition:
+    box-shadow var(--duration-short) var(--ease-standard),
+    background-color var(--duration-short) var(--ease-standard),
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
+
+  &:focus-visible {
+    z-index: 1;
+  }
+}
+
+@utility button-icon-slot {
   /* Smart Icon Padding (M3 Spec: 16px on icon sides, 24px on text sides) */
   &:has(> *:first-child:not(:last-child):is(.material-symbols-outlined, svg, img)) {
     padding-left: var(--air-button-icon-padding-x);
@@ -47,20 +56,14 @@
     padding-left: var(--air-button-icon-padding-x);
     padding-right: var(--air-button-icon-padding-x);
   }
-
-  /* Shared Transitions */
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    border-color var(--duration-short) var(--ease-standard);
 }
 
 /* Disabled State Utility */
 @utility button-disabled {
-  cursor: not-allowed !important;
-  background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent) !important;
-  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent) !important;
-  border-color: transparent !important;
+  cursor: not-allowed;
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
+  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
+  border-color: transparent;
 }
 
 /* Filled Button (High Emphasis) */
@@ -110,7 +113,7 @@
   background-color: color-mix(in srgb, var(--color-primary) 0%, transparent);
   color: var(--color-primary);
   /* 1px equivalent border using math */
-  border: calc(var(--shadow-base) * 1) solid var(--color-outline);
+  border: var(--shadow-base) solid var(--color-outline);
 }
 
 @utility button-outlined-hover {
@@ -140,7 +143,7 @@
 
 /* Composed Utilities */
 @utility button {
-  @apply button-base button-filled-surface;
+  @apply button-base button-icon-slot button-filled-surface cursor-pointer;
 
   &:hover:not(:disabled) {
     @apply button-filled-hover;
@@ -156,7 +159,7 @@
 }
 
 @utility button-elevated {
-  @apply button-base button-elevated-surface;
+  @apply button-base button-icon-slot button-elevated-surface cursor-pointer;
 
   &:hover:not(:disabled) {
     @apply button-elevated-hover;
@@ -172,7 +175,7 @@
 }
 
 @utility button-tonal {
-  @apply button-base button-tonal-surface;
+  @apply button-base button-icon-slot button-tonal-surface cursor-pointer;
 
   &:hover:not(:disabled) {
     @apply button-tonal-hover;
@@ -188,7 +191,7 @@
 }
 
 @utility button-outlined {
-  @apply button-base button-outlined-surface;
+  @apply button-base button-icon-slot button-outlined-surface cursor-pointer;
 
   &:hover:not(:disabled) {
     @apply button-outlined-hover;
@@ -204,7 +207,7 @@
 }
 
 @utility button-text {
-  @apply button-base button-text-surface;
+  @apply button-base button-icon-slot button-text-surface cursor-pointer;
 
   &:hover:not(:disabled) {
     @apply button-text-hover;
@@ -223,8 +226,8 @@
 @utility button-xs {
   --air-button-height: calc(var(--spacing) * 6);
   --air-button-padding-x: calc(var(--spacing) * 2);
-  --air-button-icon-padding-x: calc(var(--spacing) * 1);
-  --air-button-gap: calc(var(--spacing) * 1);
+  --air-button-icon-padding-x: var(--spacing);
+  --air-button-gap: var(--spacing);
   --air-button-font-size: var(--font-label-small-size);
   --air-button-line-height: var(--font-label-small-line-height);
 }

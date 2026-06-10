@@ -1,18 +1,20 @@
 /* Base State Layer Utility */
 @utility state-layer {
   position: relative;
+
   &::before {
     content: '';
     position: absolute;
     inset: 0;
-    /* By default, state layers use the on-surface color, but components can override this */
-    background-color: var(--state-layer-color, var(--color-on-surface));
     opacity: 0;
     pointer-events: none;
     border-radius: inherit;
     transition:
       opacity var(--duration-short) var(--ease-standard),
       background-color var(--duration-short) var(--ease-standard);
+
+    /* By default, state layers use the on-surface color, but components can override this */
+    background-color: var(--state-layer-color, var(--color-on-surface));
   }
   &:hover::before {
     opacity: var(--opacity-hover);
@@ -22,5 +24,16 @@
   }
   &:active::before {
     opacity: var(--opacity-pressed);
+  }
+}
+
+@utility focus-ring {
+  outline-width: var(--focus-ring-width);
+  outline-style: solid;
+  outline-color: oklch(from var(--color-secondary) l c h / 0);
+  outline-offset: var(--focus-ring-offset);
+
+  &:focus-visible {
+    outline-color: var(--color-secondary);
   }
 }

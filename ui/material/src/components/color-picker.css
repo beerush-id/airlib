@@ -4,14 +4,14 @@
 }
 
 @utility color-picker {
-  appearance: none;
+  @apply appearance-none p-0 cursor-pointer;
+  @apply focus-ring;
   width: var(--color-picker-width);
   height: var(--color-picker-height);
-  padding: 0;
   border: none;
   background-color: transparent;
   border-radius: var(--radius-md);
-  cursor: pointer;
+  transition: outline-color var(--duration-short) var(--ease-standard);
 
   &::-webkit-color-swatch-wrapper {
     padding: 0;
@@ -27,8 +27,4 @@
     border-radius: var(--radius-md);
   }
 
-  &:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-  }
 }

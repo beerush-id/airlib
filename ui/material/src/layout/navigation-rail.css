@@ -4,19 +4,11 @@
 
 /* Base Layout */
 @utility navigation-rail-base {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @apply flex flex-col items-center h-full;
+  @apply fixed top-0 left-0 z-40;
   width: var(--nav-rail-width);
-  height: 100%;
   padding: calc(var(--spacing) * 4) 0;
   gap: calc(var(--spacing) * 3);
-
-  /* Fixed to left */
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 40;
 }
 
 /* Surface Visuals */
@@ -28,26 +20,25 @@
 
 /* Item Base Layout */
 @utility navigation-rail-item-base {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  @apply inline-flex flex-col items-center justify-center;
+  @apply cursor-pointer;
+  @apply focus-ring;
   width: calc(var(--spacing) * 18); /* 72px */
   min-height: calc(var(--spacing) * 14); /* 56px */
-  gap: calc(var(--spacing) * 1);
-  cursor: pointer;
+  gap: var(--spacing);
   border-radius: var(--radius-md); /* Slightly wider hover target area */
 
   /* Reset */
   border: none;
   background-color: transparent;
-  outline: none;
 
   /* Label Medium */
   font-size: var(--font-label-medium-size);
   font-weight: var(--font-label-medium-weight);
 
-  transition: color var(--duration-short) var(--ease-standard);
+  transition:
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 }
 
 /* Item Surface Visuals */
@@ -61,12 +52,9 @@
 
 /* Icon Container Layout */
 @utility nav-rail-icon-container-base {
+  @apply flex items-center justify-center rounded-full;
   width: calc(var(--spacing) * 14); /* 56px pill */
   height: calc(var(--spacing) * 8); /* 32px */
-  border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition:
     background-color var(--duration-short) var(--ease-standard),
     color var(--duration-short) var(--ease-standard);

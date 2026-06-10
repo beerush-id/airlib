@@ -1,7 +1,7 @@
 /* Component Variables */
 @theme {
   --tooltip-plain-padding-x: calc(var(--spacing) * 2); /* 8px */
-  --tooltip-plain-padding-y: calc(var(--spacing) * 1); /* 4px */
+  --tooltip-plain-padding-y: var(--spacing); /* 4px */
 
   --tooltip-rich-padding-x: calc(var(--spacing) * 4); /* 16px */
   --tooltip-rich-padding-y: calc(var(--spacing) * 3); /* 12px */
@@ -9,15 +9,11 @@
 
 /* Base Tooltip Structure */
 @utility tooltip-base {
-  position: absolute;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
+  @apply absolute z-100 pointer-events-none;
+  @apply opacity-0 invisible box-border;
   transition:
     opacity var(--duration-short) var(--ease-standard),
     visibility var(--duration-short) var(--ease-standard);
-  box-sizing: border-box;
 
   /* When the tooltip logic activates it, it will apply a class or data-state to show it */
   &[data-state='visible'] {
@@ -54,7 +50,7 @@
   letter-spacing: var(--font-body-medium-tracking);
 
   /* Rich tooltips can be interactive */
-  pointer-events: auto;
+  @apply pointer-events-auto;
 }
 
 /* Rich Tooltip Surface */

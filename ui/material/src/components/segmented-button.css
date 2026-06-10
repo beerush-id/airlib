@@ -6,16 +6,13 @@
 }
 
 @utility segmented-group {
-  display: inline-flex;
-  align-items: center;
+  @apply inline-flex items-center;
   gap: var(--segmented-gap);
 }
 
 /* Base Layout */
 @utility segmented-button-base {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @apply inline-flex items-center justify-center;
   height: var(--segmented-height);
   padding: 0 calc(var(--spacing) * 3);
   gap: calc(var(--spacing) * 2);
@@ -27,9 +24,7 @@
 
   /* Reset */
   border: none;
-  outline: none;
-  cursor: pointer;
-  box-sizing: border-box;
+  @apply box-border cursor-pointer focus-ring;
 
   /* Inner radius default */
   border-radius: var(--segmented-radius-inner);
@@ -46,7 +41,12 @@
 
   transition:
     background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard);
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
+
+  &:focus-visible {
+    z-index: 1;
+  }
 }
 
 /* Default State */

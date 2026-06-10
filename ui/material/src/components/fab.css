@@ -9,9 +9,10 @@
 
 /* Base Layout */
 @utility fab-base {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @apply inline-flex items-center justify-center;
+  @apply box-border cursor-pointer;
+  @apply focus-ring;
+  border: none;
   width: var(--air-fab-size);
   height: var(--air-fab-size);
   border-radius: var(--air-fab-radius);
@@ -19,16 +20,11 @@
   gap: var(--air-fab-gap);
   min-width: var(--air-fab-min-width);
 
-  /* Reset */
-  border: none;
-  outline: none;
-  cursor: pointer;
-  box-sizing: border-box;
-
   transition:
     box-shadow var(--duration-short) var(--ease-standard),
     background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard);
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 }
 
 /* Size Variants */

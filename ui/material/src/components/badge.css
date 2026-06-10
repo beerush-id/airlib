@@ -1,25 +1,19 @@
 @theme {
   --air-badge-size: calc(var(--spacing) * 4);
-  --air-badge-padding-x: calc(var(--spacing) * 1);
+  --air-badge-padding-x: var(--spacing);
   --air-badge-font-size: var(--font-label-small-size);
 }
 
 @utility badge-container {
-  position: relative;
-  display: inline-flex;
+  @apply relative inline-flex;
 }
 
 /* Base shape and placement */
 @utility badge-base {
-  position: absolute;
-  top: 0;
-  right: 0;
+  @apply absolute top-0 right-0;
+  @apply inline-flex items-center justify-center box-border;
   transform: translate(30%, -30%);
   border-radius: var(--radius-full);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
 
   height: var(--air-badge-size);
   min-width: var(--air-badge-size);
@@ -37,7 +31,7 @@
 
 @utility badge-lg {
   --air-badge-size: calc(var(--spacing) * 4);
-  --air-badge-padding-x: calc(var(--spacing) * 1);
+  --air-badge-padding-x: var(--spacing);
   --air-badge-font-size: var(--font-label-small-size);
 }
 

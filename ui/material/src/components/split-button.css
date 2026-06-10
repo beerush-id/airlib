@@ -7,18 +7,16 @@
 
 /* Container */
 @utility split-button-group {
-  display: inline-flex;
-  align-items: center;
+  @apply inline-flex items-center;
   gap: var(--split-button-gap);
   height: var(--split-button-height);
 }
 
 /* Base style for both halves */
 @utility split-button-base {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+  @apply inline-flex items-center justify-center;
+  @apply cursor-pointer box-border h-full;
+  @apply focus-ring;
 
   font-size: var(--air-button-font-size, var(--font-label-large-size));
   font-weight: var(--font-label-large-weight);
@@ -26,17 +24,19 @@
   line-height: var(--air-button-line-height, var(--font-label-large-line-height));
 
   border: 1px solid transparent;
-  outline: none;
-  cursor: pointer;
-  box-sizing: border-box;
 
-  transition: background-color var(--duration-short) var(--ease-standard);
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
+
+  &:focus-visible {
+    z-index: 1;
+  }
 }
 
 /* Primary Action Area */
 @utility split-button-primary {
-  @apply split-button-base;
-  flex: 1;
+  @apply split-button-base flex-1;
   padding: 0 var(--air-button-padding-x);
   gap: var(--air-button-gap);
   border-top-left-radius: var(--split-button-radius-outer);

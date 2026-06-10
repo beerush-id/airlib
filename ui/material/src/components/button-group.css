@@ -6,12 +6,15 @@
 
 /* Container for standard buttons */
 @utility button-group {
-  display: inline-flex;
-  align-items: center;
+  @apply inline-flex items-center;
   gap: var(--group-gap);
 
   & > [class*='button'] {
     border-radius: var(--group-radius-inner) !important;
+  }
+
+  & > [class*='button']:focus-visible:not(:disabled) {
+    z-index: 1;
   }
 
   & > [class*='button']:first-child {

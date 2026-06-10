@@ -8,9 +8,7 @@
 
 /* Base Snackbar Layout */
 @utility snackbar-base {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @apply flex items-center justify-between;
   gap: var(--snackbar-gap);
   min-height: var(--snackbar-min-height);
   padding: calc(var(--snackbar-padding-x) * 0.5) var(--snackbar-padding-x);
@@ -45,12 +43,9 @@
 
 /* Snackbar Action Button */
 @utility snackbar-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @apply inline-flex items-center justify-center;
+  @apply cursor-pointer focus-ring;
   border: none;
-  outline: none;
-  cursor: pointer;
   background-color: color-mix(in srgb, var(--color-inverse-primary) 0%, transparent);
   color: var(--color-inverse-primary);
   padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
@@ -62,7 +57,8 @@
 
   transition:
     background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard);
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 
   &:hover:not(:disabled) {
     background-color: color-mix(in srgb, var(--color-inverse-primary) 8%, transparent);

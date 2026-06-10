@@ -9,14 +9,11 @@
 
 /* Base Layout and Typography */
 @utility chip-base {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @apply inline-flex items-center justify-center;
+  @apply box-border cursor-pointer;
   height: var(--air-chip-height);
   padding: 0 var(--air-chip-padding-x);
   border-radius: var(--air-chip-radius);
-  box-sizing: border-box;
-  cursor: pointer;
 
   /* Typography: Label Large */
   font-size: var(--air-chip-font-size);
@@ -24,10 +21,8 @@
   line-height: var(--air-chip-line-height);
 
   /* Resets */
-  outline: none;
   border: none;
-  text-decoration: none;
-  user-select: none;
+  @apply no-underline select-none focus-ring;
 
   /* Smart Icon Padding (M3 Spec) */
   &:has(> *:first-child:not(:last-child):is(.material-symbols-outlined, svg, img)) {
@@ -41,7 +36,8 @@
   transition:
     background-color var(--duration-short) var(--ease-standard),
     border-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard);
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 }
 
 /* Outlined Variant (Default M3 Chip) */

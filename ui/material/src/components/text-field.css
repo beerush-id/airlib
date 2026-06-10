@@ -8,10 +8,7 @@
 
 /* The Wrapper Base */
 @utility text-field-base {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
+  @apply flex flex-col relative w-full;
   margin-top: calc(var(--spacing) * 2); /* 8px room for floating label */
 
   /* Smart Icon Padding Setup */
@@ -108,9 +105,9 @@
 
 /* Label Visuals */
 @utility text-field-label-base {
-  display: block;
+  @apply block;
   font-size: var(--font-body-small-size);
-  margin-bottom: calc(var(--spacing) * 1);
+  margin-bottom: var(--spacing);
 }
 
 /* Composed Label */
@@ -129,16 +126,15 @@
 
 /* The Input Base Layout */
 @utility text-field-input-base {
-  width: 100%;
+  @apply w-full box-border;
   height: var(--air-text-field-height);
   padding: 0 var(--_trailing-padding, var(--air-text-field-padding-x)) 0
     var(--_leading-padding, var(--air-text-field-padding-x));
   border-radius: var(--air-text-field-radius);
-  box-sizing: border-box;
   font-size: var(--air-text-field-font-size);
   font-weight: var(--font-body-large-weight);
   letter-spacing: var(--font-body-large-tracking);
-  outline: none;
+  letter-spacing: var(--font-body-large-tracking);
   transition:
     border-color var(--duration-short) var(--ease-standard),
     box-shadow var(--duration-short) var(--ease-standard);
@@ -199,7 +195,7 @@
 /* Supporting Text */
 @utility text-field-supporting-base {
   font-size: var(--font-body-small-size);
-  margin-top: calc(var(--spacing) * 1);
+  margin-top: var(--spacing);
   padding: 0 var(--air-text-field-padding-x);
 }
 

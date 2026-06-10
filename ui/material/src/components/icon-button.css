@@ -6,21 +6,15 @@
 
 /* Base Layout */
 @utility icon-button-base {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @apply inline-flex items-center justify-center;
+  @apply box-border p-0 cursor-pointer select-none no-underline;
+  @apply focus-ring;
   width: var(--air-icon-button-size);
   height: var(--air-icon-button-size);
   border-radius: var(--air-icon-button-radius);
 
   /* Resets */
   border: none;
-  outline: none;
-  cursor: pointer;
-  user-select: none;
-  text-decoration: none;
-  box-sizing: border-box;
-  padding: 0;
 
   /* Ensure icon scales perfectly */
   font-size: var(--air-icon-button-icon-size);
@@ -29,20 +23,23 @@
   & > svg,
   & > span,
   & > i {
+    @apply inline-flex items-center justify-center;
     font-size: inherit !important;
     width: 1em;
     height: 1em;
     line-height: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     fill: currentColor;
   }
 
   transition:
     background-color var(--duration-short) var(--ease-standard),
     color var(--duration-short) var(--ease-standard),
-    border-color var(--duration-short) var(--ease-standard);
+    border-color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
+
+  &:focus-visible {
+    z-index: 1;
+  }
 
   /* A11y 48x48 minimum hit area */
   position: relative;
@@ -131,7 +128,7 @@
 @utility icon-button-outlined-surface {
   background-color: color-mix(in srgb, var(--color-on-surface-variant) 0%, transparent);
   color: var(--color-on-surface-variant);
-  border: calc(var(--shadow-base) * 1) solid var(--color-outline);
+  border: var(--shadow-base) solid var(--color-outline);
 }
 
 @utility icon-button-outlined-hover {

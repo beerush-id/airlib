@@ -7,22 +7,17 @@
 
 /* Base Track */
 @utility switch-base {
-  display: inline-flex;
-  align-items: center;
+  @apply inline-flex items-center relative box-border;
+  @apply cursor-pointer p-0;
+  @apply focus-ring;
   width: var(--switch-track-width);
   height: var(--switch-track-height);
   border-radius: var(--radius-full);
-  cursor: pointer;
-  position: relative;
-  box-sizing: border-box;
-
-  /* Layout Resets */
-  outline: none;
-  padding: 0;
 
   transition:
     background-color var(--duration-short) var(--ease-standard),
-    border-color var(--duration-short) var(--ease-standard);
+    border-color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 }
 
 /* Track Visuals */
@@ -44,14 +39,11 @@
 
 /* Base Handle */
 @utility switch-handle {
-  position: absolute;
+  @apply absolute flex items-center justify-center;
   left: calc(var(--spacing) * 1.5); /* 6px resting unselected */
   width: calc(var(--spacing) * 4); /* 16px resting unselected */
   height: calc(var(--spacing) * 4);
   border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   transition:
     left var(--duration-short) var(--ease-standard),

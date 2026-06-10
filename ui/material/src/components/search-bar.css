@@ -4,14 +4,11 @@
 
 /* Base Layout */
 @utility search-bar-base {
-  display: flex;
-  align-items: center;
-  width: 100%;
+  @apply flex items-center w-full box-border;
   height: var(--search-bar-height);
   border-radius: var(--radius-full);
   padding: 0 calc(var(--spacing) * 4);
   gap: calc(var(--spacing) * 4);
-  box-sizing: border-box;
 
   transition: background-color var(--duration-short) var(--ease-standard);
 }
@@ -30,10 +27,8 @@
 }
 
 @utility search-bar-input-base {
-  flex: 1;
-  height: 100%;
+  @apply flex-1 h-full outline-none;
   border: none;
-  outline: none;
   background-color: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
   color: var(--color-on-surface);
 

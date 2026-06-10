@@ -1,15 +1,12 @@
 /* Base Container */
 @utility fab-menu {
-  position: relative;
-  display: inline-flex;
-  flex-direction: column-reverse;
-  align-items: center;
+  @apply relative inline-flex flex-col-reverse items-center;
 }
 
 /* Trigger Button */
 @utility fab-menu-trigger {
   /* Requires the main fab button class too */
-  z-index: 10;
+  @apply z-10;
 
   &[data-state='open'] {
     /* Typical M3 rotation animation for the plus icon turning into an X */
@@ -33,30 +30,21 @@
 
 /* The expanding list of smaller FABs */
 @utility fab-menu-list {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
+  @apply absolute bottom-full left-1/2 flex flex-col-reverse items-center;
+  @apply pointer-events-none z-[9];
   transform: translateX(-50%);
 
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
   gap: calc(var(--spacing) * 4); /* 16px between mini fabs */
   padding-bottom: calc(var(--spacing) * 4); /* space between list and trigger */
-
-  pointer-events: none;
-  z-index: 9;
 }
 
 /* Mini FAB animation states */
 @utility fab-menu-item {
-  opacity: 0;
+  @apply opacity-0 pointer-events-none;
   transform: scale(0.6) translateY(20px);
   transition:
     opacity var(--duration-short) var(--ease-standard),
     transform var(--duration-short) var(--ease-standard);
-
-  pointer-events: none;
 
   .fab-menu[data-state='open'] & {
     opacity: 1;

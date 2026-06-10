@@ -4,43 +4,47 @@
 }
 
 @utility checkbox-container {
-  display: inline-flex;
+  @apply inline-flex items-center justify-center relative cursor-pointer;
   aspect-ratio: 1;
-  align-items: center;
-  justify-content: center;
   width: var(--checkbox-target);
   height: var(--checkbox-target);
   border-radius: var(--radius-full);
-  cursor: pointer;
-  position: relative;
 
   border: none;
   background-color: transparent;
-  outline: none;
   transition: background-color var(--duration-short) var(--ease-standard);
 
   &:hover:not(:disabled) {
     @apply checkbox-hover;
   }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:focus-visible:not(:disabled) :is(.checkbox, .checkbox-base) {
+    outline-width: var(--focus-ring-width);
+    outline-style: solid;
+    outline-color: var(--color-secondary);
+    outline-offset: var(--focus-ring-offset);
+  }
 }
 
 @utility checkbox-base {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply flex items-center justify-center box-border appearance-none;
   width: var(--checkbox-size);
   height: var(--checkbox-size);
   border-radius: calc(var(--spacing) * 0.5); /* 2px */
   border: 2px solid var(--color-on-surface-variant);
-  box-sizing: border-box;
   background-color: transparent;
   color: transparent;
-  appearance: none;
 
   transition:
     background-color var(--duration-short) var(--ease-standard),
     border-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard);
+    color var(--duration-short) var(--ease-standard),
+    box-shadow var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 }
 
 @utility checkbox-icon {
@@ -89,17 +93,14 @@
   background-color: color-mix(in srgb, var(--color-on-surface) 8%, transparent);
 }
 
-@utility checkbox-focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
 /* Composed Utilities */
 @utility checkbox {
   @apply checkbox-base;
 
   &:focus-visible {
-    @apply checkbox-focus;
+    outline: none;
+    box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-surface),
+                0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--color-secondary);
   }
 }
 

@@ -4,41 +4,34 @@
 }
 
 @utility radio-base {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @apply inline-flex items-center justify-center relative;
+  @apply cursor-pointer;
   width: var(--radio-target);
   height: var(--radio-target);
   border-radius: var(--radius-full);
-  cursor: pointer;
-  position: relative;
 
   /* Reset */
   border: none;
   background-color: transparent;
-  outline: none;
-  transition: background-color var(--duration-short) var(--ease-standard);
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 }
 
 @utility radio-visual {
+  @apply relative box-border rounded-full;
   width: var(--radio-size);
   height: var(--radio-size);
-  border-radius: 50%;
   border: 2px solid var(--color-on-surface-variant);
-  box-sizing: border-box;
-  position: relative;
 
   transition: border-color var(--duration-short) var(--ease-standard);
 }
 
 @utility radio-visual-dot {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  @apply absolute top-1/2 left-1/2 rounded-full;
   transform: translate(-50%, -50%) scale(0);
   width: 10px;
   height: 10px;
-  border-radius: 50%;
   background-color: var(--color-primary);
   transition: transform var(--duration-short) var(--ease-standard);
 }
@@ -96,6 +89,17 @@
 
   &[aria-checked='true']:focus-visible:not(:disabled) {
     @apply radio-checked-focus;
+  }
+
+  &:focus-visible:not(:disabled) .radio-visual {
+    outline-width: var(--focus-ring-width);
+    outline-style: solid;
+    outline-color: var(--color-secondary);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  &:focus-visible {
+    outline: none;
   }
 
   &:disabled,

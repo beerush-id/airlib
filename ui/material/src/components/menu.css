@@ -10,18 +10,12 @@
 
 /* Menu Surface (the floating container) */
 @utility menu-surface {
-  position: absolute;
-  z-index: 200;
+  @apply absolute z-200 m-0 box-border;
+  list-style: none;
   min-width: var(--menu-min-width);
   background-color: var(--color-surface-container);
   border-radius: var(--menu-radius);
   padding: var(--menu-padding-y) 0;
-  margin: 0;
-  list-style: none;
-
-  /* Reset */
-  box-sizing: border-box;
-  outline: none;
 
   /* Animation */
   opacity: 0;
@@ -41,28 +35,24 @@
 
 /* Menu Item Base */
 @utility menu-item-base {
-  display: flex;
-  align-items: center;
-  width: 100%;
+  @apply flex items-center w-full box-border;
+  @apply text-left cursor-pointer no-underline h-full;
+  @apply focus-ring;
   height: var(--menu-item-height);
   padding: 0 var(--menu-item-padding-x);
-  box-sizing: border-box;
 
   /* Typography: Label Large */
   font-size: var(--font-label-large-size);
   font-weight: var(--font-label-large-weight);
   letter-spacing: var(--font-label-large-tracking);
-  text-align: left;
 
   /* Resets (if applied to a button) */
   border: none;
-  outline: none;
-  cursor: pointer;
-  text-decoration: none;
 
   transition:
     background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard);
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 }
 
 /* Default Visuals */

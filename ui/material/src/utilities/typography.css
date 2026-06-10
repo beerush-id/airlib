@@ -1,3 +1,88 @@
+@theme {
+  /* Typography Scale */
+  --font-base: 1rem;
+
+  /* Label */
+  --font-label-large-size: calc(var(--font-base) * 0.875);
+  --font-label-large-weight: 500;
+  --font-label-large-tracking: calc(var(--font-base) * 0.00625);
+  --font-label-large-line-height: calc(var(--font-base) * 1.25);
+
+  --font-label-medium-size: calc(var(--font-base) * 0.75);
+  --font-label-medium-weight: 500;
+  --font-label-medium-tracking: calc(var(--font-base) * 0.03125);
+  --font-label-medium-line-height: var(--font-base);
+
+  --font-label-small-size: calc(var(--font-base) * 0.6875);
+  --font-label-small-weight: 500;
+  --font-label-small-tracking: calc(var(--font-base) * 0.03125);
+  --font-label-small-line-height: var(--font-base);
+
+  /* Body */
+  --font-body-large-size: var(--font-base);
+  --font-body-large-weight: 400;
+  --font-body-large-tracking: calc(var(--font-base) * 0.03125);
+  --font-body-large-line-height: calc(var(--font-base) * 1.5);
+
+  --font-body-medium-size: calc(var(--font-base) * 0.875);
+  --font-body-medium-weight: 400;
+  --font-body-medium-tracking: calc(var(--font-base) * 0.015625);
+  --font-body-medium-line-height: calc(var(--font-base) * 1.25);
+
+  --font-body-small-size: calc(var(--font-base) * 0.75);
+  --font-body-small-weight: 400;
+  --font-body-small-tracking: calc(var(--font-base) * 0.025);
+  --font-body-small-line-height: var(--font-base);
+
+  /* Title */
+  --font-title-large-size: calc(var(--font-base) * 1.375);
+  --font-title-large-weight: 400;
+  --font-title-large-tracking: 0;
+  --font-title-large-line-height: calc(var(--font-base) * 1.75);
+
+  --font-title-medium-size: var(--font-base);
+  --font-title-medium-weight: 500;
+  --font-title-medium-tracking: calc(var(--font-base) * 0.009375);
+  --font-title-medium-line-height: calc(var(--font-base) * 1.5);
+
+  --font-title-small-size: calc(var(--font-base) * 0.875);
+  --font-title-small-weight: 500;
+  --font-title-small-tracking: calc(var(--font-base) * 0.00625);
+  --font-title-small-line-height: calc(var(--font-base) * 1.25);
+
+  /* Headline */
+  --font-headline-large-size: calc(var(--font-base) * 2);
+  --font-headline-large-weight: 400;
+  --font-headline-large-tracking: 0;
+  --font-headline-large-line-height: calc(var(--font-base) * 2.5);
+
+  --font-headline-medium-size: calc(var(--font-base) * 1.75);
+  --font-headline-medium-weight: 400;
+  --font-headline-medium-tracking: 0;
+  --font-headline-medium-line-height: calc(var(--font-base) * 2.25);
+
+  --font-headline-small-size: calc(var(--font-base) * 1.5);
+  --font-headline-small-weight: 400;
+  --font-headline-small-tracking: 0;
+  --font-headline-small-line-height: calc(var(--font-base) * 2);
+
+  /* Display */
+  --font-display-large-size: calc(var(--font-base) * 3.5625);
+  --font-display-large-weight: 400;
+  --font-display-large-tracking: calc(var(--font-base) * -0.015625);
+  --font-display-large-line-height: calc(var(--font-base) * 4);
+
+  --font-display-medium-size: calc(var(--font-base) * 2.8125);
+  --font-display-medium-weight: 400;
+  --font-display-medium-tracking: 0;
+  --font-display-medium-line-height: calc(var(--font-base) * 3.25);
+
+  --font-display-small-size: calc(var(--font-base) * 2.25);
+  --font-display-small-weight: 400;
+  --font-display-small-tracking: 0;
+  --font-display-small-line-height: calc(var(--font-base) * 2.75);
+}
+
 @utility text-display-large {
   font-size: var(--font-display-large-size);
   font-weight: var(--font-display-large-weight);

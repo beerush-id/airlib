@@ -4,8 +4,7 @@
 
 /* Base Layout */
 @utility time-picker-base {
-  display: inline-flex;
-  flex-direction: column;
+  @apply inline-flex flex-col;
   border-radius: var(--radius-xl);
   padding: calc(var(--spacing) * 6);
 }
@@ -16,20 +15,18 @@
 }
 
 @utility time-picker-display {
-  display: flex;
-  align-items: center;
+  @apply flex items-center;
   gap: calc(var(--spacing) * 4);
 }
 
 /* Base Unit Layout */
 @utility time-picker-unit-base {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply flex items-center justify-center;
+  @apply cursor-pointer;
+  @apply focus-ring;
   width: var(--time-picker-unit-size);
   height: var(--time-picker-unit-size);
   border-radius: var(--radius-md);
-  cursor: pointer;
 
   /* Display Large */
   font-size: var(--font-display-large-size);
@@ -37,11 +34,11 @@
 
   /* Reset */
   border: none;
-  outline: none;
 
   transition:
     background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard);
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 }
 
 /* Default Unit Surface */
