@@ -1,10 +1,15 @@
-import { getAbortSignal, stream } from '@irpclib/irpc';
+import { stream } from '@irpclib/irpc';
 import { irpc } from '../../lib/module.js';
-import { watchPrice } from './function.js';
+import { submitContact, watchPrice } from './function.js';
+
+irpc.construct(submitContact, async (data) => {
+  await new Promise((r) => setTimeout(r, 1200));
+  console.log('[Server] Form submitted via IRPC:', data);
+  return { success: true, message: `Thanks, ${data.name}!` };
+});
 
 irpc.construct(watchPrice, (symbol) => {
   return stream(async (state, resolve) => {
-    const signal = getAbortSignal();
     state.data = { symbol, price: symbol.length * 15 + 20 };
 
     let tick = 0;
@@ -20,8 +25,6 @@ irpc.construct(watchPrice, (symbol) => {
       state.data.price = state.data.price + (Math.random() * 2 - 1);
     }, 50);
 
-    signal.addEventListener('abort', () => {
-      clearInterval(interval);
-    });
+    return () => clearInterval(interval);
   });
 });

@@ -1,20 +1,12 @@
-import { Checkbox, createForm, EmailInput, FormReset, FormSubmit, Textarea, TextInput } from '@airlib/react-form';
+import { Checkbox, createForm, EmailInput, FormReset, FormSubmit, Slider, Textarea, TextInput } from '@airlib/react-form';
 import { $bind, Link, Meta, mutable, page, setup, snippet, Title } from '@anchorlib/react';
-import { z } from 'zod';
 import airstackLogo from '../assets/airstack.svg';
 import { FormsPage } from './forms/index.js';
-import { watchPrice } from './home/function.js';
+import { contactSchema, submitContact, watchPrice } from './home/function.js';
 import { MaterialPage } from './material/page.js';
 import { indexRoute } from './route.js';
 
 // ── AIR Form: Contact form schema ────────────────────────────────────────────
-
-const contactSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Enter a valid email address'),
-  message: z.string().max(200, 'Keep it under 200 characters').optional(),
-  updates: z.boolean().optional(),
-});
 
 const ContactForm = createForm(contactSchema);
 
@@ -66,7 +58,7 @@ const PriceTile = setup(() => {
   );
 
   return (
-    <div className="card-outlined w-full max-w-96">
+    <div className="card w-full max-w-96">
       <StatusBar />
       <div className="card-header text-center">
         <span className="card-title">Live Exchange Rate</span>
@@ -185,6 +177,19 @@ const M3Sampler = setup(() => {
     </div>
   );
 
+  const VolumesTab = snippet(() => (
+    <div className="flex items-center gap-4 max-w-sm">
+      <span className="material-symbols-outlined text-on-surface-variant">volume_down</span>
+      <Slider
+        min={0}
+        max={100}
+        value={$bind(() => ui, 'sliderVal')}
+      />
+      <span className="material-symbols-outlined text-on-surface-variant">volume_up</span>
+      <span className="text-label-medium text-on-surface-variant w-8">{ui.sliderVal}</span>
+    </div>
+  ), 'Volumes');
+
   const ControlsTab = snippet(
     () => (
       <div className="flex flex-col gap-6">
@@ -204,21 +209,7 @@ const M3Sampler = setup(() => {
           </button>
           <span className="text-body-medium text-on-surface-variant">{ui.switchOn ? 'Enabled' : 'Disabled'}</span>
         </div>
-
-        <div className="flex items-center gap-4 max-w-sm">
-          <span className="material-symbols-outlined text-on-surface-variant">volume_down</span>
-          <input
-            type="range"
-            className="slider-primary flex-1"
-            min={0}
-            max={100}
-            value={ui.sliderVal}
-            onInput={(e) => (ui.sliderVal = Number(e.currentTarget.value))}
-          />
-          <span className="material-symbols-outlined text-on-surface-variant">volume_up</span>
-          <span className="text-label-medium text-on-surface-variant w-8">{ui.sliderVal}</span>
-        </div>
-
+        <VolumesTab/>
         <div className="flex gap-3 flex-wrap items-center">
           <button
             className="chip cursor-pointer"
@@ -272,7 +263,7 @@ const M3Sampler = setup(() => {
   }, 'Content');
 
   return (
-    <div className="card-outlined p-6 w-full">
+    <div className="border border-primary rounded-xl p-6 w-full">
       <TabBar />
       <Content />
     </div>
@@ -377,8 +368,8 @@ export const RootPage = page(indexRoute).render(() => (
       <div className="flex flex-col sm:flex-row gap-8 items-start">
         <ContactForm
           onSubmit={async (data) => {
-            await new Promise((r) => setTimeout(r, 1200));
-            console.log('Submitted:', data);
+            const result = await submitContact(data);
+            console.log('IRPC Result:', result);
           }}
           className="card-group gap-2 flex-1 [--card-padding:1.5rem]"
         >
