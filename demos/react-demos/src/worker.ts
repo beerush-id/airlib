@@ -23,11 +23,13 @@ IRPC_STORE.subscribe(() => {
 export default createFullWorker(irpcHttpRouter, render, {
   template,
   async resolveAsset(request, url, env) {
+    if (url.pathname === '/') return;
+
     // If running in Bun:
     if (typeof Bun !== 'undefined') {
       const filePath = `./dist/client${url.pathname}`;
       const file = Bun.file(filePath);
-      if (url.pathname !== '/' && (await file.exists())) {
+      if (await file.exists()) {
         return new Response(file);
       }
     }

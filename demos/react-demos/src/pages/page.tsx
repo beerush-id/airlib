@@ -1,13 +1,5 @@
-import {
-  Checkbox,
-  createForm,
-  EmailInput,
-  FormReset,
-  FormSubmit,
-  TextInput,
-  Textarea,
-} from '@airlib/react-form';
-import { $bind, Link, Meta, mutable, page, render, setup, snippet, Title } from '@anchorlib/react';
+import { Checkbox, createForm, EmailInput, FormReset, FormSubmit, Textarea, TextInput } from '@airlib/react-form';
+import { $bind, Link, Meta, mutable, page, setup, snippet, Title } from '@anchorlib/react';
 import { z } from 'zod';
 import airstackLogo from '../assets/airstack.svg';
 import { FormsPage } from './forms/index.js';
@@ -30,13 +22,9 @@ const ContactForm = createForm(contactSchema);
 
 const PriceTile = setup(() => {
   const symbol = mutable({ value: 'USD' });
-  const stream = watchPrice.later();
+  const stream = watchPrice.with(() => [symbol.value]);
 
   const symbols = ['USD', 'EUR', 'GBP'];
-  const dispatch = () => {
-    stream.close();
-    stream.dispatch(symbol.value);
-  };
 
   const StatusBar = snippet(() => {
     const isPending = stream.status === 'pending';
@@ -51,48 +39,31 @@ const PriceTile = setup(() => {
     const { symbol: sym, price } = stream.data;
     return (
       <div className="flex items-end gap-3">
-        <span className="text-display-small font-bold text-on-surface">
-          {price.toFixed(2)}
-        </span>
-        <span className="text-title-medium text-on-surface-variant mb-1">
-          {sym || symbol.value}
-        </span>
+        <span className="text-display-small font-bold text-on-surface">{price.toFixed(2)}</span>
+        <span className="text-title-medium text-on-surface-variant mb-1">{sym || symbol.value}</span>
         <div className={`badge-dot ml-2 mb-2 ${stream.status === 'pending' ? 'bg-tertiary' : 'bg-primary'}`} />
       </div>
     );
   }, 'PriceDisplay');
 
-  const SymbolSelector = snippet(() => (
-    <div className="segmented-group justify-center">
-      {symbols.map((s) => (
-        <button
-          key={s}
-          className="segmented-button"
-          aria-selected={symbol.value === s || undefined}
-          onClick={() => (symbol.value = s)}
-        >
-          {s}
-        </button>
-      ))}
-    </div>
-  ), 'SymbolSelector');
-
-  const StreamControls = snippet(() => (
-    <div className="flex gap-2 w-full">
-      <button className="button flex-1" onClick={dispatch}>
-        <span className="material-symbols-outlined text-[18px]!">play_arrow</span>
-        Start
-      </button>
-      <button
-        className="button-outlined flex-1"
-        disabled={stream.status !== 'pending'}
-        onClick={() => stream.close()}
-      >
-        <span className="material-symbols-outlined text-[18px]!">stop</span>
-        Stop
-      </button>
-    </div>
-  ), 'StreamControls');
+  const SymbolSelector = snippet(
+    () => (
+      <div className="segmented-group justify-center">
+        {symbols.map((s) => (
+          <button
+            role="option"
+            key={s}
+            className="segmented-button"
+            aria-selected={symbol.value === s || undefined}
+            onClick={() => (symbol.value = s)}
+          >
+            {s}
+          </button>
+        ))}
+      </div>
+    ),
+    'SymbolSelector'
+  );
 
   return (
     <div className="card-outlined w-full max-w-96">
@@ -103,12 +74,10 @@ const PriceTile = setup(() => {
       <div className="card-body flex flex-col gap-4 items-center text-left">
         <PriceDisplay />
         <SymbolSelector />
-        <StreamControls />
       </div>
     </div>
   );
 }, 'PriceTile');
-
 
 // ── Anchor Section: Editable profile card with per-field snippets ─────────────
 
@@ -119,17 +88,17 @@ const ProfileDemo = setup(() => {
     bio: 'Building fast, maintainable apps without the ceremony.',
   });
 
-  const NameDisplay = snippet(() => (
-    <span className="text-title-large font-semibold text-on-surface">{profile.name}</span>
-  ), 'NameDisplay');
+  const NameDisplay = snippet(
+    () => <span className="text-title-large font-semibold text-on-surface">{profile.name}</span>,
+    'NameDisplay'
+  );
 
-  const RoleDisplay = snippet(() => (
-    <div className="chip mt-1">{profile.role}</div>
-  ), 'RoleDisplay');
+  const RoleDisplay = snippet(() => <div className="chip mt-1">{profile.role}</div>, 'RoleDisplay');
 
-  const BioDisplay = snippet(() => (
-    <p className="text-body-medium text-on-surface-variant leading-relaxed mt-3">{profile.bio}</p>
-  ), 'BioDisplay');
+  const BioDisplay = snippet(
+    () => <p className="text-body-medium text-on-surface-variant leading-relaxed mt-3">{profile.bio}</p>,
+    'BioDisplay'
+  );
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
@@ -167,8 +136,8 @@ const ProfileDemo = setup(() => {
         </div>
         <p className="text-body-small text-on-surface-variant">
           Mutate directly —{' '}
-          <code className="font-mono bg-surface-variant px-1 rounded text-xs">profile.name = ...</code>.
-          No hooks, no dispatch.
+          <code className="font-mono bg-surface-variant px-1 rounded text-xs">profile.name = ...</code>. No hooks, no
+          dispatch.
         </p>
       </div>
     </div>
@@ -187,20 +156,24 @@ const M3Sampler = setup(() => {
     chipSelected: false,
   });
 
-  const TabBar = snippet(() => (
-    <div className="segmented-group mb-6">
-      {(['buttons', 'controls', 'cards'] as M3Tab[]).map((t) => (
-        <button
-          key={t}
-          className="segmented-button capitalize"
-          aria-selected={ui.tab === t || undefined}
-          onClick={() => (ui.tab = t)}
-        >
-          {t}
-        </button>
-      ))}
-    </div>
-  ), 'TabBar');
+  const TabBar = snippet(
+    () => (
+      <div className="segmented-group mb-6">
+        {(['buttons', 'controls', 'cards'] as M3Tab[]).map((t) => (
+          <button
+            role={'option'}
+            key={t}
+            className="segmented-button capitalize"
+            aria-selected={ui.tab === t || undefined}
+            onClick={() => (ui.tab = t)}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+    ),
+    'TabBar'
+  );
 
   const ButtonsTab = () => (
     <div className="flex flex-wrap gap-3 items-center">
@@ -212,72 +185,76 @@ const M3Sampler = setup(() => {
     </div>
   );
 
-  const ControlsTab = snippet(() => (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-4">
-        <button
-          type="button"
-          role="switch"
-          className="switch"
-          aria-checked={ui.switchOn}
-          onClick={() => (ui.switchOn = !ui.switchOn)}
-        >
-          <span className="switch-thumb">
-            <svg className={`switch-icon ${ui.switchOn ? 'switch-icon-checked' : ''}`} viewBox="0 0 24 24">
-              <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
-            </svg>
-          </span>
-        </button>
-        <span className="text-body-medium text-on-surface-variant">
-          {ui.switchOn ? 'Enabled' : 'Disabled'}
-        </span>
-      </div>
-
-      <div className="flex items-center gap-4 max-w-sm">
-        <span className="material-symbols-outlined text-on-surface-variant">volume_down</span>
-        <input
-          type="range"
-          className="slider-primary flex-1"
-          min={0}
-          max={100}
-          value={ui.sliderVal}
-          onInput={(e) => (ui.sliderVal = Number(e.currentTarget.value))}
-        />
-        <span className="material-symbols-outlined text-on-surface-variant">volume_up</span>
-        <span className="text-label-medium text-on-surface-variant w-8">{ui.sliderVal}</span>
-      </div>
-
-      <div className="flex gap-3 flex-wrap items-center">
-        <div
-          className="chip cursor-pointer"
-          role="checkbox"
-          aria-checked={ui.chipSelected}
-          aria-selected={ui.chipSelected || undefined}
-          onClick={() => (ui.chipSelected = !ui.chipSelected)}
-        >
-          <span className="material-symbols-outlined text-[16px]!">
-            {ui.chipSelected ? 'check' : 'add'}
-          </span>
-          React
+  const ControlsTab = snippet(
+    () => (
+      <div className="flex flex-col gap-6">
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            role="switch"
+            className="switch"
+            aria-checked={ui.switchOn}
+            onClick={() => (ui.switchOn = !ui.switchOn)}
+          >
+            <span className="switch-thumb">
+              <svg className={`switch-icon ${ui.switchOn ? 'switch-icon-checked' : ''}`} viewBox="0 0 24 24">
+                <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
+              </svg>
+            </span>
+          </button>
+          <span className="text-body-medium text-on-surface-variant">{ui.switchOn ? 'Enabled' : 'Disabled'}</span>
         </div>
-        <div className="chip-elevated">Elevated</div>
-        <div className="chip">Filter</div>
+
+        <div className="flex items-center gap-4 max-w-sm">
+          <span className="material-symbols-outlined text-on-surface-variant">volume_down</span>
+          <input
+            type="range"
+            className="slider-primary flex-1"
+            min={0}
+            max={100}
+            value={ui.sliderVal}
+            onInput={(e) => (ui.sliderVal = Number(e.currentTarget.value))}
+          />
+          <span className="material-symbols-outlined text-on-surface-variant">volume_up</span>
+          <span className="text-label-medium text-on-surface-variant w-8">{ui.sliderVal}</span>
+        </div>
+
+        <div className="flex gap-3 flex-wrap items-center">
+          <button
+            className="chip cursor-pointer"
+            role="checkbox"
+            aria-checked={ui.chipSelected}
+            onClick={() => (ui.chipSelected = !ui.chipSelected)}
+          >
+            <span className="material-symbols-outlined text-[16px]!">{ui.chipSelected ? 'check' : 'add'}</span>
+            React
+          </button>
+          <div className="chip-elevated">Elevated</div>
+          <div className="chip">Filter</div>
+        </div>
       </div>
-    </div>
-  ), 'ControlsTab');
+    ),
+    'ControlsTab'
+  );
 
   const CardsTab = () => (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div className="card">
-        <div className="card-header"><h4 className="card-title">Elevated</h4></div>
+        <div className="card-header">
+          <h4 className="card-title">Elevated</h4>
+        </div>
         <div className="card-body text-body-small text-on-surface-variant">surface-container-low + shadow</div>
       </div>
       <div className="card-filled">
-        <div className="card-header"><h4 className="card-title">Filled</h4></div>
+        <div className="card-header">
+          <h4 className="card-title">Filled</h4>
+        </div>
         <div className="card-body text-body-small text-on-surface-variant">surface-container-highest</div>
       </div>
       <div className="card-outlined">
-        <div className="card-header"><h4 className="card-title">Outlined</h4></div>
+        <div className="card-header">
+          <h4 className="card-title">Outlined</h4>
+        </div>
         <div className="card-body text-body-small text-on-surface-variant">surface + outline-variant</div>
       </div>
     </div>
@@ -285,9 +262,12 @@ const M3Sampler = setup(() => {
 
   const Content = snippet(() => {
     switch (ui.tab) {
-      case 'buttons': return <ButtonsTab />;
-      case 'controls': return <ControlsTab />;
-      case 'cards': return <CardsTab />;
+      case 'buttons':
+        return <ButtonsTab />;
+      case 'controls':
+        return <ControlsTab />;
+      case 'cards':
+        return <CardsTab />;
     }
   }, 'Content');
 
@@ -313,9 +293,7 @@ export const RootPage = page(indexRoute).render(() => (
     <section className="flex flex-col items-center w-full py-12">
       <div className="flex items-center gap-3 mb-6">
         <img src={airstackLogo} alt="AIR Stack" className="h-12 w-auto" />
-        <h1 className="text-display-small font-bold text-on-surface tracking-tight">
-          AIR Libraries
-        </h1>
+        <h1 className="text-display-small font-bold text-on-surface tracking-tight">AIR Libraries</h1>
       </div>
 
       <p className="text-title-medium text-on-surface-variant max-w-lg text-center leading-relaxed mb-8">
@@ -325,12 +303,7 @@ export const RootPage = page(indexRoute).render(() => (
       </p>
 
       <div className="flex gap-3 flex-wrap justify-center mb-8">
-        <a
-          href="https://github.com/beerush-id/airstack"
-          target="_blank"
-          rel="noreferrer"
-          className="button"
-        >
+        <a href="https://github.com/beerush-id/airstack" target="_blank" rel="noreferrer" className="button">
           <span className="material-symbols-outlined text-[18px]!">code</span>
           GitHub
         </a>
@@ -342,7 +315,9 @@ export const RootPage = page(indexRoute).render(() => (
 
       <div className="flex gap-2 flex-wrap justify-center">
         {['Anchor', 'IRPC', 'Router', 'Material 3', 'AIR Form'].map((lib) => (
-          <div key={lib} className="chip">{lib}</div>
+          <div key={lib} className="chip">
+            {lib}
+          </div>
         ))}
       </div>
     </section>
@@ -355,8 +330,8 @@ export const RootPage = page(indexRoute).render(() => (
           <h2 className="text-headline-small font-semibold text-on-surface">Anchor</h2>
         </div>
         <p className="text-body-large text-on-surface-variant">
-          Fine-grained reactivity. Mutate an object property — only the exact DOM fragment reading
-          that property updates. No hooks, no re-render budgeting.
+          Fine-grained reactivity. Mutate an object property — only the exact DOM fragment reading that property
+          updates. No hooks, no re-render budgeting.
         </p>
         <a
           href="https://airlib.dev/state-management"
@@ -380,8 +355,8 @@ export const RootPage = page(indexRoute).render(() => (
             <h2 className="text-headline-small font-semibold text-on-surface">IRPC</h2>
           </div>
           <p className="text-body-large text-on-surface-variant">
-            Isomorphic RPC with real-time streaming. One function declaration — runs on server,
-            browser, or worker. Switch the symbol and the stream re-subscribes with zero teardown code.
+            Isomorphic RPC with real-time streaming. One function declaration — runs on server, browser, or worker.
+            Switch the symbol and the stream re-subscribes with zero teardown code.
           </p>
           <a
             href="https://airlib.dev/remote-function"
@@ -444,8 +419,8 @@ export const RootPage = page(indexRoute).render(() => (
             <h2 className="text-headline-small font-semibold text-on-surface">AIR Form</h2>
           </div>
           <p className="text-body-large text-on-surface-variant">
-            Schema-driven forms with live validation. Declare your schema with Zod, get typed fields,
-            inline errors, and async submit state — all wired automatically.
+            Schema-driven forms with live validation. Declare your schema with Zod, get typed fields, inline errors, and
+            async submit state — all wired automatically.
           </p>
           <a
             href="https://airlib.dev/airlib/form"
@@ -468,8 +443,8 @@ export const RootPage = page(indexRoute).render(() => (
           <h2 className="text-headline-small font-semibold text-on-surface">Material 3 CSS</h2>
         </div>
         <p className="text-body-large text-on-surface-variant">
-          A CSS-only M3 token system with utility classes for every component. No JavaScript
-          required for styling — bring your own interaction layer.
+          A CSS-only M3 token system with utility classes for every component. No JavaScript required for styling —
+          bring your own interaction layer.
         </p>
         <a
           href="https://airlib.dev/airlib/material-css"
@@ -487,9 +462,7 @@ export const RootPage = page(indexRoute).render(() => (
     {/* ── Bottom CTA ── */}
     <section className="flex flex-col w-full py-16 gap-6 items-center text-center border-t border-outline-variant">
       <h2 className="text-headline-small text-on-surface mb-3">Explore the full demos</h2>
-      <p className="text-body-large text-on-surface-variant mb-6">
-        Each library has an interactive deep-dive demo.
-      </p>
+      <p className="text-body-large text-on-surface-variant mb-6">Each library has an interactive deep-dive demo.</p>
       <div className="flex gap-3 flex-wrap justify-center mb-8">
         <Link to={FormsPage} className="button">
           <span className="material-symbols-outlined text-[18px]!">edit_note</span>
@@ -503,9 +476,7 @@ export const RootPage = page(indexRoute).render(() => (
 
       <div className="card-outlined px-6 py-4 text-left max-w-sm w-full">
         <p className="text-label-small text-on-surface-variant mb-2">Install</p>
-        <code className="font-mono text-body-small text-on-surface block">
-          bun add @anchorlib/react @irpclib/irpc
-        </code>
+        <code className="font-mono text-body-small text-on-surface block">bun add @anchorlib/react @irpclib/irpc</code>
       </div>
     </section>
   </>

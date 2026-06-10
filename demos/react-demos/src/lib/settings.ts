@@ -38,9 +38,9 @@ configureForm({
     errorClass: 'text-field-input-error',
   },
   textInput: { class: 'text-field-input' },
-  emailInput: { class: 'text-field-input' },
-  passwordInput: { class: 'text-field-input' },
-  numberInput: { class: 'text-field-input' },
+  email: { class: 'text-field-input' },
+  password: { class: 'text-field-input' },
+  number: { class: 'text-field-input' },
   textarea: { class: 'textarea-input' },
   select: { class: 'select-input' },
   color: { class: 'color-picker' },
@@ -48,4 +48,4 @@ configureForm({
   checkbox: { class: 'checkbox-input' },
   reset: { class: 'button-outlined' },
   submit: { class: 'button' },
-} as AnyType);
+});

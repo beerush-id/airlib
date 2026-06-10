@@ -1,7 +1,7 @@
 {
   "name": "my-air-react",
   "private": true,
-  "version": "1.2.0",
+  "version": "1.2.1",
   "type": "module",
   "description": "AIR Stack for React — Vite SSR Starter",
   "scripts": {
@@ -14,8 +14,8 @@
     "format": "biome format --write"
   },
   "dependencies": {
-    "@airlib/react-form": "workspace:*",
     "@airlib/material": "workspace:*",
+    "@airlib/react-form": "workspace:*",
     "@anchorlib/core": "catalog:lib",
     "@anchorlib/react": "catalog:lib",
     "@irpclib/http": "catalog:lib",

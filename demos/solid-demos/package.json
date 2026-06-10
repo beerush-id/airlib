@@ -1,7 +1,7 @@
 {
   "name": "my-air-solid",
   "private": true,
-  "version": "1.2.0",
+  "version": "1.2.1",
   "type": "module",
   "description": "AIR Stack for Solid — Vite SSR Starter",
   "scripts": {
@@ -13,8 +13,8 @@
     "preview": "vite preview --outDir dist/client"
   },
   "dependencies": {
-    "@airlib/solid-form": "workspace:*",
     "@airlib/material": "workspace:*",
+    "@airlib/solid-form": "workspace:*",
     "@anchorlib/core": "catalog:lib",
     "@anchorlib/solid": "catalog:lib",
     "@irpclib/http": "catalog:lib",
