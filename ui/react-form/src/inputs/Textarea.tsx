@@ -1,10 +1,11 @@
 import { type AnyType, formInput } from '@airlib/form';
-import { derived, render, setup } from '@anchorlib/react';
+import { type Bindable, derived, render, setup } from '@anchorlib/react';
 import type { FocusEvent, InputEvent, TextareaHTMLAttributes } from 'react';
 import { getInputClasses, INPUT_OPTIONS_KEYS, TEXTAREA_OPTIONS, TEXTAREA_OPTIONS_KEYS } from '../config.js';
 
-export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> {
   errorClass?: string;
+  value?: Bindable<string>;
 }
 
 export const Textarea = setup<TextareaProps>((props) => {

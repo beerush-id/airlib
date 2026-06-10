@@ -586,6 +586,25 @@ describe('FilePicker', () => {
     fireEvent.change(screen.getByTestId('file-ce'));
     fireEvent.change(screen.getByTestId('file-none'));
   });
+
+  it('should apply base class when touched and valid', () => {
+    const validSchema = z.object({ avatar: z.string() });
+    render(() => (
+      <Form schema={validSchema} value={{ avatar: '' }}>
+        <Field name="avatar">
+          <FilePicker data-testid="file-valid" class="my-valid-class" />
+          <TextInput data-testid="input-valid" />
+        </Field>
+      </Form>
+    ));
+
+    const input = screen.getByTestId('input-valid');
+    fireEvent.input(input, { target: { value: 'Valid string' } });
+
+    const file = screen.getByTestId('file-valid');
+    fireEvent.change(file);
+    expect(file.className).toContain('my-valid-class');
+  });
 });
 
 describe('FieldList', () => {

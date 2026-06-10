@@ -22,4 +22,10 @@ describe('config', () => {
     expect(options).toBeNull();
     expect(keys).toEqual([]);
   });
+
+  it('should return options for specific input types', () => {
+    expect(getSpecificOptions('email').options).toBeDefined();
+    expect(getSpecificOptions('number').options).toBeDefined();
+    expect(getSpecificOptions('password').options).toBeDefined();
+  });
 });

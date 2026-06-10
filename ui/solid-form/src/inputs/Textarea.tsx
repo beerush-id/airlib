@@ -1,10 +1,11 @@
 import { type AnyType, formInput } from '@airlib/form';
-import { derived, setup } from '@anchorlib/solid';
+import { type Bindable, derived, setup } from '@anchorlib/solid';
 import type { JSX as Jsx } from 'solid-js';
 import { getInputClasses, INPUT_OPTIONS_KEYS, TEXTAREA_OPTIONS, TEXTAREA_OPTIONS_KEYS } from '../config.js';
 
-export interface TextareaProps extends Jsx.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextareaProps extends Omit<Jsx.TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> {
   errorClass?: string;
+  value?: Bindable<string>;
 }
 
 export const Textarea = setup<TextareaProps>((props) => {

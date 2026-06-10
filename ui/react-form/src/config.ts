@@ -34,6 +34,27 @@ export const TEXT_INPUT_OPTIONS = {
 export const TEXT_INPUT_OPTIONS_KEYS = Object.keys(TEXT_INPUT_OPTIONS);
 export type TextInputDefaultOptions = Partial<typeof TEXT_INPUT_OPTIONS>;
 
+export const EMAIL_OPTIONS = {
+  class: '',
+  errorClass: '',
+};
+export const EMAIL_OPTIONS_KEYS = Object.keys(EMAIL_OPTIONS);
+export type EmailDefaultOptions = Partial<typeof EMAIL_OPTIONS>;
+
+export const NUMBER_OPTIONS = {
+  class: '',
+  errorClass: '',
+};
+export const NUMBER_OPTIONS_KEYS = Object.keys(NUMBER_OPTIONS);
+export type NumberDefaultOptions = Partial<typeof NUMBER_OPTIONS>;
+
+export const PASSWORD_OPTIONS = {
+  class: '',
+  errorClass: '',
+};
+export const PASSWORD_OPTIONS_KEYS = Object.keys(PASSWORD_OPTIONS);
+export type PasswordDefaultOptions = Partial<typeof PASSWORD_OPTIONS>;
+
 export const CHECKBOX_OPTIONS = {
   class: '',
   errorClass: '',
@@ -123,6 +144,9 @@ export type FormGeneralOptions = {
   field?: FieldDefaultOptions;
   input?: InputDefaultOptions;
   textInput?: TextInputDefaultOptions;
+  email?: EmailDefaultOptions;
+  number?: NumberDefaultOptions;
+  password?: PasswordDefaultOptions;
   checkbox?: CheckboxDefaultOptions;
   radio?: RadioDefaultOptions;
   slider?: SliderDefaultOptions;
@@ -142,6 +166,9 @@ export function configureForm(options: FormGeneralOptions) {
   Object.assign(FIELD_OPTIONS, options.field ?? {});
   Object.assign(INPUT_OPTIONS, options.input ?? {});
   Object.assign(TEXT_INPUT_OPTIONS, options.textInput ?? {});
+  Object.assign(EMAIL_OPTIONS, options.email ?? {});
+  Object.assign(NUMBER_OPTIONS, options.number ?? {});
+  Object.assign(PASSWORD_OPTIONS, options.password ?? {});
   Object.assign(CHECKBOX_OPTIONS, options.checkbox ?? {});
   Object.assign(RADIO_OPTIONS, options.radio ?? {});
   Object.assign(SLIDER_OPTIONS, options.slider ?? {});
@@ -163,10 +190,16 @@ export function getInputClasses(specificOptions?: { class?: string; errorClass?:
   };
 }
 
-const TEXT_TYPES = new Set(['text', 'email', 'password', 'number', 'search', 'tel', 'url']);
+const TEXT_TYPES = new Set(['text', 'search', 'tel', 'url']);
 
 export function getSpecificOptions(type: string) {
   switch (type) {
+    case 'email':
+      return { options: EMAIL_OPTIONS, keys: EMAIL_OPTIONS_KEYS };
+    case 'number':
+      return { options: NUMBER_OPTIONS, keys: NUMBER_OPTIONS_KEYS };
+    case 'password':
+      return { options: PASSWORD_OPTIONS, keys: PASSWORD_OPTIONS_KEYS };
     case 'range':
       return { options: SLIDER_OPTIONS, keys: SLIDER_OPTIONS_KEYS };
     case 'color':

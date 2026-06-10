@@ -10,6 +10,7 @@ export default defineConfig({
       provider: 'v8',
       enabled: true,
       include: ['src/**/*.ts'],
+      exclude: ['src/**/types.ts'],
       reportsDirectory: './coverage/coverage',
     },
   },

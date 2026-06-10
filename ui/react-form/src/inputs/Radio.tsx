@@ -1,10 +1,11 @@
 import { type AnyType, formInput } from '@airlib/form';
-import { derived, render, setup } from '@anchorlib/react';
+import { type Bindable, derived, render, setup } from '@anchorlib/react';
 import type { ChangeEvent, InputHTMLAttributes } from 'react';
 import { getInputClasses, INPUT_OPTIONS_KEYS, RADIO_OPTIONS, RADIO_OPTIONS_KEYS } from '../config.js';
 
-export interface RadioProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'checked'> {
   errorClass?: string;
+  checked?: Bindable<boolean>;
 }
 
 export const Radio = setup<RadioProps>((props) => {

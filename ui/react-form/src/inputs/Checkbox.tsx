@@ -1,17 +1,17 @@
 import { type AnyType, formInput } from '@airlib/form';
-import { derived, render, setup } from '@anchorlib/react';
+import { type Bindable, derived, render, setup } from '@anchorlib/react';
 import type { ChangeEvent, InputHTMLAttributes } from 'react';
 import { CHECKBOX_OPTIONS, CHECKBOX_OPTIONS_KEYS, getInputClasses, INPUT_OPTIONS_KEYS } from '../config.js';
 
-export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'checked'> {
   errorClass?: string;
+  checked?: Bindable<boolean>;
 }
 
 export const Checkbox = setup<CheckboxProps>((props) => {
   (props as AnyType).type = 'checkbox';
   const input = formInput(props as AnyType);
   const rest = props.$omit([
-    'value',
     'type',
     'name',
     'checked',

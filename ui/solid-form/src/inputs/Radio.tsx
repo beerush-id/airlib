@@ -1,10 +1,11 @@
 import { type AnyType, formInput } from '@airlib/form';
-import { derived, setup } from '@anchorlib/solid';
+import { type Bindable, derived, setup } from '@anchorlib/solid';
 import type { JSX as Jsx } from 'solid-js';
 import { getInputClasses, INPUT_OPTIONS_KEYS, RADIO_OPTIONS, RADIO_OPTIONS_KEYS } from '../config.js';
 
-export interface RadioProps extends Jsx.InputHTMLAttributes<HTMLInputElement> {
+export interface RadioProps extends Omit<Jsx.InputHTMLAttributes<HTMLInputElement>, 'checked'> {
   errorClass?: string;
+  checked?: Bindable<boolean>;
 }
 
 export const Radio = setup<RadioProps>((props) => {

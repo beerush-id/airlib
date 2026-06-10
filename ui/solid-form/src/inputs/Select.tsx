@@ -1,10 +1,11 @@
 import { type AnyType, formInput } from '@airlib/form';
-import { derived, setup } from '@anchorlib/solid';
+import { type Bindable, derived, setup } from '@anchorlib/solid';
 import { createEffect, type JSX as Jsx } from 'solid-js';
 import { getInputClasses, INPUT_OPTIONS_KEYS, SELECT_OPTIONS, SELECT_OPTIONS_KEYS } from '../config.js';
 
-export interface SelectProps extends Jsx.SelectHTMLAttributes<HTMLSelectElement> {
+export interface SelectProps extends Omit<Jsx.SelectHTMLAttributes<HTMLSelectElement>, 'value'> {
   errorClass?: string;
+  value?: Bindable<string | number>;
 }
 
 export const Select = setup<SelectProps>((props) => {

@@ -1,16 +1,16 @@
 import { type AnyType, formInput } from '@airlib/form';
-import { derived, setup } from '@anchorlib/solid';
+import { type Bindable, derived, setup } from '@anchorlib/solid';
 import type { JSX as Jsx } from 'solid-js';
 import { CHECKBOX_OPTIONS, CHECKBOX_OPTIONS_KEYS, getInputClasses, INPUT_OPTIONS_KEYS } from '../config.js';
 
-export interface CheckboxProps extends Jsx.InputHTMLAttributes<HTMLInputElement> {
+export interface CheckboxProps extends Omit<Jsx.InputHTMLAttributes<HTMLInputElement>, 'checked'> {
   errorClass?: string;
+  checked?: Bindable<boolean>;
 }
 
 export const Checkbox = setup<CheckboxProps>((props) => {
   (props as AnyType).type = 'checkbox';
   const restProps = props.$omit([
-    'value',
     'type',
     'name',
     'checked',

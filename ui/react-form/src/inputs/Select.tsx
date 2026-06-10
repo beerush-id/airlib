@@ -1,10 +1,11 @@
 import { type AnyType, formInput } from '@airlib/form';
-import { derived, render, setup } from '@anchorlib/react';
+import { type Bindable, derived, render, setup } from '@anchorlib/react';
 import type { ChangeEvent, SelectHTMLAttributes } from 'react';
 import { getInputClasses, INPUT_OPTIONS_KEYS, SELECT_OPTIONS, SELECT_OPTIONS_KEYS } from '../config.js';
 
-export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'value'> {
   errorClass?: string;
+  value?: Bindable<string | number>;
 }
 
 export const Select = setup<SelectProps>((props) => {

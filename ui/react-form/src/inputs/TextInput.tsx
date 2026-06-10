@@ -1,7 +1,9 @@
 import type { InputHTMLAttributes } from 'react';
 import { createInput } from './createInput.js';
+import type { Bindable } from '@anchorlib/react';
 
-export interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface TextInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value'> {
   errorClass?: string;
+  value?: Bindable<string>;
 }
 export const TextInput = createInput<TextInputProps>('text');
