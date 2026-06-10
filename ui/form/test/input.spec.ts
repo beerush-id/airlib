@@ -1,4 +1,4 @@
-import { anchor, clearContextStore, createLifecycle } from '@anchorlib/core';
+import { anchor, clearContextStore, createLifecycle, mutable } from '@anchorlib/core';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { FORM_INPUT } from '../src/constant.js';
@@ -210,7 +210,7 @@ describe('FormInput', () => {
   });
 
   describe('Standalone (no field context)', () => {
-    it('reads/writes props directly without a form field', () => {
+    it('reads/writes props directly without a form and field', () => {
       scope.run(() => {
         const props: FormInputProps<string> = { type: FORM_INPUT.text, value: 'standalone' };
         const input = formInput(props);
@@ -219,6 +219,33 @@ describe('FormInput', () => {
 
         input.value = 'updated';
         expect(props.value).toBe('updated');
+        // Fallback to true.
+        expect(input.matched).toBe(true);
+      });
+    });
+
+    it('create field when inside a form', () => {
+      scope.run(() => {
+        const state = mutable({
+          name: 'Alice',
+          age: 25,
+          active: true,
+          role: 'admin',
+          birthday: new Date('2000-01-01'),
+        });
+        formState(schema, {
+          value: state,
+        });
+
+        const props: FormInputProps<string> = { type: FORM_INPUT.text, name: 'name', value: 'standalone' };
+        const input = formInput(props);
+
+        expect(input.value).toBe('Alice');
+
+        input.value = 'updated';
+        expect(props.value).toBe('standalone');
+        expect(state.name).toBe('updated');
+        expect(input.value).toBe('updated');
         // Fallback to true.
         expect(input.matched).toBe(true);
       });

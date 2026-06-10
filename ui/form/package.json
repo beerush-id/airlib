@@ -3,16 +3,7 @@
   "name": "@airlib/form",
   "version": "1.2.1",
   "description": "Reactive and declarative, framework-agnostic form engine powered by Zod schemas. Validation, dirty tracking, cross-field matching, and submission lifecycle built on AIR Stack.",
-  "keywords": [
-    "form",
-    "validation",
-    "zod",
-    "reactive",
-    "state",
-    "air-stack",
-    "anchor",
-    "typescript"
-  ],
+  "keywords": ["form", "validation", "zod", "reactive", "state", "air-stack", "anchor", "typescript"],
   "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
   "repository": {
     "type": "git",
@@ -30,9 +21,7 @@
       "import": "./dist/index.js"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "directories": {
     "dist": "dist"
   },
@@ -55,7 +44,7 @@
     "zod": "catalog:lib"
   },
   "scripts": {
-    "dev": "tsdown --watch",
+    "dev": "tsdown --watch ./src",
     "clean": "rimraf dist",
     "build": "bun run clean && tsdown && publint",
     "prepublish": "bun run format && bun run build",
