@@ -26,11 +26,11 @@
 
   /* Smart Icon Padding (M3 Spec) */
   &:has(> *:first-child:not(:last-child):is(.material-symbols-outlined, svg, img)) {
-    padding-left: var(--air-chip-icon-padding-x);
+    padding-inline-start: var(--air-chip-icon-padding-x);
   }
 
   &:has(> *:last-child:not(:first-child):is(.material-symbols-outlined, svg, img)) {
-    padding-right: var(--air-chip-icon-padding-x);
+    padding-inline-end: var(--air-chip-icon-padding-x);
   }
 
   transition:

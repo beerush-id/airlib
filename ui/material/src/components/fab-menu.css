@@ -6,7 +6,7 @@
 /* Trigger Button */
 @utility fab-menu-trigger {
   /* Requires the main fab button class too */
-  @apply z-10;
+  @apply z-dropdown;
 
   &[data-state='open'] {
     /* Typical M3 rotation animation for the plus icon turning into an X */

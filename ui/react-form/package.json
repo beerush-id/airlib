@@ -3,16 +3,7 @@
   "name": "@airlib/react-form",
   "version": "1.2.0",
   "description": "Reactive and declarative React form components built on AIR Stack. Typed forms, field validation, cross-field matching, and array fields with zero boilerplate.",
-  "keywords": [
-    "react",
-    "form",
-    "validation",
-    "zod",
-    "reactive",
-    "air-stack",
-    "anchor",
-    "typescript"
-  ],
+  "keywords": ["react", "form", "validation", "zod", "reactive", "air-stack", "anchor", "typescript"],
   "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
   "repository": {
     "type": "git",
@@ -30,9 +21,7 @@
       "import": "./dist/index.js"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "directories": {
     "dist": "dist"
   },

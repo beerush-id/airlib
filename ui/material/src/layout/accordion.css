@@ -93,7 +93,7 @@
   gap: calc(var(--spacing) * 0.5); /* 2px */
 
   --_inner-radius: var(--radius-sm);
-  --_outer-radius: var(--card-radius, var(--radius-xl));
+  --_outer-radius: var(--air-card-radius, var(--radius-xl));
 
   & > * {
     border-radius: var(--_inner-radius);

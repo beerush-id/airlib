@@ -1,5 +1,5 @@
 @theme {
-  --app-bar-height: calc(var(--spacing) * 16); /* 64px standard */
+  --air-app-bar-height: calc(var(--spacing) * 16); /* 64px standard */
 }
 
 /* Base Layout */
@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: var(--app-bar-height);
+  height: var(--air-app-bar-height);
   padding: 0 calc(var(--spacing) * 4); /* 16px */
   box-sizing: border-box;
 
@@ -32,7 +32,7 @@
   letter-spacing: var(--font-title-large-tracking);
   margin: 0;
   flex: 1;
-  padding-left: calc(var(--spacing) * 4);
+  padding-inline-start: calc(var(--spacing) * 4);
 }
 
 /* Composed Utilities */

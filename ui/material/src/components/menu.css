@@ -1,21 +1,20 @@
 /* Component Variables */
 @theme {
-  --menu-min-width: calc(var(--spacing) * 28); /* 112px */
-  --menu-radius: var(--radius-xs);
-  --menu-padding-y: calc(var(--spacing) * 2); /* 8px */
+  --air-menu-min-width: calc(var(--spacing) * 28);
+  --air-menu-radius: var(--radius-lg);
+  --air-menu-padding-y: calc(var(--spacing) * 2);
 
-  --menu-item-height: calc(var(--spacing) * 12); /* 48px */
-  --menu-item-padding-x: calc(var(--spacing) * 3); /* 12px */
+  --air-menu-item-height: calc(var(--spacing) * 12);
+  --air-menu-item-padding-x: calc(var(--spacing) * 4);
 }
 
 /* Menu Surface (the floating container) */
 @utility menu-surface {
-  @apply absolute z-200 m-0 box-border;
+  @apply absolute z-popover m-0 box-border overflow-hidden;
   list-style: none;
-  min-width: var(--menu-min-width);
+  min-width: var(--air-menu-min-width);
   background-color: var(--color-surface-container);
-  border-radius: var(--menu-radius);
-  padding: var(--menu-padding-y) 0;
+  border-radius: var(--air-menu-radius);
 
   /* Animation */
   opacity: 0;
@@ -38,8 +37,8 @@
   @apply flex items-center w-full box-border;
   @apply text-left cursor-pointer no-underline h-full;
   @apply focus-ring;
-  height: var(--menu-item-height);
-  padding: 0 var(--menu-item-padding-x);
+  height: var(--air-menu-item-height);
+  padding: 0 var(--air-menu-item-padding-x);
 
   /* Typography: Label Large */
   font-size: var(--font-label-large-size);
@@ -71,10 +70,10 @@
 }
 
 @utility menu-item-disabled {
-  cursor: not-allowed !important;
-  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent) !important;
-  background-color: transparent !important;
-  pointer-events: none !important;
+  cursor: not-allowed;
+  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
+  background-color: transparent;
+  pointer-events: none;
 }
 
 /* Composed Utilities */

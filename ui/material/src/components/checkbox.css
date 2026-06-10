@@ -99,8 +99,9 @@
 
   &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-surface),
-                0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--color-secondary);
+    box-shadow:
+      0 0 0 var(--focus-ring-offset) var(--color-surface),
+      0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--color-secondary);
   }
 }
 

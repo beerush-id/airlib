@@ -29,7 +29,7 @@
       content: '';
       position: absolute;
       top: 50%;
-      right: 16px;
+      inset-inline-end: 16px;
       transform: translateY(-50%);
       width: 20px;
       height: 20px;
@@ -57,8 +57,8 @@
   & .text-field-label {
     position: absolute;
     top: calc((var(--air-text-field-height) - 1.5em) / 2);
-    left: calc(var(--_leading-padding, var(--air-text-field-padding-x)) + 1px);
-    margin-left: calc(var(--spacing) * -1);
+    inset-inline-start: calc(var(--_leading-padding, var(--air-text-field-padding-x)) + 1px);
+    margin-inline-start: calc(var(--spacing) * -1);
     margin-bottom: 0;
     pointer-events: none;
     padding: 0 var(--spacing);
@@ -236,13 +236,13 @@
 @utility select-input {
   @apply text-field-input;
   appearance: none;
-  padding-right: 48px; /* Make room for the arrow */
+  padding-inline-end: 48px; /* Make room for the arrow */
 }
 
 @utility select-input-filled {
   @apply text-field-input-filled;
   appearance: none;
-  padding-right: 48px;
+  padding-inline-end: 48px;
 }
 
 /* Textarea Input Utilities */

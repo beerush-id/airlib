@@ -1,0 +1,24 @@
+@theme {
+  --air-masonry-gap: calc(var(--spacing) * 4);
+}
+
+@utility masonry {
+  column-gap: var(--air-masonry-gap);
+  column-count: 1;
+
+  @media (min-width: 640px) {
+    column-count: 2;
+  }
+  @media (min-width: 1024px) {
+    column-count: 3;
+  }
+  @media (min-width: 1920px) {
+    column-count: 4;
+  }
+}
+
+@utility masonry-item {
+  break-inside: avoid;
+  margin-bottom: var(--air-masonry-gap);
+  display: block; /* ensure block-level for avoiding breaks */
+}

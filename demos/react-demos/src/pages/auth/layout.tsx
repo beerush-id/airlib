@@ -38,10 +38,7 @@ export const AuthLayout = page(authRoute).render(({ context: ctx, children }) =>
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[--color-anchor] opacity-[0.03] rounded-full blur-[120px] -z-10 pointer-events-none"></div>
 
       <div className="absolute top-0 left-0 w-full flex items-center justify-between px-8 py-4 z-10">
-        <Link
-          to={RootPage}
-          className="link-nav"
-        >
+        <Link to={RootPage} className="link-nav">
           ← Back to home
         </Link>
         <div className="flex-1"></div>

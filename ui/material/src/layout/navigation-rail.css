@@ -1,12 +1,12 @@
 @theme {
-  --nav-rail-width: calc(var(--spacing) * 20); /* 80px */
+  --air-nav-rail-width: calc(var(--spacing) * 20); /* 80px */
 }
 
 /* Base Layout */
 @utility navigation-rail-base {
   @apply flex flex-col items-center h-full;
-  @apply fixed top-0 left-0 z-40;
-  width: var(--nav-rail-width);
+  @apply fixed top-0 left-0 z-fixed;
+  width: var(--air-nav-rail-width);
   padding: calc(var(--spacing) * 4) 0;
   gap: calc(var(--spacing) * 3);
 }
@@ -15,7 +15,7 @@
 @utility navigation-rail-surface {
   background-color: var(--color-surface);
   color: var(--color-on-surface-variant);
-  border-right: 1px solid var(--color-outline-variant);
+  border-inline-end: 1px solid var(--color-outline-variant);
 }
 
 /* Item Base Layout */

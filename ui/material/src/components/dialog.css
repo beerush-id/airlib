@@ -1,18 +1,18 @@
 /* Component Variables */
 @theme {
-  --dialog-padding: calc(var(--spacing) * 6); /* 24px */
-  --dialog-radius: var(--radius-xl);
-  --dialog-max-width: calc(var(--spacing) * 140); /* 560px */
+  --air-dialog-padding: calc(var(--spacing) * 6); /* 24px */
+  --air-dialog-radius: var(--radius-xl);
+  --air-dialog-max-width: calc(var(--spacing) * 140); /* 560px */
 }
 
 /* Base Dialog Structure (Layout and Animations) */
 @utility dialog-base {
   @apply m-auto outline-none;
   /* Using native <dialog> element */
-  padding: var(--dialog-padding);
-  border-radius: var(--dialog-radius);
-  max-width: var(--dialog-max-width);
-  width: calc(100% - var(--dialog-padding) * 2);
+  padding: var(--air-dialog-padding);
+  border-radius: var(--air-dialog-radius);
+  max-width: var(--air-dialog-max-width);
+  width: calc(100% - var(--air-dialog-padding) * 2);
 
   /* Reset native borders */
   border: none;

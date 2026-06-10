@@ -1,12 +1,12 @@
 @theme {
-  --nav-bar-height: calc(var(--spacing) * 20); /* 80px */
+  --air-nav-bar-height: calc(var(--spacing) * 20); /* 80px */
 }
 
 /* Base Layout */
 @utility navigation-bar-base {
   @apply flex items-center justify-evenly w-full;
-  @apply fixed bottom-0 left-0 z-40;
-  height: var(--nav-bar-height);
+  @apply fixed bottom-0 left-0 z-fixed;
+  height: var(--air-nav-bar-height);
 }
 
 /* Surface Visuals */

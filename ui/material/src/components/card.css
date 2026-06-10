@@ -1,13 +1,13 @@
 @theme {
-  --card-radius: var(--radius-xl); /* 28px standard container radius */
-  --card-padding: calc(var(--spacing) * 6); /* 24px standard padding */
+  --air-card-radius: var(--radius-xl); /* 28px standard container radius */
+  --air-card-padding: calc(var(--spacing) * 6); /* 24px standard padding */
 }
 
 /* Base Layout and Typography */
 @utility card-base {
   @apply flex flex-col relative;
   @apply overflow-hidden box-border;
-  border-radius: var(--card-radius);
+  border-radius: var(--air-card-radius);
 
   /* Typography: Body Medium default */
   font-size: var(--font-body-medium-size);
@@ -111,8 +111,8 @@
 /* Card Content Structure */
 @utility card-header {
   @apply flex flex-col;
-  padding: var(--card-padding);
-  padding-bottom: calc(var(--card-padding) / 2);
+  padding: var(--air-card-padding);
+  padding-bottom: calc(var(--air-card-padding) / 2);
   gap: var(--spacing);
 }
 
@@ -129,7 +129,7 @@
 }
 
 @utility card-body {
-  padding: var(--card-padding);
+  padding: var(--air-card-padding);
   flex-grow: 1;
 }
 
@@ -140,8 +140,8 @@
 
 @utility card-actions {
   @apply flex items-center justify-end;
-  padding: var(--card-padding);
-  padding-top: calc(var(--card-padding) / 2);
+  padding: var(--air-card-padding);
+  padding-top: calc(var(--air-card-padding) / 2);
   gap: calc(var(--spacing) * 2);
 }
 
@@ -151,7 +151,7 @@
   gap: calc(var(--spacing) * 0.5); /* 2px gap between segments */
 
   --_inner-radius: var(--radius-sm);
-  --_outer-radius: var(--card-radius, var(--radius-md));
+  --_outer-radius: var(--air-card-radius, var(--radius-md));
 
   & > * {
     border-radius: var(--_inner-radius);

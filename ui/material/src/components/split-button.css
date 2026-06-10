@@ -39,14 +39,14 @@
   @apply split-button-base flex-1;
   padding: 0 var(--air-button-padding-x);
   gap: var(--air-button-gap);
-  border-top-left-radius: var(--split-button-radius-outer);
-  border-bottom-left-radius: var(--split-button-radius-outer);
-  border-top-right-radius: var(--split-button-radius-inner);
-  border-bottom-right-radius: var(--split-button-radius-inner);
+  border-start-start-radius: var(--split-button-radius-outer);
+  border-end-start-radius: var(--split-button-radius-outer);
+  border-start-end-radius: var(--split-button-radius-inner);
+  border-end-end-radius: var(--split-button-radius-inner);
 
   /* Smart Icon Padding for Primary Action */
   &:has(> *:first-child:not(:last-child):is(.material-symbols-outlined, svg, img)) {
-    padding-left: var(--air-button-icon-padding-x, calc(var(--spacing) * 4));
+    padding-inline-start: var(--air-button-icon-padding-x, calc(var(--spacing) * 4));
   }
 }
 
@@ -54,10 +54,10 @@
 @utility split-button-trailing {
   @apply split-button-base;
   padding: 0 calc(var(--air-button-padding-x) * 0.5);
-  border-top-left-radius: var(--split-button-radius-inner);
-  border-bottom-left-radius: var(--split-button-radius-inner);
-  border-top-right-radius: var(--split-button-radius-outer);
-  border-bottom-right-radius: var(--split-button-radius-outer);
+  border-start-start-radius: var(--split-button-radius-inner);
+  border-end-start-radius: var(--split-button-radius-inner);
+  border-start-end-radius: var(--split-button-radius-outer);
+  border-end-end-radius: var(--split-button-radius-outer);
 }
 
 /* Color Variants */

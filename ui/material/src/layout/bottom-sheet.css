@@ -1,14 +1,14 @@
 @theme {
-  --bottom-sheet-radius: var(--radius-xl);
-  --bottom-sheet-max-width: 40rem; /* 640px */
+  --air-bottom-sheet-radius: var(--radius-xl);
+  --air-bottom-sheet-max-width: 40rem; /* 640px */
 }
 
 /* Base Layout */
 @utility bottom-sheet-base {
-  @apply fixed bottom-0 left-1/2 w-full z-50;
+  @apply fixed bottom-0 left-1/2 w-full z-modal;
   transform: translateX(-50%) translateY(100%);
-  max-width: var(--bottom-sheet-max-width);
-  border-radius: var(--bottom-sheet-radius) var(--bottom-sheet-radius) 0 0;
+  max-width: var(--air-bottom-sheet-max-width);
+  border-radius: var(--air-bottom-sheet-radius) var(--air-bottom-sheet-radius) 0 0;
 
   transition: transform var(--duration-medium) var(--ease-emphasized-decelerate);
 
@@ -35,7 +35,7 @@
 }
 
 @utility bottom-sheet-scrim-base {
-  @apply fixed inset-0 z-40 opacity-0 pointer-events-none;
+  @apply fixed inset-0 z-fixed opacity-0 pointer-events-none;
   transition: opacity var(--duration-medium) var(--ease-standard);
 
   &[data-state='open'] {

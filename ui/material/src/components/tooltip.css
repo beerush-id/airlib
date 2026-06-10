@@ -1,15 +1,15 @@
 /* Component Variables */
 @theme {
-  --tooltip-plain-padding-x: calc(var(--spacing) * 2); /* 8px */
-  --tooltip-plain-padding-y: var(--spacing); /* 4px */
+  --air-tooltip-plain-padding-x: calc(var(--spacing) * 2); /* 8px */
+  --air-tooltip-plain-padding-y: var(--spacing); /* 4px */
 
-  --tooltip-rich-padding-x: calc(var(--spacing) * 4); /* 16px */
-  --tooltip-rich-padding-y: calc(var(--spacing) * 3); /* 12px */
+  --air-tooltip-rich-padding-x: calc(var(--spacing) * 4); /* 16px */
+  --air-tooltip-rich-padding-y: calc(var(--spacing) * 3); /* 12px */
 }
 
 /* Base Tooltip Structure */
 @utility tooltip-base {
-  @apply absolute z-100 pointer-events-none;
+  @apply absolute z-popover pointer-events-none;
   @apply opacity-0 invisible box-border;
   transition:
     opacity var(--duration-short) var(--ease-standard),
@@ -25,7 +25,7 @@
 /* Plain Tooltip Layout */
 @utility tooltip-plain-layout {
   border-radius: var(--radius-xs);
-  padding: var(--tooltip-plain-padding-y) var(--tooltip-plain-padding-x);
+  padding: var(--air-tooltip-plain-padding-y) var(--air-tooltip-plain-padding-x);
 
   /* Typography: Label Small / Body Small */
   font-size: var(--font-body-small-size);
@@ -42,7 +42,7 @@
 /* Rich Tooltip Layout */
 @utility tooltip-rich-layout {
   border-radius: var(--radius-md);
-  padding: var(--tooltip-rich-padding-y) var(--tooltip-rich-padding-x);
+  padding: var(--air-tooltip-rich-padding-y) var(--air-tooltip-rich-padding-x);
 
   /* Typography: Body Medium */
   font-size: var(--font-body-medium-size);

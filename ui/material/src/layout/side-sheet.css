@@ -1,6 +1,6 @@
 @theme {
-  --side-sheet-radius: var(--radius-xl); /* 28px */
-  --side-sheet-max-width: 25rem; /* 400px */
+  --air-side-sheet-radius: var(--radius-xl); /* 28px */
+  --air-side-sheet-max-width: 25rem; /* 400px */
 }
 
 /* Base Layout */
@@ -9,7 +9,7 @@
   top: 0;
   bottom: 0;
   width: 100%;
-  max-width: var(--side-sheet-max-width);
+  max-width: var(--air-side-sheet-max-width);
   z-index: 50;
 
   transition: transform var(--duration-medium) var(--ease-emphasized-decelerate);
@@ -17,8 +17,8 @@
 
 /* Right Anchored (Default) */
 @utility side-sheet-right {
-  right: 0;
-  border-radius: var(--side-sheet-radius) 0 0 var(--side-sheet-radius);
+  inset-inline-end: 0;
+  border-radius: var(--air-side-sheet-radius) 0 0 var(--air-side-sheet-radius);
   transform: translateX(100%);
 
   &[data-state='open'] {
@@ -28,8 +28,8 @@
 
 /* Left Anchored */
 @utility side-sheet-left {
-  left: 0;
-  border-radius: 0 var(--side-sheet-radius) var(--side-sheet-radius) 0;
+  inset-inline-start: 0;
+  border-radius: 0 var(--air-side-sheet-radius) var(--air-side-sheet-radius) 0;
   transform: translateX(-100%);
 
   &[data-state='open'] {

@@ -10,7 +10,7 @@ export const Counter = setup(() => {
 
   const Count = snippet(
     () => (
-      <button id="counter-btn" className="button-filled" onClick={state.increment}>
+      <button id="counter-btn" className="button" onClick={state.increment}>
         <span>count is {state.count}</span>
       </button>
     ),
@@ -19,7 +19,7 @@ export const Counter = setup(() => {
 
   const WatchPrice = snippet(() => {
     return (
-      <div className="chip-base bg-surface-variant text-on-surface">
+      <div className="button-base bg-surface-variant text-on-surface">
         {stream.data.symbol ? `[${stream.data.symbol}] ` : ''}${stream.data.price.toFixed(2)}{' '}
         {stream.status === 'pending' ? '🟢' : '🛑'}
       </div>

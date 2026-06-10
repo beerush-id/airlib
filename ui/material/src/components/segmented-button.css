@@ -89,7 +89,8 @@
     @apply segmented-button-focus;
   }
 
-  &[aria-pressed='true'] {
+  &[aria-pressed='true'],
+  &[aria-selected='true'] {
     @apply segmented-button-selected-surface;
 
     &:hover:not(:disabled) {

@@ -140,6 +140,15 @@
   --focus-ring-width: 3px;
   --focus-ring-offset: 2px;
 
+  /* Z-Index Layers */
+  --z-index-elevated: 1;
+  --z-index-dropdown: 10;
+  --z-index-sticky: 20;
+  --z-index-fixed: 40;
+  --z-index-modal: 50;
+  --z-index-popover: 100;
+  --z-index-toast: 200;
+
   /* Elevation */
   --shadow-base: 0.0625rem; /* 1px equivalent in rem */
   --elevation-0: none;

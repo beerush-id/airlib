@@ -146,6 +146,52 @@
   border-color: transparent;
 }
 
+/* Toggle States */
+@utility icon-button-standard-selected-surface {
+  background-color: color-mix(in srgb, var(--color-primary) 0%, transparent);
+  color: var(--color-primary);
+}
+@utility icon-button-standard-selected-hover {
+  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+@utility icon-button-standard-selected-focus {
+  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+@utility icon-button-filled-unselected-surface {
+  background-color: var(--color-surface-variant);
+  color: var(--color-primary);
+}
+@utility icon-button-filled-unselected-hover {
+  background-color: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-variant));
+}
+@utility icon-button-filled-unselected-focus {
+  background-color: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface-variant));
+}
+
+@utility icon-button-tonal-unselected-surface {
+  background-color: var(--color-surface-variant);
+  color: var(--color-on-surface-variant);
+}
+@utility icon-button-tonal-unselected-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, var(--color-surface-variant));
+}
+@utility icon-button-tonal-unselected-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface-variant) 12%, var(--color-surface-variant));
+}
+
+@utility icon-button-outlined-selected-surface {
+  background-color: var(--color-inverse-surface);
+  color: var(--color-inverse-on-surface);
+  border-color: transparent;
+}
+@utility icon-button-outlined-selected-hover {
+  background-color: color-mix(in srgb, var(--color-inverse-on-surface) 8%, var(--color-inverse-surface));
+}
+@utility icon-button-outlined-selected-focus {
+  background-color: color-mix(in srgb, var(--color-inverse-on-surface) 12%, var(--color-inverse-surface));
+}
+
 /* Composed Utilities */
 @utility icon-button {
   @apply icon-button-base icon-button-standard-surface;
@@ -162,6 +208,18 @@
   &:disabled {
     @apply icon-button-disabled;
   }
+
+  &[aria-pressed='true'],
+  &[aria-selected='true'] {
+    @apply icon-button-standard-selected-surface;
+
+    &:hover:not(:disabled) {
+      @apply icon-button-standard-selected-hover;
+    }
+    &:focus-visible:not(:disabled) {
+      @apply icon-button-standard-selected-focus;
+    }
+  }
 }
 
 @utility icon-button-filled {
@@ -176,6 +234,18 @@
   &:disabled {
     @apply icon-button-disabled icon-button-filled-disabled;
   }
+
+  &[aria-pressed='false'],
+  &[aria-selected='false'] {
+    @apply icon-button-filled-unselected-surface;
+
+    &:hover:not(:disabled) {
+      @apply icon-button-filled-unselected-hover;
+    }
+    &:focus-visible:not(:disabled) {
+      @apply icon-button-filled-unselected-focus;
+    }
+  }
 }
 
 @utility icon-button-tonal {
@@ -189,6 +259,18 @@
   }
   &:disabled {
     @apply icon-button-disabled icon-button-filled-disabled;
+  }
+
+  &[aria-pressed='false'],
+  &[aria-selected='false'] {
+    @apply icon-button-tonal-unselected-surface;
+
+    &:hover:not(:disabled) {
+      @apply icon-button-tonal-unselected-hover;
+    }
+    &:focus-visible:not(:disabled) {
+      @apply icon-button-tonal-unselected-focus;
+    }
   }
 }
 
@@ -206,6 +288,18 @@
   }
   &:disabled {
     @apply icon-button-disabled;
+  }
+
+  &[aria-pressed='true'],
+  &[aria-selected='true'] {
+    @apply icon-button-outlined-selected-surface;
+
+    &:hover:not(:disabled) {
+      @apply icon-button-outlined-selected-hover;
+    }
+    &:focus-visible:not(:disabled) {
+      @apply icon-button-outlined-selected-focus;
+    }
   }
 }
 

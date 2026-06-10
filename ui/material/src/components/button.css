@@ -43,18 +43,18 @@
 @utility button-icon-slot {
   /* Smart Icon Padding (M3 Spec: 16px on icon sides, 24px on text sides) */
   &:has(> *:first-child:not(:last-child):is(.material-symbols-outlined, svg, img)) {
-    padding-left: var(--air-button-icon-padding-x);
+    padding-inline-start: var(--air-button-icon-padding-x);
   }
 
   &:has(> *:last-child:not(:first-child):is(.material-symbols-outlined, svg, img)) {
-    padding-right: var(--air-button-icon-padding-x);
+    padding-inline-end: var(--air-button-icon-padding-x);
   }
 
   &:has(> *:first-child:is(.material-symbols-outlined, svg, img)):has(
       > *:last-child:is(.material-symbols-outlined, svg, img)
     ) {
-    padding-left: var(--air-button-icon-padding-x);
-    padding-right: var(--air-button-icon-padding-x);
+    padding-inline-start: var(--air-button-icon-padding-x);
+    padding-inline-end: var(--air-button-icon-padding-x);
   }
 }
 
@@ -141,6 +141,33 @@
   background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
 }
 
+/* Toggle Button (State Utilities) */
+@utility button-toggle-surface {
+  background-color: var(--color-surface-container);
+  color: var(--color-on-surface);
+}
+
+@utility button-toggle-hover {
+  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container));
+}
+
+@utility button-toggle-focus {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container));
+}
+
+@utility button-toggle-selected-surface {
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+@utility button-toggle-selected-hover {
+  background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
+}
+
+@utility button-toggle-selected-focus {
+  background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
+}
+
 /* Composed Utilities */
 @utility button {
   @apply button-base button-icon-slot button-filled-surface cursor-pointer;
@@ -219,6 +246,35 @@
 
   &:disabled {
     @apply button-disabled;
+  }
+}
+
+@utility toggle-button {
+  @apply button-base button-icon-slot button-toggle-surface cursor-pointer;
+
+  &:hover:not(:disabled) {
+    @apply button-toggle-hover;
+  }
+
+  &:focus-visible:not(:disabled) {
+    @apply button-toggle-focus;
+  }
+
+  &:disabled {
+    @apply button-disabled;
+  }
+
+  &[aria-pressed='true'],
+  &[aria-selected='true'] {
+    @apply button-toggle-selected-surface;
+
+    &:hover:not(:disabled) {
+      @apply button-toggle-selected-hover;
+    }
+
+    &:focus-visible:not(:disabled) {
+      @apply button-toggle-selected-focus;
+    }
   }
 }
 

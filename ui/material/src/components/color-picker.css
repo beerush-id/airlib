@@ -1,13 +1,13 @@
 @theme {
-  --color-picker-width: calc(var(--spacing) * 10);
-  --color-picker-height: calc(var(--spacing) * 10);
+  --air-color-picker-width: calc(var(--spacing) * 10);
+  --air-color-picker-height: calc(var(--spacing) * 10);
 }
 
 @utility color-picker {
   @apply appearance-none p-0 cursor-pointer;
   @apply focus-ring;
-  width: var(--color-picker-width);
-  height: var(--color-picker-height);
+  width: var(--air-color-picker-width);
+  height: var(--air-color-picker-height);
   border: none;
   background-color: transparent;
   border-radius: var(--radius-md);
@@ -26,5 +26,4 @@
     border: none;
     border-radius: var(--radius-md);
   }
-
 }

@@ -1,5 +1,5 @@
 @theme {
-  --carousel-radius: var(--radius-xl); /* 28px for M3 Carousel Items */
+  --air-carousel-radius: var(--radius-xl); /* 28px for M3 Carousel Items */
 }
 
 @utility carousel {
@@ -20,7 +20,7 @@
 @utility carousel-item {
   scroll-snap-align: center;
   flex-shrink: 0;
-  border-radius: var(--carousel-radius);
+  border-radius: var(--air-carousel-radius);
   overflow: hidden;
   position: relative;
 }

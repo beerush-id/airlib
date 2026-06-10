@@ -3,10 +3,50 @@ import { materialRoute } from './route.js';
 
 export const MaterialPage = page(materialRoute).render(() => (
   <div className="p-8 w-full max-w-5xl mx-auto text-left">
-    <Title>Material Components</Title>
+    <Title>Material Design 3 CSS Utilities</Title>
     <Meta name="description" content="Material Design 3 Components Showcase" />
 
-    <h1 className="text-display-medium mb-12">M3 Components</h1>
+    <h1 className="text-display-medium mb-12">M3 CSS Utilities</h1>
+
+    <section className="mb-16">
+      <h2 className="text-headline-small mb-6">Typography</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-surface-container-lowest border border-outline-variant p-6 rounded-xl">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <span className="text-label-small text-on-surface-variant">Display</span>
+            <div className="text-display-large">Display Large</div>
+            <div className="text-display-medium">Display Medium</div>
+            <div className="text-display-small">Display Small</div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="text-label-small text-on-surface-variant">Headline</span>
+            <div className="text-headline-large">Headline Large</div>
+            <div className="text-headline-medium">Headline Medium</div>
+            <div className="text-headline-small">Headline Small</div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <span className="text-label-small text-on-surface-variant">Title</span>
+            <div className="text-title-large">Title Large</div>
+            <div className="text-title-medium">Title Medium</div>
+            <div className="text-title-small">Title Small</div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="text-label-small text-on-surface-variant">Body</span>
+            <div className="text-body-large">Body Large</div>
+            <div className="text-body-medium">Body Medium</div>
+            <div className="text-body-small">Body Small</div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="text-label-small text-on-surface-variant">Label</span>
+            <div className="text-label-large">Label Large</div>
+            <div className="text-label-medium">Label Medium</div>
+            <div className="text-label-small">Label Small</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section className="mb-16">
       <h2 className="text-headline-small mb-6">Buttons</h2>
@@ -372,7 +412,7 @@ export const MaterialPage = page(materialRoute).render(() => (
         <div className="flex flex-col">
           <h3 className="text-title-medium mb-4">Segmented List</h3>
           <ul className="list-view">
-            <li className="list-view-item list-view-item-filled">
+            <li className="list-view-item list-view-item-filled" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-tertiary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-tertiary-container">music_note</span>
               </div>
@@ -387,7 +427,7 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <span className="material-symbols-outlined">more_vert</span>
               </button>
             </li>
-            <li className="list-view-item list-view-item-filled">
+            <li className="list-view-item list-view-item-filled" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-secondary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-secondary-container">album</span>
               </div>
@@ -399,7 +439,7 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <span className="material-symbols-outlined">more_vert</span>
               </button>
             </li>
-            <li className="list-view-item list-view-item-filled">
+            <li className="list-view-item list-view-item-filled" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-primary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-primary-container">description</span>
               </div>
@@ -415,7 +455,7 @@ export const MaterialPage = page(materialRoute).render(() => (
 
           <h3 className="text-title-medium mb-4 mt-8">Filled List (No Segments)</h3>
           <ul className="list-view list-view-filled">
-            <li className="list-view-item">
+            <li className="list-view-item" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-tertiary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-tertiary-container">music_note</span>
               </div>
@@ -424,7 +464,7 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <span className="list-view-item-supporting-text flex items-center gap-1">Auto playlist</span>
               </div>
             </li>
-            <li className="list-view-item">
+            <li className="list-view-item" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-secondary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-secondary-container">album</span>
               </div>
@@ -433,7 +473,7 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <span className="list-view-item-supporting-text">Daisy Chain • 16 songs</span>
               </div>
             </li>
-            <li className="list-view-item">
+            <li className="list-view-item" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-primary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-primary-container">description</span>
               </div>
@@ -476,6 +516,90 @@ export const MaterialPage = page(materialRoute).render(() => (
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section className="mb-16">
+      <h2 className="text-headline-small mb-6">Data Table (Segmented)</h2>
+      <div className="w-full overflow-x-auto pb-4">
+        <table className="table-view min-w-[600px]">
+          <thead>
+            <tr>
+              <th className="table-header-cell">Name</th>
+              <th className="table-header-cell">Role</th>
+              <th className="table-header-cell">Status</th>
+              <th className="table-header-cell text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="table-row-filled" tabIndex={0}>
+              <td className="table-cell">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+                    A
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-medium text-on-surface">Alice Johnson</span>
+                    <span className="text-body-small text-on-surface-variant">alice@example.com</span>
+                  </div>
+                </div>
+              </td>
+              <td className="table-cell">Admin</td>
+              <td className="table-cell">
+                <span className="chip chip-tonal text-xs h-6">Active</span>
+              </td>
+              <td className="table-cell text-right">
+                <button className="icon-button icon-button-standard">
+                  <span className="material-symbols-outlined">edit</span>
+                </button>
+              </td>
+            </tr>
+            <tr className="table-row-filled" tabIndex={0} aria-selected="true">
+              <td className="table-cell">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+                    B
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-medium text-on-surface">Bob Smith</span>
+                    <span className="text-body-small text-on-surface-variant">bob.smith@example.com</span>
+                  </div>
+                </div>
+              </td>
+              <td className="table-cell">Editor</td>
+              <td className="table-cell">
+                <span className="chip chip-tonal text-xs h-6">Active</span>
+              </td>
+              <td className="table-cell text-right">
+                <button className="icon-button icon-button-standard">
+                  <span className="material-symbols-outlined">edit</span>
+                </button>
+              </td>
+            </tr>
+            <tr className="table-row-filled" tabIndex={0}>
+              <td className="table-cell">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center shrink-0">
+                    C
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-medium text-on-surface">Charlie Davis</span>
+                    <span className="text-body-small text-on-surface-variant">charlie.d@example.com</span>
+                  </div>
+                </div>
+              </td>
+              <td className="table-cell">Viewer</td>
+              <td className="table-cell">
+                <span className="chip bg-surface-variant text-on-surface-variant text-xs h-6">Offline</span>
+              </td>
+              <td className="table-cell text-right">
+                <button className="icon-button icon-button-standard">
+                  <span className="material-symbols-outlined">edit</span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
@@ -631,6 +755,447 @@ export const MaterialPage = page(materialRoute).render(() => (
           <p className="text-body-small">
             This is a rich tooltip that provides more detailed information and context about an element.
           </p>
+        </div>
+      </div>
+    </section>
+
+    <section className="mb-16">
+      <h2 className="text-display-small mb-8">Extensions</h2>
+
+      {/* Masonry */}
+      <h3 className="text-headline-small mb-6">Masonry Layout</h3>
+      <div className="masonry mb-16 w-full max-w-5xl">
+        <div className="masonry-item card card-outlined">
+          <div className="card-header">
+            <h4 className="card-title">Item 1</h4>
+          </div>
+          <div className="card-body">Short content.</div>
+        </div>
+
+        <div className="masonry-item card-filled">
+          <div className="card-header">
+            <h4 className="card-title">Item 2</h4>
+          </div>
+          <div className="card-body">
+            Longer content that wraps into multiple lines to show off how the masonry layout handles variable heights
+            seamlessly!
+          </div>
+        </div>
+
+        <div className="masonry-item card card-elevated">
+          <div className="card-header">
+            <h4 className="card-title">Item 3</h4>
+          </div>
+          <div className="card-body">Medium content.</div>
+        </div>
+
+        <div className="masonry-item card card-outlined">
+          <div className="card-header">
+            <h4 className="card-title">Item 4</h4>
+          </div>
+          <div className="card-body flex flex-col gap-4">
+            <div className="w-full h-32 bg-surface-container rounded-lg flex items-center justify-center shrink-0">
+              <span className="material-symbols-outlined text-4xl text-on-surface-variant">image</span>
+            </div>
+            Content with image.
+          </div>
+        </div>
+
+        <div className="masonry-item card-filled">
+          <div className="card-header">
+            <h4 className="card-title">Item 5</h4>
+          </div>
+          <div className="card-body">Very short.</div>
+        </div>
+      </div>
+
+      {/* Universal Skeleton */}
+      <h3 className="text-headline-small mb-6">Universal Skeleton Group</h3>
+      <div className="skeleton-group card card-outlined p-6 max-w-md mb-16">
+        <div className="flex items-center gap-4 mb-4">
+          <div className="w-12 h-12 rounded-full bg-surface-container shrink-0"></div>
+          <div className="flex flex-col gap-1">
+            <h4 className="text-title-medium">User Name</h4>
+            <p className="text-body-small">user@example.com</p>
+          </div>
+        </div>
+        <p className="text-body-medium mb-4">
+          This entire block of text, the headers, and the buttons below are automatically skeletonized by simply
+          applying the .skeleton-group class to the parent container.
+        </p>
+        <div className="flex gap-2 justify-end">
+          <button className="button">Primary Action</button>
+          <button className="button-tonal">Secondary</button>
+        </div>
+      </div>
+
+      {/* AI Components */}
+      <h3 className="text-headline-small mb-6">AI Conversational UI</h3>
+      <div className="card card-outlined p-6 w-full flex flex-col gap-8 bg-surface-container-lowest">
+        {/* Chat Thread */}
+        <div className="ai-chat-thread">
+          <div className="ai-message ai-message-user">
+            <div className="ai-message-bubble">Can you help me build a React application with Material Design 3?</div>
+          </div>
+
+          <div className="ai-message ai-message-agent">
+            <div className="ai-avatar">
+              <span className="ai-sparkle material-symbols-outlined text-[20px]">auto_awesome</span>
+            </div>
+            <div className="ai-message-bubble">
+              Absolutely! I can help you with that. Material Design 3 provides a fantastic set of tokens and components
+              for building beautiful, accessible React applications. Where would you like to start?
+            </div>
+          </div>
+
+          <div className="ai-message ai-message-user">
+            <div className="ai-message-bubble">Let's start with the AI prompt field.</div>
+          </div>
+
+          <div className="ai-message ai-message-agent">
+            <div className="ai-avatar">
+              <span className="ai-sparkle material-symbols-outlined text-[20px]">auto_awesome</span>
+            </div>
+            <div className="ai-message-bubble">
+              <div className="ai-typing-indicator">
+                <span className="dot"></span>
+                <span className="dot"></span>
+                <span className="dot"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Advanced Prompt Layout */}
+        <div className="mt-4 flex flex-col gap-8 w-full">
+          {/* Main Prompt Field */}
+          <div className="ai-prompt w-full relative">
+            <div className="absolute top-4 right-4 z-10">
+              <button className="icon-button icon-button-standard text-on-surface-variant hover:text-on-surface">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <div className="ai-prompt-attachments">
+              <div className="ai-attachment">
+                <img
+                  src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
+                  alt="Person"
+                />
+              </div>
+              <div className="ai-attachment">
+                <img
+                  src="https://images.unsplash.com/photo-1518908336710-4e1cf821d3d1?auto=format&fit=crop&w=200&q=80"
+                  alt="Dress"
+                />
+              </div>
+            </div>
+
+            <textarea className="ai-prompt-textarea" placeholder="What do you want to create?"></textarea>
+
+            <div className="ai-prompt-actions">
+              <div className="flex items-center gap-2">
+                <button className="icon-button icon-button-standard">
+                  <span className="material-symbols-outlined">add</span>
+                </button>
+                <button className="toggle-button">Agent</button>
+              </div>
+              <div className="flex items-center gap-2">
+                <button className="button-tonal px-4!">
+                  Video · 10s <span className="material-symbols-outlined text-[18px]!">smartphone</span> 1x
+                </button>
+                <button className="icon-button icon-button-tonal">
+                  <span className="material-symbols-outlined">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <h4 className="text-title-medium text-on-surface-variant mt-4">Popover Menus (Static Previews)</h4>
+          <div className="flex flex-col sm:flex-row gap-8 items-start">
+            {/* Settings Popover (Model Menu Closed) */}
+            <div className="card card-elevated p-4 flex flex-col gap-4 w-72 shrink-0">
+              {/* Type */}
+              <div className="segmented-group w-full">
+                <button className="segmented-button flex-1 justify-center">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">image</span> Image
+                </button>
+                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">play_circle</span> Video
+                </button>
+              </div>
+
+              {/* Input Type */}
+              <div className="segmented-group w-full">
+                <button className="segmented-button flex-1 justify-center">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">crop_free</span> Frames
+                </button>
+                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">extension</span> Ingredients
+                </button>
+              </div>
+
+              {/* Aspect Ratio */}
+              <div className="segmented-group w-full">
+                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">smartphone</span> 9:16
+                </button>
+                <button className="segmented-button flex-1 justify-center">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">crop_landscape</span> 16:9
+                </button>
+              </div>
+
+              {/* Speed */}
+              <div className="segmented-group w-full">
+                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                  1x
+                </button>
+                <button className="segmented-button flex-1 justify-center">x2</button>
+                <button className="segmented-button flex-1 justify-center">x3</button>
+                <button className="segmented-button flex-1 justify-center">x4</button>
+              </div>
+
+              {/* Model Select Mock Trigger (Closed) */}
+              <button className="button-tonal w-full justify-between">
+                Omni Flash <span className="material-symbols-outlined">arrow_drop_down</span>
+              </button>
+
+              {/* Duration */}
+              <div className="segmented-group w-full">
+                <button className="segmented-button flex-1 justify-center">4s</button>
+                <button className="segmented-button flex-1 justify-center">6s</button>
+                <button className="segmented-button flex-1 justify-center">8s</button>
+                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                  10s
+                </button>
+              </div>
+
+              <p className="text-body-small text-center text-on-surface-variant mt-2">
+                Generating will use <span className="underline cursor-pointer">15 credits</span>
+              </p>
+            </div>
+
+            {/* Settings Popover (Model Menu Open) */}
+            <div className="card card-elevated p-4 flex flex-col gap-4 w-72 shrink-0">
+              {/* Type */}
+              <div className="segmented-group w-full">
+                <button className="segmented-button flex-1 justify-center">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">image</span> Image
+                </button>
+                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">play_circle</span> Video
+                </button>
+              </div>
+
+              {/* Input Type */}
+              <div className="segmented-group w-full">
+                <button className="segmented-button flex-1 justify-center">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">crop_free</span> Frames
+                </button>
+                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">extension</span> Ingredients
+                </button>
+              </div>
+
+              {/* Aspect Ratio */}
+              <div className="segmented-group w-full">
+                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">smartphone</span> 9:16
+                </button>
+                <button className="segmented-button flex-1 justify-center">
+                  <span className="material-symbols-outlined text-[18px]! mr-2">crop_landscape</span> 16:9
+                </button>
+              </div>
+
+              {/* Speed */}
+              <div className="segmented-group w-full">
+                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                  1x
+                </button>
+                <button className="segmented-button flex-1 justify-center">x2</button>
+                <button className="segmented-button flex-1 justify-center">x3</button>
+                <button className="segmented-button flex-1 justify-center">x4</button>
+              </div>
+
+              {/* Model Select Mock Trigger (Open) */}
+              <div className="relative w-full">
+                <button className="button-tonal w-full justify-between relative z-0">
+                  Omni Flash <span className="material-symbols-outlined">arrow_drop_down</span>
+                </button>
+
+                {/* Static Model Menu Overlay positioned correctly */}
+                <ul className="menu absolute bottom-full left-0 mb-1 w-full shadow-lg z-popover" data-state="open">
+                  <li className="menu-item bg-surface-variant text-on-surface-variant font-medium">
+                    <span className="material-symbols-outlined mr-3">volume_up</span> Omni Flash
+                  </li>
+                  <li className="menu-item">
+                    <span className="material-symbols-outlined mr-3">volume_up</span> Veo 3.1 - Lite
+                  </li>
+                  <li className="menu-item">
+                    <span className="material-symbols-outlined mr-3">volume_up</span> Veo 3.1 - Fast
+                  </li>
+                  <li className="menu-item">
+                    <span className="material-symbols-outlined mr-3">volume_up</span> Veo 3.1 - Quality
+                  </li>
+                </ul>
+              </div>
+
+              {/* Duration */}
+              <div className="segmented-group w-full">
+                <button className="segmented-button flex-1 justify-center">4s</button>
+                <button className="segmented-button flex-1 justify-center">6s</button>
+                <button className="segmented-button flex-1 justify-center">8s</button>
+                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                  10s
+                </button>
+              </div>
+
+              <p className="text-body-small text-center text-on-surface-variant mt-2">
+                Generating will use <span className="underline cursor-pointer">15 credits</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section className="mb-16">
+      <h2 className="text-headline-small mb-6">Asset Browser Layout</h2>
+      <div className="card flex flex-col w-full max-w-5xl h-[600px] overflow-hidden">
+        {/* Top Bar */}
+        <div className="flex items-center gap-4 p-4">
+          <div className="split-button-group split-button-tonal">
+            <button className="split-button-primary">Talents</button>
+            <button className="split-button-trailing">
+              <span className="material-symbols-outlined">arrow_drop_down</span>
+            </button>
+          </div>
+
+          <div className="search-bar search-bar-surface flex-1">
+            <span className="material-symbols-outlined text-on-surface-variant">search</span>
+            <input className="search-bar-input" placeholder="Search assets" />
+          </div>
+
+          <div className="split-button-group split-button-tonal">
+            <button className="split-button-primary">Recent</button>
+            <button className="split-button-trailing">
+              <span className="material-symbols-outlined">arrow_drop_down</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="flex flex-1 overflow-hidden">
+          {/* Left Sidebar */}
+          <div className="w-56 flex flex-col px-4 bg-surface-container-low">
+            <div className="list-view flex-1 flex flex-col gap-1 overflow-y-auto">
+              <button className="list-view-item list-view-item-filled" aria-selected="true">
+                <span className="material-symbols-outlined">grid_view</span>
+                <span className="list-view-item-content">All</span>
+              </button>
+              <button className="list-view-item list-view-item-filled">
+                <span className="material-symbols-outlined">image</span>
+                <span className="list-view-item-content">Images</span>
+              </button>
+              <button className="list-view-item list-view-item-filled">
+                <span className="material-symbols-outlined">videocam</span>
+                <span className="list-view-item-content">Videos</span>
+              </button>
+              <button className="list-view-item list-view-item-filled">
+                <span className="material-symbols-outlined">mic</span>
+                <span className="list-view-item-content">Voices</span>
+              </button>
+              <button className="list-view-item list-view-item-filled">
+                <span className="material-symbols-outlined">person</span>
+                <span className="list-view-item-content">Characters</span>
+              </button>
+              <button className="list-view-item list-view-item-filled">
+                <span className="material-symbols-outlined">face</span>
+                <span className="list-view-item-content">Avatar</span>
+              </button>
+              <button className="list-view-item list-view-item-filled">
+                <span className="material-symbols-outlined">upload_file</span>
+                <span className="list-view-item-content">Uploads</span>
+              </button>
+            </div>
+            <div className="mb-4 mt-2">
+              <button className="button-text w-full justify-start">
+                <span className="material-symbols-outlined">upload</span>
+                Upload media
+              </button>
+            </div>
+          </div>
+
+          {/* Middle List */}
+          <div className="list-view w-80 flex flex-col overflow-y-auto gap-1">
+            <button className="list-view-item list-view-item-filled">
+              <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                <span className="material-symbols-outlined text-on-surface-variant">person</span>
+              </div>
+              <div className="list-view-item-content min-w-0">
+                <span className="text-body-large truncate font-medium">Woman in Javanese atti...</span>
+                <span className="list-view-item-supporting-text truncate">Image</span>
+              </div>
+            </button>
+
+            <button className="list-view-item list-view-item-filled" aria-selected="true">
+              <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                <span className="material-symbols-outlined text-on-surface-variant">videocam</span>
+              </div>
+              <div className="list-view-item-content min-w-0">
+                <span className="text-body-large truncate">Woman walking toward...</span>
+                <span className="list-view-item-supporting-text truncate">Video</span>
+              </div>
+            </button>
+
+            <button className="list-view-item list-view-item-filled">
+              <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                <span className="material-symbols-outlined text-on-surface-variant">videocam</span>
+              </div>
+              <div className="list-view-item-content min-w-0">
+                <span className="text-body-large truncate">Woman walking toward...</span>
+                <span className="list-view-item-supporting-text truncate">Video</span>
+              </div>
+            </button>
+
+            <button className="list-view-item list-view-item-filled">
+              <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                <span className="material-symbols-outlined text-on-surface-variant">videocam</span>
+              </div>
+              <div className="list-view-item-content min-w-0">
+                <span className="text-body-large truncate">Woman walking toward...</span>
+                <span className="list-view-item-supporting-text truncate">Video</span>
+              </div>
+            </button>
+
+            <button className="list-view-item list-view-item-filled">
+              <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                <span className="material-symbols-outlined text-on-surface-variant">videocam</span>
+              </div>
+              <div className="list-view-item-content min-w-0">
+                <span className="text-body-large truncate">Woman walking toward...</span>
+                <span className="list-view-item-supporting-text truncate">Video</span>
+              </div>
+            </button>
+
+            <button className="list-view-item list-view-item-filled">
+              <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                <span className="material-symbols-outlined text-on-surface-variant">image</span>
+              </div>
+              <div className="list-view-item-content min-w-0">
+                <span className="text-body-large truncate">Woman walking on Java...</span>
+                <span className="list-view-item-supporting-text truncate">Image</span>
+              </div>
+            </button>
+          </div>
+
+          {/* Right Preview */}
+          <div className="flex-1 flex flex-col relative p-4 pt-0 gap-4">
+            <div className="card-filled flex-1 overflow-hidden">
+              <img src="/images/image-1.png" className="w-full h-full object-cover object-center" />
+            </div>
+
+            <button className="button button-filled w-full max-w-sm">Add to Prompt</button>
+          </div>
         </div>
       </div>
     </section>

@@ -1,0 +1,134 @@
+/* ==============================
+   AI PROMPT FIELD
+   ============================== */
+@utility ai-prompt {
+  @apply flex flex-col w-full bg-surface-container-low rounded-[28px] overflow-hidden;
+  transition: box-shadow var(--duration-short) var(--ease-standard);
+
+  &:focus-within {
+    box-shadow: 0 0 0 1px var(--color-primary);
+  }
+}
+
+@utility ai-prompt-attachments {
+  @apply flex items-center gap-2 px-6 pt-6 pb-2 overflow-x-auto;
+}
+
+@utility ai-attachment {
+  @apply relative rounded-lg overflow-hidden shrink-0;
+  width: calc(var(--spacing) * 16);
+  height: calc(var(--spacing) * 16);
+
+  & img {
+    @apply w-full h-full object-cover;
+  }
+}
+
+@utility ai-prompt-textarea {
+  @apply w-full bg-transparent resize-none outline-none text-body-large text-on-surface p-6 min-h-[120px];
+
+  &::placeholder {
+    color: var(--color-on-surface-variant);
+  }
+
+  .ai-prompt:has(.ai-prompt-attachments) & {
+    padding-top: calc(var(--spacing) * 2); /* Reduced top padding when attachments exist */
+  }
+}
+
+@utility ai-prompt-actions {
+  @apply flex items-center justify-between px-4 pb-4 pt-2;
+}
+
+/* ==============================
+   AI CHAT THREAD & BUBBLES
+   ============================== */
+@utility ai-chat-thread {
+  @apply flex flex-col gap-8 w-full;
+}
+
+@utility ai-message {
+  @apply flex w-full gap-4;
+}
+
+@utility ai-message-user {
+  @apply justify-end ml-auto max-w-[85%];
+
+  & .ai-message-bubble {
+    background-color: var(--color-surface-variant);
+    color: var(--color-on-surface-variant);
+    border-start-start-radius: var(--radius-xl);
+    border-start-end-radius: var(--radius-xl);
+    border-end-start-radius: var(--radius-xl);
+    border-end-end-radius: var(--radius-sm);
+  }
+}
+
+@utility ai-message-agent {
+  @apply justify-start mr-auto max-w-[100%];
+
+  & .ai-message-bubble {
+    background-color: transparent;
+    color: var(--color-on-surface);
+    padding: calc(var(--spacing) * 2) 0; /* Agent messages usually flow like normal text */
+  }
+}
+
+@utility ai-message-bubble {
+  @apply p-4 text-body-large leading-relaxed;
+}
+
+@utility ai-avatar {
+  @apply w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-primary-container text-on-primary-container;
+}
+
+/* ==============================
+   AI GENERATION INDICATORS
+   ============================== */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@utility ai-typing-indicator {
+  @apply flex items-center gap-1 h-6 px-2;
+
+  & .dot {
+    @apply w-2 h-2 rounded-full bg-on-surface-variant;
+    animation: pulse-dot 1.5s infinite;
+  }
+  & .dot:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  & .dot:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+}
+
+@keyframes sparkle-spin {
+  0% {
+    transform: rotate(0deg) scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(360deg) scale(0.8);
+    opacity: 0.8;
+  }
+}
+
+@utility ai-sparkle {
+  color: var(--color-primary);
+  animation: sparkle-spin 3s infinite ease-in-out;
+  display: inline-block;
+}

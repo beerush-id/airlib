@@ -1,0 +1,99 @@
+@utility table-view {
+  @apply w-full text-left;
+  border-collapse: separate;
+  border-spacing: 0 calc(var(--spacing) * 1); /* 4px vertical gap */
+}
+
+@utility table-header-cell {
+  height: calc(var(--spacing) * 16);
+  padding: 0 calc(var(--spacing) * 6); /* 0 24px */
+  font-size: var(--font-title-small-size);
+  font-weight: 600; /* Bolder to stand out more */
+  color: var(--color-on-surface);
+  background-color: var(--color-surface-container-high); /* Stand out from surface-container rows */
+  vertical-align: middle;
+
+  &:first-child {
+    border-start-start-radius: var(--radius-sm);
+    border-end-start-radius: var(--radius-sm);
+  }
+
+  &:last-child {
+    border-start-end-radius: var(--radius-sm);
+    border-end-end-radius: var(--radius-sm);
+  }
+}
+
+/* Base row setup for focus and z-index */
+@utility table-row {
+  @apply focus-ring;
+  transition:
+    background-color var(--duration-short) var(--ease-standard),
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
+
+  &:focus-visible {
+    position: relative;
+    z-index: var(--z-index-elevated);
+  }
+}
+
+/* Filled Segmented Variant */
+@utility table-row-filled {
+  @apply table-row cursor-pointer;
+  background-color: var(--color-surface-container-low);
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-low));
+  }
+
+  &:focus-visible {
+    background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-low));
+  }
+
+  &[aria-selected='true'] {
+    background-color: var(--color-secondary-container);
+    color: var(--color-on-secondary-container);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
+    }
+    &:focus-visible {
+      background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
+    }
+  }
+}
+
+@utility table-cell {
+  padding: calc(var(--spacing) * 3) calc(var(--spacing) * 6); /* 12px 24px */
+  font-size: var(--font-body-medium-size);
+  color: var(--color-on-surface);
+  vertical-align: middle;
+
+  /* Default segmentation radius */
+  &:first-child {
+    border-start-start-radius: var(--radius-sm);
+    border-end-start-radius: var(--radius-sm);
+  }
+
+  &:last-child {
+    border-start-end-radius: var(--radius-sm);
+    border-end-end-radius: var(--radius-sm);
+  }
+}
+
+/* Top Outer Radius (Applies to the first row of the first group) */
+.table-view > :first-child > tr:first-child > :first-child {
+  border-start-start-radius: var(--radius-xl);
+}
+.table-view > :first-child > tr:first-child > :last-child {
+  border-start-end-radius: var(--radius-xl);
+}
+
+/* Bottom Outer Radius (Applies to the last row of the last group) */
+.table-view > :last-child > tr:last-child > :first-child {
+  border-end-start-radius: var(--radius-xl);
+}
+.table-view > :last-child > tr:last-child > :last-child {
+  border-end-end-radius: var(--radius-xl);
+}
