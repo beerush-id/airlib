@@ -1,0 +1,7 @@
+name = "airlib-demos"
+main = "dist/server/worker.js"
+compatibility_date = "2024-06-10"
+
+[assets]
+directory = "./dist/client"
+binding = "ASSETS"
