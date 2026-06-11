@@ -33,7 +33,7 @@
   },
   "scripts": {
     "build": "bun run build.ts",
-    "prepublish": "bun run format",
+    "prepublish": "bun run format && bun run build",
     "format": "biome format --write"
   },
   "license": "MIT"
