@@ -75,7 +75,7 @@
 }
 
 @utility ai-message-bubble {
-  @apply p-4 text-body-large leading-relaxed;
+  @apply p-4 text-body-large;
 }
 
 @utility ai-avatar {

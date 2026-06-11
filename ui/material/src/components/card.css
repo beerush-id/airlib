@@ -131,11 +131,11 @@
 @utility card-body {
   padding: var(--air-card-padding);
   flex-grow: 1;
-}
 
-/* Remove top padding if body follows header */
-.card-header + .card-body {
-  padding-top: 0;
+  /* Remove top padding if body follows header */
+  .card-header + & {
+    padding-top: 0;
+  }
 }
 
 @utility card-actions {

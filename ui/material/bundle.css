@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+@import './src/index.css';
+@import './src/default.css';
+
+@source './safelist.html';

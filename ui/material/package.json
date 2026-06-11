@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@airlib/material",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Material Design 3 Headless Component Library CSS Theme",
   "keywords": ["material", "design", "m3", "css", "theme", "tailwind", "air-stack"],
   "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
@@ -23,12 +23,15 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
+    "@tailwindcss/cli": "catalog:",
+    "@types/bun": "catalog:",
     "publint": "catalog:"
   },
   "peerDependencies": {
     "tailwindcss": ">=4.0.0"
   },
   "scripts": {
+    "build": "bun run build.ts",
     "prepublish": "bun run format",
     "format": "biome format --write"
   },
