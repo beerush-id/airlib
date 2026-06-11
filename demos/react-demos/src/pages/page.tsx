@@ -63,7 +63,7 @@ const PriceTile = setup(() => {
       <div className="card-header text-center">
         <span className="card-title">Live Exchange Rate</span>
       </div>
-      <div className="card-body flex flex-col gap-4 items-center text-left">
+      <div className="card-body flex flex-col gap-4 items-center">
         <PriceDisplay />
         <SymbolSelector />
       </div>
@@ -451,7 +451,7 @@ export const RootPage = page(indexRoute).render(() => (
     </section>
 
     {/* ── Bottom CTA ── */}
-    <section className="flex flex-col w-full py-16 gap-6 items-center text-center border-t border-outline-variant">
+    <section className="flex flex-col w-full py-16 items-center text-center">
       <h2 className="text-headline-small text-on-surface mb-3">Explore the full demos</h2>
       <p className="text-body-large text-on-surface-variant mb-6">Each library has an interactive deep-dive demo.</p>
       <div className="flex gap-3 flex-wrap justify-center mb-8">
