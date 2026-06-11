@@ -5,6 +5,7 @@
   justify-content: space-between;
   width: 100%;
   padding: calc(var(--spacing) * 4); /* 16px */
+  border-radius: inherit;
 
   /* Typography: Title Medium */
   font-size: var(--font-title-medium-size);
@@ -12,12 +13,13 @@
 
   /* Resets */
   border: none;
-  outline: none;
+  @apply focus-ring;
   cursor: pointer;
   text-align: left;
   transition:
     background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard);
+    color var(--duration-short) var(--ease-standard),
+    outline-color var(--duration-short) var(--ease-standard);
 }
 
 /* Accordion Header Surface */
@@ -76,6 +78,12 @@
   &:focus-visible:not(:disabled) {
     @apply accordion-header-focus;
   }
+
+  /* Soften the bottom radius when the accordion is open */
+  .accordion-item:has(.accordion-content[data-state='open']) > & {
+    border-bottom-left-radius: var(--_inner-radius, var(--radius-sm));
+    border-bottom-right-radius: var(--_inner-radius, var(--radius-sm));
+  }
 }
 
 @utility accordion-content {
@@ -112,6 +120,5 @@
 
 @utility accordion-item {
   background-color: var(--color-surface-container-low);
-  overflow: hidden;
   transition: background-color var(--duration-short) var(--ease-standard);
 }
