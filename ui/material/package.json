@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@airlib/material",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Material Design 3 Headless Component Library CSS Theme",
   "keywords": ["material", "design", "m3", "css", "theme", "tailwind", "air-stack"],
   "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
@@ -15,9 +15,10 @@
   "sideEffects": false,
   "exports": {
     ".": "./src/index.css",
+    "./bundle": "./dist/index.css",
     "./*": "./src/*"
   },
-  "files": ["src"],
+  "files": ["src", "dist"],
   "publishConfig": {
     "access": "public"
   },
