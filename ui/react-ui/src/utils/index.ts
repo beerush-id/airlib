@@ -1,4 +1,2 @@
 export * from './classx.js';
-export * from './focus.js';
-export * from './scroll.js';
 export * from './stylex.js';

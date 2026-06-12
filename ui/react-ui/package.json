@@ -21,6 +21,14 @@
     "./components": {
       "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js"
+    },
+    "./icons": {
+      "types": "./dist/icons/index.d.ts",
+      "import": "./dist/icons/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
     }
   },
   "files": ["dist"],
@@ -55,7 +63,7 @@
     "build": "bun run clean && tsdown && publint",
     "prepublish": "bun run format && bun run build",
     "format": "biome format --write",
-    "test": "rimraf coverage && vitest --run",
+    "test:run": "rimraf coverage && vitest --run",
     "test:preview": "rimraf coverage && vitest --run && vite preview --outDir coverage"
   },
   "license": "MIT"

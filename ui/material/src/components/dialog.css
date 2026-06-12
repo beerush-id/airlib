@@ -3,6 +3,7 @@
   --air-dialog-padding: calc(var(--spacing) * 6); /* 24px */
   --air-dialog-radius: var(--radius-xl);
   --air-dialog-max-width: calc(var(--spacing) * 140); /* 560px */
+  --air-dialog-surface: var(--color-surface-container-high);
 }
 
 /* Base Dialog Structure (Layout and Animations) */
@@ -25,7 +26,8 @@
     transform var(--duration-short) var(--ease-standard),
     background-color var(--duration-short) var(--ease-standard);
 
-  &[open] {
+  &[open],
+  &[aria-hidden='false'] {
     opacity: 1;
     transform: scale(1);
   }
@@ -45,8 +47,8 @@
 
 /* Visual Surface Utility */
 @utility dialog-surface {
-  --color-ghost-surface: var(--color-surface-container-high);
-  background-color: var(--color-surface-container-high);
+  --color-ghost-surface: var(--air-dialog-surface);
+  background-color: var(--air-dialog-surface);
   color: var(--color-on-surface);
 }
 
@@ -89,10 +91,14 @@
 
 @keyframes air-dialog-fade-in {
   from {
+    border-radius: var(--air-dialog-radius);
+    transform: scale(0.95);
     opacity: 0;
     visibility: hidden;
   }
   to {
+    border-radius: 0;
+    transform: scale(1);
     opacity: 1;
     visibility: visible;
   }
@@ -100,17 +106,21 @@
 
 @keyframes air-dialog-fade-out {
   from {
+    border-radius: 0;
+    transform: scale(1);
     opacity: 1;
     visibility: visible;
   }
   to {
+    border-radius: var(--air-dialog-radius);
+    transform: scale(0.95);
     opacity: 0;
     visibility: hidden;
   }
 }
 
 @utility air-dialog {
-  @apply fixed inset-0 w-screen h-screen flex items-center justify-center z-modal;
+  @apply fixed inset-0 w-screen h-screen flex items-center justify-center z-modal overflow-hidden;
 
   &[aria-hidden='false'] {
     animation: air-dialog-fade-in var(--duration-short) var(--ease-standard) forwards;
