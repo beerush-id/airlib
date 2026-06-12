@@ -8,7 +8,7 @@
     "dev": "vite",
     "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --ssr src/worker.ts --outDir dist/server",
-    "build": "bun run build:client && bun run build:server && rm dist/client/index.html",
+    "build": "bun run build:client && bun run build:server",
     "start": "NODE_ENV=production bun dist/server/worker.js",
     "preview": "vite preview --outDir dist/client",
     "format": "biome format --write"
@@ -16,6 +16,8 @@
   "dependencies": {
     "@airlib/material": "workspace:*",
     "@airlib/react-form": "workspace:*",
+    "@airlib/react-ui": "workspace:*",
+    "@airlib/uikit": "workspace:*",
     "@anchorlib/core": "catalog:lib",
     "@anchorlib/react": "catalog:lib",
     "@irpclib/http": "catalog:lib",

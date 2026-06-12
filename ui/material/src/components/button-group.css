@@ -10,7 +10,7 @@
   gap: var(--group-gap);
 
   & > [class*='button'] {
-    border-radius: var(--group-radius-inner) !important;
+    border-radius: var(--group-radius-inner);
   }
 
   & > [class*='button']:focus-visible:not(:disabled) {
@@ -18,12 +18,12 @@
   }
 
   & > [class*='button']:first-child {
-    border-top-left-radius: var(--group-radius-outer) !important;
-    border-bottom-left-radius: var(--group-radius-outer) !important;
+    border-top-left-radius: var(--group-radius-outer);
+    border-bottom-left-radius: var(--group-radius-outer);
   }
 
   & > [class*='button']:last-child {
-    border-top-right-radius: var(--group-radius-outer) !important;
-    border-bottom-right-radius: var(--group-radius-outer) !important;
+    border-top-right-radius: var(--group-radius-outer);
+    border-bottom-right-radius: var(--group-radius-outer);
   }
 }

@@ -1,3 +1,4 @@
+import { DialogConfirmHost } from '@airlib/react-ui/components';
 import { NotFoundError, page } from '@anchorlib/react';
 import { Footer } from '../components/Footer.js';
 import { Header } from '../components/Header.js';
@@ -27,11 +28,12 @@ export const RootLayout = page(rootRoute).render(({ children }) => {
   createSettings();
 
   return (
-    <div>
+    <>
       <Header />
       <main className="layout-main">{children}</main>
       <Footer />
-    </div>
+      <DialogConfirmHost />
+    </>
   );
 });
 export default RootLayout;

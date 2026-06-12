@@ -1,0 +1,62 @@
+{
+  "type": "module",
+  "name": "@airlib/react-ui",
+  "version": "1.0.0",
+  "description": "React components for AIR MUI — Material Design 3 headless component library. Thin wrappers connecting @airlib/uikit headless logic to React with fine-grained ARIA mapping.",
+  "keywords": ["react", "material-design", "headless", "ui", "components", "air-stack", "anchor", "typescript"],
+  "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beerush-id/airlib.git"
+  },
+  "bugs": {
+    "url": "https://github.com/beerush-id/airlib/issues"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    }
+  },
+  "files": ["dist"],
+  "directories": {
+    "dist": "dist"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
+    "@types/bun": "catalog:",
+    "jsdom": "catalog:",
+    "publint": "catalog:",
+    "rimraf": "catalog:",
+    "tsdown": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@airlib/uikit": "workspace:*",
+    "@anchorlib/react": "catalog:lib",
+    "react": "catalog:lib",
+    "react-dom": "catalog:lib",
+    "typescript": "catalog:lib"
+  },
+  "scripts": {
+    "dev": "tsdown --watch ./src",
+    "clean": "rimraf dist",
+    "build": "bun run clean && tsdown && publint",
+    "prepublish": "bun run format && bun run build",
+    "format": "biome format --write",
+    "test": "rimraf coverage && vitest --run",
+    "test:preview": "rimraf coverage && vitest --run && vite preview --outDir coverage"
+  },
+  "license": "MIT"
+}

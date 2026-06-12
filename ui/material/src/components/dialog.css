@@ -86,3 +86,112 @@
 @utility dialog {
   @apply dialog-base dialog-surface;
 }
+
+@keyframes air-dialog-fade-in {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes air-dialog-fade-out {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@utility air-dialog {
+  @apply fixed inset-0 w-screen h-screen flex items-center justify-center z-modal;
+
+  &[aria-hidden='false'] {
+    animation: air-dialog-fade-in var(--duration-short) var(--ease-standard) forwards;
+  }
+  &[aria-hidden='true'] {
+    animation: air-dialog-fade-out var(--duration-short) var(--ease-standard) forwards;
+  }
+}
+
+@utility air-dialog-confirm {
+  @apply air-dialog;
+
+  & > [data-focus-area] {
+    @apply max-w-96;
+  }
+}
+
+@utility air-dialog-overlay {
+  @apply air-overlay;
+}
+
+@utility air-dialog-body {
+  @apply dialog-surface z-elevated;
+  border-radius: var(--air-dialog-radius);
+  max-width: var(--air-dialog-max-width);
+  min-width: calc(var(--spacing) * 80);
+
+  .air-dialog-confirm & > [data-header] {
+    @apply justify-center;
+  }
+}
+
+@utility air-dialog-header {
+  @apply w-full flex items-center justify-between;
+  padding-inline: var(--air-dialog-padding);
+  padding-top: var(--air-dialog-padding);
+
+  & ~ .air-dialog-content {
+    padding-top: calc(var(--spacing) * 4);
+  }
+}
+
+@utility air-dialog-hero {
+  @apply air-dialog-header justify-center;
+
+  & ~ .air-dialog-header {
+    padding-top: calc(var(--spacing) * 4);
+  }
+}
+
+@utility air-dialog-title {
+  font-size: var(--font-headline-small-size);
+  font-weight: var(--font-headline-small-weight);
+  letter-spacing: var(--font-headline-small-tracking);
+  color: var(--color-on-surface);
+}
+
+@utility air-dialog-content {
+  @apply w-full flex flex-col text-on-surface-variant;
+  padding: var(--air-dialog-padding);
+}
+
+@utility air-dialog-footer {
+  @apply w-full dialog-actions;
+  padding-inline: var(--air-dialog-padding);
+  padding-bottom: var(--air-dialog-padding);
+}
+
+@utility air-dialog-cancel {
+  @apply button-text;
+}
+
+@utility air-dialog-submit {
+  @apply button;
+}
+
+@utility air-dialog-warning {
+  @apply flex items-start gap-3 mt-6 rounded-full;
+  @apply text-error bg-on-error py-2 px-4 text-xs;
+
+  & > svg {
+    @apply shrink-0;
+  }
+}

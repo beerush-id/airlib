@@ -1,0 +1,61 @@
+{
+  "type": "module",
+  "name": "@airlib/uikit",
+  "version": "1.0.0",
+  "description": "Framework-agnostic headless UI state machines and interaction patterns built on AIR Stack reactive primitives. Material Design 3 aligned.",
+  "keywords": ["headless", "ui", "state-machine", "reactive", "air-stack", "anchor", "material-design", "typescript"],
+  "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beerush-id/airlib.git"
+  },
+  "bugs": {
+    "url": "https://github.com/beerush-id/airlib/issues"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
+    }
+  },
+  "files": ["dist"],
+  "directories": {
+    "dist": "dist"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@types/bun": "catalog:",
+    "jsdom": "catalog:",
+    "publint": "catalog:",
+    "rimraf": "catalog:",
+    "tsdown": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@anchorlib/core": "catalog:lib",
+    "typescript": "catalog:lib"
+  },
+  "scripts": {
+    "dev": "tsdown --watch ./src",
+    "clean": "rimraf dist",
+    "build": "bun run clean && tsdown && publint",
+    "prepublish": "bun run format && bun run build",
+    "format": "biome format --write",
+    "test": "rimraf coverage && vitest --run",
+    "test:preview": "rimraf coverage && vitest --run && vite preview --outDir coverage"
+  },
+  "license": "MIT"
+}

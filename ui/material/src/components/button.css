@@ -265,7 +265,8 @@
   }
 
   &[aria-pressed='true'],
-  &[aria-selected='true'] {
+  &[aria-selected='true'],
+  &[aria-checked='true'] {
     @apply button-toggle-selected-surface;
 
     &:hover:not(:disabled) {

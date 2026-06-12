@@ -90,7 +90,8 @@
   }
 
   &[aria-pressed='true'],
-  &[aria-selected='true'] {
+  &[aria-selected='true'],
+  &[aria-checked='true'] {
     @apply segmented-button-selected-surface;
 
     &:hover:not(:disabled) {

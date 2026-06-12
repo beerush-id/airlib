@@ -113,6 +113,7 @@
   /* Overlays */
   --color-scrim: oklch(0% 0 0);
   --color-shadow: oklch(0% 0 0);
+  --color-overlay-container: light-dark(oklch(0% 0 0 / 0.5), oklch(0% 0 0 / 0.75));
 
   /* Abstract Base Math */
   --spacing: 0.25rem;

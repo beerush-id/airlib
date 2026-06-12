@@ -3,6 +3,7 @@ import airstackLogo from '../assets/airstack.svg';
 import { FormsPage } from '../pages/forms/index.js';
 import { MaterialPage } from '../pages/material/page.js';
 import { RootPage } from '../pages/page.js';
+import { UIPage } from '../pages/ui/page.js';
 import { ThemeToggle } from './ThemeToggle.js';
 
 export const Header = template(
@@ -19,6 +20,9 @@ export const Header = template(
         <nav className="flex items-center gap-2">
           <Link to={FormsPage} className="button-text" activeClass="text-primary bg-primary-container/20">
             Forms
+          </Link>
+          <Link to={UIPage} className="button-text" activeClass="text-primary bg-primary-container/20">
+            React UI
           </Link>
           <Link to={MaterialPage} className="button-text" activeClass="text-primary bg-primary-container/20">
             Material 3 CSS

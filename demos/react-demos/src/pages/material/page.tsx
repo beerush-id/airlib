@@ -51,29 +51,39 @@ export const MaterialPage = page(materialRoute).render(() => (
     <section className="mb-16">
       <h2 className="text-headline-small mb-6">Buttons</h2>
       <div className="flex gap-4 flex-wrap items-center mb-8">
-        <button className="button">Filled</button>
-        <button className="button-elevated">Elevated</button>
-        <button className="button-tonal">Tonal</button>
-        <button className="button-outlined">Outlined</button>
-        <button className="button-text">Text</button>
+        <button type="button" className="button">
+          Filled
+        </button>
+        <button type="button" className="button-elevated">
+          Elevated
+        </button>
+        <button type="button" className="button-tonal">
+          Tonal
+        </button>
+        <button type="button" className="button-outlined">
+          Outlined
+        </button>
+        <button type="button" className="button-text">
+          Text
+        </button>
       </div>
 
       <h3 className="text-title-medium mb-4 text-on-surface-variant">With Icons</h3>
       <div className="flex gap-4 flex-wrap items-center mb-8">
-        <button className="button">
+        <button type="button" className="button">
           <span className="material-symbols-outlined text-[18px]">add</span>
           Leading
         </button>
-        <button className="button-elevated">
+        <button type="button" className="button-elevated">
           Trailing
           <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
         </button>
-        <button className="button-tonal">
+        <button type="button" className="button-tonal">
           <span className="material-symbols-outlined text-[18px]">favorite</span>
           Both
           <span className="material-symbols-outlined text-[18px]">close</span>
         </button>
-        <button className="button-outlined">
+        <button type="button" className="button-outlined">
           <span className="material-symbols-outlined text-[18px]">search</span>
           Search
         </button>
@@ -82,13 +92,21 @@ export const MaterialPage = page(materialRoute).render(() => (
       <h3 className="text-title-medium mb-4 text-on-surface-variant">Groups & Split</h3>
       <div className="flex gap-8 flex-wrap items-center mb-8">
         <div className="button-group">
-          <button className="button-tonal">Cancel</button>
-          <button className="button-tonal">Discard</button>
-          <button className="button-tonal">Save</button>
+          <button type="button" className="button-tonal">
+            Cancel
+          </button>
+          <button type="button" className="button-tonal">
+            Discard
+          </button>
+          <button type="button" className="button-tonal">
+            Save
+          </button>
         </div>
         <div className="split-button-group split-button-tonal">
-          <button className="split-button-primary">Publish</button>
-          <button className="split-button-trailing">
+          <button type="button" className="split-button-primary">
+            Publish
+          </button>
+          <button type="button" className="split-button-trailing">
             <span className="material-symbols-outlined">arrow_drop_down</span>
           </button>
         </div>
@@ -96,11 +114,21 @@ export const MaterialPage = page(materialRoute).render(() => (
 
       <h3 className="text-title-medium mb-4 text-on-surface-variant">Sizes</h3>
       <div className="flex gap-4 flex-wrap items-center">
-        <button className="button-tonal button-xs">Extra Small</button>
-        <button className="button-tonal button-sm">Small</button>
-        <button className="button-tonal button-md">Medium</button>
-        <button className="button-tonal button-lg">Large</button>
-        <button className="button-tonal button-xl">Extra Large</button>
+        <button type="button" className="button-tonal button-xs">
+          Extra Small
+        </button>
+        <button type="button" className="button-tonal button-sm">
+          Small
+        </button>
+        <button type="button" className="button-tonal button-md">
+          Medium
+        </button>
+        <button type="button" className="button-tonal button-lg">
+          Large
+        </button>
+        <button type="button" className="button-tonal button-xl">
+          Extra Large
+        </button>
       </div>
     </section>
 
@@ -158,13 +186,17 @@ export const MaterialPage = page(materialRoute).render(() => (
       <h2 className="text-headline-small mb-6">Text Fields</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mb-12">
         <div className="text-field">
-          <input className="text-field-input" placeholder=" " />
-          <label className="text-field-label">Outlined Input</label>
+          <input id="tf-d1" className="text-field-input" placeholder=" " />
+          <label htmlFor="tf-d1" className="text-field-label">
+            Outlined Input
+          </label>
           <span className="text-field-supporting-text">Supporting text</span>
         </div>
         <div className="text-field">
-          <input className="text-field-input-filled" placeholder=" " />
-          <label className="text-field-label">Filled Input</label>
+          <input id="tf-d2" className="text-field-input-filled" placeholder=" " />
+          <label htmlFor="tf-d2" className="text-field-label">
+            Filled Input
+          </label>
           <span className="text-field-supporting-text">Supporting text</span>
         </div>
 
@@ -172,14 +204,18 @@ export const MaterialPage = page(materialRoute).render(() => (
           <span className="material-symbols-outlined absolute left-4 top-[16px] text-on-surface-variant z-10 pointer-events-none">
             search
           </span>
-          <input className="text-field-input" placeholder=" " />
-          <label className="text-field-label">With Leading Icon</label>
+          <input id="tf-d3" className="text-field-input" placeholder=" " />
+          <label htmlFor="tf-d3" className="text-field-label">
+            With Leading Icon
+          </label>
         </div>
 
         <div className="text-field">
-          <input className="text-field-input" placeholder=" " />
-          <label className="text-field-label">With Trailing Icon</label>
-          <button className="icon-button absolute right-2 top-[8px] text-on-surface-variant z-10">
+          <input id="tf-d4" className="text-field-input" placeholder=" " />
+          <label htmlFor="tf-d4" className="text-field-label">
+            With Trailing Icon
+          </label>
+          <button type={'button'} className="icon-button absolute right-2 top-[8px] text-on-surface-variant z-10">
             <span className="material-symbols-outlined">visibility</span>
           </button>
         </div>
@@ -188,16 +224,22 @@ export const MaterialPage = page(materialRoute).render(() => (
       <h3 className="text-title-medium mb-4 text-on-surface-variant">Sizes (Outlined)</h3>
       <div className="flex flex-col gap-4 max-w-sm">
         <div className="text-field text-field-sm">
-          <input className="text-field-input" placeholder=" " />
-          <label className="text-field-label">Small</label>
+          <input id="tf-s1" className="text-field-input" placeholder=" " />
+          <label htmlFor="tf-s1" className="text-field-label">
+            Small
+          </label>
         </div>
         <div className="text-field text-field-md">
-          <input className="text-field-input" placeholder=" " />
-          <label className="text-field-label">Medium</label>
+          <input id="tf-s2" className="text-field-input" placeholder=" " />
+          <label htmlFor="tf-s2" className="text-field-label">
+            Medium
+          </label>
         </div>
         <div className="text-field text-field-lg">
-          <input className="text-field-input" placeholder=" " />
-          <label className="text-field-label">Large</label>
+          <input id="tf-s3" className="text-field-input" placeholder=" " />
+          <label htmlFor="tf-s3" className="text-field-label">
+            Large
+          </label>
         </div>
       </div>
     </section>
@@ -207,9 +249,9 @@ export const MaterialPage = page(materialRoute).render(() => (
       <div className="flex gap-4 flex-wrap items-center mb-8">
         <div className="chip">Outlined Chip</div>
         <div className="chip-elevated">Elevated Chip</div>
-        <div className="chip" aria-selected="true">
+        <button role="checkbox" className="chip" aria-checked="true">
           Selected Chip
-        </div>
+        </button>
       </div>
 
       <h3 className="text-title-medium mb-4 text-on-surface-variant">Sizes</h3>
@@ -223,35 +265,51 @@ export const MaterialPage = page(materialRoute).render(() => (
     <section className="mb-16">
       <h2 className="text-headline-small mb-6">Floating Action Buttons</h2>
       <div className="flex gap-6 flex-wrap items-center mb-8">
-        <button className="fab">1</button>
-        <button className="fab-surface">2</button>
-        <button className="fab-secondary">3</button>
-        <button className="fab-tertiary">4</button>
-        <button className="fab fab-extended">Extended FAB</button>
+        <button type="button" className="fab">
+          1
+        </button>
+        <button type="button" className="fab-surface">
+          2
+        </button>
+        <button type="button" className="fab-secondary">
+          3
+        </button>
+        <button type="button" className="fab-tertiary">
+          4
+        </button>
+        <button type="button" className="fab fab-extended">
+          Extended FAB
+        </button>
       </div>
 
       <h3 className="text-title-medium mb-4 text-on-surface-variant">Sizes</h3>
       <div className="flex gap-6 flex-wrap items-end">
-        <button className="fab-secondary fab-sm">S</button>
-        <button className="fab-secondary">M</button>
-        <button className="fab-secondary fab-lg">L</button>
+        <button type="button" className="fab-secondary fab-sm">
+          S
+        </button>
+        <button type="button" className="fab-secondary">
+          M
+        </button>
+        <button type="button" className="fab-secondary fab-lg">
+          L
+        </button>
       </div>
 
       <h3 className="text-title-medium mt-8 mb-4 text-on-surface-variant">FAB Menu (Speed Dial)</h3>
       <div className="flex justify-start pl-4 min-h-[240px] items-end">
         <div className="fab-menu" data-state="open">
           <div className="fab-menu-list">
-            <button className="fab-secondary fab-sm fab-menu-item">
+            <button type="button" className="fab-secondary fab-sm fab-menu-item">
               <span className="material-symbols-outlined">edit</span>
             </button>
-            <button className="fab-secondary fab-sm fab-menu-item">
+            <button type="button" className="fab-secondary fab-sm fab-menu-item">
               <span className="material-symbols-outlined">share</span>
             </button>
-            <button className="fab-secondary fab-sm fab-menu-item">
+            <button type="button" className="fab-secondary fab-sm fab-menu-item">
               <span className="material-symbols-outlined">delete</span>
             </button>
           </div>
-          <button className="fab fab-menu-trigger" data-state="open">
+          <button type="button" className="fab fab-menu-trigger" data-state="open">
             <span className="material-symbols-outlined">add</span>
           </button>
         </div>
@@ -411,8 +469,8 @@ export const MaterialPage = page(materialRoute).render(() => (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
         <div className="flex flex-col">
           <h3 className="text-title-medium mb-4">Segmented List</h3>
-          <ul className="list-view">
-            <li className="list-view-item list-view-item-filled" tabIndex={0}>
+          <div className="list-view">
+            <div role="menuitem" className="list-view-item list-view-item-filled" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-tertiary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-tertiary-container">music_note</span>
               </div>
@@ -426,8 +484,8 @@ export const MaterialPage = page(materialRoute).render(() => (
               <button className="icon-button ml-4 shrink-0">
                 <span className="material-symbols-outlined">more_vert</span>
               </button>
-            </li>
-            <li className="list-view-item list-view-item-filled" tabIndex={0}>
+            </div>
+            <div role="menuitem" className="list-view-item list-view-item-filled" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-secondary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-secondary-container">album</span>
               </div>
@@ -438,8 +496,8 @@ export const MaterialPage = page(materialRoute).render(() => (
               <button className="icon-button ml-4 shrink-0">
                 <span className="material-symbols-outlined">more_vert</span>
               </button>
-            </li>
-            <li className="list-view-item list-view-item-filled" tabIndex={0}>
+            </div>
+            <div role="menuitem" className="list-view-item list-view-item-filled" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-primary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-primary-container">description</span>
               </div>
@@ -450,12 +508,12 @@ export const MaterialPage = page(materialRoute).render(() => (
               <button className="icon-button ml-4 shrink-0">
                 <span className="material-symbols-outlined">more_vert</span>
               </button>
-            </li>
-          </ul>
+            </div>
+          </div>
 
           <h3 className="text-title-medium mb-4 mt-8">Filled List (No Segments)</h3>
-          <ul className="list-view list-view-filled">
-            <li className="list-view-item" tabIndex={0}>
+          <div className="list-view list-view-filled">
+            <div role="menuitem" className="list-view-item" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-tertiary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-tertiary-container">music_note</span>
               </div>
@@ -463,8 +521,8 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <span className="text-title-medium text-on-surface">Your Likes</span>
                 <span className="list-view-item-supporting-text flex items-center gap-1">Auto playlist</span>
               </div>
-            </li>
-            <li className="list-view-item" tabIndex={0}>
+            </div>
+            <div role="menuitem" className="list-view-item" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-secondary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-secondary-container">album</span>
               </div>
@@ -472,8 +530,8 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <span className="text-title-medium text-on-surface">Party Mix</span>
                 <span className="list-view-item-supporting-text">Daisy Chain • 16 songs</span>
               </div>
-            </li>
-            <li className="list-view-item" tabIndex={0}>
+            </div>
+            <div role="menuitem" className="list-view-item" tabIndex={0}>
               <div className="w-14 h-14 rounded-md bg-primary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-on-primary-container">description</span>
               </div>
@@ -481,12 +539,12 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <span className="text-title-medium text-on-surface">Documents</span>
                 <span className="list-view-item-supporting-text">Updated 2 days ago</span>
               </div>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
         <div className="flex flex-col">
           <h3 className="text-title-medium mb-4">Static Dialog Preview</h3>
-          <div className="dialog relative max-w-sm mx-0" open>
+          <div role="dialog" className="dialog relative max-w-sm mx-0" aria-hidden="false">
             <h2 className="dialog-title">Dialog Title</h2>
             <div className="dialog-content">This is a static preview of the dialog surface.</div>
             <div className="dialog-actions">
@@ -607,21 +665,23 @@ export const MaterialPage = page(materialRoute).render(() => (
       <h2 className="text-headline-small mb-6">Tabs & Accordion</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
         <div className="tab flex-1">
-          <div className="tab-list">
-            <button className="tab-item" aria-selected="true">
+          <div role="tablist" className="tab-list">
+            <button role="tab" className="tab-item" aria-selected="true">
               Flight
               <div className="tab-indicator" />
             </button>
-            <button className="tab-item" aria-selected="false">
+            <button role="tab" className="tab-item" aria-selected="false">
               Hotel
               <div className="tab-indicator" />
             </button>
-            <button className="tab-item" aria-selected="false">
+            <button role="tab" className="tab-item" aria-selected="false">
               Car
               <div className="tab-indicator" />
             </button>
           </div>
-          <div className="tab-content p-4 text-body-medium text-on-surface-variant">Tab content goes here.</div>
+          <div role="tabpanel" className="tab-content p-4 text-body-medium text-on-surface-variant">
+            Tab content goes here.
+          </div>
         </div>
 
         <div className="flex-1">
@@ -689,7 +749,7 @@ export const MaterialPage = page(materialRoute).render(() => (
               <button className="date-picker-cell text-body-small">1</button>
               <button className="date-picker-cell text-body-small">2</button>
               <button className="date-picker-cell text-body-small">3</button>
-              <button className="date-picker-cell text-body-small" aria-selected="true">
+              <button role="gridcell" className="date-picker-cell text-body-small" aria-selected="true">
                 4
               </button>
               <button className="date-picker-cell text-body-small date-picker-cell-today">5</button>
@@ -703,9 +763,9 @@ export const MaterialPage = page(materialRoute).render(() => (
           <h3 className="text-title-medium mb-4">Time Picker</h3>
           <div className="time-picker">
             <div className="flex items-center justify-center gap-2 mb-6">
-              <div className="time-picker-unit" aria-selected="true">
+              <button role="option" className="time-picker-unit" aria-selected="true">
                 12
-              </div>
+              </button>
               <div className="time-picker-separator text-display-medium">:</div>
               <div className="time-picker-unit">00</div>
             </div>
@@ -920,7 +980,7 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <button className="segmented-button flex-1 justify-center">
                   <span className="material-symbols-outlined text-[18px]! mr-2">image</span> Image
                 </button>
-                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                <button role="radio" className="segmented-button flex-1 justify-center" aria-checked="true">
                   <span className="material-symbols-outlined text-[18px]! mr-2">play_circle</span> Video
                 </button>
               </div>
@@ -930,14 +990,14 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <button className="segmented-button flex-1 justify-center">
                   <span className="material-symbols-outlined text-[18px]! mr-2">crop_free</span> Frames
                 </button>
-                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                <button role="radio" className="segmented-button flex-1 justify-center" aria-checked="true">
                   <span className="material-symbols-outlined text-[18px]! mr-2">extension</span> Ingredients
                 </button>
               </div>
 
               {/* Aspect Ratio */}
               <div className="segmented-group w-full">
-                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                <button role="radio" className="segmented-button flex-1 justify-center" aria-checked="true">
                   <span className="material-symbols-outlined text-[18px]! mr-2">smartphone</span> 9:16
                 </button>
                 <button className="segmented-button flex-1 justify-center">
@@ -947,7 +1007,7 @@ export const MaterialPage = page(materialRoute).render(() => (
 
               {/* Speed */}
               <div className="segmented-group w-full">
-                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                <button role="radio" className="segmented-button flex-1 justify-center" aria-checked="true">
                   1x
                 </button>
                 <button className="segmented-button flex-1 justify-center">x2</button>
@@ -965,7 +1025,7 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <button className="segmented-button flex-1 justify-center">4s</button>
                 <button className="segmented-button flex-1 justify-center">6s</button>
                 <button className="segmented-button flex-1 justify-center">8s</button>
-                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                <button role="radio" className="segmented-button flex-1 justify-center" aria-checked="true">
                   10s
                 </button>
               </div>
@@ -982,7 +1042,7 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <button className="segmented-button flex-1 justify-center">
                   <span className="material-symbols-outlined text-[18px]! mr-2">image</span> Image
                 </button>
-                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                <button role="radio" className="segmented-button flex-1 justify-center" aria-checked="true">
                   <span className="material-symbols-outlined text-[18px]! mr-2">play_circle</span> Video
                 </button>
               </div>
@@ -992,14 +1052,14 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <button className="segmented-button flex-1 justify-center">
                   <span className="material-symbols-outlined text-[18px]! mr-2">crop_free</span> Frames
                 </button>
-                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                <button role="radio" className="segmented-button flex-1 justify-center" aria-checked="true">
                   <span className="material-symbols-outlined text-[18px]! mr-2">extension</span> Ingredients
                 </button>
               </div>
 
               {/* Aspect Ratio */}
               <div className="segmented-group w-full">
-                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                <button role="radio" className="segmented-button flex-1 justify-center" aria-checked="true">
                   <span className="material-symbols-outlined text-[18px]! mr-2">smartphone</span> 9:16
                 </button>
                 <button className="segmented-button flex-1 justify-center">
@@ -1009,7 +1069,7 @@ export const MaterialPage = page(materialRoute).render(() => (
 
               {/* Speed */}
               <div className="segmented-group w-full">
-                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                <button role="radio" className="segmented-button flex-1 justify-center" aria-checked="true">
                   1x
                 </button>
                 <button className="segmented-button flex-1 justify-center">x2</button>
@@ -1045,7 +1105,7 @@ export const MaterialPage = page(materialRoute).render(() => (
                 <button className="segmented-button flex-1 justify-center">4s</button>
                 <button className="segmented-button flex-1 justify-center">6s</button>
                 <button className="segmented-button flex-1 justify-center">8s</button>
-                <button className="segmented-button flex-1 justify-center" aria-selected="true">
+                <button role="radio" className="segmented-button flex-1 justify-center" aria-checked="true">
                   10s
                 </button>
               </div>
@@ -1088,7 +1148,7 @@ export const MaterialPage = page(materialRoute).render(() => (
           {/* Left Sidebar */}
           <div className="w-56 flex flex-col px-4 bg-surface-container-low">
             <div className="list-view flex-1 flex flex-col gap-1 overflow-y-auto">
-              <button className="list-view-item list-view-item-filled" aria-selected="true">
+              <button role="option" className="list-view-item list-view-item-filled" aria-selected="true">
                 <span className="material-symbols-outlined">grid_view</span>
                 <span className="list-view-item-content">All</span>
               </button>
@@ -1137,7 +1197,7 @@ export const MaterialPage = page(materialRoute).render(() => (
               </div>
             </button>
 
-            <button className="list-view-item list-view-item-filled" aria-selected="true">
+            <button role="option" className="list-view-item list-view-item-filled" aria-selected="true">
               <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
                 <span className="material-symbols-outlined text-on-surface-variant">videocam</span>
               </div>
@@ -1191,7 +1251,7 @@ export const MaterialPage = page(materialRoute).render(() => (
           {/* Right Preview */}
           <div className="flex-1 flex flex-col relative p-4 pt-0 gap-4">
             <div className="card-filled flex-1 overflow-hidden">
-              <img src="/images/image-1.png" className="w-full h-full object-cover object-center" />
+              <img src="/images/image-1.png" alt="preview" className="w-full h-full object-cover object-center" />
             </div>
 
             <button className="button button-filled w-full max-w-sm">Add to Prompt</button>
@@ -1209,8 +1269,8 @@ export const MaterialPage = page(materialRoute).render(() => (
           <button className="icon-button mb-8">
             <span className="material-symbols-outlined">menu</span>
           </button>
-          <button className="navigation-rail-item mb-4">
-            <div className="nav-rail-icon-container" aria-selected="true">
+          <button role="option" className="navigation-rail-item mb-4" aria-selected="true">
+            <div className="nav-rail-icon-container">
               <span className="material-symbols-outlined">home</span>
             </div>
             <span className="text-label-small mt-1">Home</span>
@@ -1257,8 +1317,12 @@ export const MaterialPage = page(materialRoute).render(() => (
 
         {/* Navigation Bar (Mobile) - Bottom */}
         <div className="navigation-bar absolute! bottom-0 left-0 right-0 flex justify-around bg-surface-container border-t border-outline-variant py-2 px-4 h-[80px] z-20 md:hidden">
-          <button className="navigation-bar-item flex flex-col items-center justify-center flex-1">
-            <div className="nav-icon-container" aria-selected="true">
+          <button
+            role="option"
+            className="navigation-bar-item flex flex-col items-center justify-center flex-1"
+            aria-selected="true"
+          >
+            <div className="nav-icon-container">
               <span className="material-symbols-outlined">home</span>
             </div>
             <span className="text-label-small mt-1">Home</span>

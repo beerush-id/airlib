@@ -3,6 +3,8 @@
 @import '@airlib/material';
 @import '@airlib/material/default.css';
 
+@source '../../node_modules/@airlib/react-ui/dist';
+
 /* ── Custom Brand Tokens ── */
 @theme {
   --seed-color: #e6611a; /* Anchor brand color to drive M3 generation */
@@ -38,8 +40,6 @@ body {
 .layout-main {
   @apply flex flex-col items-center pt-24 px-6 pb-16 text-center;
 }
-
-
 
 /* ── Legacy (other pages still use these) ── */
 .code-hint {
