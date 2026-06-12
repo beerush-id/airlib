@@ -1,4 +1,4 @@
-import { clearContextStore } from '@anchorlib/core';
+import { clearContextStore, createLifecycle } from '@anchorlib/core';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createDialog, DialogState, getDialog, setDialog } from '../../src/index.js';
 
@@ -93,6 +93,62 @@ describe('createDialog', () => {
       const newContainer = document.createElement('div');
       dialog.container = newContainer;
       expect(dialog.container).toBe(newContainer);
+    });
+
+    it('should close on mouseup outside the container', () => {
+      const dialog = createDialog({ container });
+      dialog.show();
+      expect(dialog.open).toBe(true);
+
+      document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+      expect(dialog.open).toBe(false);
+    });
+
+    it('should NOT close on mouseup inside the container', () => {
+      const dialog = createDialog({ container });
+      dialog.show();
+      expect(dialog.open).toBe(true);
+
+      container!.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+      expect(dialog.open).toBe(true);
+
+      dialog.hide();
+    });
+
+    it('should close on Escape key', () => {
+      const dialog = createDialog({ container });
+      dialog.show();
+      expect(dialog.open).toBe(true);
+
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      expect(dialog.open).toBe(false);
+    });
+
+    it('should NOT close on non-Escape keys', () => {
+      const dialog = createDialog({ container });
+      dialog.show();
+      expect(dialog.open).toBe(true);
+
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(dialog.open).toBe(true);
+
+      dialog.hide();
+    });
+
+    it('should close on lifecycle destroy', () => {
+      const scope = createLifecycle();
+      let dialog: DialogState<void, string> | undefined;
+
+      scope.run(() => {
+        dialog = createDialog({ container });
+        dialog.show();
+      });
+
+      expect(dialog?.open).toBe(true);
+
+      scope.destroy();
+
+      expect(dialog?.open).toBe(false);
     });
   });
 

@@ -1,4 +1,4 @@
-import { isBrowser } from '@anchorlib/core';
+import { effect, isBrowser, microtask, mutable } from '@anchorlib/core';
 import { KIT_CONFIGS } from '../config.js';
 import { suspendOverflow } from './scroll.js';
 
@@ -8,6 +8,27 @@ export type FocusTrapOptions = {
   trapOverflow?: boolean;
 };
 
+export const FOCUSABLE_SELECTORS = [
+  'a[href]',
+  'button:not([disabled])',
+  'textarea:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',');
+
+export function focusRef<T extends HTMLElement>(options?: FocusTrapOptions) {
+  const elRef = mutable<{ current: T | null }>({ current: null });
+
+  effect(() => {
+    if (elRef.current) {
+      return createFocusTrap(elRef.current, options);
+    }
+  });
+
+  return elRef;
+}
+
 export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptions) {
   if (!isBrowser() || !container) return () => {};
 
@@ -15,16 +36,11 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
   const focusArea = container.querySelector('[data-focus-area]') ?? container;
   const prevFocusElement: HTMLElement | undefined = document.activeElement as HTMLElement;
   const releaseOverflow = trapOverflow ? suspendOverflow(prevFocusElement) : () => {};
+  const [schedule, cancel] = microtask(5);
 
   if (autofocus) {
-    requestAnimationFrame(() => {
-      const focusable = getFocusableElements(container);
-      if (focusable.length) {
-        focusable[0].focus();
-      } else {
-        container.focus();
-      }
-    });
+    requestAnimationFrame(() => focusFrom(container));
+    schedule(() => focusFrom(container));
   }
 
   const handleKeydown = (e: KeyboardEvent) => {
@@ -61,6 +77,7 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
   document.addEventListener('mouseup', handleClickOutside);
 
   return () => {
+    cancel();
     releaseOverflow();
     if (autofocus) prevFocusElement?.focus();
     document.removeEventListener('keydown', handleKeydown);
@@ -68,10 +85,11 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
   };
 }
 
+export function focusFrom(parent: HTMLElement) {
+  const focusable = parent.querySelector(FOCUSABLE_SELECTORS) as HTMLElement;
+  focusable ? focusable.focus() : parent.focus();
+}
+
 function getFocusableElements(container: HTMLElement): HTMLElement[] {
-  return Array.from(
-    container.querySelectorAll(
-      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    )
-  );
+  return Array.from(container.querySelectorAll(FOCUSABLE_SELECTORS));
 }
