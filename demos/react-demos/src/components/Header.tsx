@@ -1,10 +1,10 @@
+import { ThemeSwitch } from '@airlib/react-ui/components';
 import { Link, template } from '@anchorlib/react';
 import airstackLogo from '../assets/airstack.svg';
 import { FormsPage } from '../pages/forms/index.js';
 import { MaterialPage } from '../pages/material/page.js';
 import { RootPage } from '../pages/page.js';
 import { UIPage } from '../pages/ui/page.js';
-import { ThemeToggle } from './ThemeToggle.js';
 
 export const Header = template(
   () => (
@@ -30,7 +30,7 @@ export const Header = template(
           <a href="https://github.com/beerush-id/airstack" target="_blank" rel="noreferrer" className="button-text">
             GitHub
           </a>
-          <ThemeToggle />
+          <ThemeSwitch />
         </nav>
       </div>
     </header>

@@ -6,6 +6,8 @@ export type FocusTrapOptions = {
   onRelease?: (e: MouseEvent | KeyboardEvent) => void;
   autofocus?: boolean;
   trapOverflow?: boolean;
+  releaseOnEsc?: boolean;
+  releaseOnClickOutside?: boolean;
 };
 
 export const FOCUSABLE_SELECTORS = [
@@ -32,7 +34,13 @@ export function focusRef<T extends HTMLElement>(options?: FocusTrapOptions) {
 export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptions) {
   if (!isBrowser() || !container) return () => {};
 
-  const { autofocus = KIT_CONFIGS.autofocus, trapOverflow = KIT_CONFIGS.trapOverflow, onRelease } = options || {};
+  const {
+    autofocus = KIT_CONFIGS.autofocus,
+    trapOverflow = KIT_CONFIGS.trapOverflow,
+    releaseOnEsc = true,
+    releaseOnClickOutside = true,
+    onRelease,
+  } = options || {};
   const focusArea = container.querySelector('[data-focus-area]') ?? container;
   const prevFocusElement: HTMLElement | undefined = document.activeElement as HTMLElement;
   const releaseOverflow = trapOverflow ? suspendOverflow(prevFocusElement) : () => {};
@@ -73,8 +81,12 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
     onRelease?.(e);
   };
 
-  document.addEventListener('keydown', handleKeydown);
-  document.addEventListener('mouseup', handleClickOutside);
+  if (releaseOnEsc) {
+    document.addEventListener('keydown', handleKeydown);
+  }
+  if (releaseOnClickOutside) {
+    document.addEventListener('mouseup', handleClickOutside);
+  }
 
   return () => {
     cancel();

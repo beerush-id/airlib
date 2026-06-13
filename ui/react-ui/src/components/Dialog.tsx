@@ -1,4 +1,5 @@
 import { type AnyType, type DialogState, getDialog, setDialog } from '@airlib/uikit';
+import { dragRef, MOUSE_MODIFIERS } from '@airlib/uikit/utils';
 import { captureStack, isBrowser } from '@anchorlib/core';
 import { type ComponentProps, nodeRef, render, setup } from '@anchorlib/react';
 import type { DialogHTMLAttributes, FC, HTMLAttributes, MouseEventHandler, ReactNode, RefObject } from 'react';
@@ -182,13 +183,23 @@ export function dialogComponent<T, O>(
     (props) => {
       if (!children) children = () => props.children;
 
+      const bodyRef = dragRef<HTMLDivElement>({
+        xModifier: MOUSE_MODIFIERS.shift,
+        yModifier: MOUSE_MODIFIERS.meta,
+      });
       const dialogRef = createDialogRef(props);
+
       setDialog(props.dialog);
+
+      const assignRef = (el: HTMLDivElement | null) => {
+        bodyRef.target = el as HTMLDivElement;
+        bodyRef.container = document.body;
+      };
 
       const content = () => (
         <div role="dialog" ref={dialogRef} {...dialogRef.attributes}>
           <div className={props.overlayClass ?? UI_CONFIGS.dialog.overlayClass} />
-          <div data-focus-area className={props.bodyClass ?? UI_CONFIGS.dialog.bodyClass}>
+          <div ref={assignRef} data-focus-area className={props.bodyClass ?? UI_CONFIGS.dialog.bodyClass}>
             {children!(props.dialog)}
           </div>
         </div>

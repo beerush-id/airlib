@@ -4,6 +4,28 @@
   --air-dialog-radius: var(--radius-xl);
   --air-dialog-max-width: calc(var(--spacing) * 140); /* 560px */
   --air-dialog-surface: var(--color-surface-container-high);
+
+  @keyframes air-dialog-show {
+    from {
+      opacity: 0;
+      visibility: hidden;
+    }
+    to {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  @keyframes air-dialog-hide {
+    from {
+      opacity: 1;
+      visibility: visible;
+    }
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
 }
 
 /* Base Dialog Structure (Layout and Animations) */
@@ -89,44 +111,14 @@
   @apply dialog-base dialog-surface;
 }
 
-@keyframes air-dialog-fade-in {
-  from {
-    border-radius: var(--air-dialog-radius);
-    transform: scale(0.95);
-    opacity: 0;
-    visibility: hidden;
-  }
-  to {
-    border-radius: 0;
-    transform: scale(1);
-    opacity: 1;
-    visibility: visible;
-  }
-}
-
-@keyframes air-dialog-fade-out {
-  from {
-    border-radius: 0;
-    transform: scale(1);
-    opacity: 1;
-    visibility: visible;
-  }
-  to {
-    border-radius: var(--air-dialog-radius);
-    transform: scale(0.95);
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
 @utility air-dialog {
   @apply fixed inset-0 w-screen h-screen flex items-center justify-center z-modal overflow-hidden;
 
   &[aria-hidden='false'] {
-    animation: air-dialog-fade-in var(--duration-short) var(--ease-standard) forwards;
+    animation: air-dialog-show var(--duration-short) var(--ease-standard) forwards;
   }
   &[aria-hidden='true'] {
-    animation: air-dialog-fade-out var(--duration-short) var(--ease-standard) forwards;
+    animation: air-dialog-hide var(--duration-short) var(--ease-standard) forwards;
   }
 }
 

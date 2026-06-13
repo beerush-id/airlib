@@ -324,3 +324,7 @@
   --air-icon-button-size: calc(var(--spacing) * 14);
   --air-icon-button-icon-size: calc(var(--spacing) * 8);
 }
+
+@utility air-icon-button {
+  @apply icon-button-outlined;
+}

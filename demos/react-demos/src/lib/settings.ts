@@ -1,4 +1,4 @@
-import { configureForm, type AnyType } from '@airlib/react-form';
+import { configureForm } from '@airlib/react-form';
 import { getContext, setContext } from '@anchorlib/core';
 import { cookies } from '@anchorlib/react';
 

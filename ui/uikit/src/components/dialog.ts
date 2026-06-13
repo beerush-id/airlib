@@ -1,5 +1,5 @@
 import { anchor, effect, getContext, mutable, onCleanup, setContext, untrack } from '@anchorlib/core';
-import { createFocusTrap } from '../utils/index.js';
+import { createFocusTrap, type FocusTrapOptions } from '../utils/index.js';
 
 const DIALOG_CONTEXT_KEY = 'air-dialog';
 
@@ -82,7 +82,7 @@ export class DialogState<T, O> {
   }
 }
 
-export function createDialog<T, O>(init: DialogInit<T> = mutable({ open: false })) {
+export function createDialog<T, O>(init: DialogInit<T> = mutable({ open: false }), options?: FocusTrapOptions) {
   const dialog = new DialogState<T, O>(init);
 
   effect.client(() => {
@@ -90,7 +90,11 @@ export function createDialog<T, O>(init: DialogInit<T> = mutable({ open: false }
       const self = dialog.container;
 
       const release = createFocusTrap(self, {
-        onRelease: () => dialog.hide(),
+        ...options,
+        onRelease: (e) => {
+          dialog.hide();
+          options?.onRelease?.(e);
+        },
       });
 
       return () => {
