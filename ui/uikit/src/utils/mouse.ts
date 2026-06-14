@@ -1,4 +1,5 @@
-import { anchor, isBrowser, type Linkable, mutable, onCleanup, type StateUnsubscribe, untrack } from '@anchorlib/core';
+import { anchor, type Linkable, mutable, type StateUnsubscribe, untrack } from '@anchorlib/core';
+import { impure } from './state.js';
 
 export const MOUSE_BUTTONS = {
   left: 0,
@@ -58,7 +59,7 @@ export class MousePointer {
   }
 }
 
-const currentPointer = isBrowser() ? mutable(new MousePointer()) : new MousePointer();
+const currentPointer = impure(new MousePointer());
 
 let disposePointer: StateUnsubscribe | undefined;
 
@@ -106,9 +107,5 @@ export function watchPointer() {
 }
 
 export function getPointer() {
-  if (!disposePointer && isBrowser()) {
-    onCleanup(watchPointer());
-  }
-
   return currentPointer;
 }

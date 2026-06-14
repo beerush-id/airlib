@@ -1,11 +1,12 @@
-import { isBrowser, mutable, onCleanup, type StateUnsubscribe } from '@anchorlib/core';
+import type { StateUnsubscribe } from '@anchorlib/core';
 import type { MouseModifier } from './mouse.js';
+import { impure } from './state.js';
 
-const currentKeyboard = isBrowser() ? mutable(new Set<string | MouseModifier>()) : new Set();
+const currentKeyboard = impure(new Set<string | MouseModifier>());
 
 let disposeKeyboard: StateUnsubscribe | undefined;
 
-function watchKeyboard() {
+export function watchKeyboard() {
   if (disposeKeyboard) return disposeKeyboard;
 
   const cleanup = () => {
@@ -38,9 +39,5 @@ function watchKeyboard() {
 }
 
 export function getKeyboard() {
-  if (!disposeKeyboard && isBrowser()) {
-    onCleanup(watchKeyboard());
-  }
-
   return currentKeyboard;
 }

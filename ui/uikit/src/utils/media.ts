@@ -1,4 +1,5 @@
-import { anchor, isBrowser, mutable, onCleanup, type StateUnsubscribe } from '@anchorlib/core';
+import { anchor, isBrowser, type StateUnsubscribe } from '@anchorlib/core';
+import { impure } from './state.js';
 
 export const MEDIA_SELECTORS = {
   dark: '(prefers-color-scheme: dark)',
@@ -44,7 +45,7 @@ export class LiveMedia implements MediaType {
   }
 }
 
-const currentMedia = isBrowser() ? mutable(new LiveMedia()) : new LiveMedia();
+const currentMedia = impure(new LiveMedia());
 
 let disposeMedia: StateUnsubscribe | undefined;
 
@@ -84,9 +85,5 @@ export function watchMedia() {
 }
 
 export function getLiveMedia() {
-  if (!disposeMedia && isBrowser()) {
-    onCleanup(watchMedia());
-  }
-
   return currentMedia;
 }

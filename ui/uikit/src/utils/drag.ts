@@ -1,6 +1,7 @@
-import { anchor, effect, mutable, onCleanup } from '@anchorlib/core';
+import { anchor, effect, isBrowser, microtask, onCleanup } from '@anchorlib/core';
 import { getKeyboard } from './keyboard.js';
 import { getPointer, MOUSE_BUTTONS, type MouseModifier } from './mouse.js';
+import { impure } from './state.js';
 
 export type DragPos = {
   x: number;
@@ -57,9 +58,9 @@ export type DragRefInit<T extends HTMLElement> = Partial<Omit<DragRef<T>, 'activ
 export function dragState(init: DragInit = {}, onChange?: (state: DragState) => void): DragState {
   const { x = 0, y = 0 } = init;
 
-  const state = mutable<DragState>({ x, y, start: false }, { recursive: false });
+  const state = impure<DragState>({ x, y, start: false }, { recursive: false });
   const pointer = getPointer();
-  const keyboard = anchor.get(getKeyboard());
+  const keyboard = anchor.get(getKeyboard(), true);
 
   const calculate = (cx = 0, cy = 0) => {
     if (typeof state.start !== 'object') return;
@@ -82,11 +83,11 @@ export function dragState(init: DragInit = {}, onChange?: (state: DragState) => 
       state.y = minMax(minY, maxY, snap(offsetY + deltaY, snapY));
     }
 
-    onChange?.(anchor.get(state));
+    onChange?.(anchor.get(state, true));
   };
 
   let rafId = 0;
-  effect(() => {
+  effect.client(() => {
     if (typeof state.start === 'object' && state.start !== null) {
       const { x: cx, y: cy } = pointer;
       rafId = requestAnimationFrame(() => {
@@ -99,6 +100,10 @@ export function dragState(init: DragInit = {}, onChange?: (state: DragState) => 
 
   return state;
 }
+
+const [later] = microtask(5);
+
+const INTERACTIVE = 'a, button, input, textarea, select, label, [contenteditable]';
 
 export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragRef<T> {
   const options = { ...init };
@@ -115,6 +120,8 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
   let savedTransition = '';
 
   const start = (e: MouseEvent | TouchEvent) => {
+    if (e.target instanceof Element && e.target.closest(INTERACTIVE)) return;
+
     if (e instanceof MouseEvent) {
       if (e.button !== (init?.button ?? MOUSE_BUTTONS.left)) return;
       state.start = { cursorX: e.clientX, cursorY: e.clientY, offsetX: state.x, offsetY: state.y };
@@ -137,21 +144,24 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
     const endPos = { x: state.x, y: state.y };
     state.start = false;
 
-    init.onEnd?.({ ...endPos, target, container });
-
     document.removeEventListener('mouseup', finish);
     document.removeEventListener('touchend', finish);
     window.removeEventListener('blur', finish);
 
     if (target) {
-      target.style.transition = savedTransition;
-
       if (init.type === 'reset') {
+        target.style.transform = '';
         state.x = 0;
         state.y = 0;
-        target.style.transform = `translate3d(0px, 0px, 0)`;
       }
+
+      later(() => {
+        if (!target) return;
+        target.style.transition = savedTransition;
+      });
     }
+
+    init.onEnd?.({ ...endPos, target, container });
   };
   const clearLimits = () => {
     if (init.minX === undefined) options.minX = undefined;
@@ -202,6 +212,8 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
   }
 
   onCleanup(() => {
+    if (!isBrowser()) return;
+
     resizeObserver?.disconnect();
     document.removeEventListener('mouseup', finish);
     document.removeEventListener('touchend', finish);

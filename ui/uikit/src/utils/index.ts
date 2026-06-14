@@ -5,5 +5,6 @@ export * from './keyboard.js';
 export * from './media.js';
 export * from './mouse.js';
 export * from './scroll.js';
+export * from './state.js';
 export * from './stylex.js';
 export * from './theme.js';

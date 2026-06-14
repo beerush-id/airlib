@@ -52,7 +52,7 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
   }
 
   const handleKeydown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' && releaseOnEsc) {
       onRelease?.(e);
       return;
     }
@@ -81,9 +81,7 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
     onRelease?.(e);
   };
 
-  if (releaseOnEsc) {
-    document.addEventListener('keydown', handleKeydown);
-  }
+  document.addEventListener('keydown', handleKeydown);
   if (releaseOnClickOutside) {
     document.addEventListener('mouseup', handleClickOutside);
   }

@@ -1,0 +1,24 @@
+import { safeRun } from '@anchorlib/core';
+import { impure } from '../../utils/index.js';
+import { WindowLauncher } from './launcher.js';
+import { WindowStacks } from './stack.js';
+import type { WindowRegistry } from './types.js';
+
+export const WINDOW_STATUS = {
+  IDLE: 'idle',
+  OPEN: 'open',
+  ERROR: 'error',
+  CLOSED: 'closed',
+  PENDING: 'pending',
+} as const;
+
+export const WebWin = safeRun(() => {
+  return impure(
+    {
+      stack: new WindowStacks(),
+      windows: new Map(),
+      launcher: impure(new WindowLauncher()),
+    },
+    { recursive: false }
+  ) as WindowRegistry;
+});

@@ -1,5 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { configureKit, KIT_CONFIGS } from '../src/config.js';
+import { createLifecycle } from '@anchorlib/core';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { configureKit, enableLiveObjects, KIT_CONFIGS } from '../src/config.js';
 
 describe('config', () => {
   // Snapshot defaults so we can restore after each test
@@ -57,6 +58,30 @@ describe('config', () => {
       expect(KIT_CONFIGS.autofocus).toBe(true);
       expect(KIT_CONFIGS.trapOverflow).toBe(true);
       expect(KIT_CONFIGS.dialogPortal).toBe('body');
+    });
+
+    it('should enable live objects', () => {
+      const scope = createLifecycle();
+      const mediaSpy = vi.spyOn(window, 'matchMedia').mockImplementation(
+        (query) =>
+          ({
+            matches: false,
+            media: query,
+            onchange: null,
+            addEventListener: vi.fn(),
+            removeEventListener: vi.fn(),
+            dispatchEvent: vi.fn(),
+          }) as any
+      );
+
+      scope.run(() => {
+        enableLiveObjects();
+      });
+
+      expect(mediaSpy).toHaveBeenCalled();
+
+      mediaSpy.mockRestore();
+      scope.destroy();
     });
   });
 });

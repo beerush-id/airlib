@@ -1,5 +1,5 @@
 import { clearContextStore, createLifecycle } from '@anchorlib/core';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDialog, DialogState, getDialog, setDialog } from '../../src/index.js';
 
 let container: HTMLElement | undefined;
@@ -96,12 +96,14 @@ describe('createDialog', () => {
     });
 
     it('should close on mouseup outside the container', () => {
-      const dialog = createDialog({ container });
+      const handler = vi.fn();
+      const dialog = createDialog({ container }, { onRelease: handler });
       dialog.show();
       expect(dialog.open).toBe(true);
 
       document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
       expect(dialog.open).toBe(false);
+      expect(handler).toHaveBeenCalled();
     });
 
     it('should NOT close on mouseup inside the container', () => {
