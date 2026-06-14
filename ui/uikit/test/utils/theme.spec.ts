@@ -30,6 +30,7 @@ describe('theme', () => {
     });
 
     it('should return state early if not in browser context', async () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       vi.stubGlobal('window', undefined);
       vi.resetModules();
 
@@ -37,6 +38,9 @@ describe('theme', () => {
       const theme = colorSchemeSSR();
 
       expect(theme.mode).toBeDefined();
+      expect(warnSpy).toHaveBeenCalled();
+
+      warnSpy.mockRestore();
       vi.unstubAllGlobals();
     });
   });

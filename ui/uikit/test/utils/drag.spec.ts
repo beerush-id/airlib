@@ -303,14 +303,17 @@ describe('drag', () => {
     });
 
     it('should invoke onCleanup on reactive root disposal', () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       const scope = createLifecycle();
       scope.run(() => {
         dragRef({ target, trigger });
       });
       scope.destroy();
+      warnSpy.mockRestore();
     });
 
     it('should not clean up if not in browser context', () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       vi.stubGlobal('window', undefined);
       const scope = createLifecycle();
       scope.run(() => {
@@ -318,6 +321,7 @@ describe('drag', () => {
       });
       scope.destroy();
       vi.unstubAllGlobals();
+      warnSpy.mockRestore();
     });
 
     it('should call onMove when dragging', async () => {
@@ -384,11 +388,13 @@ describe('drag', () => {
     });
 
     it('should disconnect resize observer on reactive root disposal', () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       const scope = createLifecycle();
       scope.run(() => {
         dragRef({ target, trigger, container });
       });
       scope.destroy();
+      warnSpy.mockRestore();
     });
   });
 });
