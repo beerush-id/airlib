@@ -1,0 +1,66 @@
+{
+  "type": "module",
+  "name": "@airlib/fs",
+  "version": "1.0.0",
+  "description": "File system abstraction and IRPC adapter for AIR Stack",
+  "keywords": ["fs", "irpc", "air-stack", "r2", "s3"],
+  "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beerush-id/airlib.git"
+  },
+  "sideEffects": false,
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./adapter": {
+      "types": "./dist/adapter.d.ts",
+      "import": "./dist/adapter.js"
+    },
+    "./constructor": {
+      "types": "./dist/constructor.d.ts",
+      "import": "./dist/constructor.js"
+    },
+    "./drivers/*": {
+      "types": "./dist/drivers/*/index.d.ts",
+      "import": "./dist/drivers/*/index.js"
+    }
+  },
+  "files": ["dist"],
+  "directories": {
+    "dist": "dist"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "fake-indexeddb": "catalog:",
+    "publint": "catalog:",
+    "rimraf": "catalog:",
+    "tsdown": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@irpclib/irpc": "catalog:lib",
+    "typescript": "catalog:lib",
+    "zod": "catalog:lib"
+  },
+  "scripts": {
+    "dev": "tsdown --watch ./src",
+    "clean": "rimraf dist",
+    "build": "bun run clean && tsdown && publint",
+    "prepublish": "bun run format && bun run build",
+    "format": "biome format --write",
+    "test:run": "rimraf coverage && vitest --run",
+    "test:preview": "rimraf coverage && vitest --run && vite preview --outDir coverage"
+  },
+  "license": "MIT"
+}
