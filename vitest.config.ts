@@ -9,14 +9,14 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    projects: ['ui/form', 'ui/react-form', 'ui/solid-form'],
+    projects: ['ui/form', 'ui/react-form', 'ui/solid-form', 'irpc/fs'],
     reporters: ['default', 'html'],
     outputFile: 'docs/.vitepress/dist/coverage/index.html',
     coverage: {
       provider: 'v8',
       enabled: true,
-      include: ['ui/form/src/**/*.{ts,tsx}', 'ui/react-form/src/**/*.{ts,tsx}', 'ui/solid-form/src/**/*.{ts,tsx}'],
-      exclude: ['ui/form/src/**/types.ts'],
+      include: ['ui/form/src/**/*.{ts,tsx}', 'ui/react-form/src/**/*.{ts,tsx}', 'ui/solid-form/src/**/*.{ts,tsx}', 'irpc/fs/src/**/*.ts'],
+      exclude: ['ui/form/src/**/types.ts', 'irpc/fs/src/**/types.ts'],
       reportsDirectory: 'docs/.vitepress/dist/coverage/details',
     },
   },
