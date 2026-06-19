@@ -1,35 +1,40 @@
 import { HandlerError } from '@irpclib/irpc';
 
-/**
- * Standard filesystem error wrapper that provides consistent
- * POSIX-style HandlerError instances across all drivers.
- */
 export class FSError extends HandlerError {
   static forbidden(action: string, path?: string) {
-    return HandlerError.failed(`Forbidden: permission denied, ${action}${path ? ` '${path}'` : ''}`);
+    return new FSError('forbidden', 'Permission denied', { action, path });
   }
 
   static notFound(action: string, path?: string) {
-    return HandlerError.failed(`NotFound: no such file or directory, ${action}${path ? ` '${path}'` : ''}`);
+    return new FSError('not_found', 'File or directory not found', { action, path });
   }
 
   static failed(action: string, path?: string) {
-    return HandlerError.failed(`Failed: operation failed, ${action}${path ? ` '${path}'` : ''}`);
+    return new FSError('failed', 'Operation failed', { action, path });
   }
 
   static tooLarge(action: string, path?: string) {
-    return HandlerError.failed(`TooLarge: file too large, ${action}${path ? ` '${path}'` : ''}`);
+    return new FSError('too_large', 'File is too large', { action, path });
   }
 
   static notEmpty(action: string, path?: string) {
-    return HandlerError.failed(`NotEmpty: directory not empty, ${action}${path ? ` '${path}'` : ''}`);
+    return new FSError('not_empty', 'Directory is not empty', { action, path });
   }
 
   static notSupported(action: string, path?: string) {
-    return HandlerError.failed(`NotSupported: operation not supported, ${action}${path ? ` '${path}'` : ''}`);
+    return new FSError('not_supported', 'Operation not supported', { action, path });
   }
 
   static notPermitted(action: string, path?: string) {
-    return HandlerError.failed(`NotPermitted: operation not permitted, ${action}${path ? ` '${path}'` : ''}`);
+    return new FSError('not_permitted', 'Operation not permitted', { action, path });
+  }
+
+  public action: string;
+  public path?: string;
+
+  private constructor(code: string, message: string, ctx: { action: string; path?: string }) {
+    super(code, message);
+    this.action = ctx.action;
+    this.path = ctx.path;
   }
 }

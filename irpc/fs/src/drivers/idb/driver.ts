@@ -1,310 +1,230 @@
-import { HandlerError, type IRPCDriver, type IRPCFile, type IRPCMeta } from '@irpclib/irpc';
+import { type IRPCDriver, type IRPCFile } from '@irpclib/irpc';
 import type { FSAdapter } from '../../adapter.js';
+import type { FSMeta, FSFile } from '../../index.js';
 import { FSError } from '../../error.js';
-import type { FSEntry, FSFile } from '../../index.js';
-import { getFileExt, getFileType, normalizePath } from '../../utils.js';
+import { getMimeType, join, withExt } from '../../utils.js';
 import { getIDBFSOptions, type IDBFSOptions } from './context.js';
-
-export interface IDBRecord {
-  path: string;
-  parent: string;
-  name: string;
-  type: string;
-  size: number;
-  isDirectory: boolean;
-  data?: ArrayBuffer;
-}
+import { IDBStore, type MetaEntry } from './store.js';
 
 export class IDBFSDriver implements IRPCDriver<FSAdapter> {
-  private db?: Promise<IDBDatabase>;
-  private currentDbName?: string;
+  private store?: IDBStore;
 
   constructor(public readonly options?: Partial<IDBFSOptions>) {}
 
-  getOptions(): IDBFSOptions {
-    const ctxOptions = getIDBFSOptions();
-    const dbName = ctxOptions?.dbName || this.options?.dbName || 'irpc-fs';
-    const storeName = ctxOptions?.storeName || this.options?.storeName || 'files';
-
-    return { dbName, storeName };
+  private getStore(): IDBStore {
+    if (this.store) return this.store;
+    const ctx = getIDBFSOptions();
+    return (this.store = new IDBStore({
+      dbName: ctx?.dbName || this.options?.dbName || 'irpc-fs',
+      metaStore: 'meta',
+      blobStore: ctx?.storeName || this.options?.storeName || 'blobs',
+    }));
   }
 
-  private getDB(): Promise<IDBDatabase> {
-    const { dbName, storeName } = this.getOptions();
-
-    if (this.db && this.currentDbName === dbName) {
-      return this.db;
-    }
-
-    if (typeof indexedDB === 'undefined') {
-      return Promise.reject(FSError.failed('init', 'Storage not available'));
-    }
-
-    this.currentDbName = dbName;
-
-    this.db = new Promise((resolve, reject) => {
-      try {
-        const req = indexedDB.open(dbName, 1);
-        req.onupgradeneeded = () => {
-          const db = req.result;
-          if (!db.objectStoreNames.contains(storeName)) {
-            const store = db.createObjectStore(storeName, { keyPath: 'path' });
-            store.createIndex('parent', 'parent', { unique: false });
-          }
-        };
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(FSError.failed('init', 'Failed to initialize storage'));
-      } catch (err) {
-        reject(FSError.failed('init', 'Failed to initialize storage'));
-      }
-    });
-
-    return this.db;
+  private key(meta: FSMeta, path: string): string {
+    return join(meta.prefix, path);
   }
 
-  private async withStore<T>(
-    mode: IDBTransactionMode,
-    fn: (store: IDBObjectStore, resolve: (val: T) => void, reject: (err: any) => void) => void
-  ): Promise<T> {
-    const db = await this.getDB();
-    const { storeName } = this.getOptions();
-    return new Promise((resolve, reject) => {
-      let tx: IDBTransaction;
-      try {
-        tx = db.transaction(storeName, mode);
-      } catch (err) {
-        return reject(err);
-      }
-
-      const store = tx.objectStore(storeName);
-
-      tx.oncomplete = () => {};
-      tx.onerror = () => reject(tx.error);
-
-      fn(store, resolve, reject);
-    });
+  private thumbKey(meta: FSMeta, path: string): string | null {
+    return meta.thumbnailPrefix ? join(meta.thumbnailPrefix, path) : null;
   }
 
-  private async ensureParents(reqPath: string): Promise<void> {
-    if (reqPath === '/' || reqPath === '') return;
+  private url(key: string): string {
+    const s = this.getStore();
+    return `/idb-blob/${s.dbName}/${s.blobStoreName}${key}`;
+  }
 
-    const parts = reqPath.split('/').filter(Boolean);
+  private async ensureParents(key: string): Promise<void> {
+    const store = this.getStore();
+    const parts = key.split('/').filter(Boolean);
     parts.pop();
-
-    let current = '/';
-    const missing: IDBRecord[] = [];
-
+    let current = '';
     for (const part of parts) {
-      const parent = current;
-      current = `${current}${part}/`;
-
-      missing.push({
-        path: current,
-        parent: parent,
-        name: part,
-        type: 'directory',
-        size: 0,
-        isDirectory: true,
-      });
-    }
-
-    if (missing.length === 0) return;
-
-    await this.withStore('readwrite', (store, resolve, reject) => {
-      let pending = missing.length;
-      for (const m of missing) {
-        const req = store.put(m);
-        req.onsuccess = () => {
-          pending--;
-          if (pending === 0) resolve(undefined);
-        };
-        req.onerror = () => reject(req.error);
+      current += `/${part}`;
+      const existing = await store.getMeta(current);
+      if (!existing) {
+        const now = Date.now();
+        await store.putMeta(current, {
+          path: current,
+          size: 0,
+          type: 'directory',
+          mime: '',
+          isDirectory: true,
+          createdAt: now,
+          updatedAt: now,
+        });
       }
-    });
+    }
   }
 
-  private async getRecord(reqPath: string, operation: string): Promise<IDBRecord> {
-    return this.withStore<IDBRecord>('readonly', (store, resolve, reject) => {
-      const p1 = normalizePath(reqPath, false);
-      const req = store.get(p1);
-      req.onsuccess = () => {
-        if (req.result) return resolve(req.result);
-
-        if (p1 !== '/') {
-          const p2 = p1 + '/';
-          const req2 = store.get(p2);
-          req2.onsuccess = () => {
-            if (req2.result) return resolve(req2.result);
-            reject(FSError.notFound(operation, reqPath));
-          };
-          req2.onerror = () => reject(req2.error);
-        } else {
-          reject(FSError.notFound(operation, reqPath));
-        }
-      };
-      req.onerror = () => reject(req.error);
-    });
+  private toFSFile(entry: MetaEntry, meta: FSMeta): FSFile {
+    const key = entry.path;
+    return {
+      path: entry.path.replace(meta.prefix, '') || '/',
+      url: entry.isDirectory ? '' : this.url(key),
+      size: entry.size,
+      type: entry.isDirectory ? 'directory' : entry.type,
+      isDirectory: entry.isDirectory,
+      createdAt: entry.createdAt,
+      updatedAt: entry.updatedAt,
+    };
   }
 
-  async read(_meta: IRPCMeta, reqPath: string): Promise<FSFile> {
+  async read(meta: FSMeta, path: string): Promise<FSFile> {
+    const key = this.key(meta, path);
+    const entry = await this.getStore().getMeta(key);
+    if (!entry) throw FSError.notFound('read', path);
+    if (entry.isDirectory) throw FSError.notPermitted('read (is a directory)');
+    return this.toFSFile(entry, meta);
+  }
+
+  async write(meta: FSMeta, path: string, file: IRPCFile, thumbnail?: IRPCFile): Promise<FSFile> {
+    const store = this.getStore();
+    const key = this.key(meta, path);
+    const tKey = this.thumbKey(meta, path);
+
+    await this.ensureParents(key);
+    const now = Date.now();
+
+    if (thumbnail && tKey) {
+      const thumbBuf = await thumbnail.data.arrayBuffer();
+      const thumbExt = thumbnail.meta.type;
+      const thumbKey = withExt(tKey, thumbExt);
+      await store.putBlob(thumbKey, new Blob([thumbBuf], { type: getMimeType(thumbnail.meta.type) }));
+    }
+
     try {
-      const record = await this.getRecord(reqPath, 'read');
+      const buf = await file.data.arrayBuffer();
+      const mime = getMimeType(file.meta.type || path);
+      await store.putBlob(key, new Blob([buf], { type: mime }));
 
-      if (record.isDirectory) throw FSError.notPermitted('read (is a directory)');
+      const entry: MetaEntry = {
+        path: key,
+        size: file.meta.size || buf.byteLength,
+        type: file.meta.type,
+        mime,
+        isDirectory: false,
+        createdAt: now,
+        updatedAt: now,
+      };
+      await store.putMeta(key, entry);
 
-      let objectUrl = record.path;
-      if (record.data) {
-        objectUrl = URL.createObjectURL(new Blob([record.data], { type: record.type }));
+      const result = this.toFSFile(entry, meta);
+      if (thumbnail && tKey) {
+        const thumbExt = thumbnail.meta.type;
+        result.thumbnailUrl = this.url(withExt(tKey, thumbExt));
       }
-
-      return {
-        path: record.path,
-        url: objectUrl,
-        size: record.size,
-        type: record.type,
-        isDirectory: false,
-      };
-    } catch (err: any) {
-      if (err instanceof HandlerError) throw err;
-      throw FSError.failed('read', reqPath);
+      return result;
+    } catch (e) {
+      if (thumbnail && tKey) await store.deleteBlob(tKey);
+      throw FSError.failed('write', path);
     }
   }
 
-  async write(_meta: IRPCMeta, reqPath: string, file: IRPCFile): Promise<FSFile> {
-    const p = normalizePath(reqPath, reqPath.endsWith('/'));
-
-    try {
-      await this.ensureParents(p);
-
-      const buffer = await file.data.arrayBuffer();
-      const parts = p.split('/').filter(Boolean);
-      const name = parts.pop() || '';
-      const parent = p.substring(0, p.lastIndexOf(name));
-
-      const record: IDBRecord = {
-        path: p,
-        parent,
-        name,
-        type: file.meta.type || getFileType('', getFileExt(p)),
-        size: file.meta.size || buffer.byteLength,
-        isDirectory: false,
-        data: buffer,
-      };
-
-      await this.withStore('readwrite', (store, resolve, reject) => {
-        const req = store.put(record);
-        req.onsuccess = () => resolve(undefined);
-        req.onerror = () => reject(req.error);
-      });
-
-      const objectUrl = URL.createObjectURL(new Blob([buffer], { type: record.type }));
-
-      return {
-        path: p,
-        url: objectUrl,
-        size: record.size,
-        type: record.type,
-        isDirectory: false,
-      };
-    } catch (err: any) {
-      throw FSError.failed('write', reqPath);
-    }
+  async remove(meta: FSMeta, path: string): Promise<boolean> {
+    const store = this.getStore();
+    const key = this.key(meta, path);
+    const entry = await store.getMeta(key);
+    if (!entry) throw FSError.notFound('remove', path);
+    if (entry.isDirectory) throw FSError.notPermitted('remove (is a directory)');
+    await Promise.all([store.deleteMeta(key), store.deleteBlob(key)]);
+    return true;
   }
 
-  async remove(_meta: IRPCMeta, reqPath: string): Promise<boolean> {
-    try {
-      const record = await this.getRecord(reqPath, 'remove');
-      if (record.isDirectory) throw FSError.notPermitted('remove (is a directory)');
+  async rmdir(meta: FSMeta, path: string, recursive?: boolean): Promise<boolean> {
+    const store = this.getStore();
+    const key = this.key(meta, path);
+    const entry = await store.getMeta(key);
+    if (!entry) throw FSError.notFound('rmdir', path);
+    if (!entry.isDirectory) throw FSError.notPermitted('rmdir (not a directory)');
 
-      await this.withStore('readwrite', (store, resolve, reject) => {
-        const req = store.delete(record.path);
-        req.onsuccess = () => resolve(undefined);
-        req.onerror = () => reject(req.error);
-      });
+    const prefix = key.endsWith('/') ? key : `${key}/`;
+    const children = await store.listMeta(prefix);
 
-      return true;
-    } catch (err: any) {
-      if (err instanceof HandlerError) throw err;
-      throw FSError.failed('remove', reqPath);
-    }
+    if (!recursive && children.length > 0) throw FSError.notEmpty('rmdir', path);
+
+    await store.deleteAll(key);
+    return true;
   }
 
-  async rmdir(_meta: IRPCMeta, reqPath: string, recursive?: boolean): Promise<boolean> {
-    try {
-      const record = await this.getRecord(reqPath, 'rmdir');
-      if (!record.isDirectory) throw FSError.notPermitted('rmdir (not a directory)');
+  async dir(meta: FSMeta, path?: string): Promise<FSFile[]> {
+    const store = this.getStore();
+    const key = path ? this.key(meta, path) : meta.prefix;
+    const prefix = key.endsWith('/') ? key : `${key}/`;
+    const entries = await store.listMeta(prefix);
 
-      const p = record.path;
-
-      const children = await this.withStore<IDBRecord[]>('readonly', (store, resolve, reject) => {
-        const idx = store.index('parent');
-        const req = idx.getAll(p);
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
-      });
-
-      if (!recursive && children.length > 0) throw FSError.notEmpty('rmdir', reqPath);
-
-      await this.withStore('readwrite', (store, resolve, reject) => {
-        const delReq = store.delete(p);
-        delReq.onerror = () => reject(delReq.error);
-
-        if (recursive) {
-          if (typeof IDBKeyRange === 'undefined') {
-            return reject(new Error('IDBKeyRange not available'));
-          }
-          const req = store.openCursor(IDBKeyRange.lowerBound(p));
-          req.onsuccess = (e: any) => {
-            const cursor = e.target.result as IDBCursorWithValue;
-            if (cursor) {
-              if (cursor.key.toString().startsWith(p)) {
-                cursor.delete();
-                cursor.continue();
-              } else {
-                resolve(undefined);
-              }
-            } else {
-              resolve(undefined);
-            }
-          };
-          req.onerror = () => reject(req.error);
-        } else {
-          delReq.onsuccess = () => resolve(undefined);
-        }
-      });
-
-      return true;
-    } catch (err: any) {
-      if (err instanceof HandlerError) throw err;
-      throw FSError.failed('rmdir', reqPath);
-    }
+    return entries
+      .filter((e) => {
+        const rel = e.path.substring(prefix.length);
+        return !rel.includes('/') || (rel.endsWith('/') && rel.indexOf('/') === rel.length - 1);
+      })
+      .map((e) => this.toFSFile(e, meta));
   }
 
-  async dir(_meta: IRPCMeta, reqPath?: string): Promise<FSEntry[]> {
-    try {
-      let p = '/';
-      if (reqPath && reqPath !== '/') {
-        const record = await this.getRecord(reqPath, 'dir');
-        if (!record.isDirectory) throw FSError.notPermitted('dir (not a directory)');
-        p = record.path;
-      }
+  async mkdir(meta: FSMeta, path: string): Promise<FSFile> {
+    const store = this.getStore();
+    const key = this.key(meta, path);
+    const existing = await store.getMeta(key);
+    if (existing) return this.toFSFile(existing, meta);
 
-      const children = await this.withStore<IDBRecord[]>('readonly', (store, resolve, reject) => {
-        const idx = store.index('parent');
-        const req = idx.getAll(p);
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
-      });
+    const now = Date.now();
+    const entry: MetaEntry = {
+      path: key,
+      size: 0,
+      type: 'directory',
+      mime: '',
+      isDirectory: true,
+      createdAt: now,
+      updatedAt: now,
+    };
+    await this.ensureParents(key);
+    await store.putMeta(key, entry);
+    return this.toFSFile(entry, meta);
+  }
 
-      return children.map((c) => ({
-        path: c.path,
-        size: c.size,
-        type: c.type,
-        isDirectory: c.isDirectory,
-      }));
-    } catch (err: any) {
-      if (err instanceof HandlerError) throw err;
-      throw FSError.failed('dir', reqPath || '/');
-    }
+  async stat(meta: FSMeta, path: string): Promise<FSFile> {
+    const key = this.key(meta, path);
+    const entry = await this.getStore().getMeta(key);
+    if (!entry) throw FSError.notFound('stat', path);
+    return this.toFSFile(entry, meta);
+  }
+
+  async move(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSFile> {
+    const store = this.getStore();
+    const srcKey = this.key(meta, from);
+    const dst = dstMeta || meta;
+    const dstKey = this.key(dst, to);
+
+    const entry = await store.getMeta(srcKey);
+    if (!entry) throw FSError.notFound('move', from);
+
+    await this.ensureParents(dstKey);
+    const blob = await store.getBlob(srcKey);
+    if (blob) await store.putBlob(dstKey, blob);
+    await store.putMeta(dstKey, { ...entry, path: dstKey, updatedAt: Date.now() });
+    await Promise.all([store.deleteMeta(srcKey), store.deleteBlob(srcKey)]);
+    return this.toFSFile({ ...entry, path: dstKey }, dst);
+  }
+
+  async copy(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSFile> {
+    const store = this.getStore();
+    const srcKey = this.key(meta, from);
+    const dst = dstMeta || meta;
+    const dstKey = this.key(dst, to);
+
+    const entry = await store.getMeta(srcKey);
+    if (!entry) throw FSError.notFound('copy', from);
+
+    await this.ensureParents(dstKey);
+    const blob = await store.getBlob(srcKey);
+    if (blob) await store.putBlob(dstKey, blob);
+    const now = Date.now();
+    await store.putMeta(dstKey, { ...entry, path: dstKey, createdAt: now, updatedAt: now });
+    return this.toFSFile({ ...entry, path: dstKey, createdAt: now, updatedAt: now }, dst);
+  }
+
+  async exists(meta: FSMeta, path: string): Promise<boolean> {
+    const entry = await this.getStore().getMeta(this.key(meta, path));
+    return !!entry;
   }
 }

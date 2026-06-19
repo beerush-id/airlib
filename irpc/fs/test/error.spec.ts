@@ -1,61 +1,81 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { FSError } from '../src/error.js';
 
 describe('File System Error', () => {
-  test('forbidden', () => {
-    expect(() => {
-      throw FSError.forbidden('test', 'path');
-    }).toThrowError(/Forbidden/);
-    expect(() => {
-      throw FSError.forbidden('test');
-    }).toThrowError(/Forbidden/);
+  it('creates forbidden error with correct properties', () => {
+    const err = FSError.forbidden('read', '/path');
+    expect(err.message).toBe('Permission denied');
+    expect(err.code).toBe('forbidden');
+    expect(err.action).toBe('read');
+    expect(err.path).toBe('/path');
+
+    const errNoPath = FSError.forbidden('read');
+    expect(errNoPath.path).toBeUndefined();
   });
-  test('notFound', () => {
-    expect(() => {
-      throw FSError.notFound('test', 'path');
-    }).toThrowError(/NotFound/);
-    expect(() => {
-      throw FSError.notFound('test');
-    }).toThrowError(/NotFound/);
+
+  it('creates notFound error with correct properties', () => {
+    const err = FSError.notFound('read', '/path');
+    expect(err.message).toBe('File or directory not found');
+    expect(err.code).toBe('not_found');
+    expect(err.action).toBe('read');
+    expect(err.path).toBe('/path');
+
+    const errNoPath = FSError.notFound('read');
+    expect(errNoPath.path).toBeUndefined();
   });
-  test('failed', () => {
-    expect(() => {
-      throw FSError.failed('test', 'path');
-    }).toThrowError(/Failed/);
-    expect(() => {
-      throw FSError.failed('test');
-    }).toThrowError(/Failed/);
+
+  it('creates failed error with correct properties', () => {
+    const err = FSError.failed('write', '/path');
+    expect(err.message).toBe('Operation failed');
+    expect(err.code).toBe('failed');
+    expect(err.action).toBe('write');
+    expect(err.path).toBe('/path');
+
+    const errNoPath = FSError.failed('write');
+    expect(errNoPath.path).toBeUndefined();
   });
-  test('tooLarge', () => {
-    expect(() => {
-      throw FSError.tooLarge('test', 'path');
-    }).toThrowError(/TooLarge/);
-    expect(() => {
-      throw FSError.tooLarge('test');
-    }).toThrowError(/TooLarge/);
+
+  it('creates tooLarge error with correct properties', () => {
+    const err = FSError.tooLarge('write', '/path');
+    expect(err.message).toBe('File is too large');
+    expect(err.code).toBe('too_large');
+    expect(err.action).toBe('write');
+    expect(err.path).toBe('/path');
+
+    const errNoPath = FSError.tooLarge('write');
+    expect(errNoPath.path).toBeUndefined();
   });
-  test('notEmpty', () => {
-    expect(() => {
-      throw FSError.notEmpty('test', 'path');
-    }).toThrowError(/NotEmpty/);
-    expect(() => {
-      throw FSError.notEmpty('test');
-    }).toThrowError(/NotEmpty/);
+
+  it('creates notEmpty error with correct properties', () => {
+    const err = FSError.notEmpty('rmdir', '/path');
+    expect(err.message).toBe('Directory is not empty');
+    expect(err.code).toBe('not_empty');
+    expect(err.action).toBe('rmdir');
+    expect(err.path).toBe('/path');
+
+    const errNoPath = FSError.notEmpty('rmdir');
+    expect(errNoPath.path).toBeUndefined();
   });
-  test('notSupported', () => {
-    expect(() => {
-      throw FSError.notSupported('test', 'path');
-    }).toThrowError(/NotSupported/);
-    expect(() => {
-      throw FSError.notSupported('test');
-    }).toThrowError(/NotSupported/);
+
+  it('creates notSupported error with correct properties', () => {
+    const err = FSError.notSupported('move', '/path');
+    expect(err.message).toBe('Operation not supported');
+    expect(err.code).toBe('not_supported');
+    expect(err.action).toBe('move');
+    expect(err.path).toBe('/path');
+
+    const errNoPath = FSError.notSupported('move');
+    expect(errNoPath.path).toBeUndefined();
   });
-  test('notPermitted', () => {
-    expect(() => {
-      throw FSError.notPermitted('test', 'path');
-    }).toThrowError(/NotPermitted/);
-    expect(() => {
-      throw FSError.notPermitted('test');
-    }).toThrowError(/NotPermitted/);
+
+  it('creates notPermitted error with correct properties', () => {
+    const err = FSError.notPermitted('write', '/path');
+    expect(err.message).toBe('Operation not permitted');
+    expect(err.code).toBe('not_permitted');
+    expect(err.action).toBe('write');
+    expect(err.path).toBe('/path');
+
+    const errNoPath = FSError.notPermitted('write');
+    expect(errNoPath.path).toBeUndefined();
   });
 });

@@ -1,83 +1,197 @@
+import { withIsolation } from '@anchorlib/core';
 import { IRPCFile } from '@irpclib/irpc';
-import { describe, expect, it, test } from 'vitest';
-import { getFileExt, getFileType, getMimeType, stripPath, validateWrite } from '../src/utils.js';
+import { describe, expect, it } from 'vitest';
+import { type FSConfig, setFSConfig } from '../src/context.js';
+import type { AnyType } from '../src/types.js';
+import {
+  errorCode,
+  getFileExt,
+  getMimeType,
+  join,
+  normalizePath,
+  normalizeType,
+  resolveRequest,
+  resolveWriteAccess,
+  resolveWriteLimit,
+  withExt,
+} from '../src/utils.js';
 
 describe('utils', () => {
-  describe('getFileExt', () => {
-    test('gets extension', () => {
+  describe('join', () => {
+    it('joins segments properly', () => {
+      expect(join('a', 'b')).toBe('/a/b');
+      expect(join('/a/', '/b/')).toBe('/a/b');
+      expect(join('a', '..', 'b')).toBe('/b');
+      expect(join('a', '.', 'b')).toBe('/a/b');
+      expect(join(undefined, 'b')).toBe('/b');
+    });
+  });
+
+  describe('normalizePath', () => {
+    it('normalizes paths properly', () => {
+      expect(normalizePath('a/b')).toBe('/a/b');
+      expect(normalizePath('a/../b')).toBe('/b');
+      expect(normalizePath('', true)).toBe('/');
+      expect(normalizePath('a', true)).toBe('/a/');
+      expect(normalizePath('/a/b/', false)).toBe('/a/b');
+    });
+  });
+
+  describe('resolveRequest', () => {
+    it('resolves request path and meta', () => {
+      const config = { rootPath: '/root', pathPrefix: 'prefix', thumbnailPrefix: 'thumb' };
+      const meta = { type: 'txt' } as AnyType;
+      const res = resolveRequest(config, meta, 'file.txt', false);
+
+      expect(res.path).toBe('/file.txt');
+      expect(res.meta.prefix).toBe('/root/prefix');
+      expect(res.meta.thumbnailPrefix).toBe('/root/thumb');
+    });
+
+    it('handles config with missing rootPath or pathPrefix gracefully', () => {
+      const config = { thumbnailPrefix: 'thumb' };
+      const meta = { type: 'txt' } as AnyType;
+      const res = resolveRequest(config, meta, 'file.txt', false);
+
+      expect(res.meta.prefix).toBe('/raw');
+      expect(res.meta.thumbnailPrefix).toBe('/thumb');
+    });
+  });
+
+  describe('resolveWriteAccess & resolveWriteLimit', () => {
+    const runWithConfig = <T>(config: Partial<FSConfig>, fn: () => T) => {
+      return withIsolation(() => {
+        setFSConfig(config);
+        return fn();
+      });
+    };
+
+    it('resolveWriteAccess allows write if not readOnly', () => {
+      runWithConfig({ readOnly: false }, () => {
+        expect(() => resolveWriteAccess()).not.toThrow();
+      });
+    });
+
+    it('resolveWriteAccess throws if readOnly', () => {
+      runWithConfig({ readOnly: true }, () => {
+        expect(() => resolveWriteAccess()).toThrowError(/not permitted/i);
+      });
+    });
+
+    it('resolveWriteLimit checks file size', () => {
+      runWithConfig({ maxFileSize: 100 }, () => {
+        const file = new IRPCFile({ size: 200, type: 'txt' } as AnyType);
+        expect(() => resolveWriteLimit(file)).toThrowError(/too large/i);
+      });
+    });
+
+    it('resolveWriteLimit checks allowed types', () => {
+      runWithConfig({ allowedTypes: ['jpg', 'png'] }, () => {
+        const file = new IRPCFile({ size: 10, type: 'txt' } as AnyType);
+        expect(() => resolveWriteLimit(file)).toThrowError(/not permitted/i);
+
+        const goodFile = new IRPCFile({ size: 10, type: 'jpg' } as AnyType);
+        expect(() => resolveWriteLimit(goodFile)).not.toThrowError();
+      });
+    });
+
+    it('resolveWriteLimit rejects files completely missing meta.type if allowedTypes is strict', () => {
+      runWithConfig({ allowedTypes: ['jpg', 'png'] }, () => {
+        const file = new IRPCFile({ size: 10 } as AnyType); // Intentionally missing type
+        expect(() => resolveWriteLimit(file)).toThrowError(/not permitted/i);
+      });
+    });
+  });
+
+  describe('getFileExt & withExt', () => {
+    it('getFileExt extracts extensions properly', () => {
       expect(getFileExt('file.txt')).toBe('txt');
-      expect(getFileExt('noext')).toBe('file');
-      expect(getFileExt('/path/to/file.txt')).toBe('txt');
+      expect(getFileExt('noext')).toBe('');
+      expect(getFileExt('/path/to/file.TXT')).toBe('txt');
+    });
+
+    it('withExt replaces extensions properly', () => {
+      expect(withExt('file.txt', 'md')).toBe('file.md');
+      expect(withExt('/path/file.txt', 'jpg')).toBe('/path/file.jpg');
     });
   });
 
-  describe('stripPath', () => {
-    it('strips rootPath correctly', () => {
-      const config = { rootPath: '/uploads' };
-      expect(stripPath(config, '/uploads/file.txt')).toBe('/file.txt');
+  describe('normalizeType', () => {
+    it('normalizes standard MIME types into short extensions for consistent handling', () => {
+      const file = { type: 'text/plain' };
+      normalizeType(file);
+      expect(file.type).toBe('txt');
     });
 
-    it('strips rootPath exactly when path is exactly root without trailing slash', () => {
-      const config = { rootPath: '/uploads/' };
-      expect(stripPath(config, '/uploads')).toBe('/'); // Hits line 28
+    it('accepts short extensions directly when provided by the client', () => {
+      const file = { type: 'txt' };
+      normalizeType(file);
+      expect(file.type).toBe('txt');
     });
 
-    it('returns root when path is exactly root with trailing slash', () => {
-      const config = { rootPath: '/uploads' };
-      expect(stripPath(config, '/uploads/')).toBe('/');
-    });
-  });
-
-  describe('validateWrite', () => {
-    it('allows write when file has no type and allowedTypes is not set', () => {
-      const file = new IRPCFile({ name: 'file.txt', size: 0 } as any, new Blob());
-      expect(() => validateWrite({}, file)).not.toThrow();
+    it('resolves common aliases to their primary extension', () => {
+      const file = { type: 'plain' };
+      normalizeType(file);
+      expect(file.type).toBe('txt');
     });
 
-    it('rejects write when file has no type but allowedTypes is set', () => {
-      const file = new IRPCFile({ name: 'file.txt', size: 0 } as any, new Blob());
-      expect(() => validateWrite({ allowedTypes: ['txt'] }, file)).toThrowError(/file type {2}is not allowed/);
+    it('rejects untrusted or unknown file types to prevent spoofing', () => {
+      const file = { type: 'image/unknown' };
+      normalizeType(file);
+      expect(file.type).toBeUndefined();
+    });
+
+    it('refuses to guess types from filenames when the type is empty to ensure zero-trust security', () => {
+      const file = { type: '', name: 'test.svg' };
+      normalizeType(file);
+      expect(file.type).toBeUndefined();
+    });
+
+    it('refuses to guess types when completely omitted to ensure safe binary defaults', () => {
+      const file = { type: undefined as string | undefined, name: 'test.svg' };
+      normalizeType(file);
+      expect(file.type).toBeUndefined();
+    });
+
+    it('deletes nested IRPCFile metadata type if untrusted', () => {
+      const file = { meta: { type: 'image/unknown' } };
+      normalizeType(file);
+      expect((file.meta as AnyType).type).toBeUndefined();
+    });
+
+    it('deletes nested IRPCFile metadata type if missing entirely', () => {
+      const file = { meta: { name: 'test.svg' } };
+      normalizeType(file);
+      expect((file.meta as AnyType).type).toBeUndefined();
+    });
+
+    it('handles nested IRPCFile metadata seamlessly', () => {
+      const file = { meta: { type: 'application/json' } };
+      normalizeType(file);
+      expect(file.meta.type).toBe('json');
     });
   });
 
   describe('getMimeType', () => {
-    test('maps standard extensions to mime types', () => {
+    it('maps standard extensions and full filenames to mime types', () => {
       expect(getMimeType('txt')).toBe('text/plain');
-      expect(getMimeType('.json')).toBe('application/json');
-      expect(getMimeType('png')).toBe('image/png');
+      expect(getMimeType('file.json')).toBe('application/json');
+      expect(getMimeType('.png')).toBe('image/png');
       expect(getMimeType('jpg')).toBe('image/jpeg');
-      expect(getMimeType('jpeg')).toBe('image/jpeg');
-      expect(getMimeType('gif')).toBe('image/gif');
-      expect(getMimeType('svg')).toBe('image/svg+xml');
-      expect(getMimeType('pdf')).toBe('application/pdf');
-      expect(getMimeType('html')).toBe('text/html');
-      expect(getMimeType('css')).toBe('text/css');
-      expect(getMimeType('js')).toBe('application/javascript');
-      expect(getMimeType('csv')).toBe('text/csv');
-      expect(getMimeType('zip')).toBe('application/zip');
-      expect(getMimeType('xml')).toBe('application/xml');
-      expect(getMimeType('mp4')).toBe('video/mp4');
-      expect(getMimeType('mp3')).toBe('audio/mpeg');
-      expect(getMimeType('wav')).toBe('audio/wav');
-      expect(getMimeType('webp')).toBe('image/webp');
-      expect(getMimeType('webm')).toBe('video/webm');
       expect(getMimeType('unknown')).toBe('application/octet-stream');
+    });
+
+    it('falls back securely for trailing dots without extensions', () => {
+      expect(getMimeType('file.')).toBe('application/octet-stream');
     });
   });
 
-  describe('getFileType', () => {
-    test('maps mime types to standard extensions', () => {
-      expect(getFileType('text/plain')).toBe('txt');
-      expect(getFileType('image/jpeg')).toBe('jpg');
-      expect(getFileType('image/svg+xml')).toBe('svg');
-      expect(getFileType('application/javascript')).toBe('js');
-      expect(getFileType('audio/mpeg')).toBe('mp3');
-      expect(getFileType('application/json')).toBe('json');
-      expect(getFileType('application/octet-stream')).toBe('file');
-      expect(getFileType('application/octet-stream', 'bin')).toBe('bin');
-      expect(getFileType('')).toBe('file');
-      expect(getFileType('invalid')).toBe('file');
-      expect(getFileType('text/html; charset=utf-8')).toBe('html');
+  describe('errorCode', () => {
+    it('extracts error code safely', () => {
+      expect(errorCode({ code: 'ENOENT' })).toBe('ENOENT');
+      expect(errorCode({ message: 'ENOENT' })).toBeUndefined();
+      expect(errorCode(null)).toBeUndefined();
+      expect(errorCode('ENOENT')).toBeUndefined();
     });
   });
 });

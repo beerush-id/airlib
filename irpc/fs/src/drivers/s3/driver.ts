@@ -1,305 +1,340 @@
-import { HandlerError, type IRPCDriver, type IRPCFile, type IRPCMeta } from '@irpclib/irpc';
+import { HandlerError, type IRPCDriver, type IRPCFile } from '@irpclib/irpc';
 import type { FSAdapter } from '../../adapter.js';
 import { FSError } from '../../error.js';
-import type { FSEntry, FSFile } from '../../index.js';
-import { getFileExt, getFileType, getMimeType } from '../../utils.js';
+import type { FSMeta, FSFile } from '../../index.js';
+import { getFileExt, getMimeType, join, withExt } from '../../utils.js';
 import { getS3Credentials } from './context.js';
-import { signS3Request, signS3Url } from './signer.js';
+import { signS3Request, signS3Url, type AwsCredentials } from './signer.js';
 
 const DEFAULT_MAX_KEYS = 100;
 const DEFAULT_DELETE_CHUNK_SIZE = 10;
 
 export interface S3DriverOptions {
-  /** Maximum number of keys to fetch per list request (default: 100) */
   maxKeys?: number;
-  /** Number of concurrent delete requests during recursive rmdir (default: 10) */
   deleteChunkSize?: number;
 }
 
-/**
- * AWS S3 driver implementation for the IRPC filesystem adapter.
- * Uses AWS Signature Version 4 for direct REST API communication without external SDKs.
- */
+function extractXmlElements(xml: string, tag: string): string[] {
+  const results: string[] = [];
+  const open = `<${tag}>`;
+  const close = `</${tag}>`;
+  let pos = 0;
+  while (pos < xml.length) {
+    const start = xml.indexOf(open, pos);
+    if (start === -1) break;
+    const valStart = start + open.length;
+    const end = xml.indexOf(close, valStart);
+    if (end === -1) break;
+    results.push(xml.substring(valStart, end));
+    pos = end + close.length;
+  }
+  return results;
+}
+
+function extractXmlElement(xml: string, tag: string): string | null {
+  const open = `<${tag}>`;
+  const close = `</${tag}>`;
+  const start = xml.indexOf(open);
+  if (start === -1) return null;
+  const valStart = start + open.length;
+  const end = xml.indexOf(close, valStart);
+  if (end === -1) return null;
+  return xml.substring(valStart, end);
+}
+
 export class S3Driver implements IRPCDriver<FSAdapter> {
   constructor(public options: S3DriverOptions = {}) {}
 
-  private getCredentials() {
+  private getCredentials(): AwsCredentials {
     const credentials = getS3Credentials();
     if (!credentials?.endpoint || !credentials?.accessKeyId || !credentials?.secretAccessKey) {
-      throw FSError.forbidden('authenticate');
+      throw FSError.forbidden('access');
     }
     return credentials;
   }
 
-  /**
-   * Reads a file from S3 and returns its actual metadata along with a downloadable signed URL.
-   *
-   * @param _meta - IRPC request metadata.
-   * @param path - The S3 object key to read.
-   * @returns A promise resolving to the FSFile representation.
-   */
-  async read(_meta: IRPCMeta, path: string): Promise<FSFile> {
+  private s3Key(meta: FSMeta, path: string): string {
+    return join(meta.prefix, path).replace(/^\//, '');
+  }
+
+  private stripPrefix(key: string, meta: FSMeta): string {
+    const prefix = meta.prefix.replace(/^\//, '');
+    return key.startsWith(prefix) ? `/${key.substring(prefix.length)}` : `/${key}`;
+  }
+
+  async read(meta: FSMeta, path: string): Promise<FSFile> {
     const credentials = this.getCredentials();
+    const key = this.s3Key(meta, path);
 
-    const headReq = await signS3Request(credentials, 'HEAD', path);
-    const headRes = await fetch(headReq);
-
+    const headRes = await fetch(await signS3Request(credentials, 'HEAD', key));
     if (!headRes.ok) {
       if (headRes.status === 401 || headRes.status === 403) throw FSError.forbidden('read', path);
       if (headRes.status === 404) throw FSError.notFound('read', path);
       throw FSError.failed('read', path);
     }
 
-    const size = parseInt(headRes.headers.get('content-length') || '0', 10);
-    const mimeType = headRes.headers.get('content-type') || '';
-    const type = getFileType(mimeType, getFileExt(path));
-
-    const url = await signS3Url(credentials, 'GET', path);
-
+    const mime = headRes.headers.get('content-type') || '';
     return {
       path,
-      url,
-      size,
-      type,
+      url: await signS3Url(credentials, 'GET', key),
+      size: parseInt(headRes.headers.get('content-length') || '0', 10),
+      type: mime,
       isDirectory: false,
+      createdAt: 0,
+      updatedAt: 0,
     };
   }
 
-  /**
-   * Writes a file to S3 using a streaming PUT request.
-   *
-   * @param _meta - IRPC request metadata.
-   * @param path - The destination S3 object key.
-   * @param file - The file data to write.
-   * @returns A promise resolving to the updated FSFile.
-   */
-  async write(_meta: IRPCMeta, path: string, file: IRPCFile): Promise<FSFile> {
+  async write(meta: FSMeta, path: string, file: IRPCFile, thumbnail?: IRPCFile): Promise<FSFile> {
     const credentials = this.getCredentials();
-    const url = await signS3Url(credentials, 'PUT', path);
-    const buffer = await file.data.arrayBuffer();
+    const key = this.s3Key(meta, path);
+    const mime = getMimeType(file.meta.type || path);
 
-    const fileType = file.meta.type || getFileExt(path);
-    const mimeType = getMimeType(fileType);
+    if (thumbnail && meta.thumbnailPrefix) {
+      const thumbExt = thumbnail.meta.type;
+      const thumbKey = withExt(this.s3Key({ ...meta, prefix: meta.thumbnailPrefix }, path), thumbExt);
+      await fetch(await signS3Url(credentials, 'PUT', thumbKey), {
+        method: 'PUT',
+        body: await thumbnail.data.arrayBuffer(),
+        headers: { 'Content-Type': getMimeType(thumbnail.meta.type) },
+      });
+    }
 
-    const response = await fetch(url, {
-      method: 'PUT',
-      body: buffer,
-      headers: {
-        'Content-Type': mimeType,
-      },
-    });
+    try {
+      const buf = await file.data.arrayBuffer();
+      const res = await fetch(await signS3Url(credentials, 'PUT', key), {
+        method: 'PUT',
+        body: buf,
+        headers: { 'Content-Type': mime },
+      });
 
-    if (!response.ok) {
-      if (response.status === 401 || response.status === 403) throw FSError.forbidden('write', path);
-      if (response.status === 404) throw FSError.notFound('write', path);
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) throw FSError.forbidden('write', path);
+        if (res.status === 404) throw FSError.notFound('write', path);
+        throw FSError.failed('write', path);
+      }
+
+      const result: FSFile = {
+        path,
+        url: await signS3Url(credentials, 'GET', key),
+        size: file.meta.size || buf.byteLength,
+        type: file.meta.type,
+        isDirectory: false,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+
+      if (thumbnail && meta.thumbnailPrefix) {
+        const thumbExt = thumbnail.meta.type;
+        const thumbKey = withExt(this.s3Key({ ...meta, prefix: meta.thumbnailPrefix }, path), thumbExt);
+        result.thumbnailUrl = await signS3Url(credentials, 'GET', thumbKey);
+      }
+
+      return result;
+    } catch (e) {
+      if (e instanceof HandlerError) throw e;
       throw FSError.failed('write', path);
     }
-
-    const readUrl = await signS3Url(credentials, 'GET', path);
-
-    return {
-      path,
-      url: readUrl,
-      size: file.meta.size,
-      type: fileType,
-      isDirectory: false,
-    };
   }
 
-  /**
-   * Removes a specific object from S3.
-   *
-   * @param _meta - IRPC request metadata.
-   * @param path - The S3 object key to remove.
-   * @param _credentials - Optional pre-resolved credentials (used internally).
-   * @returns A promise resolving to true on success.
-   */
-  async remove(_meta: IRPCMeta, path: string, _credentials?: any): Promise<boolean> {
-    const credentials = _credentials || this.getCredentials();
-    const req = await signS3Request(credentials, 'DELETE', path);
-    const response = await fetch(req);
-
-    if (!response.ok) {
-      if (response.status === 401 || response.status === 403) throw FSError.forbidden('remove', path);
-      if (response.status === 404) throw FSError.notFound('remove', path);
+  async remove(meta: FSMeta, path: string): Promise<boolean> {
+    const credentials = this.getCredentials();
+    const res = await fetch(await signS3Request(credentials, 'DELETE', this.s3Key(meta, path)));
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) throw FSError.forbidden('remove', path);
+      if (res.status === 404) throw FSError.notFound('remove', path);
       throw FSError.failed('remove', path);
     }
-
     return true;
   }
 
-  /**
-   * Removes a directory from S3 by prefix.
-   * Supports both empty-check validation and forced recursive deletion.
-   *
-   * @param _meta - IRPC request metadata.
-   * @param path - The directory prefix to remove.
-   * @param recursive - If true, recursively deletes all objects under the prefix.
-   * @returns A promise resolving to true on success.
-   * @throws {HandlerError} If the directory is not empty and recursive is false.
-   */
-  async rmdir(_meta: IRPCMeta, path: string, recursive?: boolean): Promise<boolean> {
+  async rmdir(meta: FSMeta, path: string, recursive?: boolean): Promise<boolean> {
     const credentials = this.getCredentials();
-    const prefix = path.endsWith('/') ? path : `${path}/`;
+    const prefix = this.s3Key(meta, path);
+    const dirPrefix = prefix.endsWith('/') ? prefix : `${prefix}/`;
 
     if (!recursive) {
-      const query = `?list-type=2&max-keys=2&prefix=${encodeURIComponent(prefix)}`;
-      const req = await signS3Request(credentials, 'GET', query);
-      const res = await fetch(req);
+      const res = await fetch(
+        await signS3Request(credentials, 'GET', `?list-type=2&max-keys=2&prefix=${encodeURIComponent(dirPrefix)}`)
+      );
       if (!res.ok) {
-        if (res.status === 401 || res.status === 403) throw FSError.forbidden('rmdir (check)', path);
-        if (res.status === 404) throw FSError.notFound('rmdir (check)', path);
-        throw FSError.failed('rmdir (check)', path);
+        if (res.status === 401 || res.status === 403) throw FSError.forbidden('rmdir', path);
+        throw FSError.failed('rmdir', path);
       }
-
-      const text = await res.text();
-      const keys: string[] = [];
-      const keyRegex = /<Key>([^<]+)<\/Key>/g;
-      let match: RegExpExecArray | null;
-      while ((match = keyRegex.exec(text)) !== null) {
-        keys.push(match[1]);
-      }
-
-      if (keys.length > 1 || (keys.length === 1 && keys[0] !== prefix)) {
+      const keys = extractXmlElements(await res.text(), 'Key');
+      if (keys.length > 1 || (keys.length === 1 && keys[0] !== dirPrefix)) {
         throw FSError.notEmpty('rmdir', path);
       }
-
-      if (keys.length === 1 && keys[0] === prefix) {
-        return this.remove(_meta, prefix, credentials);
+      if (keys.length === 1 && keys[0] === dirPrefix) {
+        await fetch(await signS3Request(credentials, 'DELETE', dirPrefix));
       }
       return true;
     }
 
     let isTruncated = true;
-    let continuationToken = '';
-
+    let token = '';
     while (isTruncated) {
-      const maxKeys = this.options.maxKeys || DEFAULT_MAX_KEYS;
-      let query = `?list-type=2&max-keys=${maxKeys}&prefix=${encodeURIComponent(prefix)}`;
-      if (continuationToken) {
-        query += `&continuation-token=${encodeURIComponent(continuationToken)}`;
-      }
+      let query = `?list-type=2&max-keys=${this.options.maxKeys || DEFAULT_MAX_KEYS}&prefix=${encodeURIComponent(dirPrefix)}`;
+      if (token) query += `&continuation-token=${encodeURIComponent(token)}`;
 
-      const req = await signS3Request(credentials, 'GET', query);
-      const res = await fetch(req);
-      if (!res.ok) {
-        if (res.status === 401 || res.status === 403) throw FSError.forbidden('rmdir (list)', path);
-        if (res.status === 404) throw FSError.notFound('rmdir (list)', path);
-        throw FSError.failed('rmdir (list)', path);
-      }
-
+      const res = await fetch(await signS3Request(credentials, 'GET', query));
+      if (!res.ok) throw FSError.failed('rmdir (list)', path);
       const text = await res.text();
-      const keys: string[] = [];
-      const keyRegex = /<Key>([^<]+)<\/Key>/g;
-      let match: RegExpExecArray | null;
-
-      while ((match = keyRegex.exec(text)) !== null) {
-        keys.push(match[1]);
-      }
+      const keys = extractXmlElements(text, 'Key');
 
       if (keys.length > 0) {
-        const chunkSize = this.options.deleteChunkSize || DEFAULT_DELETE_CHUNK_SIZE;
-        for (let i = 0; i < keys.length; i += chunkSize) {
-          const chunk = keys.slice(i, i + chunkSize);
-          await Promise.all(chunk.map((k) => this.remove(_meta, k, credentials)));
+        const chunk = this.options.deleteChunkSize || DEFAULT_DELETE_CHUNK_SIZE;
+        for (let i = 0; i < keys.length; i += chunk) {
+          const reqs = await Promise.all(keys.slice(i, i + chunk).map((k) => signS3Request(credentials, 'DELETE', k)));
+          await Promise.all(reqs.map((req) => fetch(req)));
         }
       }
 
-      const truncMatch = /<IsTruncated>(true|false)<\/IsTruncated>/.exec(text);
-      isTruncated = truncMatch ? truncMatch[1] === 'true' : false;
-
-      if (isTruncated) {
-        const tokenMatch = /<NextContinuationToken>([^<]+)<\/NextContinuationToken>/.exec(text);
-        continuationToken = tokenMatch ? tokenMatch[1] : '';
-      }
+      isTruncated = extractXmlElement(text, 'IsTruncated') === 'true';
+      token = extractXmlElement(text, 'NextContinuationToken') || '';
     }
-
     return true;
   }
 
-  /**
-   * Lists files and directories under a specific S3 prefix.
-   * Emulates traditional filesystem directory listings using S3 list-type=2.
-   *
-   * @param _meta - IRPC request metadata.
-   * @param path - The directory prefix to list (optional).
-   * @returns A promise resolving to an array of FSFiles representing the directory contents.
-   */
-  async dir(_meta: IRPCMeta, path?: string): Promise<FSEntry[]> {
+  async dir(meta: FSMeta, path?: string): Promise<FSFile[]> {
     const credentials = this.getCredentials();
-    const maxKeys = this.options.maxKeys || DEFAULT_MAX_KEYS;
-    let query = `?list-type=2&delimiter=/&max-keys=${maxKeys}`;
-    if (path) {
-      query += `&prefix=${encodeURIComponent(path)}`;
-    }
+    const prefix = path ? this.s3Key(meta, path) : this.s3Key(meta, '/');
+    const dirPrefix = prefix.endsWith('/') ? prefix : `${prefix}/`;
+    let query = `?list-type=2&delimiter=/&max-keys=${this.options.maxKeys || DEFAULT_MAX_KEYS}`;
+    if (dirPrefix !== '/') query += `&prefix=${encodeURIComponent(dirPrefix)}`;
 
-    const req = await signS3Request(credentials, 'GET', query);
-    const response = await fetch(req);
-
-    if (!response.ok) {
-      if (response.status === 401 || response.status === 403) throw FSError.forbidden('dir', path || '/');
-      if (response.status === 404) throw FSError.notFound('dir', path || '/');
+    const res = await fetch(await signS3Request(credentials, 'GET', query));
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) throw FSError.forbidden('dir', path || '/');
       throw FSError.failed('dir', path || '/');
     }
 
-    const text = await response.text();
-    const entries: FSEntry[] = [];
+    const text = await res.text();
+    const entries: FSFile[] = [];
 
-    let start = 0;
-    while ((start = text.indexOf('<CommonPrefixes>', start)) !== -1) {
-      const pStart = text.indexOf('<Prefix>', start);
-      if (pStart === -1) break;
-      const pEnd = text.indexOf('</Prefix>', pStart);
-      if (pEnd === -1) break;
-
-      const dirPath = text.substring(pStart + 8, pEnd);
+    for (const dirPath of extractXmlElements(text, 'Prefix')) {
+      if (dirPath === dirPrefix) continue;
       entries.push({
-        path: dirPath,
+        path: this.stripPrefix(dirPath, meta),
+        url: '',
         size: 0,
         type: 'directory',
         isDirectory: true,
+        createdAt: 0,
+        updatedAt: 0,
       });
-      start = pEnd;
     }
 
-    start = 0;
-    while ((start = text.indexOf('<Contents>', start)) !== -1) {
-      const endTag = text.indexOf('</Contents>', start);
-      if (endTag === -1) break;
-
-      const kStart = text.indexOf('<Key>', start);
-      if (kStart === -1 || kStart > endTag) {
-        start = endTag;
-        continue;
-      }
-      const kEnd = text.indexOf('</Key>', kStart);
-      if (kEnd === -1) break;
-
-      const filePath = text.substring(kStart + 5, kEnd);
-      if (filePath === path) {
-        start = endTag;
-        continue;
-      }
-
-      const sStart = text.indexOf('<Size>', start);
-      let size = 0;
-      if (sStart !== -1 && sStart < endTag) {
-        const sEnd = text.indexOf('</Size>', sStart);
-        if (sEnd !== -1) {
-          size = parseInt(text.substring(sStart + 6, sEnd), 10) || 0;
-        }
-      }
-
+    const contents = extractXmlElements(text, 'Contents');
+    for (const content of contents) {
+      const key = extractXmlElement(content, 'Key');
+      if (!key || key === dirPrefix) continue;
+      const size = parseInt(extractXmlElement(content, 'Size') || '0', 10);
       entries.push({
-        path: filePath,
+        path: this.stripPrefix(key, meta),
+        url: '',
         size,
-        type: getFileExt(filePath),
+        type: getFileExt(key),
         isDirectory: false,
+        createdAt: 0,
+        updatedAt: 0,
       });
-
-      start = endTag;
     }
 
     return entries;
+  }
+
+  async mkdir(meta: FSMeta, path: string): Promise<FSFile> {
+    const credentials = this.getCredentials();
+    const key = this.s3Key(meta, path);
+    const dirKey = key.endsWith('/') ? key : `${key}/`;
+    await fetch(await signS3Url(credentials, 'PUT', dirKey), {
+      method: 'PUT',
+      headers: { 'Content-Length': '0' },
+    });
+    return {
+      path: path.endsWith('/') ? path : `${path}/`,
+      url: '',
+      size: 0,
+      type: 'directory',
+      isDirectory: true,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+  }
+
+  async stat(meta: FSMeta, path: string): Promise<FSFile> {
+    const credentials = this.getCredentials();
+    const key = this.s3Key(meta, path);
+    const headRes = await fetch(await signS3Request(credentials, 'HEAD', key));
+    if (headRes.status === 404) throw FSError.notFound('stat', path);
+    if (!headRes.ok) throw FSError.failed('stat', path);
+    const mime = headRes.headers.get('content-type') || '';
+    return {
+      path,
+      url: '',
+      size: parseInt(headRes.headers.get('content-length') || '0', 10),
+      type: mime,
+      isDirectory: false,
+      createdAt: 0,
+      updatedAt: 0,
+    };
+  }
+
+  async move(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSFile> {
+    const credentials = this.getCredentials();
+    const srcKey = this.s3Key(meta, from);
+    const dst = dstMeta || meta;
+    const dstKey = this.s3Key(dst, to);
+
+    const stat = await this.stat(meta, from);
+
+    const res = await fetch(await signS3Url(credentials, 'PUT', dstKey), {
+      method: 'PUT',
+      headers: { 'x-amz-copy-source': `/${srcKey}` },
+    });
+    if (!res.ok) throw FSError.failed('move', from);
+    await fetch(await signS3Request(credentials, 'DELETE', srcKey));
+
+    return {
+      path: to,
+      url: await signS3Url(credentials, 'GET', dstKey),
+      size: stat.size,
+      type: stat.type,
+      isDirectory: false,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+  }
+
+  async copy(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSFile> {
+    const credentials = this.getCredentials();
+    const srcKey = this.s3Key(meta, from);
+    const dst = dstMeta || meta;
+    const dstKey = this.s3Key(dst, to);
+
+    const stat = await this.stat(meta, from);
+
+    const res = await fetch(await signS3Url(credentials, 'PUT', dstKey), {
+      method: 'PUT',
+      headers: { 'x-amz-copy-source': `/${srcKey}` },
+    });
+    if (!res.ok) throw FSError.failed('copy', from);
+
+    return {
+      path: to,
+      url: await signS3Url(credentials, 'GET', dstKey),
+      size: stat.size,
+      type: stat.type,
+      isDirectory: false,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+  }
+
+  async exists(meta: FSMeta, path: string): Promise<boolean> {
+    const credentials = this.getCredentials();
+    const res = await fetch(await signS3Request(credentials, 'HEAD', this.s3Key(meta, path)));
+    return res.ok;
   }
 }

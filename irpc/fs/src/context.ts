@@ -4,13 +4,11 @@ import { getContext, setContext } from '@irpclib/irpc';
  * Configuration options for the filesystem.
  */
 export interface FSConfig {
-  /** The root directory for relative path resolution to sandbox operations (e.g. '/uploads') */
   rootPath?: string;
-  /** Whether to prevent write, remove, and rmdir operations */
+  pathPrefix?: string;
+  thumbnailPrefix?: string;
   readOnly?: boolean;
-  /** The maximum allowed file size in bytes for write operations */
   maxFileSize?: number;
-  /** A list of allowed MIME types for write operations */
   allowedTypes?: string[];
 }
 
@@ -21,9 +19,9 @@ export const FS_CONFIG = Symbol('FS_CONFIG');
 
 export const DEFAULT_FS_CONFIG: FSConfig = {
   rootPath: '',
+  pathPrefix: 'raw',
+  thumbnailPrefix: 'thb',
   readOnly: false,
-  maxFileSize: 0,
-  allowedTypes: [],
 };
 
 /**
