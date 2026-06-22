@@ -8,7 +8,9 @@ import type { WebWindow } from './window.js';
 export type WindowData = {
   [key: string]: AnyType;
 };
+
 export type WindowStatus = (typeof WINDOW_STATUS)[keyof typeof WINDOW_STATUS];
+
 export type WindowRect = {
   x: number;
   y: number;
@@ -16,10 +18,15 @@ export type WindowRect = {
   height: number;
   minWidth: number;
   minHeight: number;
-  maxWidth: number;
-  maxHeight: number;
+  maxWidth?: number;
+  maxHeight?: number;
 };
-export type WindowState<T extends WindowData> = {
+
+export type WindowDisplay = {
+  maximized: boolean;
+};
+
+export type WindowState<T extends WindowData> = WindowDisplay & {
   data: T;
   error?: Error;
   x: number;
@@ -28,19 +35,26 @@ export type WindowState<T extends WindowData> = {
   height: number;
   zIndex: number;
   status: WindowStatus;
-  minimized?: boolean;
-  maximized?: boolean;
-  fullscreen?: boolean;
+  minimized: boolean;
+  fullscreen: boolean;
 };
+
 export type WebWindowOptions<O> = {
   name: string;
   icon?: string | (() => O);
   rect?: Partial<WindowRect>;
+  remember?: boolean | 'default';
   multiple?: boolean;
   maximized?: boolean;
 
   title?: string;
   description?: string;
+};
+
+export type WindowStorage = {
+  rect: WindowRect;
+  fresh: boolean;
+  display: WindowDisplay;
 };
 
 export type WindowRegistry = {

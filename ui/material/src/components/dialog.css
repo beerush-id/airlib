@@ -155,7 +155,7 @@
   }
 }
 
-@utility air-dialog-hero {
+@utility air-dialog-toolbar {
   @apply air-dialog-header justify-center;
 
   & ~ .air-dialog-header {

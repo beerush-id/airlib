@@ -1,5 +1,6 @@
 import { captureStack, isBrowser } from '@anchorlib/core';
-
+import { persistent } from '@anchorlib/storage';
+import { KIT_CONFIGS } from '../../config.js';
 import type { AnyType } from '../../types.js';
 import { impure } from '../../utils/index.js';
 import { WindowInstance } from './instance.js';
@@ -12,6 +13,7 @@ import type {
   WindowProvider,
   WindowProviderList,
   WindowState,
+  WindowStorage,
 } from './types.js';
 
 export class WebWindow<T extends WindowData, O> {
@@ -20,6 +22,7 @@ export class WebWindow<T extends WindowData, O> {
   guards = new Set<WindowGuard<T>>();
   providers = new Set<WindowProviderList>();
 
+  public storage: WindowStorage;
   public renderLoader?: () => Promise<WebWindowRenderer<T, O>>;
   public viewRenderer?: WebWindowRenderer<T, O>;
   public splashRenderer?: WebWindowRenderer<T, O>;
@@ -29,6 +32,27 @@ export class WebWindow<T extends WindowData, O> {
   }
 
   constructor(private options: WebWindowOptions<O>) {
+    if (options.remember === 'default') {
+      options.remember = KIT_CONFIGS.rememberWindows;
+    }
+
+    const {
+      x = KIT_CONFIGS.windowX ?? 0,
+      y = KIT_CONFIGS.windowY ?? 0,
+      minWidth = KIT_CONFIGS.windowMinWidth,
+      minHeight = KIT_CONFIGS.windowMinHeight,
+      width = minWidth ?? KIT_CONFIGS.windowWidth ?? 800,
+      height = minHeight ?? KIT_CONFIGS.windowHeight ?? 600,
+      maxWidth = KIT_CONFIGS.windowMaxWidth,
+      maxHeight = KIT_CONFIGS.windowMaxHeight,
+    } = { ...options.rect };
+    const storageInit = {
+      rect: { x, y, width, height, minWidth, minHeight, maxWidth, maxHeight },
+      fresh: true,
+      display: { maximized: options.maximized ?? false },
+    };
+    this.storage = isBrowser() && options.remember ? persistent(`window/${options.name}`, storageInit) : storageInit;
+
     WebWin.windows.set(options.name, this);
   }
 

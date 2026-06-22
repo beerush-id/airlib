@@ -6,7 +6,7 @@ export const UI_CONFIGS = {
     portal: 'body',
     bodyClass: 'air-dialog-body',
 
-    heroClass: 'air-dialog-hero',
+    toolbarClass: 'air-dialog-toolbar',
     titleClass: 'air-dialog-title',
     headerClass: 'air-dialog-header',
     footerClass: 'air-dialog-footer',

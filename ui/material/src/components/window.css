@@ -1,0 +1,267 @@
+@theme {
+  --shadow-window: 0 0 3px light-dark(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 1));
+  --shadow-window-active: 0 0 30px light-dark(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 1));
+  --air-minimized-transform: translate3d(0, 100%, 0) scale(0.3);
+  --spacing-resizer: 5px;
+
+  @keyframes window-focus-in {
+    from {
+      box-shadow: var(--shadow-window);
+    }
+    to {
+      box-shadow: var(--shadow-window-active);
+    }
+  }
+
+  @keyframes window-focus-out {
+    from {
+      box-shadow: var(--shadow-window-active);
+    }
+    to {
+      box-shadow: var(--shadow-window);
+    }
+  }
+}
+
+@utility air-window-collapsed {
+  top: var(--window-y);
+  left: var(--window-x);
+  width: var(--window-width);
+  height: var(--window-height);
+  border-radius: var(--radius-xl);
+}
+
+@utility air-window-expanded {
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  border-color: transparent;
+}
+
+@utility air-window-surface {
+  @apply fixed rounded-xl bg-surface-container-low/75 backdrop-blur-xl;
+}
+
+@utility air-window {
+  --window-x: auto;
+  --window-y: auto;
+  --window-min-x: auto;
+  --window-min-y: auto;
+  --window-width: auto;
+  --window-height: auto;
+  --window-max-width: auto;
+  --window-max-height: auto;
+  --window-z-index: var(--z-index-modal);
+
+  @apply air-window-surface air-window-collapsed;
+
+  z-index: var(--window-z-index);
+  animation: window-focus-out var(--duration-short) var(--ease-emphasized);
+  box-shadow: var(--shadow-window);
+  border: 1px solid var(--color-surface-container-low);
+  outline: none;
+
+  opacity: 0;
+  transform: translate3d(0, 20%, 0) scale(0.8);
+
+  transition:
+    top var(--duration-short) var(--ease-emphasized),
+    left var(--duration-short) var(--ease-emphasized),
+    opacity var(--duration-short) var(--ease-emphasized),
+    transform var(--duration-short) var(--ease-emphasized),
+    border-radius var(--duration-short) var(--ease-emphasized),
+    border var(--duration-short) var(--ease-emphasized),
+    box-shadow var(--duration-short) var(--ease-emphasized),
+    width var(--duration-short) var(--ease-emphasized),
+    height var(--duration-short) var(--ease-emphasized);
+
+  &[data-online='true'] {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  &:focus-within {
+    animation: window-focus-in var(--duration-short) var(--ease-emphasized);
+    box-shadow: var(--shadow-window-active);
+    border: 1px solid light-dark(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1));
+  }
+
+  &[data-maximized='true'] {
+    @apply air-window-expanded;
+  }
+
+  &[data-maximized='true'][data-drag-out] {
+    transition: transform var(--duration-short) var(--ease-emphasized) !important;
+  }
+
+  &[data-minimized='true'] {
+    transform: var(--air-minimized-transform);
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  :not(p, input, textarea, span) {
+    user-select: none;
+  }
+}
+
+@utility air-window-offset {
+  top: inherit;
+  left: inherit;
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+@utility air-window-toolbar {
+  @apply select-none flex items-start gap-4 justify-start;
+}
+
+@utility air-window-control {
+  @apply p-4 flex items-center gap-2;
+
+  svg {
+    @apply w-3 h-3 opacity-0 transition-opacity pointer-events-none;
+  }
+
+  &:hover {
+    svg {
+      @apply opacity-100;
+    }
+  }
+}
+
+@utility air-window-control-reverse {
+  @apply flex-row-reverse;
+}
+
+@utility air-window-control-btn {
+  @apply rounded-full p-0.5 flex items-center justify-center;
+  @apply bg-surface-container-high transition-colors;
+  @apply focus-ring;
+
+  &:focus-visible svg {
+    @apply opacity-100;
+  }
+}
+
+@utility air-window-close {
+  @apply air-window-control-btn;
+  @apply bg-red-500 text-black;
+
+  &:hover {
+    @apply bg-red-700 text-white;
+  }
+
+  &:active {
+    @apply bg-red-800 text-white;
+  }
+
+  .air-window:not(:focus-within) &:not(:hover, :active, :focus) {
+    background-color: light-dark(oklch(0% 0 0 / 0.2), oklch(100% 0 0 / 0.2));
+  }
+}
+
+@utility air-window-minimize {
+  @apply air-window-control-btn;
+  @apply bg-yellow-500 text-black;
+
+  .air-window:not(:focus-within) &:not(:hover, :active, :focus) {
+    background-color: light-dark(oklch(0% 0 0 / 0.2), oklch(100% 0 0 / 0.2));
+  }
+
+  &:hover {
+    @apply bg-yellow-700 text-white;
+  }
+
+  &:active {
+    @apply bg-yellow-800 text-white;
+  }
+}
+
+@utility air-window-maximize {
+  @apply air-window-control-btn;
+  @apply bg-green-500 text-black;
+
+  &:hover {
+    @apply bg-green-700 text-white;
+  }
+
+  &:active {
+    @apply bg-green-800 text-white;
+  }
+
+  .air-window:not(:focus-within) &:not(:hover, :active, :focus) {
+    background-color: light-dark(oklch(0% 0 0 / 0.2), oklch(100% 0 0 / 0.2));
+  }
+}
+
+@utility air-window-title {
+  @apply text-title-small-emphasized;
+}
+
+@utility air-window-subtitle {
+  @apply text-field-label;
+}
+
+@utility air-window-splash {
+  @apply air-window-surface z-modal;
+  @apply flex flex-col items-center justify-center gap-4;
+  @apply min-w-96 min-h-64 left-1/2 top-1/2 shadow-window-active;
+  @apply -translate-x-1/2 -translate-y-1/2 z-popover;
+  border: 1px solid light-dark(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1));
+}
+
+@utility air-resize {
+  @apply absolute select-none;
+  z-index: 0;
+}
+
+@utility air-resize-corner {
+  @apply air-resize w-resizer h-resizer;
+  z-index: 1;
+}
+
+@utility air-resize-x {
+  @apply air-resize w-resizer h-full top-0;
+}
+
+@utility air-resize-y {
+  @apply air-resize h-resizer w-full left-0;
+}
+
+@utility air-resize-t {
+  @apply air-resize-y -top-resizer;
+  cursor: ns-resize;
+}
+@utility air-resize-r {
+  @apply air-resize-x -right-resizer;
+  cursor: ew-resize;
+}
+@utility air-resize-b {
+  @apply air-resize-y -bottom-resizer;
+  cursor: ns-resize;
+}
+@utility air-resize-l {
+  @apply air-resize-x -left-resizer;
+  cursor: ew-resize;
+}
+@utility air-resize-tr {
+  @apply air-resize-corner -top-resizer -right-resizer;
+  cursor: nesw-resize;
+}
+@utility air-resize-tl {
+  @apply air-resize-corner -top-resizer -left-resizer;
+  cursor: nwse-resize;
+}
+@utility air-resize-br {
+  @apply air-resize-corner -bottom-resizer -right-resizer;
+  cursor: nwse-resize;
+}
+@utility air-resize-bl {
+  @apply air-resize-corner -bottom-resizer -left-resizer;
+  cursor: nesw-resize;
+}

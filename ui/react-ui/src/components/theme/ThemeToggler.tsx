@@ -1,7 +1,7 @@
 import { colorScheme } from '@airlib/uikit/utils';
 import { render, setup } from '@anchorlib/react';
 import type { HTMLAttributes } from 'react';
-import { DarkModeIcon, LightModeIcon, SystemThemeIcon } from '../icons/index.js';
+import { DarkModeIcon, LightModeIcon, SystemThemeIcon } from '../../icons/index.js';
 
 export interface ThemeTogglerProps extends HTMLAttributes<HTMLButtonElement> {}
 

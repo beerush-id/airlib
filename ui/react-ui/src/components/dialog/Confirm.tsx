@@ -1,22 +1,16 @@
-import type { AnyType } from '@airlib/uikit';
-import { createDialog, type DialogState } from '@airlib/uikit/components';
+import { createDialog } from '@airlib/uikit/components';
 import { captureStack, isBrowser } from '@anchorlib/core';
-import { mutable, template } from '@anchorlib/react';
-import { UI_CONFIGS } from '../config.js';
-import { ErrorIcon } from '../icons/Error.js';
-import { HelpIcon } from '../icons/Help.js';
-import { InfoIcon } from '../icons/Info.js';
-import { WarningIcon } from '../icons/Warning.js';
-import {
-  DialogCancel,
-  dialogComponent,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogHero,
-  DialogSubmit,
-  DialogTitle,
-} from './Dialog.js';
+import { UI_CONFIGS } from '../../config.js';
+import { WarningIcon } from '../../icons/Warning.js';
+import { DialogCancel } from './Cancel.js';
+import { DialogContent } from './Content.js';
+import { CONFIRM_DIALOG_LIST, CONFIRM_TYPE_COLORS, CONFIRM_TYPE_ICONS } from './constant.js';
+import { dialogComponent } from './Dialog.js';
+import { DialogFooter } from './Footer.js';
+import { DialogHeader } from './Header.js';
+import { DialogToolbar } from './Toolbar.js';
+import { DialogSubmit } from './Submit.js';
+import { DialogTitle } from './Title.js';
 
 export type DialogConfirmData = {
   type?: 'info' | 'help' | 'warning' | 'error';
@@ -27,21 +21,6 @@ export type DialogConfirmData = {
   rejectLabel?: string;
   acceptLabel?: string;
 };
-
-const CONFIRM_TYPE_COLORS: {
-  [key: string]: string;
-} = {
-  warning: 'text-error',
-  error: 'text-error',
-};
-const CONFIRM_TYPE_ICONS = {
-  info: InfoIcon,
-  help: HelpIcon,
-  warning: WarningIcon,
-  error: ErrorIcon,
-};
-
-const DIALOG_CONFIRM_LIST: Set<DialogState<AnyType, AnyType>> = isBrowser() ? mutable(new Set()) : new Set();
 
 export async function dialogConfirm(data: DialogConfirmData) {
   if (!isBrowser()) {
@@ -61,29 +40,30 @@ export async function dialogConfirm(data: DialogConfirmData) {
   }
 
   const dialog = createDialog<DialogConfirmData, boolean>({});
-  DIALOG_CONFIRM_LIST.add(dialog);
+  CONFIRM_DIALOG_LIST.add(dialog);
 
   try {
     return await dialog.show(data);
   } finally {
     setTimeout(() => {
-      DIALOG_CONFIRM_LIST.delete(dialog);
+      CONFIRM_DIALOG_LIST.delete(dialog);
     }, UI_CONFIGS.dialog.disposalDelay);
   }
 }
 
-const DialogConfirm = dialogComponent<DialogConfirmData, boolean>((dialog) => {
+export const ConfirmDialog = dialogComponent<DialogConfirmData, boolean>((dialog) => {
   const Icon = CONFIRM_TYPE_ICONS[dialog.data.type ?? 'info'];
+
   return (
     <>
       {dialog.data.type && (
-        <DialogHero>
+        <DialogToolbar>
           <Icon
             className={
               UI_CONFIGS.dialog[`${dialog.data.type}Color` as never] ?? CONFIRM_TYPE_COLORS[dialog.data.type] ?? ''
             }
           />
-        </DialogHero>
+        </DialogToolbar>
       )}
       <DialogHeader data-header>
         <DialogTitle>{dialog.data.title ?? 'Are you sure?'}</DialogTitle>
@@ -106,10 +86,3 @@ const DialogConfirm = dialogComponent<DialogConfirmData, boolean>((dialog) => {
     </>
   );
 }, 'Confirm');
-
-export const DialogConfirmHost = template(() => {
-  if (!DIALOG_CONFIRM_LIST.size) return null;
-  return Array.from(DIALOG_CONFIRM_LIST).map((dialog, index) => {
-    return <DialogConfirm className={UI_CONFIGS.dialog.confirmClass} key={index} dialog={dialog} />;
-  });
-}, 'DialogConfirmHost');

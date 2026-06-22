@@ -1,4 +1,5 @@
 import { createObserver, onCleanup, type StateUnsubscribe, untrack, uuid } from '@anchorlib/core';
+import { KIT_CONFIGS } from '../../config.js';
 import type { AnyType } from '../../types.js';
 import { impure } from '../../utils/index.js';
 import { WebWin, WINDOW_STATUS } from './registry.js';
@@ -65,7 +66,7 @@ export class WindowInstance<T extends WindowData, O> {
   }
   public set element(value: HTMLElement | undefined) {
     this._element = value;
-    this.drawRect();
+    this.initRect();
   }
 
   #cleanupHandlers = new Set<StateUnsubscribe>();
@@ -76,27 +77,25 @@ export class WindowInstance<T extends WindowData, O> {
     private options: WebWindowOptions<O>,
     init: T
   ) {
-    const {
-      x = 0,
-      y = 0,
-      minWidth = 800,
-      minHeight = 600,
-      width = minWidth,
-      height = minHeight,
-      maxWidth = minWidth,
-      maxHeight = minHeight,
-    } = options.rect ?? {};
+    const rect = untrack(() => ({
+      ...this.owner.storage.rect,
+    }));
+    const display = untrack(() => ({
+      ...this.owner.storage.display,
+    }));
 
-    this.rect = { x, y, width, height, minWidth, minHeight, maxWidth, maxHeight };
-    this.state = impure({
-      x,
-      y,
-      width,
-      height,
+    this.rect = rect;
+    this.state = impure<WindowState<T>>({
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height,
       data: init,
       zIndex: 0,
       status: WINDOW_STATUS.IDLE,
-      maximized: options.maximized,
+      minimized: false,
+      maximized: display.maximized,
+      fullscreen: false,
     });
   }
 
@@ -206,10 +205,12 @@ export class WindowInstance<T extends WindowData, O> {
   public focus() {
     WebWin.activeWindow = this;
     WebWin.stack.focus(this);
+    this.element?.focus();
     return this;
   }
 
   public close() {
+    this.remember();
     return this.owner.close(this);
   }
 
@@ -307,14 +308,18 @@ export class WindowInstance<T extends WindowData, O> {
     return this;
   }
 
-  private drawRect() {
+  private initRect() {
     if (!this.element) return this;
 
-    const { width, height } = this.rect;
-    const { innerWidth, innerHeight } = window;
-    const center = { x: (innerWidth - width) / 2, y: (innerHeight - height) / 2 };
+    const freshBoot = untrack(() => this.owner.storage.fresh);
 
-    Object.assign(this.rect, { ...center, maxWidth: innerWidth, maxHeight: innerHeight });
+    if (freshBoot) {
+      const { x, y, width, height } = this.rect;
+      const { innerWidth, innerHeight } = window;
+      const center = { x: x || (innerWidth - width) / 2, y: y || (innerHeight - height) / 2 };
+
+      Object.assign(this.rect, { ...center });
+    }
 
     untrack(() => {
       Object.assign(this.state, { ...this.rect });
@@ -325,6 +330,7 @@ export class WindowInstance<T extends WindowData, O> {
       this.focus();
     };
 
+    this.element.setAttribute('data-online', 'true');
     this.element.addEventListener('mousedown', autofocus);
     onCleanup(() => {
       this.element!.removeEventListener('mousedown', autofocus);
@@ -334,7 +340,7 @@ export class WindowInstance<T extends WindowData, O> {
   private applyRect() {
     if (!this.element) return this;
 
-    const { x, y, width, height, maxWidth, maxHeight } = this.rect;
+    const { x, y, width, height, minWidth, maxWidth, minHeight, maxHeight } = this.rect;
     const styles = [
       ['x', `${x}px`],
       ['y', `${y}px`],
@@ -342,16 +348,32 @@ export class WindowInstance<T extends WindowData, O> {
       ['min-y', `${-y}px`],
       ['width', `${width}px`],
       ['height', `${height}px`],
+      ['min-width', `${minWidth}px`],
       ['max-width', `${maxWidth}px`],
+      ['min-height', `${minHeight}px`],
       ['max-height', `${maxHeight}px`],
-      ['z-index', `${this.zIndex + 50}`],
+      ['z-index', `${this.zIndex + (KIT_CONFIGS.windowZIndex ?? 999)}`],
     ];
 
     for (const [property, value] of styles) {
+      if (value.includes('undefined')) continue;
       this.element.style.setProperty(`--window-${property}`, value);
     }
 
+    this.remember();
     this.element.focus();
     return this;
+  }
+
+  private remember() {
+    untrack(() => {
+      if (!this.options.remember) return;
+
+      Object.assign(this.owner.storage, {
+        rect: this.rect,
+        fresh: false,
+        display: { maximized: this.maximized },
+      });
+    });
   }
 }
