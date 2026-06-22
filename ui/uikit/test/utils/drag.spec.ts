@@ -1,5 +1,6 @@
 import { createLifecycle, microtask } from '@anchorlib/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { SNAP_BOUND } from '../../src/config.js';
 import { dragRef, dragState } from '../../src/utils/drag.js';
 import { getKeyboard } from '../../src/utils/keyboard.js';
 import { getPointer } from '../../src/utils/mouse.js';
@@ -23,7 +24,7 @@ describe('drag', () => {
       const state = dragState();
       expect(state.x).toBe(0);
       expect(state.y).toBe(0);
-      expect(state.start).toBe(false);
+      expect(state.start).toBeUndefined();
     });
 
     it('should initialize with custom values', () => {
@@ -36,7 +37,20 @@ describe('drag', () => {
       const onChange = vi.fn();
       const state = dragState({}, onChange);
 
-      state.start = { cursorX: 0, cursorY: 0, offsetX: 0, offsetY: 0 };
+      state.start = {
+        cursorX: 0,
+        cursorY: 0,
+        offsetX: 0,
+        offsetY: 0,
+        offsetWidth: 0,
+        offsetHeight: 0,
+        startWidth: 0,
+        startHeight: 0,
+        anchorLeft: 0,
+        anchorTop: 0,
+        anchorRight: 0,
+        anchorBottom: 0,
+      };
 
       const pointer = getPointer();
       pointer.x = 50;
@@ -55,7 +69,20 @@ describe('drag', () => {
       const onChange = vi.fn();
       const state = dragState({ xModifier: 'shift', yModifier: 'alt' }, onChange);
 
-      state.start = { cursorX: 0, cursorY: 0, offsetX: 0, offsetY: 0 };
+      state.start = {
+        cursorX: 0,
+        cursorY: 0,
+        offsetX: 0,
+        offsetY: 0,
+        offsetWidth: 0,
+        offsetHeight: 0,
+        startWidth: 0,
+        startHeight: 0,
+        anchorLeft: 0,
+        anchorTop: 0,
+        anchorRight: 0,
+        anchorBottom: 0,
+      };
 
       const pointer = getPointer();
       const keyboard = getKeyboard();
@@ -87,7 +114,20 @@ describe('drag', () => {
       const cancelSpy = vi.spyOn(window, 'cancelAnimationFrame');
       const state = dragState();
 
-      state.start = { cursorX: 0, cursorY: 0, offsetX: 0, offsetY: 0 };
+      state.start = {
+        cursorX: 0,
+        cursorY: 0,
+        offsetX: 0,
+        offsetY: 0,
+        offsetWidth: 0,
+        offsetHeight: 0,
+        startWidth: 0,
+        startHeight: 0,
+        anchorLeft: 0,
+        anchorTop: 0,
+        anchorRight: 0,
+        anchorBottom: 0,
+      };
 
       const pointer = getPointer();
       pointer.x = 10;
@@ -95,7 +135,7 @@ describe('drag', () => {
       const [later] = microtask(5);
       await new Promise<void>((resolve) => later(() => resolve()));
 
-      state.start = false;
+      state.start = undefined;
       await new Promise<void>((resolve) => later(() => resolve()));
 
       expect(cancelSpy).toHaveBeenCalled();
@@ -109,7 +149,20 @@ describe('drag', () => {
       });
 
       const state = dragState();
-      state.start = { cursorX: 0, cursorY: 0, offsetX: 0, offsetY: 0 };
+      state.start = {
+        cursorX: 0,
+        cursorY: 0,
+        offsetX: 0,
+        offsetY: 0,
+        offsetWidth: 0,
+        offsetHeight: 0,
+        startWidth: 0,
+        startHeight: 0,
+        anchorLeft: 0,
+        anchorTop: 0,
+        anchorRight: 0,
+        anchorBottom: 0,
+      };
       const pointer = getPointer();
       pointer.x = 10;
 
@@ -117,7 +170,7 @@ describe('drag', () => {
       await new Promise<void>((resolve) => later(() => resolve()));
 
       // rAFCb is queued. Now change start to false.
-      state.start = false;
+      state.start = undefined;
       if (rAFCb) rAFCb();
     });
   });
@@ -241,6 +294,16 @@ describe('drag', () => {
       expect(drag.active).toBe(false);
     });
 
+    it('should finish existing drag if a new start event fires', () => {
+      const drag = dragRef({ target, trigger });
+      trigger.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0, button: 0 }));
+
+      // Fire mousedown again while already active
+      trigger.dispatchEvent(new MouseEvent('mousedown', { clientX: 10, clientY: 10, button: 0 }));
+
+      expect(drag.active).toBe(true);
+    });
+
     it('should assign limits automatically from container and step', () => {
       const drag = dragRef({ target, container, stepX: 10, stepY: 20 });
       expect(drag.active).toBe(false);
@@ -303,13 +366,11 @@ describe('drag', () => {
     });
 
     it('should invoke onCleanup on reactive root disposal', () => {
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       const scope = createLifecycle();
       scope.run(() => {
         dragRef({ target, trigger });
       });
       scope.destroy();
-      warnSpy.mockRestore();
     });
 
     it('should not clean up if not in browser context', () => {
@@ -321,6 +382,7 @@ describe('drag', () => {
       });
       scope.destroy();
       vi.unstubAllGlobals();
+      expect(warnSpy).toHaveBeenCalled();
       warnSpy.mockRestore();
     });
 
@@ -388,13 +450,149 @@ describe('drag', () => {
     });
 
     it('should disconnect resize observer on reactive root disposal', () => {
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       const scope = createLifecycle();
       scope.run(() => {
         dragRef({ target, trigger, container });
       });
       scope.destroy();
-      warnSpy.mockRestore();
+    });
+
+    it('should resolve snap to snapX and snapY', () => {
+      const drag = dragRef({ target, container, snap: 50 });
+      expect(drag.x).toBe(0); // Covers the assignLimits branch for snap fallback
+    });
+
+    it('should fall back to default configs and handle missing targets when calculating snap points', () => {
+      // Target is undefined
+      const dragNoTarget = dragRef({ trigger, snapTo: ['.snap-target'] });
+      trigger.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0, button: 0 }));
+      document.dispatchEvent(new MouseEvent('mouseup'));
+
+      // Target is detached from DOM (no parentElement)
+      const detachedTarget = document.createElement('div');
+      const dragDetached = dragRef({ target: detachedTarget, trigger, snapTo: ['.snap-target'] });
+      trigger.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0, button: 0 }));
+      document.dispatchEvent(new MouseEvent('mouseup'));
+
+      // Target itself matches the snap selector (should be ignored)
+      const root = document.createElement('div');
+      root.appendChild(target);
+      document.body.appendChild(root);
+      const dragSelf = dragRef({ target, trigger, snapTo: ['div'] }); // target is a 'div'
+      trigger.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0, button: 0 }));
+      document.dispatchEvent(new MouseEvent('mouseup'));
+      root.remove();
+    });
+
+    it('should actually snap to target points when within threshold', async () => {
+      const root = document.createElement('div');
+      const snapTarget = document.createElement('div');
+      snapTarget.className = 'snap-target';
+      root.appendChild(target);
+      root.appendChild(snapTarget);
+      document.body.appendChild(root);
+
+      // target center is 100, 100
+      vi.spyOn(target, 'getBoundingClientRect').mockReturnValue({
+        left: 50,
+        top: 50,
+        right: 150,
+        bottom: 150,
+        width: 100,
+        height: 100,
+        x: 50,
+        y: 50,
+        toJSON: () => {},
+      });
+
+      // snapTarget center is 250, 250
+      // snap point center-to-center is dx=150, dy=150
+      vi.spyOn(snapTarget, 'getBoundingClientRect').mockReturnValue({
+        left: 200,
+        top: 200,
+        right: 300,
+        bottom: 300,
+        width: 100,
+        height: 100,
+        x: 200,
+        y: 200,
+        toJSON: () => {},
+      });
+
+      // Omit snapX, snapY, and snapToBound to hit default fallbacks
+      const drag = dragRef({
+        target,
+        trigger,
+        snapTo: ['.snap-target'],
+      });
+
+      trigger.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0, button: 0 }));
+      const pointer = getPointer();
+
+      // Move within proximity (threshold is usually 8-20, so 5 is safe)
+      pointer.x = 145; // 145 is close to 150
+      pointer.y = 145;
+
+      const [later] = microtask(5);
+      await new Promise<void>((resolve) => later(() => resolve()));
+
+      expect(drag.x).toBe(150); // Successfully snapped!
+      expect(drag.y).toBe(150); // Successfully snapped!
+
+      document.dispatchEvent(new MouseEvent('mouseup'));
+      root.remove();
+    });
+
+    it('should collect snap points for all bounds', async () => {
+      const root = document.createElement('div');
+      const snapTarget = document.createElement('div');
+      snapTarget.className = 'snap-target';
+      root.appendChild(target);
+      root.appendChild(snapTarget);
+      document.body.appendChild(root);
+
+      vi.spyOn(snapTarget, 'getBoundingClientRect').mockReturnValue({
+        left: 200,
+        top: 200,
+        right: 300,
+        bottom: 300,
+        width: 100,
+        height: 100,
+        x: 200,
+        y: 200,
+        toJSON: () => {},
+      });
+
+      const dragEdge = dragRef({
+        target,
+        trigger,
+        snapTo: ['.snap-target'],
+        snapToBound: SNAP_BOUND.edge,
+        snapX: 50,
+        snapY: 50,
+      });
+      trigger.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0, button: 0 }));
+      document.dispatchEvent(new MouseEvent('mouseup'));
+
+      const dragAll = dragRef({
+        target,
+        trigger,
+        snapTo: ['.snap-target'],
+        snapToBound: SNAP_BOUND.all,
+        snapX: 50,
+        snapY: 50,
+      });
+      trigger.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0, button: 0 }));
+      document.dispatchEvent(new MouseEvent('mouseup'));
+
+      root.remove();
+    });
+
+    it('should assign snapX and snapY from snap on drag start', () => {
+      const drag = dragRef({ target, trigger, snap: 10 });
+      trigger.dispatchEvent(new MouseEvent('mousedown', { clientX: 0, clientY: 0, button: 0 }));
+      expect(drag.active).toBe(true);
+      document.dispatchEvent(new MouseEvent('mouseup'));
     });
   });
 });

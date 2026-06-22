@@ -46,6 +46,7 @@
   },
   "peerDependencies": {
     "@anchorlib/core": "catalog:lib",
+    "@anchorlib/storage": "catalog:lib",
     "typescript": "catalog:lib"
   },
   "scripts": {

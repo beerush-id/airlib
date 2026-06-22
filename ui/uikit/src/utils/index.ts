@@ -4,6 +4,8 @@ export * from './focus.js';
 export * from './keyboard.js';
 export * from './media.js';
 export * from './mouse.js';
+export * from './rect.js';
+export * from './resize.js';
 export * from './scroll.js';
 export * from './state.js';
 export * from './stylex.js';

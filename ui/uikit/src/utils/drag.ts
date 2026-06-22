@@ -1,32 +1,40 @@
-import { anchor, effect, isBrowser, microtask, onCleanup } from '@anchorlib/core';
+import { anchor, isBrowser, onCleanup } from '@anchorlib/core';
+import { KIT_CONFIGS, type SnapToBound } from '../config.js';
 import { getKeyboard } from './keyboard.js';
-import { getPointer, MOUSE_BUTTONS, type MouseModifier } from './mouse.js';
-import { impure } from './state.js';
+import { MOUSE_BUTTONS, type MouseModifier } from './mouse.js';
+import {
+  attachFinish,
+  bindTrigger,
+  captureStart,
+  collectSnapPoints,
+  detachFinish,
+  freezeTransition,
+  type InteractionEvent,
+  type InteractionRef,
+  type InteractionRefInit,
+  type InteractionState,
+  interactionState,
+  type InteractionType,
+  INTERACTIVE,
+  minMax,
+  resetInteraction,
+  restoreTransition,
+  snapGrid,
+  type SnapPoint,
+  unbindTrigger,
+} from './rect.js';
 
 export type DragPos = {
   x: number;
   y: number;
 };
-export type DragState = DragPos & {
-  start:
-    | {
-        cursorX: number;
-        cursorY: number;
-        offsetX: number;
-        offsetY: number;
-      }
-    | false;
-};
-export type DragRef<T extends HTMLElement> = DragPos & {
-  active: boolean;
-  target?: T;
-  trigger?: HTMLElement;
+export type DragState = InteractionState;
+export type DragRef<T extends HTMLElement> = Omit<InteractionRef<T>, 'width' | 'height'> & {
   container?: HTMLElement;
 };
 
-export type DragType = 'stay' | 'reset';
-export type DragEvent<T extends HTMLElement> = DragPos & {
-  target?: T;
+export type DragType = InteractionType;
+export type DragEvent<T extends HTMLElement> = Omit<InteractionEvent<T>, 'width' | 'height'> & {
   container?: HTMLElement;
 };
 
@@ -38,75 +46,67 @@ export type DragOptions = {
   maxY?: number;
   gapX?: number;
   gapY?: number;
+  snap?: number;
   snapX?: number;
   snapY?: number;
   stepX?: number;
   stepY?: number;
   xModifier?: MouseModifier;
   yModifier?: MouseModifier;
+  snapTo?: string[];
+  snapToBound?: SnapToBound;
+  snapPoints?: SnapPoint[];
 };
 
 export type DragInit = Partial<DragPos & DragOptions>;
-export type DragRefInit<T extends HTMLElement> = Partial<Omit<DragRef<T>, 'active'> & DragOptions> & {
-  type?: DragType;
-  button?: (typeof MOUSE_BUTTONS)[keyof typeof MOUSE_BUTTONS];
-  onStart?: (e: DragEvent<T>) => void;
-  onMove?: (e: DragEvent<T>) => void;
-  onEnd?: (e: DragEvent<T>) => void;
+export type DragRefInit<T extends HTMLElement> = InteractionRefInit<T, DragOptions, DragEvent<T>> & {
+  container?: HTMLElement;
 };
 
 export function dragState(init: DragInit = {}, onChange?: (state: DragState) => void): DragState {
-  const { x = 0, y = 0 } = init;
-
-  const state = impure<DragState>({ x, y, start: false }, { recursive: false });
-  const pointer = getPointer();
   const keyboard = anchor.get(getKeyboard(), true);
 
-  const calculate = (cx = 0, cy = 0) => {
-    if (typeof state.start !== 'object') return;
+  return interactionState(
+    init,
+    (state, cx, cy, rawState) => {
+      const { dir, minX, minY, maxX, maxY, snapX, snapY, xModifier, yModifier } = init;
+      const { cursorX, cursorY, offsetX, offsetY } = rawState.start!;
+      const deltaX = cx - cursorX;
+      const deltaY = cy - cursorY;
 
-    const { dir, minX, minY, maxX, maxY, snapX, snapY, xModifier, yModifier } = init;
-    const { cursorX, cursorY, offsetX, offsetY } = state.start;
-    const deltaX = cx - cursorX;
-    const deltaY = cy - cursorY;
+      let activeDir = dir;
+      if (xModifier && keyboard.has(xModifier)) activeDir = 'x';
+      else if (yModifier && keyboard.has(yModifier)) activeDir = 'y';
 
-    let activeDir = dir;
-    if (xModifier && keyboard.has(xModifier)) activeDir = 'x';
-    else if (yModifier && keyboard.has(yModifier)) activeDir = 'y';
+      if (activeDir === 'x') {
+        state.x = minMax(minX, maxX, snapGrid(offsetX + deltaX, snapX));
+      } else if (activeDir === 'y') {
+        state.y = minMax(minY, maxY, snapGrid(offsetY + deltaY, snapY));
+      } else {
+        state.x = minMax(minX, maxX, snapGrid(offsetX + deltaX, snapX));
+        state.y = minMax(minY, maxY, snapGrid(offsetY + deltaY, snapY));
+      }
 
-    if (activeDir === 'x') {
-      state.x = minMax(minX, maxX, snap(offsetX + deltaX, snapX));
-    } else if (activeDir === 'y') {
-      state.y = minMax(minY, maxY, snap(offsetY + deltaY, snapY));
-    } else {
-      state.x = minMax(minX, maxX, snap(offsetX + deltaX, snapX));
-      state.y = minMax(minY, maxY, snap(offsetY + deltaY, snapY));
-    }
-
-    onChange?.(anchor.get(state, true));
-  };
-
-  let rafId = 0;
-  effect.client(() => {
-    if (typeof state.start === 'object' && state.start !== null) {
-      const { x: cx, y: cy } = pointer;
-      rafId = requestAnimationFrame(() => {
-        calculate(cx, cy);
-      });
-    }
-
-    return () => cancelAnimationFrame(rafId);
-  });
-
-  return state;
+      // Snap to DOM element positions
+      const pts = init.snapPoints;
+      if (pts?.length) {
+        const proxX = snapX ?? KIT_CONFIGS.snapThreshold;
+        const proxY = snapY ?? KIT_CONFIGS.snapThreshold;
+        const desiredX = offsetX + deltaX;
+        const desiredY = offsetY + deltaY;
+        for (const pt of pts) {
+          if (Math.abs(desiredX - pt.x) < proxX) state.x = pt.x;
+          if (Math.abs(desiredY - pt.y) < proxY) state.y = pt.y;
+        }
+      }
+    },
+    onChange
+  );
 }
-
-const [later] = microtask(5);
-
-const INTERACTIVE = 'a, button, input, textarea, select, label, [contenteditable]';
 
 export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragRef<T> {
   const options = { ...init };
+
   const state = dragState(options, ({ x, y }) => {
     if (!target) return;
     target!.style.transform = `translate3d(${x}px, ${y}px, 0)`;
@@ -120,47 +120,51 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
   let savedTransition = '';
 
   const start = (e: MouseEvent | TouchEvent) => {
+    if (state.start) finish();
     if (e.target instanceof Element && e.target.closest(INTERACTIVE)) return;
 
-    if (e instanceof MouseEvent) {
-      if (e.button !== (init?.button ?? MOUSE_BUTTONS.left)) return;
-      state.start = { cursorX: e.clientX, cursorY: e.clientY, offsetX: state.x, offsetY: state.y };
-    } else {
-      const touch = e.touches[0];
-      state.start = { cursorX: touch.clientX, cursorY: touch.clientY, offsetX: state.x, offsetY: state.y };
+    const start = captureStart(e, state, init?.button ?? MOUSE_BUTTONS.left);
+    if (!start) return;
+
+    state.start = start;
+
+    if (init.snap != null) {
+      options.snapX = init.snapX ?? init.snap;
+      options.snapY = init.snapY ?? init.snap;
+    }
+
+    // Collect snap targets at drag start (before new transform applied)
+    if (init.snapTo?.length) {
+      options.snapPoints = collectSnapPoints(target, init.snapTo, init.snapToBound ?? KIT_CONFIGS.snapBound);
     }
 
     init.onStart?.({ x: state.x, y: state.y, target, container });
 
     if (target) {
-      savedTransition = target.style.transition;
-      target.style.transition = 'none';
+      savedTransition = freezeTransition(target);
     }
-    document.addEventListener('mouseup', finish);
-    document.addEventListener('touchend', finish, { once: true });
-    window.addEventListener('blur', finish);
+
+    attachFinish(finish);
   };
   const finish = () => {
     const endPos = { x: state.x, y: state.y };
-    state.start = false;
+    const startPos = { x: state.start!.offsetX, y: state.start!.offsetY };
 
-    document.removeEventListener('mouseup', finish);
-    document.removeEventListener('touchend', finish);
-    window.removeEventListener('blur', finish);
+    state.start = undefined;
+
+    detachFinish(finish);
 
     if (target) {
       if (init.type === 'reset') {
-        target.style.transform = '';
-        state.x = 0;
-        state.y = 0;
+        resetInteraction(state, target, ['transform']);
       }
 
-      later(() => {
-        if (!target) return;
-        target.style.transition = savedTransition;
-      });
+      restoreTransition(target, savedTransition, 'drag-out');
     }
 
+    options.snapPoints = [];
+
+    if (endPos.x === startPos.x && endPos.y === startPos.y) return;
     init.onEnd?.({ ...endPos, target, container });
   };
   const clearLimits = () => {
@@ -175,7 +179,7 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
       return;
     }
 
-    const { minX, minY, maxX, maxY, gapX = 0, gapY = 0, stepX, stepY } = init;
+    const { minX, minY, maxX, maxY, gapX = 0, gapY = 0, stepX, stepY, snap } = init;
     const tRect = target.getBoundingClientRect();
     const cRect = container.getBoundingClientRect();
 
@@ -189,10 +193,14 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
     if (stepX) {
       const range = (options.maxX ?? maxX ?? 0) - (options.minX ?? minX ?? 0);
       options.snapX = (range * stepX) / 100;
+    } else if (snap != null && init.snapX === undefined) {
+      options.snapX = snap;
     }
     if (stepY) {
       const range = (options.maxY ?? maxY ?? 0) - (options.minY ?? minY ?? 0);
       options.snapY = (range * stepY) / 100;
+    } else if (snap != null && init.snapY === undefined) {
+      options.snapY = snap;
     }
   };
 
@@ -207,19 +215,15 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
 
   setupContainer();
   if (trigger) {
-    trigger.addEventListener('mousedown', start);
-    trigger.addEventListener('touchstart', start, { passive: true });
+    bindTrigger(trigger, start);
   }
 
   onCleanup(() => {
     if (!isBrowser()) return;
 
     resizeObserver?.disconnect();
-    document.removeEventListener('mouseup', finish);
-    document.removeEventListener('touchend', finish);
-    window.removeEventListener('blur', finish);
-    trigger?.removeEventListener('mousedown', start);
-    trigger?.removeEventListener('touchstart', start);
+    detachFinish(finish);
+    if (trigger) unbindTrigger(trigger, start);
   });
 
   return {
@@ -230,7 +234,7 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
       return state.y;
     },
     get active() {
-      return state.start !== false;
+      return state.start != null;
     },
     get target() {
       return target;
@@ -243,11 +247,9 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
       return trigger;
     },
     set trigger(value: HTMLElement | undefined) {
-      trigger?.removeEventListener('mousedown', start);
-      trigger?.removeEventListener('touchstart', start);
+      if (trigger) unbindTrigger(trigger, start);
       trigger = value;
-      trigger?.addEventListener('mousedown', start);
-      trigger?.addEventListener('touchstart', start, { passive: true });
+      if (trigger) bindTrigger(trigger, start);
     },
     get container() {
       return container;
@@ -257,21 +259,4 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
       setupContainer();
     },
   };
-}
-
-function minMax(min: number | undefined, max: number | undefined, value: number) {
-  if (typeof min === 'number') {
-    value = Math.max(min, value);
-  }
-
-  if (typeof max === 'number') {
-    value = Math.min(max, value);
-  }
-
-  return value;
-}
-
-function snap(value: number, step: number | undefined) {
-  if (typeof step !== 'number' || step <= 0) return value;
-  return Math.round(value / step) * step;
 }
