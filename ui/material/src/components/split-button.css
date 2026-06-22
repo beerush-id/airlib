@@ -1,27 +1,30 @@
 @theme {
-  --split-button-height: var(--air-button-height, 40px);
-  --split-button-radius-outer: calc(var(--split-button-height) / 2); /* Prevent CSS proportional radius scaling bug */
-  --split-button-radius-inner: var(--radius-sm, 8px);
-  --split-button-gap: calc(var(--spacing) * 0.5);
+  --air-split-button-height: var(--air-button-height, 40px);
+  --air-split-button-radius-outer: calc(
+    var(--air-split-button-height) /
+    2
+  ); /* Prevent CSS proportional radius scaling bug */
+  --air-split-button-radius-inner: var(--radius-sm, 8px);
+  --air-split-button-gap: calc(var(--spacing) * 0.5);
 }
 
 /* Container */
-@utility split-button-group {
+@utility air-split-button-group {
   @apply inline-flex items-center;
-  gap: var(--split-button-gap);
-  height: var(--split-button-height);
+  gap: var(--air-split-button-gap);
+  height: var(--air-split-button-height);
 }
 
 /* Base style for both halves */
-@utility split-button-base {
+@utility air-split-button-base {
   @apply inline-flex items-center justify-center;
   @apply cursor-pointer box-border h-full;
-  @apply focus-ring;
+  @apply air-focus-ring air-state-layer;
 
-  font-size: var(--air-button-font-size, var(--font-label-large-size));
-  font-weight: var(--font-label-large-weight);
-  letter-spacing: var(--font-label-large-tracking);
-  line-height: var(--air-button-line-height, var(--font-label-large-line-height));
+  font:
+    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-lg-tracking);
 
   border: 1px solid transparent;
 
@@ -35,94 +38,69 @@
 }
 
 /* Primary Action Area */
-@utility split-button-primary {
-  @apply split-button-base flex-1;
+@utility air-split-button-primary {
+  @apply air-split-button-base flex-1;
   padding: 0 var(--air-button-padding-x);
   gap: var(--air-button-gap);
-  border-start-start-radius: var(--split-button-radius-outer);
-  border-end-start-radius: var(--split-button-radius-outer);
-  border-start-end-radius: var(--split-button-radius-inner);
-  border-end-end-radius: var(--split-button-radius-inner);
+  border-start-start-radius: var(--air-split-button-radius-outer);
+  border-end-start-radius: var(--air-split-button-radius-outer);
+  border-start-end-radius: var(--air-split-button-radius-inner);
+  border-end-end-radius: var(--air-split-button-radius-inner);
 
   /* Smart Icon Padding for Primary Action */
-  &:has(> *:first-child:not(:last-child):is(.material-symbols-outlined, svg, img)) {
+  &:has(> .air-icon:first-child:not(:last-child)) {
     padding-inline-start: var(--air-button-icon-padding-x, calc(var(--spacing) * 4));
   }
 }
 
 /* Trailing Action Area (Dropdown Arrow) */
-@utility split-button-trailing {
-  @apply split-button-base;
+@utility air-split-button-trailing {
+  @apply air-split-button-base;
   padding: 0 calc(var(--air-button-padding-x) * 0.5);
-  border-start-start-radius: var(--split-button-radius-inner);
-  border-end-start-radius: var(--split-button-radius-inner);
-  border-start-end-radius: var(--split-button-radius-outer);
-  border-end-end-radius: var(--split-button-radius-outer);
+  border-start-start-radius: var(--air-split-button-radius-inner);
+  border-end-start-radius: var(--air-split-button-radius-inner);
+  border-start-end-radius: var(--air-split-button-radius-outer);
+  border-end-end-radius: var(--air-split-button-radius-outer);
 }
 
 /* Color Variants */
-@utility split-button-filled {
-  & > .split-button-primary,
-  & > .split-button-trailing {
+@utility air-split-button-filled {
+  & > .air-split-button-primary,
+  & > .air-split-button-trailing {
     background-color: var(--color-primary);
     color: var(--color-on-primary);
-
-    &:hover:not(:disabled) {
-      background-color: color-mix(in srgb, var(--color-on-primary) 8%, var(--color-primary));
-    }
-
-    &:focus-visible:not(:disabled) {
-      background-color: color-mix(in srgb, var(--color-on-primary) 12%, var(--color-primary));
-    }
+    --state-layer-color: var(--color-on-primary);
   }
 }
 
-@utility split-button-tonal {
-  & > .split-button-primary,
-  & > .split-button-trailing {
+@utility air-split-button-tonal {
+  & > .air-split-button-primary,
+  & > .air-split-button-trailing {
     background-color: var(--color-secondary-container);
     color: var(--color-on-secondary-container);
-
-    &:hover:not(:disabled) {
-      background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
-    }
-
-    &:focus-visible:not(:disabled) {
-      background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
-    }
+    --state-layer-color: var(--color-on-secondary-container);
   }
 }
 
-@utility split-button-elevated {
-  & > .split-button-primary,
-  & > .split-button-trailing {
+@utility air-split-button-elevated {
+  & > .air-split-button-primary,
+  & > .air-split-button-trailing {
     background-color: var(--color-surface-container-low);
     color: var(--color-primary);
     box-shadow: var(--elevation-1);
-
-    &:hover:not(:disabled) {
-      background-color: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-container-low));
-    }
-
-    &:focus-visible:not(:disabled) {
-      background-color: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface-container-low));
-    }
+    --state-layer-color: var(--color-primary);
   }
 }
 
-@utility split-button-outlined {
-  & > .split-button-primary,
-  & > .split-button-trailing {
+@utility air-split-button-outlined {
+  & > .air-split-button-primary,
+  & > .air-split-button-trailing {
     background-color: transparent;
     color: var(--color-primary);
     border-color: var(--color-outline);
-
-    &:hover:not(:disabled) {
-      background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
-    }
+    --state-layer-color: var(--color-primary);
 
     &:focus-visible:not(:disabled) {
-      background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
       border-color: var(--color-primary);
     }
   }

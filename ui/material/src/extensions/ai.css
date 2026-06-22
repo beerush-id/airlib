@@ -1,7 +1,7 @@
 /* ==============================
    AI PROMPT FIELD
    ============================== */
-@utility ai-prompt {
+@utility air-ai-prompt {
   @apply flex flex-col w-full bg-surface-container-low rounded-[28px] overflow-hidden;
   transition: box-shadow var(--duration-short) var(--ease-standard);
 
@@ -10,11 +10,11 @@
   }
 }
 
-@utility ai-prompt-attachments {
+@utility air-ai-prompt-attachments {
   @apply flex items-center gap-2 px-6 pt-6 pb-2 overflow-x-auto;
 }
 
-@utility ai-attachment {
+@utility air-ai-attachment {
   @apply relative rounded-lg overflow-hidden shrink-0;
   width: calc(var(--spacing) * 16);
   height: calc(var(--spacing) * 16);
@@ -24,37 +24,37 @@
   }
 }
 
-@utility ai-prompt-textarea {
-  @apply w-full bg-transparent resize-none outline-none text-body-large text-on-surface p-6 min-h-[120px];
+@utility air-ai-prompt-textarea {
+  @apply w-full bg-transparent resize-none outline-none air-body-lg text-on-surface p-6 min-h-[120px];
 
   &::placeholder {
     color: var(--color-on-surface-variant);
   }
 
-  .ai-prompt:has(.ai-prompt-attachments) & {
+  .air-ai-prompt:has(.air-ai-prompt-attachments) & {
     padding-top: calc(var(--spacing) * 2); /* Reduced top padding when attachments exist */
   }
 }
 
-@utility ai-prompt-actions {
+@utility air-ai-prompt-actions {
   @apply flex items-center justify-between px-4 pb-4 pt-2;
 }
 
 /* ==============================
    AI CHAT THREAD & BUBBLES
    ============================== */
-@utility ai-chat-thread {
+@utility air-ai-chat-thread {
   @apply flex flex-col gap-8 w-full;
 }
 
-@utility ai-message {
+@utility air-ai-message {
   @apply flex w-full gap-4;
 }
 
-@utility ai-message-user {
+@utility air-ai-message-user {
   @apply justify-end ml-auto max-w-[85%];
 
-  & .ai-message-bubble {
+  & .air-ai-message-bubble {
     background-color: var(--color-surface-variant);
     color: var(--color-on-surface-variant);
     border-start-start-radius: var(--radius-xl);
@@ -64,21 +64,21 @@
   }
 }
 
-@utility ai-message-agent {
+@utility air-ai-message-agent {
   @apply justify-start mr-auto max-w-[100%];
 
-  & .ai-message-bubble {
+  & .air-ai-message-bubble {
     background-color: transparent;
     color: var(--color-on-surface);
     padding: calc(var(--spacing) * 2) 0; /* Agent messages usually flow like normal text */
   }
 }
 
-@utility ai-message-bubble {
-  @apply p-4 text-body-large;
+@utility air-ai-message-bubble {
+  @apply p-4 air-body-lg;
 }
 
-@utility ai-avatar {
+@utility air-ai-avatar {
   @apply w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-primary-container text-on-primary-container;
 }
 
@@ -97,7 +97,7 @@
   }
 }
 
-@utility ai-typing-indicator {
+@utility air-ai-typing-indicator {
   @apply flex items-center gap-1 h-6 px-2;
 
   & .dot {
@@ -127,7 +127,7 @@
   }
 }
 
-@utility ai-sparkle {
+@utility air-ai-sparkle {
   color: var(--color-primary);
   animation: sparkle-spin 3s infinite ease-in-out;
   display: inline-block;

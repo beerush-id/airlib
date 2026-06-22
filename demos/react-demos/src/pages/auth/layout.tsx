@@ -21,11 +21,11 @@ export const AuthLayout = page(authRoute).render(({ context: ctx, children }) =>
   const CrossLink = template(
     () =>
       ctx.url?.endsWith('/signin') ? (
-        <p className="text-body-medium text-on-surface-variant mt-4 text-center">
+        <p className="air-body-md text-on-surface-variant mt-4 text-center">
           Don't have an account? <Link to={SignUpPage}>Sign Up</Link>
         </p>
       ) : (
-        <p className="text-body-medium text-on-surface-variant mt-4 text-center">
+        <p className="air-body-md text-on-surface-variant mt-4 text-center">
           Already have an account? <Link to={SignInPage}>Sign In</Link>
         </p>
       ),

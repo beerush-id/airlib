@@ -12,11 +12,11 @@ export const ThemeSwitch = setup<ThemeSwitchProps>((props) => {
 
   return render(
     () => (
-      <div role="radiogroup" className={props.className ?? 'segmented-group'} data-theme={theme.current}>
+      <div role="radiogroup" className={props.className ?? 'air-segmented-group'} data-theme={theme.current}>
         <button
           role="radio"
           aria-checked={theme.mode === 'light'}
-          className={props.buttonClass ?? 'segmented-button'}
+          className={props.buttonClass ?? 'air-segmented-button'}
           onClick={() => theme.change('light')}
         >
           <LightModeIcon />
@@ -24,7 +24,7 @@ export const ThemeSwitch = setup<ThemeSwitchProps>((props) => {
         <button
           role="radio"
           aria-checked={theme.mode === 'system'}
-          className={props.buttonClass ?? 'segmented-button'}
+          className={props.buttonClass ?? 'air-segmented-button'}
           onClick={() => theme.change('system')}
         >
           <SystemThemeIcon />
@@ -32,7 +32,7 @@ export const ThemeSwitch = setup<ThemeSwitchProps>((props) => {
         <button
           role="radio"
           aria-checked={theme.mode === 'dark'}
-          className={props.buttonClass ?? 'segmented-button'}
+          className={props.buttonClass ?? 'air-segmented-button'}
           onClick={() => theme.change('dark')}
         >
           <DarkModeIcon />

@@ -4,7 +4,7 @@
 }
 
 /* Base Layout */
-@utility drawer-base {
+@utility air-drawer-base {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -25,7 +25,7 @@
   }
 
   /* Standard/Persistent drawer modifier */
-  &.drawer-persistent {
+  &.air-drawer-persistent {
     position: relative;
     border-radius: 0;
     transform: none; /* Always visible */
@@ -33,17 +33,17 @@
 }
 
 /* Surface Visuals */
-@utility drawer-surface {
+@utility air-drawer-surface {
   background-color: var(--color-surface-container-low);
   color: var(--color-on-surface);
 
-  &.drawer-persistent {
+  &.air-drawer-persistent {
     background-color: var(--color-surface);
     border-inline-end: 1px solid var(--color-outline-variant);
   }
 }
 
-@utility drawer-scrim-base {
+@utility air-drawer-scrim-base {
   position: fixed;
   inset: 0;
   z-index: 40;
@@ -57,15 +57,15 @@
   }
 }
 
-@utility drawer-scrim-surface {
+@utility air-drawer-scrim-surface {
   background-color: color-mix(in srgb, var(--color-scrim) 32%, transparent);
 }
 
 /* Composed Utilities */
-@utility drawer {
-  @apply drawer-base drawer-surface;
+@utility air-drawer {
+  @apply air-drawer-base air-drawer-surface;
 }
 
-@utility drawer-scrim {
-  @apply drawer-scrim-base drawer-scrim-surface;
+@utility air-drawer-scrim {
+  @apply air-drawer-scrim-base air-drawer-scrim-surface;
 }

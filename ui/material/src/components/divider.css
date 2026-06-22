@@ -1,42 +1,42 @@
 /* Layout utilities */
-@utility divider-base {
+@utility air-divider-base {
   @apply m-0 box-border;
   border: none;
 }
 
-@utility divider-horizontal-layout {
+@utility air-divider-horizontal-layout {
   @apply w-full;
   height: 1px;
 }
 
-@utility divider-vertical-layout {
+@utility air-divider-vertical-layout {
   @apply h-full;
   width: 1px;
 }
 
-@utility divider-inset-layout {
+@utility air-divider-inset-layout {
   width: calc(100% - calc(var(--spacing) * 4)); /* Leaves 16px margin */
   margin-left: calc(var(--spacing) * 4);
 }
 
 /* Visual utilities */
-@utility divider-surface {
+@utility air-divider-surface {
   background-color: var(--color-outline-variant);
 }
 
-@utility divider-primary-surface {
+@utility air-divider-primary-surface {
   background-color: var(--color-primary);
 }
 
 /* Composed Utilities */
-@utility divider {
-  @apply divider-base divider-horizontal-layout divider-surface;
+@utility air-divider {
+  @apply air-divider-base air-divider-horizontal-layout air-divider-surface;
 }
 
-@utility divider-vertical {
-  @apply divider-base divider-vertical-layout divider-surface;
+@utility air-divider-vertical {
+  @apply air-divider-base air-divider-vertical-layout air-divider-surface;
 }
 
-@utility divider-inset {
-  @apply divider-base divider-horizontal-layout divider-inset-layout divider-surface;
+@utility air-divider-inset {
+  @apply air-divider-base air-divider-horizontal-layout air-divider-inset-layout air-divider-surface;
 }

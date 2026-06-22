@@ -3,11 +3,11 @@
   --air-text-field-radius: var(--radius-md);
   --air-text-field-padding-x: calc(var(--spacing) * 4);
   --air-text-field-icon-padding-x: calc(var(--spacing) * 12);
-  --air-text-field-font-size: var(--font-body-large-size);
+  --air-text-field-font-size: var(--font-body-lg-size);
 }
 
 /* The Wrapper Base */
-@utility text-field-base {
+@utility air-text-field-base {
   @apply flex flex-col relative w-full outline-none;
   margin-top: calc(var(--spacing) * 2); /* 8px room for floating label */
 
@@ -15,24 +15,25 @@
   --_leading-padding: var(--air-text-field-padding-x);
   --_trailing-padding: var(--air-text-field-padding-x);
 
-  &:has(> :is(.material-symbols-outlined, svg, img, .icon-button) ~ :is(.text-field-input, .text-field-input-filled)) {
+  &:has(> :is(.air-icon, .air-icon-button) ~ :is(.air-text-field-input, .air-text-field-input-filled)) {
     --_leading-padding: var(--air-text-field-icon-padding-x);
   }
 
-  &:has(> :is(.text-field-input, .text-field-input-filled) ~ :is(.material-symbols-outlined, svg, img, .icon-button)) {
+  &:has(> :is(.air-text-field-input, .air-text-field-input-filled) ~ :is(.air-icon, .air-icon-button)) {
     --_trailing-padding: var(--air-text-field-icon-padding-x);
   }
 
   /* Select Dropdown Arrow using Mask */
-  &:has(.select-input, .select-input-filled) {
+  &:has(.air-select-input, .air-select-input-filled) {
     &::after {
       content: '';
       position: absolute;
       top: 50%;
-      inset-inline-end: 16px;
+      inset-inline-end: calc(var(--spacing) * 4);
+      /* Clear icon size */
+      width: calc(var(--spacing) * 5);
+      height: calc(var(--spacing) * 5);
       transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
       background-color: var(--color-on-surface-variant);
       mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-width='1.5' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
       mask-size: contain;
@@ -41,20 +42,20 @@
       transition: background-color var(--duration-short) var(--ease-standard);
     }
 
-    &:has(:is(.select-input, .select-input-filled):focus)::after {
+    &:has(:is(.air-select-input, .air-select-input-filled):focus)::after {
       background-color: var(--color-primary);
     }
   }
 }
 
 /* Composed Root Wrapper */
-@utility text-field {
-  @apply text-field-base text-field-floating;
+@utility air-text-field {
+  @apply air-text-field-base air-text-field-floating;
 }
 
 /* Floating Label Logic (Pure CSS) */
-@utility text-field-floating {
-  & .text-field-label {
+@utility air-text-field-floating {
+  & .air-text-field-label {
     position: absolute;
     top: calc((var(--air-text-field-height) - 1.5em) / 2);
     inset-inline-start: calc(var(--_leading-padding, var(--air-text-field-padding-x)) + 1px);
@@ -64,8 +65,8 @@
     padding: 0 var(--spacing);
     border-radius: var(--air-text-field-radius);
 
-    font-size: var(--font-body-large-size);
-    line-height: 1.5;
+    font: var(--font-body-lg-weight) var(--font-body-lg-size) / 1.5 var(--font-brand, system-ui);
+    letter-spacing: var(--font-body-lg-tracking);
     background-color: transparent;
 
     /* Hardware accelerated animation */
@@ -79,24 +80,24 @@
   }
 
   /* Default (Outlined) Floating State */
-  &:has(.text-field-input:focus) .text-field-label,
-  &:has(.text-field-input:not(:placeholder-shown)) .text-field-label,
-  &:has(.textarea-input:focus) .text-field-label,
-  &:has(.textarea-input:not(:placeholder-shown)) .text-field-label,
-  &:has(.select-input) .text-field-label,
-  &:has(.text-field-input:-webkit-autofill) .text-field-label {
+  &:has(.air-text-field-input:focus) .air-text-field-label,
+  &:has(.air-text-field-input:not(:placeholder-shown)) .air-text-field-label,
+  &:has(.air-textarea-input:focus) .air-text-field-label,
+  &:has(.air-textarea-input:not(:placeholder-shown)) .air-text-field-label,
+  &:has(.air-select-input) .air-text-field-label,
+  &:has(.air-text-field-input:-webkit-autofill) .air-text-field-label {
     /* Dynamic calc: Move center to top border ((height - 1.5em)/-2) and adjust for scale(-0.5625em) */
     transform: translateY(calc(((var(--air-text-field-height) - 1.5em) / -2) - 0.5625em)) scale(0.75);
     background-color: var(--color-ghost-surface);
   }
 
   /* Filled Floating State Override */
-  &:has(.text-field-input-filled:focus) .text-field-label,
-  &:has(.text-field-input-filled:not(:placeholder-shown)) .text-field-label,
-  &:has(.textarea-input-filled:focus) .text-field-label,
-  &:has(.textarea-input-filled:not(:placeholder-shown)) .text-field-label,
-  &:has(.select-input-filled) .text-field-label,
-  &:has(.text-field-input-filled:-webkit-autofill) .text-field-label {
+  &:has(.air-text-field-input-filled:focus) .air-text-field-label,
+  &:has(.air-text-field-input-filled:not(:placeholder-shown)) .air-text-field-label,
+  &:has(.air-textarea-input-filled:focus) .air-text-field-label,
+  &:has(.air-textarea-input-filled:not(:placeholder-shown)) .air-text-field-label,
+  &:has(.air-select-input-filled) .air-text-field-label,
+  &:has(.air-text-field-input-filled:-webkit-autofill) .air-text-field-label {
     /* Move the scaled label proportionally to the top area */
     transform: translateY(calc((var(--air-text-field-height) - 1.5em) / -4)) scale(0.75);
     background-color: transparent;
@@ -104,36 +105,41 @@
 }
 
 /* Label Visuals */
-@utility text-field-label-base {
+@utility air-text-field-label-base {
   @apply block;
-  font-size: var(--font-body-small-size);
+  font:
+    var(--font-body-sm-weight) var(--font-body-sm-size) / var(--font-body-sm-line-height) var(--font-brand, system-ui);
+  letter-spacing: var(--font-body-sm-tracking);
   margin-bottom: var(--spacing);
 }
 
 /* Composed Label */
-@utility text-field-label {
-  @apply text-field-label-base;
+@utility air-text-field-label {
+  @apply air-text-field-label-base;
   color: var(--color-on-surface-variant);
 }
 
-@utility text-field-label-focus {
+@utility air-text-field-label-focus {
   color: var(--color-primary);
 }
 
-@utility text-field-label-error {
+@utility air-text-field-label-error {
   color: var(--color-error);
 }
 
 /* The Input Base Layout */
-@utility text-field-input-base {
+@utility air-text-field-input-base {
   @apply w-full box-border;
   height: var(--air-text-field-height);
   padding: 0 var(--_trailing-padding, var(--air-text-field-padding-x)) 0
     var(--_leading-padding, var(--air-text-field-padding-x));
   border-radius: var(--air-text-field-radius);
-  font-size: var(--air-text-field-font-size);
-  font-weight: var(--font-body-large-weight);
-  letter-spacing: var(--font-body-large-tracking);
+
+  font:
+    var(--font-body-lg-weight) var(--air-text-field-font-size) / var(--font-body-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-body-lg-tracking);
+
   transition:
     border-color var(--duration-short) var(--ease-standard),
     box-shadow var(--duration-short) var(--ease-standard);
@@ -145,13 +151,13 @@
 }
 
 /* Input Outlined Variant */
-@utility text-field-outlined-surface {
+@utility air-text-field-outlined-surface {
   border: 1px solid var(--color-outline);
   background-color: transparent;
   color: var(--color-on-surface);
 }
 
-@utility text-field-outlined-focus {
+@utility air-text-field-outlined-focus {
   border-color: var(--color-primary);
   box-shadow: inset 0 0 0 1px var(--color-primary);
 
@@ -161,7 +167,7 @@
 }
 
 /* Input Filled Variant */
-@utility text-field-filled-surface {
+@utility air-text-field-filled-surface {
   border: none;
   border-bottom: 1px solid var(--color-on-surface-variant);
   border-radius: var(--air-text-field-radius) var(--air-text-field-radius) 0 0;
@@ -172,7 +178,7 @@
   padding-top: calc(var(--spacing) * 4);
 }
 
-@utility text-field-filled-focus {
+@utility air-text-field-filled-focus {
   border-color: var(--color-primary);
   border-bottom-width: 2px;
   box-shadow: none;
@@ -183,78 +189,80 @@
 }
 
 /* Common Input Utilities */
-@utility text-field-input-placeholder-visible {
+@utility air-text-field-input-placeholder-visible {
   &::placeholder {
     color: var(--color-on-surface-variant);
   }
 }
 
-@utility text-field-input-error {
+@utility air-text-field-input-error {
   border-color: var(--color-error);
 }
 
-@utility text-field-input-disabled {
+@utility air-text-field-input-disabled {
   opacity: 0.38;
   cursor: not-allowed;
   pointer-events: none;
 }
 
 /* Supporting Text */
-@utility text-field-supporting-base {
-  font-size: var(--font-body-small-size);
+@utility air-text-field-supporting-base {
+  font:
+    var(--font-body-sm-weight) var(--font-body-sm-size) / var(--font-body-sm-line-height) var(--font-brand, system-ui);
+  letter-spacing: var(--font-body-sm-tracking);
   margin-top: var(--spacing);
   padding: 0 var(--air-text-field-padding-x);
 }
 
-@utility text-field-supporting-surface {
+@utility air-text-field-supporting-surface {
   color: var(--color-on-surface-variant);
 }
 
-@utility text-field-supporting-error {
+@utility air-text-field-supporting-error {
   color: var(--color-error);
 }
 
 /* Composed Utilities */
-@utility text-field-input {
-  @apply text-field-input-base text-field-outlined-surface;
+@utility air-text-field-input {
+  @apply air-text-field-input-base air-text-field-outlined-surface;
 
   &:focus {
-    @apply text-field-outlined-focus text-field-input-placeholder-visible;
+    @apply air-text-field-outlined-focus air-text-field-input-placeholder-visible;
   }
 
   &:disabled {
-    @apply text-field-input-disabled;
+    @apply air-text-field-input-disabled;
   }
 }
 
-@utility text-field-input-filled {
-  @apply text-field-input-base text-field-filled-surface;
+@utility air-text-field-input-filled {
+  @apply air-text-field-input-base air-text-field-filled-surface;
 
   &:focus {
-    @apply text-field-filled-focus text-field-input-placeholder-visible;
+    @apply air-text-field-filled-focus air-text-field-input-placeholder-visible;
   }
 
   &:disabled {
-    @apply text-field-input-disabled;
+    @apply air-text-field-input-disabled;
   }
 }
 
 /* Select Input Utilities */
-@utility select-input {
-  @apply text-field-input;
+@utility air-select-input {
+  @apply air-text-field-input;
   appearance: none;
-  padding-inline-end: 48px; /* Make room for the arrow */
+  padding-inline-end: calc(var(--spacing) * 12); /* Make room for the arrow */
 }
 
-@utility select-input-filled {
-  @apply text-field-input-filled;
+@utility air-select-input-filled {
+  @apply air-text-field-input-filled;
   appearance: none;
-  padding-inline-end: 48px;
+  padding-inline-end: calc(var(--spacing) * 12);
 }
 
 /* Textarea Input Utilities */
-@utility textarea-input {
-  @apply text-field-input;
+@utility air-textarea-input {
+  @apply air-text-field-input;
   height: auto;
   min-height: calc(var(--air-text-field-height) * 2);
   padding-top: calc(var(--spacing) * 3);
@@ -262,8 +270,8 @@
   resize: vertical;
 }
 
-@utility textarea-input-filled {
-  @apply text-field-input-filled;
+@utility air-textarea-input-filled {
+  @apply air-text-field-input-filled;
   height: auto;
   min-height: calc(var(--air-text-field-height) * 2);
   padding-top: calc(var(--spacing) * 6);
@@ -271,27 +279,30 @@
   resize: vertical;
 }
 
-@utility text-field-supporting-text {
-  @apply text-field-supporting-base text-field-supporting-surface;
+@utility air-text-field-supporting-text {
+  @apply air-text-field-supporting-base air-text-field-supporting-surface;
 }
 
-@utility text-field-error {
-  @apply text-field-supporting-base text-field-supporting-error;
+@utility air-text-field-error {
+  @apply air-text-field-supporting-base air-text-field-supporting-error;
 }
 
 /* Text Field Sizes */
-@utility text-field-sm {
+@utility air-text-field-sm {
   --air-text-field-height: calc(var(--spacing) * 10);
   --air-text-field-padding-x: calc(var(--spacing) * 3);
-  --air-text-field-font-size: var(--font-body-medium-size);
+  --air-text-field-font-size: var(--font-body-md-size);
+  --air-text-field-radius: var(--radius-sm);
 }
-@utility text-field-md {
+@utility air-text-field-md {
   --air-text-field-height: calc(var(--spacing) * 14);
   --air-text-field-padding-x: calc(var(--spacing) * 4);
-  --air-text-field-font-size: var(--font-body-large-size);
+  --air-text-field-font-size: var(--font-body-lg-size);
+  --air-text-field-radius: var(--radius-md);
 }
-@utility text-field-lg {
+@utility air-text-field-lg {
   --air-text-field-height: calc(var(--spacing) * 16);
   --air-text-field-padding-x: calc(var(--spacing) * 5);
-  --air-text-field-font-size: var(--font-body-large-size);
+  --air-text-field-font-size: var(--font-body-lg-size);
+  --air-text-field-radius: var(--radius-lg);
 }

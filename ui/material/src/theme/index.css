@@ -2,6 +2,10 @@
   /* Base Variables */
   --seed-color: oklch(60% 0.15 260); /* Default seed color (Blue/Purple) */
 
+  /* Base Icon Configuration */
+  --icon-font: 'Material Symbols Outlined', 'Material Symbols Rounded', 'Material Symbols Sharp', sans-serif;
+  --icon-weight: normal;
+
   /* Color Roles (computed relative to seed hue) */
   /* Primary */
   --color-primary: light-dark(oklch(from var(--seed-color) 45% 0.15 h), oklch(from var(--seed-color) 80% 0.15 h));

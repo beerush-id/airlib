@@ -7,7 +7,7 @@ export const PointerDebug = setup(() => {
 
   return render(
     () => (
-      <div className="fixed chip chip-sm bottom-0 right-0 m-2 flex gap-1 pointer-events-none">
+      <div className="fixed air-chip air-chip-sm bottom-0 right-0 m-2 flex gap-1 pointer-events-none">
         <span>
           X: {pointer.x}, Y: {pointer.y}
         </span>

@@ -40,7 +40,6 @@ export const Window = setup<WindowProps>((props) => {
     minW: win?.rect.minWidth ?? KIT_CONFIGS.windowMinWidth,
     minH: win?.rect.minHeight ?? KIT_CONFIGS.windowMinHeight,
     onEnd: (e) => {
-      console.log(e);
       win?.redraw(e);
     },
   });

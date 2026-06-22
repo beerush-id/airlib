@@ -4,13 +4,15 @@
 }
 
 /* Base Layout and Typography */
-@utility card-base {
+@utility air-card-base {
   @apply flex flex-col relative;
   @apply overflow-hidden box-border;
   border-radius: var(--air-card-radius);
 
   /* Typography: Body Medium default */
-  font-size: var(--font-body-medium-size);
+  font:
+    var(--font-body-md-weight) var(--font-body-md-size) / var(--font-body-md-line-height) var(--font-brand, system-ui);
+  letter-spacing: var(--font-body-md-tracking);
   color: var(--color-on-surface);
 
   transition:
@@ -20,125 +22,80 @@
 }
 
 /* Elevated Card */
-@utility card-elevated-surface {
+@utility air-card-elevated-surface {
   --color-ghost-surface: var(--color-surface-container-low);
   background-color: var(--color-surface-container-low);
   border: none;
 }
 
-@utility card-elevated-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-low));
-}
-
-@utility card-elevated-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-low));
-}
-
 /* Filled Card */
-@utility card-filled-surface {
+@utility air-card-filled-surface {
   --color-ghost-surface: var(--color-surface-container-highest);
   background-color: var(--color-surface-container-highest);
   border: none;
 }
 
-@utility card-filled-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-highest));
-}
-
-@utility card-filled-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-highest));
-}
-
 /* Outlined Card */
-@utility card-outlined-surface {
+@utility air-card-outlined-surface {
   --color-ghost-surface: var(--color-surface);
   background-color: var(--color-surface);
   border: 1px solid var(--color-outline-variant);
 }
 
-@utility card-outlined-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface));
-  border-color: var(--color-outline);
-}
-
-@utility card-outlined-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface));
-  border-color: var(--color-outline);
-}
-
 /* Optional Interactive Modifier */
-@utility card-interactive {
-  @apply cursor-pointer focus-ring;
+@utility air-card-interactive {
+  @apply cursor-pointer air-focus-ring air-state-layer;
+  --state-layer-color: var(--color-on-surface);
 }
 
 /* Composed Utilities */
-@utility card {
-  @apply card-base card-elevated-surface;
-
-  &.card-interactive:hover {
-    @apply card-elevated-hover;
-  }
-
-  &.card-interactive:focus-visible {
-    @apply card-elevated-focus;
-  }
+@utility air-card {
+  @apply air-card-base air-card-elevated-surface;
 }
 
-@utility card-filled {
-  @apply card-base card-filled-surface;
-
-  &.card-interactive:hover {
-    @apply card-filled-hover;
-  }
-
-  &.card-interactive:focus-visible {
-    @apply card-filled-focus;
-  }
+@utility air-card-filled {
+  @apply air-card-base air-card-filled-surface;
 }
 
-@utility card-outlined {
-  @apply card-base card-outlined-surface;
+@utility air-card-outlined {
+  @apply air-card-base air-card-outlined-surface;
 
-  &.card-interactive:hover {
-    @apply card-outlined-hover;
-  }
-
-  &.card-interactive:focus-visible {
-    @apply card-outlined-focus;
+  &.air-card-interactive:focus-visible {
+    border-color: var(--color-outline);
   }
 }
 
 /* Card Content Structure */
-@utility card-header {
+@utility air-card-header {
   @apply flex flex-col;
   padding: var(--air-card-padding);
   padding-bottom: calc(var(--air-card-padding) / 2);
   gap: var(--spacing);
 }
 
-@utility card-title {
-  @apply text-title-medium;
+@utility air-card-title {
+  @apply air-title-md;
   margin: 0;
   color: var(--color-on-surface);
 }
 
-@utility card-subtitle {
-  @apply text-body-medium;
+@utility air-card-subtitle {
+  @apply air-body-md;
   margin: 0;
   color: var(--color-on-surface-variant);
 }
 
-@utility card-body {
+@utility air-card-body {
   padding: var(--air-card-padding);
   flex-grow: 1;
 
   /* Remove top padding if body follows header */
-  .card-header + & {
+  .air-card-header + & {
     padding-top: 0;
   }
 }
 
-@utility card-actions {
+@utility air-card-actions {
   @apply flex items-center justify-end;
   padding: var(--air-card-padding);
   padding-top: calc(var(--air-card-padding) / 2);
@@ -146,7 +103,7 @@
 }
 
 /* Segmented Card Group */
-@utility card-group {
+@utility air-card-group {
   @apply flex flex-col;
   gap: calc(var(--spacing) * 0.5); /* 2px gap between segments */
 

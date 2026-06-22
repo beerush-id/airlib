@@ -1,23 +1,23 @@
 /* Component Variables */
 @theme {
-  --snackbar-min-height: calc(var(--spacing) * 12); /* 48px */
-  --snackbar-padding-x: calc(var(--spacing) * 4); /* 16px */
-  --snackbar-radius: var(--radius-xs);
-  --snackbar-gap: calc(var(--spacing) * 2); /* 8px */
+  --air-snackbar-min-height: calc(var(--spacing) * 12); /* 48px */
+  --air-snackbar-padding-x: calc(var(--spacing) * 4); /* 16px */
+  --air-snackbar-radius: var(--radius-xs);
+  --air-snackbar-gap: calc(var(--spacing) * 2); /* 8px */
 }
 
 /* Base Snackbar Layout */
-@utility snackbar-base {
+@utility air-snackbar-base {
   @apply flex items-center justify-between;
-  gap: var(--snackbar-gap);
-  min-height: var(--snackbar-min-height);
-  padding: calc(var(--snackbar-padding-x) * 0.5) var(--snackbar-padding-x);
-  border-radius: var(--snackbar-radius);
+  gap: var(--air-snackbar-gap);
+  min-height: var(--air-snackbar-min-height);
+  padding: calc(var(--air-snackbar-padding-x) * 0.5) var(--air-snackbar-padding-x);
+  border-radius: var(--air-snackbar-radius);
 
   /* Typography: Body Medium */
-  font-size: var(--font-body-medium-size);
-  font-weight: var(--font-body-medium-weight);
-  letter-spacing: var(--font-body-medium-tracking);
+  font:
+    var(--font-body-md-weight) var(--font-body-md-size) / var(--font-body-md-line-height) var(--font-brand, system-ui);
+  letter-spacing: var(--font-body-md-tracking);
 
   /* Visibility & Transitions */
   opacity: 0;
@@ -36,40 +36,35 @@
 }
 
 /* Visual Surface */
-@utility snackbar-surface {
+@utility air-snackbar-surface {
   background-color: var(--color-inverse-surface);
   color: var(--color-inverse-on-surface);
 }
 
 /* Snackbar Action Button */
-@utility snackbar-action {
+@utility air-snackbar-action {
   @apply inline-flex items-center justify-center;
-  @apply cursor-pointer focus-ring;
+  @apply cursor-pointer air-focus-ring air-state-layer;
   border: none;
-  background-color: color-mix(in srgb, var(--color-inverse-primary) 0%, transparent);
+  background-color: transparent;
   color: var(--color-inverse-primary);
   padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
   border-radius: var(--radius-full);
+  --state-layer-color: var(--color-inverse-primary);
 
   /* Typography */
-  font-size: var(--font-label-large-size);
-  font-weight: var(--font-label-large-weight);
+  font:
+    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-lg-tracking);
 
   transition:
     background-color var(--duration-short) var(--ease-standard),
     color var(--duration-short) var(--ease-standard),
     outline-color var(--duration-short) var(--ease-standard);
-
-  &:hover:not(:disabled) {
-    background-color: color-mix(in srgb, var(--color-inverse-primary) 8%, transparent);
-  }
-
-  &:focus-visible:not(:disabled) {
-    background-color: color-mix(in srgb, var(--color-inverse-primary) 12%, transparent);
-  }
 }
 
 /* Composed Utilities */
-@utility snackbar {
-  @apply snackbar-base snackbar-surface;
+@utility air-snackbar {
+  @apply air-snackbar-base air-snackbar-surface;
 }

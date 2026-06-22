@@ -3,7 +3,7 @@
 }
 
 /* Base Layout */
-@utility app-bar-base {
+@utility air-app-bar-base {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,29 +17,30 @@
 }
 
 /* Surface Visuals */
-@utility app-bar-surface {
+@utility air-app-bar-surface {
   background-color: var(--color-surface);
   color: var(--color-on-surface);
 }
 
-@utility app-bar-surface-scrolled {
+@utility air-app-bar-surface-scrolled {
   background-color: var(--color-surface-container-high);
 }
 
-@utility app-bar-title {
-  font-size: var(--font-title-large-size);
-  font-weight: var(--font-title-large-weight);
-  letter-spacing: var(--font-title-large-tracking);
+@utility air-app-bar-title {
+  font:
+    var(--font-title-lg-weight) var(--font-title-lg-size) / var(--font-title-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-title-lg-tracking);
   margin: 0;
   flex: 1;
   padding-inline-start: calc(var(--spacing) * 4);
 }
 
 /* Composed Utilities */
-@utility app-bar {
-  @apply app-bar-base app-bar-surface;
+@utility air-app-bar {
+  @apply air-app-bar-base air-app-bar-surface;
 
   &[data-scrolled='true'] {
-    @apply app-bar-surface-scrolled;
+    @apply air-app-bar-surface-scrolled;
   }
 }

@@ -8,10 +8,10 @@
 }
 
 /* Base Layout */
-@utility fab-base {
+@utility air-fab-base {
   @apply inline-flex items-center justify-center;
   @apply box-border cursor-pointer;
-  @apply focus-ring;
+  @apply air-focus-ring;
   border: none;
   width: var(--air-fab-size);
   height: var(--air-fab-size);
@@ -28,17 +28,17 @@
 }
 
 /* Size Variants */
-@utility fab-sm {
+@utility air-fab-sm {
   --air-fab-size: calc(var(--spacing) * 10);
   --air-fab-radius: var(--radius-md); /* 12px */
 }
 
-@utility fab-lg {
+@utility air-fab-lg {
   --air-fab-size: calc(var(--spacing) * 24);
   --air-fab-radius: var(--radius-xl); /* 28px */
 }
 
-@utility fab-extended {
+@utility air-fab-extended {
   width: auto;
   --air-fab-min-width: calc(var(--spacing) * 20);
   --air-fab-padding-x: calc(var(--spacing) * 6);
@@ -46,118 +46,59 @@
   --air-fab-gap: calc(var(--spacing) * 2);
 
   /* Typography: Label Large */
-  font-size: var(--font-label-large-size);
-  font-weight: var(--font-label-large-weight);
-  line-height: var(--font-label-large-line-height);
+  font:
+    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-lg-tracking);
 
   /* Smart Icon Padding */
-  &:has(> *:first-child:not(:last-child):is(.material-symbols-outlined, svg, img)) {
+  &:has(> .air-icon:first-child:not(:last-child)) {
     padding-inline-start: var(--air-fab-icon-padding-x);
   }
 
-  &:has(> *:last-child:not(:first-child):is(.material-symbols-outlined, svg, img)) {
+  &:has(> .air-icon:last-child:not(:first-child)) {
     padding-inline-end: var(--air-fab-icon-padding-x);
   }
 }
 
 /* Color Variants */
-@utility fab-primary-surface {
+@utility air-fab-primary-surface {
   background-color: var(--color-primary-container);
   color: var(--color-on-primary-container);
 }
 
-@utility fab-primary-hover {
-  background-color: color-mix(in srgb, var(--color-on-primary-container) 8%, var(--color-primary-container));
-}
-
-@utility fab-primary-focus {
-  background-color: color-mix(in srgb, var(--color-on-primary-container) 12%, var(--color-primary-container));
-}
-
-@utility fab-surface-surface {
+@utility air-fab-surface-surface {
   background-color: var(--color-surface-container-high);
   color: var(--color-primary);
 }
 
-@utility fab-surface-hover {
-  background-color: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-container-high));
-}
-
-@utility fab-surface-focus {
-  background-color: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface-container-high));
-}
-
-@utility fab-secondary-surface {
+@utility air-fab-secondary-surface {
   background-color: var(--color-secondary-container);
   color: var(--color-on-secondary-container);
 }
 
-@utility fab-secondary-hover {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
-}
-
-@utility fab-secondary-focus {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
-}
-
-@utility fab-tertiary-surface {
+@utility air-fab-tertiary-surface {
   background-color: var(--color-tertiary-container);
   color: var(--color-on-tertiary-container);
 }
 
-@utility fab-tertiary-hover {
-  background-color: color-mix(in srgb, var(--color-on-tertiary-container) 8%, var(--color-tertiary-container));
-}
-
-@utility fab-tertiary-focus {
-  background-color: color-mix(in srgb, var(--color-on-tertiary-container) 12%, var(--color-tertiary-container));
-}
-
 /* Composed Utilities */
-@utility fab {
-  @apply fab-base fab-primary-surface;
-
-  &:hover:not(:disabled) {
-    @apply fab-primary-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply fab-primary-focus;
-  }
+@utility air-fab {
+  @apply air-fab-base air-fab-primary-surface air-state-layer;
+  --state-layer-color: var(--color-on-primary-container);
 }
 
-@utility fab-surface {
-  @apply fab-base fab-surface-surface;
-
-  &:hover:not(:disabled) {
-    @apply fab-surface-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply fab-surface-focus;
-  }
+@utility air-fab-surface {
+  @apply air-fab-base air-fab-surface-surface air-state-layer;
+  --state-layer-color: var(--color-primary);
 }
 
-@utility fab-secondary {
-  @apply fab-base fab-secondary-surface;
-
-  &:hover:not(:disabled) {
-    @apply fab-secondary-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply fab-secondary-focus;
-  }
+@utility air-fab-secondary {
+  @apply air-fab-base air-fab-secondary-surface air-state-layer;
+  --state-layer-color: var(--color-on-secondary-container);
 }
 
-@utility fab-tertiary {
-  @apply fab-base fab-tertiary-surface;
-
-  &:hover:not(:disabled) {
-    @apply fab-tertiary-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply fab-tertiary-focus;
-  }
+@utility air-fab-tertiary {
+  @apply air-fab-base air-fab-tertiary-surface air-state-layer;
+  --state-layer-color: var(--color-on-tertiary-container);
 }

@@ -1,13 +1,13 @@
 @theme {
-  --radio-target: calc(var(--spacing) * 12); /* 48px */
-  --radio-size: calc(var(--spacing) * 5); /* 20px */
+  --air-radio-target: calc(var(--spacing) * 12); /* 48px */
+  --air-radio-size: calc(var(--spacing) * 5); /* 20px */
 }
 
-@utility radio-base {
+@utility air-radio-base {
   @apply inline-flex items-center justify-center relative;
   @apply cursor-pointer;
-  width: var(--radio-target);
-  height: var(--radio-target);
+  width: var(--air-radio-target);
+  height: var(--air-radio-target);
   border-radius: var(--radius-full);
 
   /* Reset */
@@ -18,84 +18,57 @@
     outline-color var(--duration-short) var(--ease-standard);
 }
 
-@utility radio-visual {
+@utility air-radio-visual {
   @apply relative box-border rounded-full;
-  width: var(--radio-size);
-  height: var(--radio-size);
+  width: var(--air-radio-size);
+  height: var(--air-radio-size);
   border: 2px solid var(--color-on-surface-variant);
 
   transition: border-color var(--duration-short) var(--ease-standard);
 }
 
-@utility radio-visual-dot {
+@utility air-radio-visual-dot {
   @apply absolute top-1/2 left-1/2 rounded-full;
   transform: translate(-50%, -50%) scale(0);
-  width: 10px;
-  height: 10px;
+  width: calc(var(--air-radio-size) * 0.5);
+  height: calc(var(--air-radio-size) * 0.5);
   background-color: var(--color-primary);
   transition: transform var(--duration-short) var(--ease-standard);
 }
 
 /* Composable States */
-@utility radio-checked {
+@utility air-radio-checked {
   border-color: var(--color-primary);
 }
 
-@utility radio-checked-dot {
+@utility air-radio-checked-dot {
   transform: translate(-50%, -50%) scale(1);
 }
 
-@utility radio-disabled {
-  border-color: var(--color-on-surface) !important;
-  opacity: 0.38 !important;
-  pointer-events: none !important;
+@utility air-radio-disabled {
+  border-color: var(--color-on-surface);
+  opacity: 0.38;
+  pointer-events: none;
 }
 
-@utility radio-disabled-dot {
-  background-color: var(--color-on-surface) !important;
-}
-
-@utility radio-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, transparent);
-}
-
-@utility radio-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface-variant) 12%, transparent);
-}
-
-@utility radio-checked-hover {
-  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
-}
-
-@utility radio-checked-focus {
-  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+@utility air-radio-disabled-dot {
+  background-color: var(--color-on-surface);
 }
 
 /* Composed Utilities */
-@utility radio {
-  @apply radio-base;
+@utility air-radio {
+  @apply air-radio-base air-state-layer;
+  --state-layer-color: var(--color-on-surface-variant);
 
-  &:hover:not(:disabled) {
-    @apply radio-hover;
+  &[aria-checked='true'] {
+    --state-layer-color: var(--color-primary);
   }
 
-  &:focus-visible:not(:disabled) {
-    @apply radio-focus;
-  }
-
-  &[aria-checked='true']:hover:not(:disabled) {
-    @apply radio-checked-hover;
-  }
-
-  &[aria-checked='true']:focus-visible:not(:disabled) {
-    @apply radio-checked-focus;
-  }
-
-  &:focus-visible:not(:disabled) .radio-visual {
-    outline-width: var(--focus-ring-width);
+  &:focus-visible:not(:disabled) .air-radio-visual {
+    outline-width: var(--air-focus-ring-width, 3px);
     outline-style: solid;
     outline-color: var(--color-secondary);
-    outline-offset: var(--focus-ring-offset);
+    outline-offset: var(--air-focus-ring-offset, 2px);
   }
 
   &:focus-visible {
@@ -106,5 +79,6 @@
   &[aria-disabled='true'] {
     cursor: not-allowed;
     pointer-events: none;
+    --state-layer-color: transparent;
   }
 }

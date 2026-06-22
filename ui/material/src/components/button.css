@@ -4,25 +4,23 @@
   --air-button-icon-padding-x: calc(var(--spacing) * 4);
   --air-button-gap: calc(var(--spacing) * 2);
   --air-button-radius: var(--radius-full);
-  --air-button-font-size: var(--font-label-large-size);
-  --air-button-line-height: var(--font-label-large-line-height);
 }
 
 /* Base Structure */
-@utility button-base {
+@utility air-button-base {
   @apply inline-flex items-center justify-center;
-  @apply select-none box-border focus-ring;
+  @apply select-none box-border air-focus-ring;
 
   gap: var(--air-button-gap);
   height: var(--air-button-height);
   padding: 0 var(--air-button-padding-x);
   border-radius: var(--air-button-radius);
 
-  /* Typography */
-  font-size: var(--air-button-font-size);
-  font-weight: var(--font-label-large-weight);
-  letter-spacing: var(--font-label-large-tracking);
-  line-height: var(--air-button-line-height);
+  /* Default Typography (md) */
+  font:
+    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-lg-tracking);
 
   /* Resets */
   border: 1px solid transparent;
@@ -40,283 +38,172 @@
   }
 }
 
-@utility button-icon-slot {
+@utility air-button-icon-slot {
   /* Smart Icon Padding (M3 Spec: 16px on icon sides, 24px on text sides) */
-  &:has(> *:first-child:not(:last-child):is(.material-symbols-outlined, svg, img)) {
+  &:has(> .air-icon:first-child:not(:last-child)) {
     padding-inline-start: var(--air-button-icon-padding-x);
   }
 
-  &:has(> *:last-child:not(:first-child):is(.material-symbols-outlined, svg, img)) {
+  &:has(> .air-icon:last-child:not(:first-child)) {
     padding-inline-end: var(--air-button-icon-padding-x);
   }
 
-  &:has(> *:first-child:is(.material-symbols-outlined, svg, img)):has(
-      > *:last-child:is(.material-symbols-outlined, svg, img)
-    ) {
+  &:has(> .air-icon:first-child):has(> .air-icon:last-child) {
     padding-inline-start: var(--air-button-icon-padding-x);
     padding-inline-end: var(--air-button-icon-padding-x);
   }
 }
 
 /* Disabled State Utility */
-@utility button-disabled {
+@utility air-button-disabled {
   cursor: not-allowed;
   background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
   color: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
   border-color: transparent;
+  /* Disable state layer */
+  --state-layer-color: transparent;
 }
 
 /* Filled Button (High Emphasis) */
-@utility button-filled-surface {
+@utility air-button {
+  @apply air-button-base air-button-icon-slot cursor-pointer air-state-layer;
   background-color: var(--color-primary);
   color: var(--color-on-primary);
-}
+  --state-layer-color: var(--color-on-primary);
 
-@utility button-filled-hover {
-  background-color: color-mix(in srgb, var(--color-on-primary) 8%, var(--color-primary));
-}
-
-@utility button-filled-focus {
-  background-color: color-mix(in srgb, var(--color-on-primary) 12%, var(--color-primary));
+  &:disabled {
+    @apply air-button-disabled;
+  }
 }
 
 /* Elevated Button (High Emphasis) */
-@utility button-elevated-surface {
+@utility air-button-elevated {
+  @apply air-button-base air-button-icon-slot cursor-pointer air-state-layer;
   background-color: var(--color-surface-container-low);
   color: var(--color-primary);
-}
+  --state-layer-color: var(--color-primary);
 
-@utility button-elevated-hover {
-  background-color: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-container-low));
-}
-
-@utility button-elevated-focus {
-  background-color: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface-container-low));
+  &:disabled {
+    @apply air-button-disabled;
+  }
 }
 
 /* Filled Tonal (Medium Emphasis) */
-@utility button-tonal-surface {
+@utility air-button-tonal {
+  @apply air-button-base air-button-icon-slot cursor-pointer air-state-layer;
   background-color: var(--color-secondary-container);
   color: var(--color-on-secondary-container);
-}
+  --state-layer-color: var(--color-on-secondary-container);
 
-@utility button-tonal-hover {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
-}
-
-@utility button-tonal-focus {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
+  &:disabled {
+    @apply air-button-disabled;
+  }
 }
 
 /* Outlined (Medium Emphasis) */
-@utility button-outlined-surface {
+@utility air-button-outlined {
+  @apply air-button-base air-button-icon-slot cursor-pointer air-state-layer;
   background-color: color-mix(in srgb, var(--color-primary) 0%, transparent);
   color: var(--color-primary);
   /* 1px equivalent border using math */
   border: var(--shadow-base) solid var(--color-outline);
-}
+  --state-layer-color: var(--color-primary);
 
-@utility button-outlined-hover {
-  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
-}
+  &:focus-visible:not(:disabled) {
+    border-color: var(--color-primary);
+  }
 
-@utility button-outlined-focus {
-  border-color: var(--color-primary);
-  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  &:disabled {
+    @apply air-button-disabled;
+  }
 }
 
 /* Text Button (Low Emphasis) */
-@utility button-text-surface {
+@utility air-button-text {
+  @apply air-button-base air-button-icon-slot cursor-pointer air-state-layer;
   background-color: color-mix(in srgb, var(--color-primary) 0%, transparent);
   color: var(--color-primary);
   /* Text buttons have tighter padding */
   padding: 0 calc(var(--air-button-padding-x) * 0.5); /* 12px */
+  --state-layer-color: var(--color-primary);
+
+  &:disabled {
+    @apply air-button-disabled;
+  }
 }
 
-@utility button-text-hover {
-  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
-}
-
-@utility button-text-focus {
-  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
-}
-
-/* Toggle Button (State Utilities) */
-@utility button-toggle-surface {
+/* Toggle Button */
+@utility air-toggle-button {
+  @apply air-button-base air-button-icon-slot cursor-pointer air-state-layer;
   background-color: var(--color-surface-container);
   color: var(--color-on-surface);
-}
-
-@utility button-toggle-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container));
-}
-
-@utility button-toggle-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container));
-}
-
-@utility button-toggle-selected-surface {
-  background-color: var(--color-secondary-container);
-  color: var(--color-on-secondary-container);
-}
-
-@utility button-toggle-selected-hover {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
-}
-
-@utility button-toggle-selected-focus {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
-}
-
-/* Composed Utilities */
-@utility button {
-  @apply button-base button-icon-slot button-filled-surface cursor-pointer;
-
-  &:hover:not(:disabled) {
-    @apply button-filled-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply button-filled-focus;
-  }
+  --state-layer-color: var(--color-on-surface);
 
   &:disabled {
-    @apply button-disabled;
-  }
-}
-
-@utility button-elevated {
-  @apply button-base button-icon-slot button-elevated-surface cursor-pointer;
-
-  &:hover:not(:disabled) {
-    @apply button-elevated-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply button-elevated-focus;
-  }
-
-  &:disabled {
-    @apply button-disabled;
-  }
-}
-
-@utility button-tonal {
-  @apply button-base button-icon-slot button-tonal-surface cursor-pointer;
-
-  &:hover:not(:disabled) {
-    @apply button-tonal-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply button-tonal-focus;
-  }
-
-  &:disabled {
-    @apply button-disabled;
-  }
-}
-
-@utility button-outlined {
-  @apply button-base button-icon-slot button-outlined-surface cursor-pointer;
-
-  &:hover:not(:disabled) {
-    @apply button-outlined-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply button-outlined-focus;
-  }
-
-  &:disabled {
-    @apply button-disabled;
-  }
-}
-
-@utility button-text {
-  @apply button-base button-icon-slot button-text-surface cursor-pointer;
-
-  &:hover:not(:disabled) {
-    @apply button-text-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply button-text-focus;
-  }
-
-  &:disabled {
-    @apply button-disabled;
-  }
-}
-
-@utility toggle-button {
-  @apply button-base button-icon-slot button-toggle-surface cursor-pointer;
-
-  &:hover:not(:disabled) {
-    @apply button-toggle-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply button-toggle-focus;
-  }
-
-  &:disabled {
-    @apply button-disabled;
+    @apply air-button-disabled;
   }
 
   &[aria-pressed='true'],
   &[aria-selected='true'],
   &[aria-checked='true'] {
-    @apply button-toggle-selected-surface;
-
-    &:hover:not(:disabled) {
-      @apply button-toggle-selected-hover;
-    }
-
-    &:focus-visible:not(:disabled) {
-      @apply button-toggle-selected-focus;
-    }
+    background-color: var(--color-secondary-container);
+    color: var(--color-on-secondary-container);
+    --state-layer-color: var(--color-on-secondary-container);
   }
 }
 
 /* Button Sizes (M3 Expressive) */
-@utility button-xs {
+@utility air-button-xs {
   --air-button-height: calc(var(--spacing) * 6);
   --air-button-padding-x: calc(var(--spacing) * 2);
   --air-button-icon-padding-x: var(--spacing);
   --air-button-gap: var(--spacing);
-  --air-button-font-size: var(--font-label-small-size);
-  --air-button-line-height: var(--font-label-small-line-height);
+  font:
+    var(--font-label-sm-weight) var(--font-label-sm-size) / var(--font-label-sm-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-sm-tracking);
 }
-@utility button-sm {
+
+@utility air-button-sm {
   --air-button-height: calc(var(--spacing) * 8);
   --air-button-padding-x: calc(var(--spacing) * 4);
   --air-button-icon-padding-x: calc(var(--spacing) * 2.5);
   --air-button-gap: calc(var(--spacing) * 1.5);
-  --air-button-font-size: var(--font-label-medium-size);
-  --air-button-line-height: var(--font-label-medium-line-height);
+  font:
+    var(--font-label-md-weight) var(--font-label-md-size) / var(--font-label-md-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-md-tracking);
 }
-@utility button-md {
+
+@utility air-button-md {
   --air-button-height: calc(var(--spacing) * 10);
   --air-button-padding-x: calc(var(--spacing) * 6);
   --air-button-icon-padding-x: calc(var(--spacing) * 4);
   --air-button-gap: calc(var(--spacing) * 2);
-  --air-button-font-size: var(--font-label-large-size);
-  --air-button-line-height: var(--font-label-large-line-height);
+  font:
+    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-lg-tracking);
 }
-@utility button-lg {
+
+@utility air-button-lg {
   --air-button-height: calc(var(--spacing) * 12);
   --air-button-padding-x: calc(var(--spacing) * 8);
   --air-button-icon-padding-x: calc(var(--spacing) * 5.5);
   --air-button-gap: calc(var(--spacing) * 2.5);
-  --air-button-font-size: var(--font-title-small-size);
-  --air-button-line-height: var(--font-title-small-line-height);
+  font:
+    var(--font-title-sm-weight) var(--font-title-sm-size) / var(--font-title-sm-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-title-sm-tracking);
 }
-@utility button-xl {
+
+@utility air-button-xl {
   --air-button-height: calc(var(--spacing) * 14);
   --air-button-padding-x: calc(var(--spacing) * 10);
   --air-button-icon-padding-x: calc(var(--spacing) * 7);
   --air-button-gap: calc(var(--spacing) * 3);
-  --air-button-font-size: var(--font-title-medium-size);
-  --air-button-line-height: var(--font-title-medium-line-height);
+  font:
+    var(--font-title-md-weight) var(--font-title-md-size) / var(--font-title-md-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-title-md-tracking);
 }

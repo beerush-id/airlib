@@ -11,14 +11,14 @@ export const InputField = setup<{
 }>((props) => {
   return render(() => (
     <div className="flex flex-col gap-1 text-left w-full">
-      <div className="text-field text-field-outlined">
-        <label htmlFor={props.id} className="text-field-label">
+      <div className="air-text-field">
+        <label htmlFor={props.id} className="air-text-field-label">
           {props.label}
         </label>
         <input
           id={props.id}
           type={props.type ?? 'text'}
-          className="text-field-input"
+          className="air-text-field-input"
           value={props.value}
           onChange={(e) => {
             props.value = e.currentTarget.value;
@@ -26,7 +26,7 @@ export const InputField = setup<{
           placeholder=" "
         />
       </div>
-      {props.error ? <span className="text-body-small text-error">{props.error.message}</span> : null}
+      {props.error ? <span className="air-body-sm text-error">{props.error.message}</span> : null}
     </div>
   ));
 }, 'InputField');

@@ -16,10 +16,10 @@ const DialogConfirmDemo = setup(() => {
 
   return (
     <div className="flex items-center gap-4">
-      <button type="button" className="button" onClick={handleClick}>
+      <button type="button" className="air-button" onClick={handleClick}>
         Confirm Action
       </button>
-      <button type="button" className="button" onClick={() => demoWin.open()}>
+      <button type="button" className="air-button" onClick={() => demoWin.open()}>
         Open Window
       </button>
     </div>

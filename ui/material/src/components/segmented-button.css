@@ -1,42 +1,43 @@
 @theme {
-  --segmented-height: calc(var(--spacing) * 10);
-  --segmented-radius-outer: calc(var(--segmented-height) / 2);
-  --segmented-radius-inner: var(--radius-sm, 8px);
-  --segmented-gap: calc(var(--spacing) * 0.5);
+  --air-segmented-height: calc(var(--spacing) * 10);
+  --air-segmented-radius-outer: calc(var(--air-segmented-height) / 2);
+  --air-segmented-radius-inner: var(--radius-sm, 8px);
+  --air-segmented-gap: calc(var(--spacing) * 0.5);
 }
 
-@utility segmented-group {
+@utility air-segmented-group {
   @apply inline-flex items-center;
-  gap: var(--segmented-gap);
+  gap: var(--air-segmented-gap);
 }
 
 /* Base Layout */
-@utility segmented-button-base {
+@utility air-segmented-button-base {
   @apply inline-flex items-center justify-center;
-  height: var(--segmented-height);
+  height: var(--air-segmented-height);
   padding: 0 calc(var(--spacing) * 3);
   gap: calc(var(--spacing) * 2);
 
   /* Typography: Label Large */
-  font-size: var(--font-label-large-size);
-  font-weight: var(--font-label-large-weight);
-  line-height: var(--font-label-large-line-height);
+  font:
+    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-lg-tracking);
 
   /* Reset */
   border: none;
-  @apply box-border cursor-pointer focus-ring;
+  @apply box-border cursor-pointer air-focus-ring;
 
   /* Inner radius default */
-  border-radius: var(--segmented-radius-inner);
+  border-radius: var(--air-segmented-radius-inner);
 
   &:first-child {
-    border-top-left-radius: var(--segmented-radius-outer);
-    border-bottom-left-radius: var(--segmented-radius-outer);
+    border-top-left-radius: var(--air-segmented-radius-outer);
+    border-bottom-left-radius: var(--air-segmented-radius-outer);
   }
 
   &:last-child {
-    border-top-right-radius: var(--segmented-radius-outer);
-    border-bottom-right-radius: var(--segmented-radius-outer);
+    border-top-right-radius: var(--air-segmented-radius-outer);
+    border-bottom-right-radius: var(--air-segmented-radius-outer);
   }
 
   transition:
@@ -50,56 +51,34 @@
 }
 
 /* Default State */
-@utility segmented-button-surface {
+@utility air-segmented-button-surface {
   background-color: var(--color-surface-container);
   color: var(--color-on-surface);
 }
 
-@utility segmented-button-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container));
-}
-
-@utility segmented-button-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container));
-}
-
 /* Selected/Pressed State */
-@utility segmented-button-selected-surface {
+@utility air-segmented-button-selected-surface {
   background-color: var(--color-secondary-container);
   color: var(--color-on-secondary-container);
 }
 
-@utility segmented-button-selected-hover {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
-}
-
-@utility segmented-button-selected-focus {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
-}
-
 /* Composed Utilities */
-@utility segmented-button {
-  @apply segmented-button-base segmented-button-surface;
-
-  &:hover:not(:disabled) {
-    @apply segmented-button-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply segmented-button-focus;
-  }
+@utility air-segmented-button {
+  @apply air-segmented-button-base air-segmented-button-surface air-state-layer;
+  --state-layer-color: var(--color-on-surface);
 
   &[aria-pressed='true'],
   &[aria-selected='true'],
   &[aria-checked='true'] {
-    @apply segmented-button-selected-surface;
+    @apply air-segmented-button-selected-surface;
+    --state-layer-color: var(--color-on-secondary-container);
+  }
 
-    &:hover:not(:disabled) {
-      @apply segmented-button-selected-hover;
-    }
-
-    &:focus-visible:not(:disabled) {
-      @apply segmented-button-selected-focus;
-    }
+  &:disabled,
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+    color: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
+    background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
+    --state-layer-color: transparent;
   }
 }

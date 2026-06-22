@@ -16,7 +16,7 @@ export const AboutPage = page(aboutRoute).render(({ state }) => (
       SSR handles server rendering out of the box.
     </p>
 
-    <div className="card about-card">
+    <div className="air-card about-card">
       <ul className="about-list">
         <li>
           <strong className="brand-anchor">Anchor</strong> — Reactive state management. Mutate objects directly, and

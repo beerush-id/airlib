@@ -6,7 +6,7 @@ export const ThemeToggle = setup(() => {
 
   return render(
     () => (
-      <button className="icon-button" onClick={theme.toggle} data-theme={theme.current} aria-label="Toggle theme">
+      <button className="air-icon-button" onClick={theme.toggle} data-theme={theme.current} aria-label="Toggle theme">
         <span className="material-symbols-outlined">
           {theme.mode === 'dark' ? 'dark_mode' : theme.mode === 'light' ? 'light_mode' : 'contrast'}
         </span>

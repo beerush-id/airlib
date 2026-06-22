@@ -5,7 +5,7 @@
 }
 
 /* Tab List Layout */
-@utility tab-list-base {
+@utility air-tab-list-base {
   display: flex;
   align-items: center;
   margin: 0;
@@ -21,19 +21,19 @@
 }
 
 /* Tab List Surface */
-@utility tab-list-surface {
+@utility air-tab-list-surface {
   background-color: var(--color-surface-container-low);
   overflow: hidden;
 }
 
 /* Tab Content */
-@utility tab-content {
+@utility air-tab-content {
   background-color: var(--color-surface-container-low);
   overflow: hidden;
 }
 
 /* Segmented Structure */
-@utility tab {
+@utility air-tab {
   display: flex;
   flex-direction: column;
   gap: calc(var(--spacing) * 0.5); /* 2px gap */
@@ -57,7 +57,7 @@
 }
 
 /* Tab Button Base Layout */
-@utility tab-base {
+@utility air-tab-base {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -65,9 +65,10 @@
   padding: 0 calc(var(--spacing) * 4);
 
   /* Typography: Title Small */
-  font-size: var(--font-title-small-size);
-  font-weight: var(--font-title-small-weight);
-  letter-spacing: var(--font-title-small-tracking);
+  font:
+    var(--font-title-sm-weight) var(--font-title-sm-size) / var(--font-title-sm-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-title-sm-tracking);
   white-space: nowrap;
 
   /* Resets */
@@ -82,7 +83,7 @@
     background-color var(--duration-short) var(--ease-standard);
 }
 
-@utility tab-indicator-base {
+@utility air-tab-indicator-base {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -94,84 +95,53 @@
 }
 
 /* Tab Surface */
-/* Tab Surface */
-@utility tab-item-surface {
+@utility air-tab-item-surface {
   color: var(--color-on-surface-variant);
 }
 
-@utility tab-item-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, transparent);
-}
-
-@utility tab-item-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface-variant) 12%, transparent);
-}
-
-@utility tab-item-selected-surface {
+@utility air-tab-item-selected-surface {
   color: var(--color-primary);
 }
 
-@utility tab-item-selected-hover {
-  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
-}
-
-@utility tab-item-selected-focus {
-  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
-}
-
 /* Tab Indicator Surface */
-@utility tab-indicator-surface {
+@utility air-tab-indicator-surface {
   background-color: var(--color-primary);
 }
 
-@utility tab-indicator-selected {
+@utility air-tab-indicator-selected {
   opacity: 1;
 }
 
-@utility tab-item-disabled {
-  cursor: not-allowed !important;
-  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent) !important;
-  pointer-events: none !important;
+@utility air-tab-item-disabled {
+  cursor: not-allowed;
+  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
+  pointer-events: none;
 }
 
 /* Composed Utilities */
-@utility tab-list {
-  @apply tab-list-base tab-list-surface;
+@utility air-tab-list {
+  @apply air-tab-list-base air-tab-list-surface;
 }
 
-@utility tab-item {
-  @apply tab-base tab-item-surface;
-
-  &:hover:not(:disabled) {
-    @apply tab-item-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply tab-item-focus;
-  }
+@utility air-tab-item {
+  @apply air-tab-base air-tab-item-surface air-state-layer;
+  --state-layer-color: var(--color-on-surface-variant);
 
   &[aria-selected='true'] {
-    @apply tab-item-selected-surface;
-
-    &:hover:not(:disabled) {
-      @apply tab-item-selected-hover;
-    }
-
-    &:focus-visible:not(:disabled) {
-      @apply tab-item-selected-focus;
-    }
+    @apply air-tab-item-selected-surface;
+    --state-layer-color: var(--color-primary);
   }
 
   &:disabled,
   &[aria-disabled='true'] {
-    @apply tab-item-disabled;
+    @apply air-tab-item-disabled;
   }
 }
 
-@utility tab-indicator {
-  @apply tab-indicator-base tab-indicator-surface;
+@utility air-tab-indicator {
+  @apply air-tab-indicator-base air-tab-indicator-surface;
 
-  .tab-item[aria-selected='true'] & {
-    @apply tab-indicator-selected;
+  .air-tab-item[aria-selected='true'] & {
+    @apply air-tab-indicator-selected;
   }
 }

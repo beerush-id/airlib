@@ -3,33 +3,32 @@
   --air-chip-radius: var(--radius-sm);
   --air-chip-padding-x: calc(var(--spacing) * 4);
   --air-chip-icon-padding-x: calc(var(--spacing) * 2);
-  --air-chip-font-size: var(--font-label-large-size);
-  --air-chip-line-height: var(--font-label-large-line-height);
 }
 
 /* Base Layout and Typography */
-@utility chip-base {
+@utility air-chip-base {
   @apply inline-flex items-center justify-center;
   @apply box-border cursor-pointer;
   height: var(--air-chip-height);
   padding: 0 var(--air-chip-padding-x);
   border-radius: var(--air-chip-radius);
 
-  /* Typography: Label Large */
-  font-size: var(--air-chip-font-size);
-  font-weight: var(--font-label-large-weight);
-  line-height: var(--air-chip-line-height);
+  /* Typography: Label Large (Default MD) */
+  font:
+    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-lg-tracking);
 
   /* Resets */
   border: none;
-  @apply no-underline select-none focus-ring;
+  @apply no-underline select-none air-focus-ring;
 
   /* Smart Icon Padding (M3 Spec) */
-  &:has(> *:first-child:not(:last-child):is(.material-symbols-outlined, svg, img)) {
+  &:has(> .air-icon:first-child:not(:last-child)) {
     padding-inline-start: var(--air-chip-icon-padding-x);
   }
 
-  &:has(> *:last-child:not(:first-child):is(.material-symbols-outlined, svg, img)) {
+  &:has(> .air-icon:last-child:not(:first-child)) {
     padding-inline-end: var(--air-chip-icon-padding-x);
   }
 
@@ -41,143 +40,102 @@
 }
 
 /* Outlined Variant (Default M3 Chip) */
-@utility chip-outlined-surface {
+@utility air-chip-outlined-surface {
   border: 1px solid var(--color-outline-variant);
   background-color: transparent;
   color: var(--color-on-surface-variant);
 }
 
-@utility chip-outlined-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, transparent);
-}
-
-@utility chip-outlined-focus {
-  border-color: var(--color-on-surface-variant);
-  background-color: color-mix(in srgb, var(--color-on-surface-variant) 12%, transparent);
-}
-
-@utility chip-outlined-selected-surface {
+@utility air-chip-outlined-selected-surface {
   background-color: var(--color-secondary-container);
   color: var(--color-on-secondary-container);
   border-color: transparent;
 }
 
-@utility chip-outlined-selected-hover {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
-}
-
-@utility chip-outlined-selected-focus {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
-}
-
 /* Elevated Variant */
-@utility chip-elevated-surface {
+@utility air-chip-elevated-surface {
   background-color: var(--color-surface-container-low);
   color: var(--color-on-surface-variant);
 }
 
-@utility chip-elevated-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, var(--color-surface-container-low));
-}
-
-@utility chip-elevated-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface-variant) 12%, var(--color-surface-container-low));
-}
-
-@utility chip-elevated-selected-surface {
+@utility air-chip-elevated-selected-surface {
   background-color: var(--color-secondary-container);
   color: var(--color-on-secondary-container);
 }
 
-@utility chip-elevated-selected-hover {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
-}
-
-@utility chip-elevated-selected-focus {
-  background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
-}
-
 /* Common Disabled State */
-@utility chip-disabled {
-  opacity: 0.38 !important;
-  cursor: not-allowed !important;
-  pointer-events: none !important;
+@utility air-chip-disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* Composed Utilities */
-@utility chip {
-  @apply chip-base chip-outlined-surface;
-
-  &:hover:not(:disabled) {
-    @apply chip-outlined-hover;
-  }
+@utility air-chip {
+  @apply air-chip-base air-chip-outlined-surface air-state-layer;
+  --state-layer-color: var(--color-on-surface-variant);
 
   &:focus-visible:not(:disabled) {
-    @apply chip-outlined-focus;
+    border-color: var(--color-on-surface-variant);
   }
 
   &[aria-selected='true'],
   &[aria-checked='true'] {
-    @apply chip-outlined-selected-surface;
-
-    &:hover:not(:disabled) {
-      @apply chip-outlined-selected-hover;
-    }
-
-    &:focus-visible:not(:disabled) {
-      @apply chip-outlined-selected-focus;
-    }
+    @apply air-chip-outlined-selected-surface;
+    --state-layer-color: var(--color-on-secondary-container);
   }
 
   &:disabled,
   &[aria-disabled='true'] {
-    @apply chip-disabled;
+    @apply air-chip-disabled;
+    --state-layer-color: transparent;
   }
 }
 
-@utility chip-elevated {
-  @apply chip-base chip-elevated-surface;
-
-  &:hover:not(:disabled) {
-    @apply chip-elevated-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply chip-elevated-focus;
-  }
+@utility air-chip-elevated {
+  @apply air-chip-base air-chip-elevated-surface air-state-layer;
+  --state-layer-color: var(--color-on-surface-variant);
 
   &[aria-selected='true'],
   &[aria-checked='true'] {
-    @apply chip-elevated-selected-surface;
-
-    &:hover:not(:disabled) {
-      @apply chip-elevated-selected-hover;
-    }
-
-    &:focus-visible:not(:disabled) {
-      @apply chip-elevated-selected-focus;
-    }
+    @apply air-chip-elevated-selected-surface;
+    --state-layer-color: var(--color-on-secondary-container);
   }
 
   &:disabled,
   &[aria-disabled='true'] {
-    @apply chip-disabled;
+    @apply air-chip-disabled;
+    --state-layer-color: transparent;
   }
 }
 
 /* Chip Sizes */
-@utility chip-sm {
+@utility air-chip-sm {
   --air-chip-height: calc(var(--spacing) * 6);
   --air-chip-padding-x: calc(var(--spacing) * 2);
-  --air-chip-font-size: var(--font-label-medium-size);
+  --air-chip-radius: var(--radius-xs);
+  font:
+    var(--font-label-md-weight) var(--font-label-md-size) / var(--font-label-md-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-md-tracking);
 }
-@utility chip-md {
+
+@utility air-chip-md {
   --air-chip-height: calc(var(--spacing) * 8);
   --air-chip-padding-x: calc(var(--spacing) * 4);
-  --air-chip-font-size: var(--font-label-large-size);
+  --air-chip-radius: var(--radius-sm);
+  font:
+    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-lg-tracking);
 }
-@utility chip-lg {
+
+@utility air-chip-lg {
   --air-chip-height: calc(var(--spacing) * 10);
   --air-chip-padding-x: calc(var(--spacing) * 6);
-  --air-chip-font-size: var(--font-title-small-size);
+  --air-chip-radius: var(--radius-md);
+  font:
+    var(--font-title-sm-weight) var(--font-title-sm-size) / var(--font-title-sm-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-title-sm-tracking);
 }

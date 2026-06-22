@@ -1,33 +1,34 @@
 @theme {
-  --date-picker-radius: var(--radius-xl);
-  --date-picker-cell-size: calc(var(--spacing) * 12); /* 48px */
+  --air-date-picker-radius: var(--radius-xl);
+  --air-date-picker-cell-size: calc(var(--spacing) * 12); /* 48px */
 }
 
 /* Base surface */
-@utility date-picker-surface {
+@utility air-date-picker-surface {
   @apply inline-block box-border;
   background-color: var(--color-surface-container-high);
-  border-radius: var(--date-picker-radius);
+  border-radius: var(--air-date-picker-radius);
   padding: calc(var(--spacing) * 4);
 }
 
-@utility date-picker-grid {
+@utility air-date-picker-grid {
   @apply grid;
   grid-template-columns: repeat(7, 1fr);
   gap: var(--spacing); /* 4px */
 }
 
 /* Base cell layout */
-@utility date-picker-cell-base {
+@utility air-date-picker-cell-base {
   @apply flex items-center justify-center;
-  @apply cursor-pointer focus-ring;
-  width: var(--date-picker-cell-size);
-  height: var(--date-picker-cell-size);
+  @apply cursor-pointer air-focus-ring;
+  width: var(--air-date-picker-cell-size);
+  height: var(--air-date-picker-cell-size);
   border-radius: var(--radius-full);
 
   /* Typography: Body Large */
-  font-size: var(--font-body-large-size);
-  font-weight: var(--font-body-large-weight);
+  font:
+    var(--font-body-lg-weight) var(--font-body-lg-size) / var(--font-body-lg-line-height) var(--font-brand, system-ui);
+  letter-spacing: var(--font-body-lg-tracking);
 
   /* Reset */
   border: 1px solid transparent; /* reserve border space */
@@ -41,75 +42,64 @@
 }
 
 /* Default state */
-@utility date-picker-cell-surface {
+@utility air-date-picker-cell-surface {
   color: var(--color-on-surface);
 }
 
-@utility date-picker-cell-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface) 8%, transparent);
-}
-
 /* Selected state */
-@utility date-picker-cell-selected-surface {
+@utility air-date-picker-cell-selected-surface {
   background-color: var(--color-primary);
   color: var(--color-on-primary);
   border-color: var(--color-primary);
 }
 
-@utility date-picker-cell-selected-hover {
-  background-color: color-mix(in srgb, var(--color-on-primary) 8%, var(--color-primary));
-}
-
 /* Today indicator */
-@utility date-picker-cell-today-surface {
+@utility air-date-picker-cell-today-surface {
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
 
 /* Disabled state */
-@utility date-picker-cell-disabled {
-  cursor: not-allowed !important;
-  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent) !important;
-  background-color: transparent !important;
-  pointer-events: none !important;
+@utility air-date-picker-cell-disabled {
+  cursor: not-allowed;
+  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
+  background-color: transparent;
+  pointer-events: none;
 }
 
-@utility date-picker-header {
+@utility air-date-picker-header {
   @apply flex items-center justify-between;
   margin-bottom: calc(var(--spacing) * 4);
   color: var(--color-on-surface-variant);
 
   /* Typography: Label Large for Days of Week */
-  font-size: var(--font-label-large-size);
-  font-weight: var(--font-label-large-weight);
+  font:
+    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-lg-tracking);
 }
 
 /* Composed Utilities */
-@utility date-picker {
-  @apply date-picker-surface;
+@utility air-date-picker {
+  @apply air-date-picker-surface;
 }
 
-@utility date-picker-cell {
-  @apply date-picker-cell-base date-picker-cell-surface;
-
-  &:hover:not(:disabled) {
-    @apply date-picker-cell-hover;
-  }
+@utility air-date-picker-cell {
+  @apply air-date-picker-cell-base air-date-picker-cell-surface air-state-layer;
+  --state-layer-color: var(--color-on-surface);
 
   &[aria-selected='true'] {
-    @apply date-picker-cell-selected-surface;
-
-    &:hover:not(:disabled) {
-      @apply date-picker-cell-selected-hover;
-    }
+    @apply air-date-picker-cell-selected-surface;
+    --state-layer-color: var(--color-on-primary);
   }
 
   &[aria-current='date']:not([aria-selected='true']) {
-    @apply date-picker-cell-today-surface;
+    @apply air-date-picker-cell-today-surface;
   }
 
   &:disabled,
   &[aria-disabled='true'] {
-    @apply date-picker-cell-disabled;
+    @apply air-date-picker-cell-disabled;
+    --state-layer-color: transparent;
   }
 }

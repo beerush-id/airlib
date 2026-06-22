@@ -50,8 +50,8 @@ export const FormsPage = page(formsRoute).render(() => (
     <Title>Account Settings | Form Demo</Title>
 
     <div className="mb-8">
-      <h1 className="text-headline-medium font-bold tracking-tight text-on-surface">Account Settings</h1>
-      <p className="mt-2 text-body-large text-on-surface-variant">
+      <h1 className="air-headline-md font-bold tracking-tight text-on-surface">Account Settings</h1>
+      <p className="mt-2 air-body-lg text-on-surface-variant">
         Showcasing deep paths, complex validation, and various input types.
       </p>
     </div>
@@ -65,14 +65,14 @@ export const FormsPage = page(formsRoute).render(() => (
         await new Promise((resolve) => setTimeout(resolve, 1000));
         alert('Settings saved successfully!');
       }}
-      className="card-group gap-2 [--card-padding:1.5rem] sm:[--card-padding:2rem]"
+      className="air-card-group gap-2 [--card-padding:1.5rem] sm:[--card-padding:2rem]"
     >
       {/* Profile Section */}
-      <div className="card">
-        <div className="card-header">
-          <h2 className="card-title">Profile Information</h2>
+      <div className="air-card">
+        <div className="air-card-header">
+          <h2 className="air-card-title">Profile Information</h2>
         </div>
-        <div className="card-body grid gap-6 sm:grid-cols-2">
+        <div className="air-card-body grid gap-6 sm:grid-cols-2">
           <AccountForm.Field name="profile.fullName" label="Full Name">
             <TextInput placeholder="Jane Doe" />
           </AccountForm.Field>
@@ -81,18 +81,18 @@ export const FormsPage = page(formsRoute).render(() => (
             <EmailInput placeholder="jane@example.com" />
           </AccountForm.Field>
 
-          <AccountForm.Field name="profile.bio" label="Biography" className="text-field sm:col-span-2">
+          <AccountForm.Field name="profile.bio" label="Biography" className="air-text-field sm:col-span-2">
             <Textarea placeholder="Tell us a bit about yourself..." rows={3} />
           </AccountForm.Field>
         </div>
       </div>
 
       {/* Security Section */}
-      <div className="card">
-        <div className="card-header">
-          <h2 className="card-title">Security Settings</h2>
+      <div className="air-card">
+        <div className="air-card-header">
+          <h2 className="air-card-title">Security Settings</h2>
         </div>
-        <div className="card-body grid gap-6 sm:grid-cols-2">
+        <div className="air-card-body grid gap-6 sm:grid-cols-2">
           <AccountForm.Field name="password" label="New Password">
             <PasswordInput placeholder="••••••••" />
           </AccountForm.Field>
@@ -109,21 +109,21 @@ export const FormsPage = page(formsRoute).render(() => (
       </div>
 
       {/* Addresses Section */}
-      <div className="card">
-        <div className="card-header">
-          <h2 className="card-title">Address Information</h2>
+      <div className="air-card">
+        <div className="air-card-header">
+          <h2 className="air-card-title">Address Information</h2>
         </div>
 
         <AccountForm.FieldList name="addresses">
           {(items) => (
-            <div className="card-body space-y-2">
+            <div className="air-card-body space-y-2">
               <For each={() => items}>
                 {(_, index) => (
-                  <div className="card-filled card-body grid gap-6 sm:grid-cols-2">
+                  <div className="air-card-filled air-card-body grid gap-6 sm:grid-cols-2">
                     <AccountForm.Field
                       name={`addresses.${index}.street`}
                       label="Street Address"
-                      className="text-field sm:col-span-2"
+                      className="air-text-field sm:col-span-2"
                     >
                       <TextInput placeholder="123 Main St, Apt 4B" />
                     </AccountForm.Field>
@@ -148,7 +148,7 @@ export const FormsPage = page(formsRoute).render(() => (
                         onClick={() => {
                           items.splice(index, 1);
                         }}
-                        className="button-text text-error"
+                        className="air-button-text text-error"
                       >
                         Remove Address
                       </button>
@@ -170,7 +170,7 @@ export const FormsPage = page(formsRoute).render(() => (
                     country: 'United States',
                   });
                 }}
-                className="rounded-lg border border-dashed border-outline-variant px-4 py-3 text-body-medium font-medium text-on-surface-variant transition-colors hover:border-outline hover:bg-surface-variant w-full"
+                className="rounded-lg border border-dashed border-outline-variant px-4 py-3 air-body-md font-medium text-on-surface-variant transition-colors hover:border-outline hover:bg-surface-variant w-full"
               >
                 + Add New Address
               </button>
@@ -180,11 +180,11 @@ export const FormsPage = page(formsRoute).render(() => (
       </div>
 
       {/* Preferences Section */}
-      <div className="card">
-        <div className="card-header">
-          <h2 className="card-title">App Preferences</h2>
+      <div className="air-card">
+        <div className="air-card-header">
+          <h2 className="air-card-title">App Preferences</h2>
         </div>
-        <div className="card-body grid gap-8 sm:grid-cols-2">
+        <div className="air-card-body grid gap-8 sm:grid-cols-2">
           <AccountForm.Field name="preferences.theme" label="Interface Theme">
             <Select>
               <option value="light">Light Mode</option>
@@ -196,7 +196,7 @@ export const FormsPage = page(formsRoute).render(() => (
           <AccountForm.Field name="preferences.accentColor" label="Accent Color" className="flex flex-col gap-1">
             <div className="flex items-center gap-3">
               <ColorPicker />
-              <span className="text-body-small text-on-surface-variant">Pick a brand color</span>
+              <span className="air-body-sm text-on-surface-variant">Pick a brand color</span>
             </div>
           </AccountForm.Field>
 
@@ -214,8 +214,8 @@ export const FormsPage = page(formsRoute).render(() => (
                 <Checkbox id={'marketing-check'} />
               </div>
               <div className="flex flex-col">
-                <span className="text-body-medium font-medium text-on-surface">Marketing Emails</span>
-                <span className="text-body-small text-on-surface-variant">
+                <span className="air-body-md font-medium text-on-surface">Marketing Emails</span>
+                <span className="air-body-sm text-on-surface-variant">
                   Receive weekly product updates and offers.
                 </span>
               </div>
@@ -225,8 +225,8 @@ export const FormsPage = page(formsRoute).render(() => (
       </div>
 
       {/* Actions */}
-      <div className="card">
-        <div className="card-body flex items-center justify-end gap-3 bg-surface-variant">
+      <div className="air-card">
+        <div className="air-card-body flex items-center justify-end gap-3 bg-surface-variant">
           <FormReset>Discard Changes</FormReset>
           <FormSubmit>{(form) => (form?.pending ? 'Saving...' : 'Save Settings')}</FormSubmit>
         </div>

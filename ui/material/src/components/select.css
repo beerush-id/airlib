@@ -1,29 +1,30 @@
 /* Select uses text-field as the trigger and menu as the dropdown */
 
-@utility select-trigger {
+@utility air-select-trigger {
   /* Inherits text-field-base but resets cursor to pointer */
   @apply cursor-pointer;
 }
 
-@utility select-caret {
+@utility air-select-caret {
   transition: transform var(--duration-short) var(--ease-standard);
 }
 
-@utility select-caret-expanded {
+@utility air-select-caret-expanded {
   transform: rotate(180deg);
 }
 
-@utility select-option-selected-surface {
+@utility air-select-option-selected-surface {
   background-color: var(--color-secondary-container);
   color: var(--color-on-secondary-container);
   font-weight: bold;
 }
 
 /* Composed Utilities */
-@utility select-option {
-  @apply menu-item;
+@utility air-select-option {
+  @apply air-menu-item;
 
   &[aria-selected='true'] {
-    @apply select-option-selected-surface;
+    @apply air-select-option-selected-surface;
+    --state-layer-color: var(--color-on-secondary-container);
   }
 }

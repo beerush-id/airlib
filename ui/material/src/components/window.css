@@ -2,7 +2,7 @@
   --shadow-window: 0 0 3px light-dark(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 1));
   --shadow-window-active: 0 0 30px light-dark(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 1));
   --air-minimized-transform: translate3d(0, 100%, 0) scale(0.3);
-  --spacing-resizer: 5px;
+  --spacing-resizer: calc(var(--spacing) * 1.25); /* 5px */
 
   @keyframes window-focus-in {
     from {
@@ -93,7 +93,7 @@
   }
 
   &[data-maximized='true'][data-drag-out] {
-    transition: transform var(--duration-short) var(--ease-emphasized) !important;
+    transition: transform var(--duration-short) var(--ease-emphasized);
   }
 
   &[data-minimized='true'] {
@@ -141,7 +141,7 @@
 @utility air-window-control-btn {
   @apply rounded-full p-0.5 flex items-center justify-center;
   @apply bg-surface-container-high transition-colors;
-  @apply focus-ring;
+  @apply air-focus-ring;
 
   &:focus-visible svg {
     @apply opacity-100;
@@ -200,11 +200,11 @@
 }
 
 @utility air-window-title {
-  @apply text-title-small-emphasized;
+  @apply air-title-sm-strong;
 }
 
 @utility air-window-subtitle {
-  @apply text-field-label;
+  @apply air-text-field-label;
 }
 
 @utility air-window-splash {

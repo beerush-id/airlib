@@ -8,7 +8,7 @@
 }
 
 /* Base Tooltip Structure */
-@utility tooltip-base {
+@utility air-tooltip-base {
   @apply absolute z-popover pointer-events-none;
   @apply opacity-0 invisible box-border;
   transition:
@@ -23,47 +23,47 @@
 }
 
 /* Plain Tooltip Layout */
-@utility tooltip-plain-layout {
+@utility air-tooltip-plain-layout {
   border-radius: var(--radius-xs);
   padding: var(--air-tooltip-plain-padding-y) var(--air-tooltip-plain-padding-x);
 
   /* Typography: Label Small / Body Small */
-  font-size: var(--font-body-small-size);
-  font-weight: var(--font-body-small-weight);
-  letter-spacing: var(--font-body-small-tracking);
+  font:
+    var(--font-body-sm-weight) var(--font-body-sm-size) / var(--font-body-sm-line-height) var(--font-brand, system-ui);
+  letter-spacing: var(--font-body-sm-tracking);
 }
 
 /* Plain Tooltip Surface */
-@utility tooltip-plain-surface {
+@utility air-tooltip-plain-surface {
   background-color: var(--color-inverse-surface);
   color: var(--color-inverse-on-surface);
 }
 
 /* Rich Tooltip Layout */
-@utility tooltip-rich-layout {
+@utility air-tooltip-rich-layout {
   border-radius: var(--radius-md);
   padding: var(--air-tooltip-rich-padding-y) var(--air-tooltip-rich-padding-x);
 
   /* Typography: Body Medium */
-  font-size: var(--font-body-medium-size);
-  font-weight: var(--font-body-medium-weight);
-  letter-spacing: var(--font-body-medium-tracking);
+  font:
+    var(--font-body-md-weight) var(--font-body-md-size) / var(--font-body-md-line-height) var(--font-brand, system-ui);
+  letter-spacing: var(--font-body-md-tracking);
 
   /* Rich tooltips can be interactive */
   @apply pointer-events-auto;
 }
 
 /* Rich Tooltip Surface */
-@utility tooltip-rich-surface {
+@utility air-tooltip-rich-surface {
   background-color: var(--color-surface-variant);
   color: var(--color-on-surface-variant);
 }
 
 /* Composed Utilities */
-@utility tooltip-plain {
-  @apply tooltip-base tooltip-plain-layout tooltip-plain-surface;
+@utility air-tooltip-plain {
+  @apply air-tooltip-base air-tooltip-plain-layout air-tooltip-plain-surface;
 }
 
-@utility tooltip-rich {
-  @apply tooltip-base tooltip-rich-layout tooltip-rich-surface;
+@utility air-tooltip-rich {
+  @apply air-tooltip-base air-tooltip-rich-layout air-tooltip-rich-surface;
 }

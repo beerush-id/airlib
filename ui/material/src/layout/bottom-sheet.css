@@ -4,7 +4,7 @@
 }
 
 /* Base Layout */
-@utility bottom-sheet-base {
+@utility air-bottom-sheet-base {
   @apply fixed bottom-0 left-1/2 w-full z-modal;
   transform: translateX(-50%) translateY(100%);
   max-width: var(--air-bottom-sheet-max-width);
@@ -18,23 +18,23 @@
 }
 
 /* Surface Visuals */
-@utility bottom-sheet-surface {
+@utility air-bottom-sheet-surface {
   background-color: var(--color-surface-container-low);
   color: var(--color-on-surface);
 }
 
-@utility bottom-sheet-handle-base {
+@utility air-bottom-sheet-handle-base {
   @apply opacity-50 rounded-full;
   width: calc(var(--spacing) * 8); /* 32px */
   height: var(--spacing); /* 4px */
   margin: calc(var(--spacing) * 4) auto calc(var(--spacing) * 4); /* 16px auto */
 }
 
-@utility bottom-sheet-handle-surface {
+@utility air-bottom-sheet-handle-surface {
   background-color: var(--color-outline);
 }
 
-@utility bottom-sheet-scrim-base {
+@utility air-bottom-sheet-scrim-base {
   @apply fixed inset-0 z-fixed opacity-0 pointer-events-none;
   transition: opacity var(--duration-medium) var(--ease-standard);
 
@@ -44,19 +44,19 @@
   }
 }
 
-@utility bottom-sheet-scrim-surface {
+@utility air-bottom-sheet-scrim-surface {
   background-color: color-mix(in srgb, var(--color-scrim) 32%, transparent);
 }
 
 /* Composed Utilities */
-@utility bottom-sheet {
-  @apply bottom-sheet-base bottom-sheet-surface;
+@utility air-bottom-sheet {
+  @apply air-bottom-sheet-base air-bottom-sheet-surface;
 }
 
-@utility bottom-sheet-handle {
-  @apply bottom-sheet-handle-base bottom-sheet-handle-surface;
+@utility air-bottom-sheet-handle {
+  @apply air-bottom-sheet-handle-base air-bottom-sheet-handle-surface;
 }
 
-@utility bottom-sheet-scrim {
-  @apply bottom-sheet-scrim-base bottom-sheet-scrim-surface;
+@utility air-bottom-sheet-scrim {
+  @apply air-bottom-sheet-scrim-base air-bottom-sheet-scrim-surface;
 }

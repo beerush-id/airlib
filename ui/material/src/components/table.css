@@ -1,14 +1,16 @@
-@utility table-view {
+@utility air-table-view {
   @apply w-full text-left;
   border-collapse: separate;
   border-spacing: 0 calc(var(--spacing) * 1); /* 4px vertical gap */
 }
 
-@utility table-header-cell {
+@utility air-table-header-cell {
   height: calc(var(--spacing) * 16);
   padding: 0 calc(var(--spacing) * 6); /* 0 24px */
-  font-size: var(--font-title-small-size);
-  font-weight: 600; /* Bolder to stand out more */
+
+  font: 600 var(--font-title-sm-size) / var(--font-title-sm-line-height) var(--font-brand, system-ui);
+  letter-spacing: var(--font-title-sm-tracking);
+
   color: var(--color-on-surface);
   background-color: var(--color-surface-container-high); /* Stand out from surface-container rows */
   vertical-align: middle;
@@ -25,22 +27,21 @@
 }
 
 /* Base row setup for focus and z-index */
-@utility table-row {
-  @apply focus-ring;
+@utility air-table-row {
+  @apply air-focus-ring relative;
   transition:
     background-color var(--duration-short) var(--ease-standard),
     color var(--duration-short) var(--ease-standard),
     outline-color var(--duration-short) var(--ease-standard);
 
   &:focus-visible {
-    position: relative;
     z-index: var(--z-index-elevated);
   }
 }
 
 /* Filled Segmented Variant */
-@utility table-row-filled {
-  @apply table-row cursor-pointer;
+@utility air-table-row-filled {
+  @apply air-table-row cursor-pointer;
   background-color: var(--color-surface-container-low);
 
   &:hover {
@@ -64,9 +65,13 @@
   }
 }
 
-@utility table-cell {
+@utility air-table-cell {
   padding: calc(var(--spacing) * 3) calc(var(--spacing) * 6); /* 12px 24px */
-  font-size: var(--font-body-medium-size);
+
+  font:
+    var(--font-body-md-weight) var(--font-body-md-size) / var(--font-body-md-line-height) var(--font-brand, system-ui);
+  letter-spacing: var(--font-body-md-tracking);
+
   color: var(--color-on-surface);
   vertical-align: middle;
 
@@ -83,17 +88,17 @@
 }
 
 /* Top Outer Radius (Applies to the first row of the first group) */
-.table-view > :first-child > tr:first-child > :first-child {
+.air-table-view > :first-child > tr:first-child > :first-child {
   border-start-start-radius: var(--radius-xl);
 }
-.table-view > :first-child > tr:first-child > :last-child {
+.air-table-view > :first-child > tr:first-child > :last-child {
   border-start-end-radius: var(--radius-xl);
 }
 
 /* Bottom Outer Radius (Applies to the last row of the last group) */
-.table-view > :last-child > tr:last-child > :first-child {
+.air-table-view > :last-child > tr:last-child > :first-child {
   border-end-start-radius: var(--radius-xl);
 }
-.table-view > :last-child > tr:last-child > :last-child {
+.air-table-view > :last-child > tr:last-child > :last-child {
   border-end-end-radius: var(--radius-xl);
 }

@@ -4,7 +4,7 @@
 }
 
 /* Base Layout */
-@utility side-sheet-base {
+@utility air-side-sheet-base {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -16,7 +16,7 @@
 }
 
 /* Right Anchored (Default) */
-@utility side-sheet-right {
+@utility air-side-sheet-right {
   inset-inline-end: 0;
   border-radius: var(--air-side-sheet-radius) 0 0 var(--air-side-sheet-radius);
   transform: translateX(100%);
@@ -27,7 +27,7 @@
 }
 
 /* Left Anchored */
-@utility side-sheet-left {
+@utility air-side-sheet-left {
   inset-inline-start: 0;
   border-radius: 0 var(--air-side-sheet-radius) var(--air-side-sheet-radius) 0;
   transform: translateX(-100%);
@@ -38,7 +38,7 @@
 }
 
 /* Surface Visuals */
-@utility side-sheet-surface {
+@utility air-side-sheet-surface {
   background-color: var(--color-surface-container-low);
   color: var(--color-on-surface);
 
@@ -47,7 +47,7 @@
      M3 uses tonal elevation primarily. */
 }
 
-@utility side-sheet-scrim-base {
+@utility air-side-sheet-scrim-base {
   position: fixed;
   inset: 0;
   z-index: 40;
@@ -61,16 +61,16 @@
   }
 }
 
-@utility side-sheet-scrim-surface {
+@utility air-side-sheet-scrim-surface {
   background-color: color-mix(in srgb, var(--color-scrim) 32%, transparent);
 }
 
 /* Composed Utilities */
-@utility side-sheet {
+@utility air-side-sheet {
   /* Default to right anchored */
-  @apply side-sheet-base side-sheet-right side-sheet-surface;
+  @apply air-side-sheet-base air-side-sheet-right air-side-sheet-surface;
 }
 
-@utility side-sheet-scrim {
-  @apply side-sheet-scrim-base side-sheet-scrim-surface;
+@utility air-side-sheet-scrim {
+  @apply air-side-sheet-scrim-base air-side-sheet-scrim-surface;
 }

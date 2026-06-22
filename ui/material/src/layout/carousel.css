@@ -2,7 +2,7 @@
   --air-carousel-radius: var(--radius-xl); /* 28px for M3 Carousel Items */
 }
 
-@utility carousel {
+@utility air-carousel {
   display: flex;
   align-items: center;
   gap: calc(var(--spacing) * 2); /* 8px */
@@ -17,7 +17,7 @@
   }
 }
 
-@utility carousel-item {
+@utility air-carousel-item {
   scroll-snap-align: center;
   flex-shrink: 0;
   border-radius: var(--air-carousel-radius);

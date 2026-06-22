@@ -13,7 +13,7 @@ export const WindowLoader: WebWindowRenderer<AnyType, ReactNode> = ({ instance }
           {instance.description && <p className="air-window-subtitle">{instance.description}</p>}
         </div>
         {Array.from(instance.activities).map((activity, index) => (
-          <span key={index} className="text-field-label text-on-surface">
+          <span key={index} className="air-label-md text-on-surface">
             {activity}
           </span>
         ))}

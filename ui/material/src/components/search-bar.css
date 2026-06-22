@@ -1,11 +1,11 @@
 @theme {
-  --search-bar-height: calc(var(--spacing) * 10); /* 40px */
+  --air-search-bar-height: calc(var(--spacing) * 10); /* 40px */
 }
 
 /* Base Layout */
-@utility search-bar-base {
+@utility air-search-bar-base {
   @apply flex items-center w-full box-border;
-  height: var(--search-bar-height);
+  height: var(--air-search-bar-height);
   border-radius: var(--radius-full);
   padding: 0 calc(var(--spacing) * 3);
   gap: calc(var(--spacing) * 3);
@@ -14,28 +14,21 @@
 }
 
 /* Visual Surface */
-@utility search-bar-surface {
+@utility air-search-bar-surface {
   background-color: var(--color-surface-container-high);
 }
 
-@utility search-bar-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-high));
-}
-
-@utility search-bar-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-high));
-}
-
-@utility search-bar-input-base {
+@utility air-search-bar-input-base {
   @apply flex-1 h-full outline-none;
   border: none;
   background-color: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
   color: var(--color-on-surface);
 
-  /* Body Large */
-  font-size: var(--font-title-small-size);
-  line-height: var(--font-title-small-line-height);
-  font-weight: var(--font-title-medium-weight);
+  /* Title Small */
+  font:
+    var(--font-title-sm-weight) var(--font-title-sm-size) / var(--font-title-sm-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-title-sm-tracking);
 
   &::placeholder {
     color: var(--color-on-surface-variant);
@@ -43,18 +36,18 @@
 }
 
 /* Composed Utilities */
-@utility search-bar {
-  @apply search-bar-base search-bar-surface;
+@utility air-search-bar {
+  @apply air-search-bar-base air-search-bar-surface air-state-layer;
+  --state-layer-color: var(--color-on-surface);
 
-  &:hover {
-    @apply search-bar-hover;
-  }
-
-  &:has(.search-bar-input:focus) {
-    @apply search-bar-focus;
+  /* Forward focus from input to trigger the state layer background */
+  &:has(.air-search-bar-input:focus) {
+    &::before {
+      opacity: var(--opacity-focus);
+    }
   }
 }
 
-@utility search-bar-input {
-  @apply search-bar-input-base;
+@utility air-search-bar-input {
+  @apply air-search-bar-input-base;
 }

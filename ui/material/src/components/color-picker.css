@@ -3,9 +3,9 @@
   --air-color-picker-height: calc(var(--spacing) * 10);
 }
 
-@utility color-picker {
+@utility air-color-picker {
   @apply appearance-none p-0 cursor-pointer;
-  @apply focus-ring;
+  @apply air-focus-ring;
   width: var(--air-color-picker-width);
   height: var(--air-color-picker-height);
   border: none;

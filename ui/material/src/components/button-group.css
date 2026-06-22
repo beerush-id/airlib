@@ -1,29 +1,29 @@
 @theme {
-  --group-radius-outer: calc(var(--air-button-height, 40px) / 2);
-  --group-radius-inner: var(--radius-sm, 8px);
-  --group-gap: calc(var(--spacing) * 0.5);
+  --air-group-radius-outer: calc(var(--air-button-height, 40px) / 2);
+  --air-group-radius-inner: var(--radius-sm, 8px);
+  --air-group-gap: calc(var(--spacing) * 0.5);
 }
 
 /* Container for standard buttons */
-@utility button-group {
+@utility air-button-group {
   @apply inline-flex items-center;
-  gap: var(--group-gap);
+  gap: var(--air-group-gap);
 
-  & > [class*='button'] {
-    border-radius: var(--group-radius-inner);
+  & > [class*='air-button'] {
+    border-radius: var(--air-group-radius-inner);
   }
 
-  & > [class*='button']:focus-visible:not(:disabled) {
+  & > [class*='air-button']:focus-visible:not(:disabled) {
     z-index: 1;
   }
 
-  & > [class*='button']:first-child {
-    border-top-left-radius: var(--group-radius-outer);
-    border-bottom-left-radius: var(--group-radius-outer);
+  & > [class*='air-button']:first-child {
+    border-top-left-radius: var(--air-group-radius-outer);
+    border-bottom-left-radius: var(--air-group-radius-outer);
   }
 
-  & > [class*='button']:last-child {
-    border-top-right-radius: var(--group-radius-outer);
-    border-bottom-right-radius: var(--group-radius-outer);
+  & > [class*='air-button']:last-child {
+    border-top-right-radius: var(--air-group-radius-outer);
+    border-bottom-right-radius: var(--air-group-radius-outer);
   }
 }

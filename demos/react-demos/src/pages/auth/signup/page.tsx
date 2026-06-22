@@ -28,7 +28,7 @@ export const SignUpPage = page(signUpRoute).render(() => {
       <Meta name="description" content="Create your account." />
 
       <SignUpForm
-        className="card-group w-md gap-2"
+        className="air-card-group w-md gap-2"
         onSubmit={async (data) => {
           auth.error = '';
           try {
@@ -39,8 +39,8 @@ export const SignUpPage = page(signUpRoute).render(() => {
           }
         }}
       >
-        <div className="card card-body p-10 gap-3">
-          {auth.error ? <p className="text-body-small text-error text-center">{auth.error}</p> : null}
+        <div className="air-card air-card-body p-10 gap-3">
+          {auth.error ? <p className="air-body-sm text-error text-center">{auth.error}</p> : null}
 
           <SignUpForm.Field name="email" label="Email">
             <TextInput placeholder="jane@example.com" />
@@ -60,7 +60,7 @@ export const SignUpPage = page(signUpRoute).render(() => {
                 <div className="flex h-5 items-center">
                   <Checkbox />
                 </div>
-                <span className="text-body-medium text-on-surface">Remember me</span>
+                <span className="air-body-md text-on-surface">Remember me</span>
               </label>
             </SignUpForm.Field>
 
@@ -69,16 +69,16 @@ export const SignUpPage = page(signUpRoute).render(() => {
                 <div className="flex h-5 items-center mt-0.5">
                   <Checkbox />
                 </div>
-                <span className="text-body-medium text-on-surface">I accept the terms and conditions</span>
+                <span className="air-body-md text-on-surface">I accept the terms and conditions</span>
               </label>
             </SignUpForm.Field>
           </div>
         </div>
 
-        <div className="card-filled card-body p-10">
-          <FormSubmit className="button w-full">{(form) => (form?.pending ? 'Signing Up...' : 'Sign Up')}</FormSubmit>
+        <div className="air-card-filled air-card-body p-10">
+          <FormSubmit className="air-button w-full">{(form) => (form?.pending ? 'Signing Up...' : 'Sign Up')}</FormSubmit>
 
-          {auth.submitted ? <p className="text-body-small text-primary text-center mt-2">Welcome aboard!</p> : null}
+          {auth.submitted ? <p className="air-body-sm text-primary text-center mt-2">Welcome aboard!</p> : null}
         </div>
       </SignUpForm>
     </>

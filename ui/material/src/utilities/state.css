@@ -1,5 +1,5 @@
 /* Base State Layer Utility */
-@utility state-layer {
+@utility air-state-layer {
   position: relative;
 
   &::before {
@@ -27,7 +27,7 @@
   }
 }
 
-@utility focus-ring {
+@utility air-focus-ring {
   outline-width: var(--focus-ring-width);
   outline-style: solid;
   outline-color: oklch(from var(--color-secondary) l c h / 0);

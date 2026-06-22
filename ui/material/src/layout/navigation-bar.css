@@ -3,23 +3,23 @@
 }
 
 /* Base Layout */
-@utility navigation-bar-base {
+@utility air-navigation-bar-base {
   @apply flex items-center justify-evenly w-full;
   @apply fixed bottom-0 left-0 z-fixed;
   height: var(--air-nav-bar-height);
 }
 
 /* Surface Visuals */
-@utility navigation-bar-surface {
+@utility air-navigation-bar-surface {
   background-color: var(--color-surface-container);
   color: var(--color-on-surface-variant);
 }
 
 /* Item Base Layout */
-@utility navigation-bar-item-base {
+@utility air-navigation-bar-item-base {
   @apply inline-flex flex-col items-center justify-center;
   @apply cursor-pointer h-full;
-  @apply focus-ring;
+  @apply air-focus-ring;
   min-width: calc(var(--spacing) * 16); /* 64px */
   gap: var(--spacing);
 
@@ -27,9 +27,11 @@
   border: none;
   background-color: transparent;
 
-  /* Label Medium */
-  font-size: var(--font-label-medium-size);
-  font-weight: var(--font-label-medium-weight);
+  /* Typography: Label Medium */
+  font:
+    var(--font-label-md-weight) var(--font-label-md-size) / var(--font-label-md-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-md-tracking);
 
   transition:
     color var(--duration-short) var(--ease-standard),
@@ -37,16 +39,16 @@
 }
 
 /* Item Surface Visuals */
-@utility navigation-bar-item-surface {
+@utility air-navigation-bar-item-surface {
   color: var(--color-on-surface-variant);
 }
 
-@utility navigation-bar-item-selected-surface {
+@utility air-navigation-bar-item-selected-surface {
   color: var(--color-on-surface);
 }
 
 /* Icon Container Layout */
-@utility nav-icon-container-base {
+@utility air-nav-icon-container-base {
   @apply flex items-center justify-center rounded-full;
   width: calc(var(--spacing) * 16); /* 64px */
   height: calc(var(--spacing) * 8); /* 32px */
@@ -56,70 +58,36 @@
 }
 
 /* Icon Container Visuals */
-@utility nav-icon-container-surface {
+@utility air-nav-icon-container-surface {
   background-color: transparent;
   color: inherit;
 }
 
-@utility nav-icon-container-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface-variant) 8%, transparent);
-}
-
-@utility nav-icon-container-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface-variant) 12%, transparent);
-}
-
-@utility nav-icon-container-selected-surface {
+@utility air-nav-icon-container-selected-surface {
   background-color: var(--color-secondary-container);
   color: var(--color-on-secondary-container);
 }
 
-@utility nav-icon-container-selected-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-secondary-container));
-}
-
-@utility nav-icon-container-selected-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-secondary-container));
-}
-
 /* Composed Utilities */
-@utility navigation-bar {
-  @apply navigation-bar-base navigation-bar-surface;
+@utility air-navigation-bar {
+  @apply air-navigation-bar-base air-navigation-bar-surface;
 }
 
-@utility navigation-bar-item {
-  @apply navigation-bar-item-base navigation-bar-item-surface;
+@utility air-navigation-bar-item {
+  @apply air-navigation-bar-item-base air-navigation-bar-item-surface;
 
   &[aria-selected='true'] {
-    @apply navigation-bar-item-selected-surface;
+    @apply air-navigation-bar-item-selected-surface;
   }
 }
 
-@utility nav-icon-container {
-  @apply nav-icon-container-base nav-icon-container-surface;
-
-  /* Hover when item is not selected */
-  .navigation-bar-item:hover:not([aria-selected='true']) & {
-    @apply nav-icon-container-hover;
-  }
-
-  /* Focus when item is not selected */
-  .navigation-bar-item:focus-visible:not([aria-selected='true']) & {
-    @apply nav-icon-container-focus;
-  }
+@utility air-nav-icon-container {
+  @apply air-nav-icon-container-base air-nav-icon-container-surface air-state-layer;
+  --state-layer-color: var(--color-on-surface-variant);
 
   /* Selected */
-  .navigation-bar-item[aria-selected='true'] & {
-    @apply nav-icon-container-selected-surface;
-  }
-
-  /* Selected Hover */
-  .navigation-bar-item[aria-selected='true']:hover & {
-    @apply nav-icon-container-selected-hover;
-  }
-
-  /* Selected Focus */
-  .navigation-bar-item[aria-selected='true']:focus-visible & {
-    @apply nav-icon-container-selected-focus;
+  .air-navigation-bar-item[aria-selected='true'] & {
+    @apply air-nav-icon-container-selected-surface;
+    --state-layer-color: var(--color-on-surface);
   }
 }

@@ -9,7 +9,7 @@
 }
 
 /* Menu Surface (the floating container) */
-@utility menu-surface {
+@utility air-menu-surface {
   @apply absolute z-popover m-0 box-border overflow-hidden;
   list-style: none;
   min-width: var(--air-menu-min-width);
@@ -33,17 +33,18 @@
 }
 
 /* Menu Item Base */
-@utility menu-item-base {
+@utility air-menu-item-base {
   @apply flex items-center w-full box-border;
   @apply text-left cursor-pointer no-underline h-full;
-  @apply focus-ring;
+  @apply air-focus-ring;
   height: var(--air-menu-item-height);
   padding: 0 var(--air-menu-item-padding-x);
 
   /* Typography: Label Large */
-  font-size: var(--font-label-large-size);
-  font-weight: var(--font-label-large-weight);
-  letter-spacing: var(--font-label-large-tracking);
+  font:
+    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
+    var(--font-brand, system-ui);
+  letter-spacing: var(--font-label-lg-tracking);
 
   /* Resets (if applied to a button) */
   border: none;
@@ -55,21 +56,12 @@
 }
 
 /* Default Visuals */
-@utility menu-item-surface {
+@utility air-menu-item-surface {
   background-color: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
   color: var(--color-on-surface);
 }
 
-/* Interactive States */
-@utility menu-item-hover {
-  background-color: color-mix(in srgb, var(--color-on-surface) 8%, transparent);
-}
-
-@utility menu-item-focus {
-  background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
-}
-
-@utility menu-item-disabled {
+@utility air-menu-item-disabled {
   cursor: not-allowed;
   color: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
   background-color: transparent;
@@ -77,23 +69,17 @@
 }
 
 /* Composed Utilities */
-@utility menu {
-  @apply menu-surface;
+@utility air-menu {
+  @apply air-menu-surface;
 }
 
-@utility menu-item {
-  @apply menu-item-base menu-item-surface;
-
-  &:hover:not(:disabled) {
-    @apply menu-item-hover;
-  }
-
-  &:focus-visible:not(:disabled) {
-    @apply menu-item-focus;
-  }
+@utility air-menu-item {
+  @apply air-menu-item-base air-menu-item-surface air-state-layer;
+  --state-layer-color: var(--color-on-surface);
 
   &:disabled,
   &[aria-disabled='true'] {
-    @apply menu-item-disabled;
+    @apply air-menu-item-disabled;
+    --state-layer-color: transparent;
   }
 }
