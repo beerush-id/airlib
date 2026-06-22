@@ -20,6 +20,7 @@
     "@airlib/uikit": "workspace:*",
     "@anchorlib/core": "catalog:lib",
     "@anchorlib/react": "catalog:lib",
+    "@anchorlib/storage": "catalog:lib",
     "@irpclib/http": "catalog:lib",
     "@irpclib/irpc": "catalog:lib",
     "@irpclib/ws": "catalog:lib",

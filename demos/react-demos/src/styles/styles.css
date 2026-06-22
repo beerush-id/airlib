@@ -7,7 +7,7 @@
 
 /* ── Custom Brand Tokens ── */
 @theme {
-  --seed-color: #e6611a; /* Anchor brand color to drive M3 generation */
+  --seed-color: #ffc700; /* Anchor brand color to drive M3 generation */
 
   --color-anchor: #e6611a;
   --color-anchor-glow: oklch(from #e6611a l c h / 40%);

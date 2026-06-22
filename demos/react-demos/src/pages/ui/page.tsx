@@ -1,8 +1,10 @@
 import { dialogConfirm } from '@airlib/react-ui/components';
-import { page } from '@anchorlib/react';
+import { webWindow } from '@airlib/react-ui/lib';
+import { page, setup } from '@anchorlib/react';
+import DemoWindow from './DemoWindow.js';
 import { uiRoute } from './route.js';
 
-const DialogConfirmDemo = () => {
+const DialogConfirmDemo = setup(() => {
   const handleClick = () => {
     dialogConfirm({
       type: 'help',
@@ -13,11 +15,25 @@ const DialogConfirmDemo = () => {
   };
 
   return (
-    <button type="button" className="button" onClick={handleClick}>
-      Confirm Action
-    </button>
+    <div className="flex items-center gap-4">
+      <button type="button" className="button" onClick={handleClick}>
+        Confirm Action
+      </button>
+      <button type="button" className="button" onClick={() => demoWin.open()}>
+        Open Window
+      </button>
+    </div>
   );
-};
+});
+
+const demoWin = webWindow({
+  name: 'asset-browser',
+  title: 'Asset Browser',
+  description: 'Multi window asset browser is awesome.',
+  multiple: true,
+  remember: 'default',
+  rect: { minWidth: 960, minHeight: 680 },
+}).render(DemoWindow);
 
 export const UIPage = page(uiRoute).render(() => (
   <>
