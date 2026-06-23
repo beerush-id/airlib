@@ -31,7 +31,7 @@ export const DialogClose = setup<DialogCloseProps>((props) => {
       <button
         {...restProps}
         type="button"
-        className={props.className ?? DIALOG_CONFIGS.close.class}
+        className={props.className || DIALOG_CONFIGS.close.class}
         onClick={handleClick}
       >
         {props.children ?? <CloseIcon className={props.iconClass ?? DIALOG_CONFIGS.close.icon.class} />}

@@ -45,8 +45,8 @@ export const WindowControl = setup<WindowControlProps>((props) => {
         role="group"
         aria-label="window controls"
         className={classx(() => [
-          props.className ?? WINDOW_CONFIGS.controls.class,
-          { [props.reversedClass ?? WINDOW_CONFIGS.controls.reversedClass]: props.dir === 'rtl' },
+          props.className || WINDOW_CONFIGS.controls.class,
+          { [props.reversedClass ?? WINDOW_CONFIGS.controls.reversedClass]: props.dir !== 'ltr' },
         ])}
       >
         {props.maximize !== false && (

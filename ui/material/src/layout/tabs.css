@@ -41,18 +41,23 @@
   --_inner-radius: var(--radius-sm);
   --_outer-radius: var(--air-card-radius, var(--radius-xl));
 
-  & > * {
+  & > [role='tablist'],
+  & > [role='tabpanel'] {
     border-radius: var(--_inner-radius);
   }
 
-  & > *:first-child {
+  & > [role='tablist'] {
     border-top-left-radius: var(--_outer-radius);
     border-top-right-radius: var(--_outer-radius);
   }
 
-  & > *:last-child {
+  & > [role='tabpanel'] {
     border-bottom-left-radius: var(--_outer-radius);
     border-bottom-right-radius: var(--_outer-radius);
+
+    &[aria-hidden='true'] {
+      display: none;
+    }
   }
 }
 
@@ -86,12 +91,16 @@
 @utility air-tab-indicator-base {
   position: absolute;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: var(--air-tab-item-x);
+  right: var(--air-tab-item-x);
+  width: var(--air-tab-item-width);
   height: var(--air-tabs-indicator-height);
   border-radius: var(--air-tabs-indicator-height) var(--air-tabs-indicator-height) 0 0;
-  opacity: 0;
-  transition: opacity var(--duration-short) var(--ease-standard);
+  transition:
+    width var(--duration-short) var(--ease-standard),
+    height var(--duration-short) var(--ease-standard),
+    top var(--duration-short) var(--ease-standard),
+    left var(--duration-short) var(--ease-standard);
 }
 
 /* Tab Surface */
@@ -120,7 +129,18 @@
 
 /* Composed Utilities */
 @utility air-tab-list {
-  @apply air-tab-list-base air-tab-list-surface;
+  --air-tab-item-x: 0;
+  --air-tab-item-y: 0;
+  --air-tab-item-width: 0;
+  --air-tab-item-height: auto;
+
+  @apply air-tab-list-base air-tab-list-surface relative;
+
+  &:before {
+    @apply absolute block air-tab-indicator-base w-full bg-surface-container-highest;
+    content: '';
+    left: 0;
+  }
 }
 
 @utility air-tab-item {

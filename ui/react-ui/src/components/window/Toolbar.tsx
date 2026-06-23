@@ -15,7 +15,7 @@ export const WindowToolbar = setup<WindowToolbarProps>((props) => {
 
   return render(
     () => (
-      <div role="toolbar" ref={assignRef} className={props.className ?? WINDOW_CONFIGS.toolbar.class}>
+      <div role="toolbar" ref={assignRef} className={props.className || WINDOW_CONFIGS.toolbar.class}>
         {props.dir === 'rtl' && props.children}
         <WindowControl
           dir={props.dir}

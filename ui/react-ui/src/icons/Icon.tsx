@@ -8,16 +8,16 @@ export interface IconProps extends Omit<SVGAttributes<SVGElement>, 'width' | 'he
 
 export function createIcon(content: (() => ReactNode) | ReactNode, name?: string, viewBox = '0 -960 960 960') {
   if (typeof content === 'function') {
-    const IconFactory: FC<IconProps> = ({ className, size, fill, ...restProps }) => (
+    const IconFactory: FC<IconProps> = ({ className, size = ICON_CONFIGS.size, fill, style, ...restProps }) => (
       <svg
         {...restProps}
         xmlns="http://www.w3.org/2000/svg"
         viewBox={viewBox}
         fill={fill ?? ICON_CONFIGS.fill ?? 'currentColor'}
-        className={className ?? ICON_CONFIGS.class}
+        className={className || ICON_CONFIGS.class}
         style={stylex({
           '--icon-size': size,
-          ...restProps.style,
+          ...style,
         })}
       >
         {content()}
@@ -27,16 +27,16 @@ export function createIcon(content: (() => ReactNode) | ReactNode, name?: string
     return IconFactory;
   }
 
-  const Icon: FC<IconProps> = ({ className, size, fill, ...restProps }) => (
+  const Icon: FC<IconProps> = ({ className, size = ICON_CONFIGS.size, fill, style, ...restProps }) => (
     <svg
       {...restProps}
       xmlns="http://www.w3.org/2000/svg"
       viewBox={viewBox}
       fill={fill ?? ICON_CONFIGS.fill ?? 'currentColor'}
-      className={className ?? ICON_CONFIGS.class}
+      className={className || ICON_CONFIGS.class}
       style={stylex({
         '--icon-size': size,
-        ...restProps.style,
+        ...style,
       })}
     >
       {content}

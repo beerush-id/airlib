@@ -3,7 +3,6 @@ export * from './Close.js';
 export * from './Confirm.js';
 export * from './ConfirmHost.js';
 export * from './Content.js';
-export * from './constant.js';
 export * from './Dialog.js';
 export * from './Footer.js';
 export * from './Header.js';

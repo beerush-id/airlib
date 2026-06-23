@@ -3,6 +3,7 @@ import { render, setup } from '@anchorlib/react';
 import type { HTMLAttributes } from 'react';
 import { DarkModeIcon, LightModeIcon, SystemThemeIcon } from '../../icons/index.js';
 import { THEME_CONFIGS } from './config.js';
+
 export interface ThemeSwitchProps extends HTMLAttributes<HTMLButtonElement> {
   buttonClass?: string;
 }
@@ -12,7 +13,7 @@ export const ThemeSwitch = setup<ThemeSwitchProps>((props) => {
 
   return render(
     () => (
-      <div role="radiogroup" className={props.className ?? THEME_CONFIGS.switchGroup.class} data-theme={theme.current}>
+      <div role="radiogroup" className={props.className || THEME_CONFIGS.switchGroup.class} data-theme={theme.current}>
         <button
           role="radio"
           aria-checked={theme.mode === 'light'}

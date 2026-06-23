@@ -1,13 +1,15 @@
 import { DIALOG_CONFIGS } from './components/dialog/config.js';
+import { TAB_CONFIGS } from './components/tab/config.js';
 import { THEME_CONFIGS } from './components/theme/config.js';
 import { WINDOW_CONFIGS } from './components/window/config.js';
 import { ICON_CONFIGS } from './icons/config.js';
 
 export const UI_CONFIGS = {
-  dialog: DIALOG_CONFIGS,
+  tab: TAB_CONFIGS,
   icon: ICON_CONFIGS,
-  window: WINDOW_CONFIGS,
   theme: THEME_CONFIGS,
+  dialog: DIALOG_CONFIGS,
+  window: WINDOW_CONFIGS,
 };
 
 export function configureUI(config: Partial<typeof UI_CONFIGS>) {

@@ -36,7 +36,7 @@ export const DialogCancel = setup<DialogCancelProps>((props) => {
       <button
         {...restProps}
         type="button"
-        className={props.className ?? DIALOG_CONFIGS.cancel.class}
+        className={props.className || DIALOG_CONFIGS.cancel.class}
         onClick={handleClick}
       >
         {props.children}

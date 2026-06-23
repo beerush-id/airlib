@@ -31,7 +31,7 @@ export const DialogSubmit = setup<DialogSubmitProps>((props) => {
       <button
         {...restProps}
         type="button"
-        className={props.className ?? DIALOG_CONFIGS.submit.class}
+        className={props.className || DIALOG_CONFIGS.submit.class}
         onClick={handleClick}
       >
         {props.children}

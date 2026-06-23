@@ -670,15 +670,13 @@ export const MaterialPage = page(materialRoute).render(() => (
           <div role="tablist" className="air-tab-list">
             <button role="tab" className="air-tab-item" aria-selected="true">
               Flight
-              <div className="air-tab-indicator" />
+              <div className="air-tab-indicator w-full" />
             </button>
             <button role="tab" className="air-tab-item" aria-selected="false">
               Hotel
-              <div className="air-tab-indicator" />
             </button>
             <button role="tab" className="air-tab-item" aria-selected="false">
               Car
-              <div className="air-tab-indicator" />
             </button>
           </div>
           <div role="tabpanel" className="air-tab-content p-4 air-body-md text-on-surface-variant">
@@ -691,10 +689,7 @@ export const MaterialPage = page(materialRoute).render(() => (
             <div className="air-accordion-item">
               <button className="air-accordion-header" aria-expanded="true">
                 Accordion Item 1
-                <span
-                  className="air-icon transition-transform duration-200"
-                  style={{ transform: 'rotate(180deg)' }}
-                >
+                <span className="air-icon transition-transform duration-200" style={{ transform: 'rotate(180deg)' }}>
                   expand_more
                 </span>
               </button>
@@ -707,8 +702,7 @@ export const MaterialPage = page(materialRoute).render(() => (
 
             <div className="air-accordion-item">
               <button className="air-accordion-header" aria-expanded="false">
-                Accordion Item 2
-                <span className="air-icon transition-transform duration-200">expand_more</span>
+                Accordion Item 2<span className="air-icon transition-transform duration-200">expand_more</span>
               </button>
               <div className="air-accordion-content" data-state="closed">
                 <div className="air-accordion-inner air-body-md text-on-surface-variant">
@@ -897,7 +891,9 @@ export const MaterialPage = page(materialRoute).render(() => (
         {/* Chat Thread */}
         <div className="air-ai-chat-thread">
           <div className="air-ai-message air-ai-message-user">
-            <div className="air-ai-message-bubble">Can you help me build a React application with Material Design 3?</div>
+            <div className="air-ai-message-bubble">
+              Can you help me build a React application with Material Design 3?
+            </div>
           </div>
 
           <div className="air-ai-message air-ai-message-agent">
@@ -1086,7 +1082,10 @@ export const MaterialPage = page(materialRoute).render(() => (
                 </button>
 
                 {/* Static Model Menu Overlay positioned correctly */}
-                <ul className="air-menu isolate absolute bottom-full left-0 mb-1 w-full shadow-lg z-popover" data-state="open">
+                <ul
+                  className="air-menu isolate absolute bottom-full left-0 mb-1 w-full shadow-lg z-popover"
+                  data-state="open"
+                >
                   <li className="air-menu-item bg-surface-variant text-on-surface-variant font-medium">
                     <span className="air-icon mr-3">volume_up</span> Omni Flash
                   </li>
@@ -1298,9 +1297,7 @@ export const MaterialPage = page(materialRoute).render(() => (
 
         {/* Main Content Area */}
         <main className="absolute! top-[64px] bottom-[80px] md:bottom-0 left-0 md:left-[80px] right-0 p-6 overflow-y-auto bg-surface-container-lowest">
-          <p className="air-body-lg text-on-surface-variant">
-            Main content area simulating a responsive page layout.
-          </p>
+          <p className="air-body-lg text-on-surface-variant">Main content area simulating a responsive page layout.</p>
           <p className="air-body-md text-on-surface-variant mt-2">
             On mobile sizes, it uses the Bottom Navigation Bar. On tablet/desktop sizes, it switches to the Navigation
             Rail.
@@ -1309,10 +1306,18 @@ export const MaterialPage = page(materialRoute).render(() => (
           <div className="mt-8">
             <h3 className="air-title-md mb-4">Carousel Preview</h3>
             <div className="air-carousel flex gap-4 overflow-x-auto pb-4">
-              <div className="air-carousel-item air-card min-w-[200px] h-[120px] flex items-center justify-center">Card 1</div>
-              <div className="air-carousel-item air-card min-w-[200px] h-[120px] flex items-center justify-center">Card 2</div>
-              <div className="air-carousel-item air-card min-w-[200px] h-[120px] flex items-center justify-center">Card 3</div>
-              <div className="air-carousel-item air-card min-w-[200px] h-[120px] flex items-center justify-center">Card 4</div>
+              <div className="air-carousel-item air-card min-w-[200px] h-[120px] flex items-center justify-center">
+                Card 1
+              </div>
+              <div className="air-carousel-item air-card min-w-[200px] h-[120px] flex items-center justify-center">
+                Card 2
+              </div>
+              <div className="air-carousel-item air-card min-w-[200px] h-[120px] flex items-center justify-center">
+                Card 3
+              </div>
+              <div className="air-carousel-item air-card min-w-[200px] h-[120px] flex items-center justify-center">
+                Card 4
+              </div>
             </div>
           </div>
         </main>

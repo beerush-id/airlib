@@ -1,8 +1,13 @@
-import type { StateUnsubscribe } from '@anchorlib/core';
+import { effect, mutable, type StateUnsubscribe } from '@anchorlib/core';
+import { FOCUSABLE_SELECTORS } from './focus.js';
 import type { MouseModifier } from './mouse.js';
 import { impure } from './state.js';
 
-const currentKeyboard = impure(new Set<string | MouseModifier>());
+export class LiveKeyboard extends Set<string | MouseModifier> {
+  public pressed = false;
+}
+
+const currentKeyboard = impure(new LiveKeyboard());
 
 let disposeKeyboard: StateUnsubscribe | undefined;
 
@@ -13,11 +18,15 @@ export function watchKeyboard() {
     currentKeyboard.clear();
   };
   const register = (e: KeyboardEvent) => {
+    currentKeyboard.pressed = true;
+
     const key = e.key.toLowerCase();
     if (currentKeyboard.has(key)) return;
     currentKeyboard.add(key);
   };
   const unregister = (e: KeyboardEvent) => {
+    currentKeyboard.pressed = false;
+
     const key = e.key.toLowerCase();
     if (!currentKeyboard.has(key)) return;
     currentKeyboard.delete(key);
@@ -40,4 +49,113 @@ export function watchKeyboard() {
 
 export function getKeyboard() {
   return currentKeyboard;
+}
+
+export type ArrowRefOptions = {
+  direction?: 'vertical' | 'horizontal' | 'both';
+  focusable?: string;
+};
+
+export function arrowRef<T extends HTMLElement>(options: ArrowRefOptions = {}) {
+  if (!options || typeof options !== 'object') options = {};
+
+  const state = mutable<{ current: T | null }>({ current: null });
+
+  const getFocusable = () => {
+    const query = options.focusable ?? FOCUSABLE_SELECTORS;
+
+    const focusable = Array.from(state.current!.querySelectorAll<HTMLElement>(query) ?? []);
+    if (!focusable.length) return { focusable: [], current: -1 };
+
+    const currentFocus = focusable.indexOf(document.activeElement as HTMLElement);
+    return { focusable, current: currentFocus };
+  };
+
+  const nextFocus = () => {
+    const { focusable, current } = getFocusable();
+    const nextIndex = current === -1 || current >= focusable.length - 1 ? 0 : current + 1;
+    focusable[nextIndex]?.focus();
+  };
+
+  const prevFocus = () => {
+    const { focusable, current } = getFocusable();
+    if (current === -1 && document.activeElement !== state.current) return;
+    const prevIndex = current <= 0 ? focusable.length - 1 : current - 1;
+    focusable[prevIndex]?.focus();
+  };
+
+  let searchQuery = '';
+  let searchTimeout: ReturnType<typeof setTimeout>;
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    const { direction = 'both' } = options;
+
+    const isNext =
+      (direction !== 'vertical' && e.key === 'ArrowRight') || (direction !== 'horizontal' && e.key === 'ArrowDown');
+
+    const isPrev =
+      (direction !== 'vertical' && e.key === 'ArrowLeft') || (direction !== 'horizontal' && e.key === 'ArrowUp');
+
+    if (isNext) {
+      e.preventDefault();
+      nextFocus();
+    } else if (isPrev) {
+      e.preventDefault();
+      prevFocus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      const { focusable } = getFocusable();
+      focusable[0]?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      const { focusable } = getFocusable();
+      focusable[focusable.length - 1]?.focus();
+    } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      // Typeahead search
+      searchQuery += e.key.toLowerCase();
+      const { focusable, current } = getFocusable();
+
+      const startIndex = current === -1 ? 0 : current;
+      let matchedIndex = -1;
+
+      // If typing the same character repeatedly, cycle to the next match.
+      // Otherwise, search the full string starting from the current item.
+      const isCycling = searchQuery.length > 1 && searchQuery.split('').every((char) => char === searchQuery[0]);
+      const searchStr = isCycling ? searchQuery[0] : searchQuery;
+      const searchStart = isCycling ? startIndex + 1 : startIndex;
+
+      for (let i = 0; i < focusable.length; i++) {
+        const index = (searchStart + i) % focusable.length;
+        const text = focusable[index].textContent?.trim().toLowerCase() || '';
+
+        if (text.startsWith(searchStr)) {
+          matchedIndex = index;
+          break;
+        }
+      }
+
+      if (matchedIndex !== -1) {
+        focusable[matchedIndex]?.focus();
+      }
+
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        searchQuery = '';
+      }, 500);
+    }
+  };
+
+  effect.client(() => {
+    const element = state.current;
+    if (!element) return;
+
+    element.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearTimeout(searchTimeout);
+      element!.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+
+  return state;
 }

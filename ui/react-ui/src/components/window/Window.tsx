@@ -17,7 +17,7 @@ export type WindowProps = HTMLAttributes<HTMLDivElement> &
 export const Window = setup<WindowProps>((props) => {
   const window = getWindow();
   const nodeCtx = nodeRef<HTMLDivElement>(() => ({
-    className: props.className ?? WINDOW_CONFIGS.class,
+    className: props.className || WINDOW_CONFIGS.class,
     'data-minimized': window?.minimized,
     'data-maximized': window?.maximized,
     'data-fullscreen': window?.fullscreen,

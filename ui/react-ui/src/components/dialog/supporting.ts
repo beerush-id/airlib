@@ -20,7 +20,7 @@ export function createDialogRef(props: ComponentProps<DialogProps<unknown, unkno
 
     return {
       ...restProps,
-      className: props.className ?? DIALOG_CONFIGS.class,
+      className: props.className || DIALOG_CONFIGS.class,
       'aria-modal': props.dialog.open ? 'true' : undefined,
       'aria-hidden': props.dialog.open ? 'false' : 'true',
       'aria-labelledby': props.name ?? props['aria-labelledby'],

@@ -10,7 +10,7 @@ export const WINDOW_CONFIGS = {
 
   controls: {
     class: 'air-window-control',
-    reversedClass: 'air-window-control-reversed',
+    reversedClass: 'air-window-control-reverse',
     close: { class: 'air-window-close' },
     minimize: { class: 'air-window-minimize' },
     maximize: { class: 'air-window-maximize' },

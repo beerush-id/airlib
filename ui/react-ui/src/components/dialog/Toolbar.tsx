@@ -4,7 +4,7 @@ import { DIALOG_CONFIGS } from './config.js';
 
 export const DialogToolbar = template<HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...rest }) => (
-    <div className={className ?? DIALOG_CONFIGS.toolbar.class} {...rest}>
+    <div className={className || DIALOG_CONFIGS.toolbar.class} {...rest}>
       {children}
     </div>
   ),

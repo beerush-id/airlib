@@ -14,7 +14,7 @@ export const ThemeToggler = setup<ThemeTogglerProps>((props) => {
     () => (
       <button
         {...rest}
-        className={props.className ?? THEME_CONFIGS.toggler.class}
+        className={props.className || THEME_CONFIGS.toggler.class}
         data-theme={theme.current}
         onClick={theme.toggle}
       >
