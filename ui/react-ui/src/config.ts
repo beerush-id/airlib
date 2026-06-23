@@ -1,42 +1,31 @@
-import type { AnyType } from '@airlib/uikit';
+import { DIALOG_CONFIGS } from './components/dialog/config.js';
+import { THEME_CONFIGS } from './components/theme/config.js';
+import { WINDOW_CONFIGS } from './components/window/config.js';
+import { ICON_CONFIGS } from './icons/config.js';
 
 export const UI_CONFIGS = {
-  dialog: {
-    class: 'air-dialog',
-    portal: 'body',
-    bodyClass: 'air-dialog-body',
-
-    toolbarClass: 'air-dialog-toolbar',
-    titleClass: 'air-dialog-title',
-    headerClass: 'air-dialog-header',
-    footerClass: 'air-dialog-footer',
-    contentClass: 'air-dialog-content',
-
-    overlayClass: 'air-dialog-overlay',
-
-    closeClass: 'air-dialog-close',
-    closeIconClass: 'air-dialog-close-icon',
-    submitClass: 'air-dialog-submit',
-    cancelClass: 'air-dialog-cancel',
-
-    confirmClass: 'air-dialog-confirm',
-    messageClass: 'air-dialog-message',
-    warningClass: 'air-dialog-warning',
-    warningMessageClass: 'air-dialog-warning-message',
-    disposalDelay: 500,
-  },
-
-  iconSize: 24,
-  iconFill: 'currentColor',
-  iconClass: 'air-icon',
+  dialog: DIALOG_CONFIGS,
+  icon: ICON_CONFIGS,
+  window: WINDOW_CONFIGS,
+  theme: THEME_CONFIGS,
 };
 
-export function configureUI(config: Partial<typeof UI_CONFIGS> = {}) {
-  for (const [key, value] of Object.entries(config)) {
-    if (typeof value === 'object' && value !== null) {
-      Object.assign((UI_CONFIGS as AnyType)[key], value);
-    } else {
-      (UI_CONFIGS as AnyType)[key] = value;
+export function configureUI(config: Partial<typeof UI_CONFIGS>) {
+  applyConfig(UI_CONFIGS as Record<string, unknown>, config);
+}
+
+function applyConfig(target: Record<string, unknown>, source: unknown) {
+  if (!source || typeof source !== 'object') return;
+
+  const src = source as Record<string, unknown>;
+
+  for (const [key, targetValue] of Object.entries(target)) {
+    if (src[key] != null) {
+      if (typeof targetValue === 'object') {
+        applyConfig(targetValue as Record<string, unknown>, src[key]);
+      } else {
+        target[key] = src[key];
+      }
     }
   }
 }

@@ -2,7 +2,7 @@ import { type AnyType, type DialogState, getDialog, setDialog } from '@airlib/ui
 import { dragRef, MOUSE_MODIFIERS } from '@airlib/uikit/utils';
 import { render, setup } from '@anchorlib/react';
 import type { ReactNode } from 'react';
-import { UI_CONFIGS } from '../../config.js';
+import { DIALOG_CONFIGS } from './config.js';
 import { teleport } from '../../lib/index.js';
 import { createDialogRef } from './supporting.js';
 import type { DialogComponent, DialogProps } from './types.js';
@@ -30,8 +30,8 @@ export function dialogComponent<T, O>(
 
       const content = () => (
         <div role="dialog" ref={dialogRef} {...dialogRef.attributes}>
-          <div className={props.overlayClass ?? UI_CONFIGS.dialog.overlayClass} />
-          <div ref={assignRef} data-focus-area className={props.bodyClass ?? UI_CONFIGS.dialog.bodyClass}>
+          <div className={props.overlayClass ?? DIALOG_CONFIGS.overlay.class} />
+          <div ref={assignRef} data-focus-area className={props.bodyClass ?? DIALOG_CONFIGS.body.class}>
             {children!(props.dialog)}
           </div>
         </div>

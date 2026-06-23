@@ -2,6 +2,7 @@ import { colorScheme } from '@airlib/uikit/utils';
 import { render, setup } from '@anchorlib/react';
 import type { HTMLAttributes } from 'react';
 import { DarkModeIcon, LightModeIcon, SystemThemeIcon } from '../../icons/index.js';
+import { THEME_CONFIGS } from './config.js';
 
 export interface ThemeTogglerProps extends HTMLAttributes<HTMLButtonElement> {}
 
@@ -13,7 +14,7 @@ export const ThemeToggler = setup<ThemeTogglerProps>((props) => {
     () => (
       <button
         {...rest}
-        className={props.className ?? 'air-icon-button'}
+        className={props.className ?? THEME_CONFIGS.toggler.class}
         data-theme={theme.current}
         onClick={theme.toggle}
       >

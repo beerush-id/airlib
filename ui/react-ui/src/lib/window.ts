@@ -6,9 +6,10 @@ import {
   type WindowData,
   type WindowInstance,
 } from '@airlib/uikit';
+import type { DragRef } from '@airlib/uikit/utils';
 import { getContext, setup } from '@anchorlib/react';
 import type { ReactNode } from 'react';
-import { type WindowContext, WindowLoader } from '../components/index.js';
+import { WindowSplash } from '../components/index.js';
 
 export const WINDOW_SYMBOL = Symbol('web-window');
 export const WINDOW_CTX_SYMBOL = Symbol('window-context');
@@ -21,6 +22,11 @@ export function getWindow() {
   return getContext<WindowInstance<AnyType, ReactNode>>(WINDOW_SYMBOL);
 }
 
+export type WindowContext = {
+  window: WindowInstance<AnyType, ReactNode>;
+  dragger: DragRef<HTMLDivElement>;
+};
+
 export function getWindowCtx() {
   return getContext<WindowContext>(WINDOW_CTX_SYMBOL);
 }
@@ -28,7 +34,7 @@ export function getWindowCtx() {
 export class ReactWindow<T extends WindowData> extends WebWindow<T, ReactNode> {
   public constructor(options: WebWindowOptions<ReactNode>) {
     super(options);
-    this.splash(WindowLoader);
+    this.splash(WindowSplash);
   }
 
   public get current(): WindowInstance<T, ReactNode> {

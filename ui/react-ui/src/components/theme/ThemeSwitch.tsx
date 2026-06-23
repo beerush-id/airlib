@@ -2,7 +2,7 @@ import { colorScheme } from '@airlib/uikit/utils';
 import { render, setup } from '@anchorlib/react';
 import type { HTMLAttributes } from 'react';
 import { DarkModeIcon, LightModeIcon, SystemThemeIcon } from '../../icons/index.js';
-
+import { THEME_CONFIGS } from './config.js';
 export interface ThemeSwitchProps extends HTMLAttributes<HTMLButtonElement> {
   buttonClass?: string;
 }
@@ -12,11 +12,11 @@ export const ThemeSwitch = setup<ThemeSwitchProps>((props) => {
 
   return render(
     () => (
-      <div role="radiogroup" className={props.className ?? 'air-segmented-group'} data-theme={theme.current}>
+      <div role="radiogroup" className={props.className ?? THEME_CONFIGS.switchGroup.class} data-theme={theme.current}>
         <button
           role="radio"
           aria-checked={theme.mode === 'light'}
-          className={props.buttonClass ?? 'air-segmented-button'}
+          className={props.buttonClass ?? THEME_CONFIGS.switchButton.class}
           onClick={() => theme.change('light')}
         >
           <LightModeIcon />
@@ -24,7 +24,7 @@ export const ThemeSwitch = setup<ThemeSwitchProps>((props) => {
         <button
           role="radio"
           aria-checked={theme.mode === 'system'}
-          className={props.buttonClass ?? 'air-segmented-button'}
+          className={props.buttonClass ?? THEME_CONFIGS.switchButton.class}
           onClick={() => theme.change('system')}
         >
           <SystemThemeIcon />
@@ -32,7 +32,7 @@ export const ThemeSwitch = setup<ThemeSwitchProps>((props) => {
         <button
           role="radio"
           aria-checked={theme.mode === 'dark'}
-          className={props.buttonClass ?? 'air-segmented-button'}
+          className={props.buttonClass ?? THEME_CONFIGS.switchButton.class}
           onClick={() => theme.change('dark')}
         >
           <DarkModeIcon />

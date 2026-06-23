@@ -1,6 +1,7 @@
 import type { AnyType, WindowInstance } from '@airlib/uikit';
 import { render, setContext, setup } from '@anchorlib/react';
 import { teleport, WINDOW_SYMBOL } from '../../lib/index.js';
+import { WINDOW_CONFIGS } from './config.js';
 
 export type WindowRendererProps = {
   instance: WindowInstance<AnyType, AnyType>;
@@ -17,7 +18,7 @@ export const WindowRenderer = setup<WindowRendererProps>((props) => {
     }
 
     if (!Render) {
-      return teleport(<div className="air-window-error">[WINDOW ERROR: No render function]</div>);
+      return teleport(<div className={WINDOW_CONFIGS.error.class}>[WINDOW ERROR: No render function]</div>);
     }
 
     return teleport(<Render state={state} instance={props.instance} />);

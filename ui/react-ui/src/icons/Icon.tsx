@@ -1,6 +1,6 @@
 import type { FC, ReactNode, SVGAttributes } from 'react';
-import { UI_CONFIGS } from '../config.js';
 import { stylex } from '../utils/index.js';
+import { ICON_CONFIGS } from './config.js';
 
 export interface IconProps extends Omit<SVGAttributes<SVGElement>, 'width' | 'height'> {
   size?: number;
@@ -13,8 +13,8 @@ export function createIcon(content: (() => ReactNode) | ReactNode, name?: string
         {...restProps}
         xmlns="http://www.w3.org/2000/svg"
         viewBox={viewBox}
-        fill={fill ?? UI_CONFIGS.iconFill ?? 'currentColor'}
-        className={className ?? UI_CONFIGS.iconClass}
+        fill={fill ?? ICON_CONFIGS.fill ?? 'currentColor'}
+        className={className ?? ICON_CONFIGS.class}
         style={stylex({
           '--icon-size': size,
           ...restProps.style,
@@ -32,8 +32,8 @@ export function createIcon(content: (() => ReactNode) | ReactNode, name?: string
       {...restProps}
       xmlns="http://www.w3.org/2000/svg"
       viewBox={viewBox}
-      fill={fill ?? UI_CONFIGS.iconFill ?? 'currentColor'}
-      className={className ?? UI_CONFIGS.iconClass}
+      fill={fill ?? ICON_CONFIGS.fill ?? 'currentColor'}
+      className={className ?? ICON_CONFIGS.class}
       style={stylex({
         '--icon-size': size,
         ...restProps.style,

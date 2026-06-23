@@ -2,7 +2,7 @@ import { getDialog } from '@airlib/uikit/components';
 import { captureStack } from '@anchorlib/core';
 import { render, setup } from '@anchorlib/react';
 import type { HTMLAttributes, MouseEventHandler } from 'react';
-import { UI_CONFIGS } from '../../config.js';
+import { DIALOG_CONFIGS } from './config.js';
 
 export interface DialogSubmitProps extends HTMLAttributes<HTMLButtonElement> {
   value?: unknown;
@@ -31,7 +31,7 @@ export const DialogSubmit = setup<DialogSubmitProps>((props) => {
       <button
         {...restProps}
         type="button"
-        className={props.className ?? UI_CONFIGS.dialog.submitClass}
+        className={props.className ?? DIALOG_CONFIGS.submit.class}
         onClick={handleClick}
       >
         {props.children}

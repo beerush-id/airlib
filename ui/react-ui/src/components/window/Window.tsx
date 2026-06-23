@@ -1,46 +1,43 @@
-import { type AnyType, KIT_CONFIGS } from '@airlib/uikit';
-import type { WindowInstance } from '@airlib/uikit/components';
-import { type DragRef, dragRef, focusRef, resizeRef } from '@airlib/uikit/utils';
+import { KIT_CONFIGS } from '@airlib/uikit';
+import { dragRef, focusRef, resizeRef } from '@airlib/uikit/utils';
 import { nodeRef, render, setContext, setup } from '@anchorlib/react';
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes } from 'react';
 import { getWindow, WINDOW_CTX_SYMBOL } from '../../lib/index.js';
+import type { WindowControls } from './Control.js';
+import { WINDOW_CONFIGS } from './config.js';
 import { WindowToolbar } from './Toolbar.js';
 
-export type WindowProps = HTMLAttributes<HTMLDivElement> & {
-  title?: string;
-  headless?: boolean;
-  contained?: boolean;
-};
-
-export type WindowContext = {
-  window: WindowInstance<AnyType, ReactNode>;
-  dragger: DragRef<HTMLDivElement>;
-};
+export type WindowProps = HTMLAttributes<HTMLDivElement> &
+  WindowControls & {
+    title?: string;
+    headless?: boolean;
+    contained?: boolean;
+  };
 
 export const Window = setup<WindowProps>((props) => {
-  const win = getWindow();
+  const window = getWindow();
   const nodeCtx = nodeRef<HTMLDivElement>(() => ({
-    className: props.className ?? 'air-window',
-    'data-minimized': win?.minimized,
-    'data-maximized': win?.maximized,
-    'data-fullscreen': win?.fullscreen,
+    className: props.className ?? WINDOW_CONFIGS.class,
+    'data-minimized': window?.minimized,
+    'data-maximized': window?.maximized,
+    'data-fullscreen': window?.fullscreen,
   }));
   const trapCtx = focusRef({ trapOverflow: false, autofocus: false, releaseOnEsc: false });
   const dragCtx = dragRef({
     type: 'reset',
     snapTo: ['[role=region]'],
     onEnd: (e) => {
-      win?.redraw(e);
+      window?.redraw(e);
     },
   });
   const sizeCtx = resizeRef({
     type: 'reset',
     dir: 'auto',
     snapTo: ['[role=region]'],
-    minW: win?.rect.minWidth ?? KIT_CONFIGS.windowMinWidth,
-    minH: win?.rect.minHeight ?? KIT_CONFIGS.windowMinHeight,
+    minW: window?.rect.minWidth ?? KIT_CONFIGS.windowMinWidth,
+    minH: window?.rect.minHeight ?? KIT_CONFIGS.windowMinHeight,
     onEnd: (e) => {
-      win?.redraw(e);
+      window?.redraw(e);
     },
   });
 
@@ -52,29 +49,29 @@ export const Window = setup<WindowProps>((props) => {
     nodeCtx.current = element;
 
     if (props.contained) dragCtx.container = document.body;
-    if (win) win.element = element;
+    if (window) window.element = element;
   };
 
   setContext(WINDOW_CTX_SYMBOL, {
-    window: win,
+    window,
     dragger: dragCtx,
   });
 
   return render(
     () => (
       <div role="region" ref={assignRef} {...nodeCtx.attributes} tabIndex={-1}>
-        <div className="air-resize-t"></div>
-        <div className="air-resize-l"></div>
-        <div className="air-resize-r"></div>
-        <div className="air-resize-b"></div>
-        <div className="air-resize-tl"></div>
-        <div className="air-resize-tr"></div>
-        <div className="air-resize-bl"></div>
-        <div className="air-resize-br"></div>
-        <div className="air-window-offset">
+        <div className={WINDOW_CONFIGS.resize.t.class}></div>
+        <div className={WINDOW_CONFIGS.resize.l.class}></div>
+        <div className={WINDOW_CONFIGS.resize.r.class}></div>
+        <div className={WINDOW_CONFIGS.resize.b.class}></div>
+        <div className={WINDOW_CONFIGS.resize.tl.class}></div>
+        <div className={WINDOW_CONFIGS.resize.tr.class}></div>
+        <div className={WINDOW_CONFIGS.resize.bl.class}></div>
+        <div className={WINDOW_CONFIGS.resize.br.class}></div>
+        <div className={WINDOW_CONFIGS.offset.class}>
           {!props.headless && (
             <WindowToolbar close minimize maximize>
-              <h2 className="air-window-title">{props.title}</h2>
+              <h2 className={WINDOW_CONFIGS.title.class}>{props.title}</h2>
             </WindowToolbar>
           )}
           {props.children}

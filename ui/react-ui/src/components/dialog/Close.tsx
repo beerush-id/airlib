@@ -2,7 +2,7 @@ import { getDialog } from '@airlib/uikit/components';
 import { captureStack } from '@anchorlib/core';
 import { render, setup } from '@anchorlib/react';
 import type { HTMLAttributes, MouseEventHandler } from 'react';
-import { UI_CONFIGS } from '../../config.js';
+import { DIALOG_CONFIGS } from './config.js';
 import { CloseIcon } from '../../icons/index.js';
 
 export interface DialogCloseProps extends HTMLAttributes<HTMLButtonElement> {
@@ -31,10 +31,10 @@ export const DialogClose = setup<DialogCloseProps>((props) => {
       <button
         {...restProps}
         type="button"
-        className={props.className ?? UI_CONFIGS.dialog.closeClass}
+        className={props.className ?? DIALOG_CONFIGS.close.class}
         onClick={handleClick}
       >
-        {props.children ?? <CloseIcon className={props.iconClass ?? UI_CONFIGS.dialog.closeIconClass} />}
+        {props.children ?? <CloseIcon className={props.iconClass ?? DIALOG_CONFIGS.close.icon.class} />}
       </button>
     ),
     'DialogClose'

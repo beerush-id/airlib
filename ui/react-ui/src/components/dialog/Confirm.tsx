@@ -1,10 +1,10 @@
 import { createDialog } from '@airlib/uikit/components';
 import { captureStack, isBrowser } from '@anchorlib/core';
-import { UI_CONFIGS } from '../../config.js';
+import { DIALOG_CONFIGS } from './config.js';
 import { WarningIcon } from '../../icons/Warning.js';
 import { DialogCancel } from './Cancel.js';
 import { DialogContent } from './Content.js';
-import { CONFIRM_DIALOG_LIST, CONFIRM_TYPE_COLORS, CONFIRM_TYPE_ICONS } from './constant.js';
+import { CONFIRM_DIALOG_LIST } from './supporting.js';
 import { dialogComponent } from './Dialog.js';
 import { DialogFooter } from './Footer.js';
 import { DialogHeader } from './Header.js';
@@ -47,35 +47,31 @@ export async function dialogConfirm(data: DialogConfirmData) {
   } finally {
     setTimeout(() => {
       CONFIRM_DIALOG_LIST.delete(dialog);
-    }, UI_CONFIGS.dialog.disposalDelay);
+    }, DIALOG_CONFIGS.disposalDelay);
   }
 }
 
 export const ConfirmDialog = dialogComponent<DialogConfirmData, boolean>((dialog) => {
-  const Icon = CONFIRM_TYPE_ICONS[dialog.data.type ?? 'info'];
+  const Icon = DIALOG_CONFIGS.confirm.icons[dialog.data.type ?? 'info'];
 
   return (
     <>
       {dialog.data.type && (
         <DialogToolbar>
-          <Icon
-            className={
-              UI_CONFIGS.dialog[`${dialog.data.type}Color` as never] ?? CONFIRM_TYPE_COLORS[dialog.data.type] ?? ''
-            }
-          />
+          <Icon className={DIALOG_CONFIGS.confirm.colors[dialog.data.type ?? 'info']} />
         </DialogToolbar>
       )}
       <DialogHeader data-header>
         <DialogTitle>{dialog.data.title ?? 'Are you sure?'}</DialogTitle>
       </DialogHeader>
       <DialogContent>
-        <p className={UI_CONFIGS.dialog.messageClass}>
+        <p className={DIALOG_CONFIGS.message.class}>
           {dialog.data.message ?? 'Are you sure you want to perform this action?'}
         </p>
         {dialog.data.warningMessage && (
-          <div className={UI_CONFIGS.dialog.warningClass}>
+          <div className={DIALOG_CONFIGS.warning.class}>
             <WarningIcon />
-            <p className={UI_CONFIGS.dialog.warningMessageClass}>{dialog.data.warningMessage}</p>
+            <p className={DIALOG_CONFIGS.warningMessage.class}>{dialog.data.warningMessage}</p>
           </div>
         )}
       </DialogContent>

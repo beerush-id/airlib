@@ -1,14 +1,22 @@
 import { classx } from '@airlib/uikit/utils';
 import { render, setup } from '@anchorlib/react';
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, MouseEventHandler } from 'react';
 import { CloseIcon, MaximizeIcon, MinimizeIcon, RestoreIcon } from '../../icons/index.js';
 import { getWindowCtx } from '../../lib/index.js';
+import { WINDOW_CONFIGS } from './config.js';
 
 export type WindowControls = {
+  dir?: 'ltr' | 'rtl';
   close?: boolean;
   minimize?: boolean;
   maximize?: boolean;
-  dir?: 'ltr' | 'rtl';
+  closeClass?: string;
+  minimizeClass?: string;
+  maximizeClass?: string;
+  reversedClass?: string;
+  onClose?: MouseEventHandler<HTMLButtonElement>;
+  onMinimize?: MouseEventHandler<HTMLButtonElement>;
+  onMaximize?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export type WindowControlProps = HTMLAttributes<HTMLButtonElement> & WindowControls;
@@ -16,9 +24,18 @@ export type WindowControlProps = HTMLAttributes<HTMLButtonElement> & WindowContr
 export const WindowControl = setup<WindowControlProps>((props) => {
   const ctx = getWindowCtx();
 
-  const close = () => ctx?.window?.close();
-  const minimize = () => ctx?.window?.minimize();
-  const maximize = () => ctx?.window?.maximize();
+  const close: MouseEventHandler<HTMLButtonElement> = (e) => {
+    ctx?.window?.close();
+    props.onClose?.(e);
+  };
+  const minimize: MouseEventHandler<HTMLButtonElement> = (e) => {
+    ctx?.window?.minimize();
+    props.onMinimize?.(e);
+  };
+  const maximize: MouseEventHandler<HTMLButtonElement> = (e) => {
+    ctx?.window?.maximize();
+    props.onMaximize?.(e);
+  };
 
   return render(() => {
     if (props.close === false && props.minimize === false && props.maximize === false) return;
@@ -28,24 +45,35 @@ export const WindowControl = setup<WindowControlProps>((props) => {
         role="group"
         aria-label="window controls"
         className={classx(() => [
-          'air-window-control',
-          props.className,
-          { 'air-window-control-reverse': props.dir === 'ltr' },
+          props.className ?? WINDOW_CONFIGS.controls.class,
+          { [props.reversedClass ?? WINDOW_CONFIGS.controls.reversedClass]: props.dir === 'rtl' },
         ])}
       >
-        {props.close !== false && (
-          <button onClick={close} aria-label="Close" className="air-window-close">
-            <CloseIcon />
+        {props.maximize !== false && (
+          <button
+            aria-label="Maximize"
+            onClick={maximize}
+            className={props.maximizeClass ?? WINDOW_CONFIGS.controls.maximize.class}
+          >
+            {ctx?.window?.maximized ? <RestoreIcon /> : <MaximizeIcon />}
           </button>
         )}
         {props.minimize !== false && (
-          <button onClick={minimize} aria-label="Minimize" className="air-window-minimize">
+          <button
+            aria-label="Minimize"
+            onClick={minimize}
+            className={props.minimizeClass ?? WINDOW_CONFIGS.controls.minimize.class}
+          >
             <MinimizeIcon />
           </button>
         )}
-        {props.maximize !== false && (
-          <button onClick={maximize} aria-label="Maximize" className="air-window-maximize">
-            {ctx?.window?.maximized ? <RestoreIcon /> : <MaximizeIcon />}
+        {props.close !== false && (
+          <button
+            aria-label="Close"
+            onClick={close}
+            className={props.closeClass ?? WINDOW_CONFIGS.controls.close.class}
+          >
+            <CloseIcon />
           </button>
         )}
       </div>
