@@ -115,14 +115,14 @@ export function captureSnapshot(
 
   if (options.cssPrefix) {
     for (const k of CSS_SUFFIXES) {
-      const name = `${options.cssPrefix}${k}`;
+      const name = `${options.cssPrefix}-${k}`;
       vars.set(name, el.style.getPropertyValue(name));
     }
   }
 
   if (options.attrPrefix) {
     for (const k of ATTR_SUFFIXES) {
-      const name = `${options.attrPrefix}${k}`;
+      const name = `${options.attrPrefix}-${k}`;
       attrs.set(name, el.getAttribute(name));
     }
   }

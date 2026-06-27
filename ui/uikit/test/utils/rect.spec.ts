@@ -1,6 +1,15 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { SNAP_BOUND } from '../../src/config.js';
-import { collectEdgeSnaps } from '../../src/utils/rect.js';
+import {
+  anchorOff,
+  applyPlacement,
+  baseCoordinate,
+  clearPlacement,
+  collectEdgeSnaps,
+  freezeTransition,
+  placeRect,
+  resolveAxis,
+} from '../../src/utils/rect.js';
 
 describe('rect utils', () => {
   beforeEach(() => {
@@ -141,6 +150,138 @@ describe('rect utils', () => {
       // Should not throw
       restoreTransition(undefined, 'all 0.3s ease');
       await new Promise((resolve) => setTimeout(resolve, 10));
+    });
+  });
+
+  describe('baseCoordinate', () => {
+    it('should calculate correct coordinates for all AxisPosition values', () => {
+      expect(baseCoordinate('before', 100, 50, 20, 10)).toBe(70); // 100 - 20 - 10
+      expect(baseCoordinate('after', 100, 50, 20, 10)).toBe(160); // 100 + 50 + 10
+      expect(baseCoordinate('start', 100, 50, 20, 10)).toBe(100); // 100
+      expect(baseCoordinate('center', 100, 50, 20, 10)).toBe(115); // 100 + (50 - 20) / 2
+      expect(baseCoordinate('end', 100, 50, 20, 10)).toBe(130); // 100 + 50 - 20
+    });
+  });
+
+  describe('resolveAxis', () => {
+    it('should shift coordinate within tolerance when shift strategy is enabled', () => {
+      // Out of bounds on near side (bNear = 0, coordinate = -10)
+      const res1 = resolveAxis('start', -10, 20, 0, 100, 0, 500, 0, 0.5, ['shift']);
+      expect(res1.coordinate).toBe(0);
+
+      // Out of bounds on far side
+      const res2 = resolveAxis('start', 490, 20, 400, 100, 0, 500, 0, 0.5, ['shift']);
+      expect(res2.coordinate).toBe(480);
+    });
+
+    it('should flip side and coordinate when flip strategy is enabled and flipped position fits better', () => {
+      // side = 'before' (FLIP['before'] is 'after'), near boundary collision
+      const res = resolveAxis('before', -10, 20, 10, 50, 0, 500, 5, 0.5, ['flip']);
+      expect(res.side).toBe('after');
+      expect(res.coordinate).toBe(65); // 10 + 50 + 5
+    });
+
+    it('should return unmodified side and coordinate if no strategies or no collision', () => {
+      const res = resolveAxis('start', 100, 20, 100, 50, 0, 500, 5, 0.5, []);
+      expect(res).toEqual({ side: 'start', coordinate: 100 });
+    });
+  });
+
+  describe('anchorOff', () => {
+    it('should compute relative offsets correctly', () => {
+      expect(anchorOff(50, 100, 40)).toEqual({
+        start: 50,
+        center: 70,
+        end: 90,
+      });
+    });
+  });
+
+  describe('placeRect', () => {
+    const anchorRect = new DOMRect(100, 100, 50, 50);
+    const elementRect = new DOMRect(0, 0, 20, 20);
+    const boundaryRect = new DOMRect(0, 0, 500, 500);
+
+    it('should resolve placement with default options', () => {
+      const placement = placeRect(anchorRect, elementRect, boundaryRect);
+      expect(placement.xSide).toBe('center');
+      expect(placement.ySide).toBe('after');
+    });
+
+    it('should resolve placement with custom options including object gap', () => {
+      const placement = placeRect(anchorRect, elementRect, boundaryRect, {
+        xPos: 'before',
+        yPos: 'start',
+        gap: { x: 5, y: 10 },
+      });
+      expect(placement.xSide).toBe('before');
+      expect(placement.ySide).toBe('start');
+    });
+
+    it('should fall back to 0 when gap object properties are undefined', () => {
+      const placement = placeRect(anchorRect, elementRect, boundaryRect, {
+        xPos: 'before',
+        yPos: 'after',
+        gap: {},
+      });
+      expect(placement.x).toBeDefined();
+      expect(placement.y).toBeDefined();
+    });
+  });
+
+  describe('applyPlacement & clearPlacement', () => {
+    it('should apply and clear placement with cssPrefix and attrPrefix', () => {
+      const el = document.createElement('div');
+      const placement = {
+        x: 10,
+        y: 20,
+        xSide: 'before' as const,
+        ySide: 'after' as const,
+        anchorX: { start: 1, center: 2, end: 3 },
+        anchorY: { start: 4, center: 5, end: 6 },
+      };
+
+      applyPlacement(el, placement, '--popover', 'data-popover');
+      expect(el.style.position).toBe('fixed');
+      expect(el.style.getPropertyValue('--popover-x')).toBe('10px');
+      expect(el.style.getPropertyValue('--popover-y')).toBe('20px');
+      expect(el.getAttribute('data-popover-open')).toBe('');
+      expect(el.getAttribute('data-popover-x-side')).toBe('before');
+
+      clearPlacement(el, '--popover', 'data-popover');
+      expect(el.style.position).toBe('');
+      expect(el.style.getPropertyValue('--popover-x')).toBe('');
+      expect(el.hasAttribute('data-popover-open')).toBe(false);
+    });
+
+    it('should apply and clear placement without prefixes (using left/top)', () => {
+      const el = document.createElement('div');
+      const placement = {
+        x: 15,
+        y: 25,
+        xSide: 'start' as const,
+        ySide: 'end' as const,
+        anchorX: { start: 0, center: 0, end: 0 },
+        anchorY: { start: 0, center: 0, end: 0 },
+      };
+
+      applyPlacement(el, placement);
+      expect(el.style.left).toBe('15px');
+      expect(el.style.top).toBe('25px');
+
+      clearPlacement(el);
+      expect(el.style.left).toBe('');
+      expect(el.style.top).toBe('');
+    });
+  });
+
+  describe('freezeTransition', () => {
+    it('should set transition to none and return previous value', () => {
+      const el = document.createElement('div');
+      el.style.transition = 'opacity 0.2s';
+      const prev = freezeTransition(el);
+      expect(prev).toBe('opacity 0.2s');
+      expect(el.style.transition).toBe('none');
     });
   });
 });

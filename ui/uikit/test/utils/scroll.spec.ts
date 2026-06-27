@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { getNearestScrollable, suspendOverflow } from '../../src/utils/scroll.js';
+import { getNearestScrollable, getScrollables, suspendOverflow } from '../../src/utils/scroll.js';
 
 describe('scroll utilities', () => {
   let container: HTMLElement;
@@ -111,6 +111,34 @@ describe('scroll utilities', () => {
       container.appendChild(outer);
 
       expect(getNearestScrollable(child)).toBe(inner);
+    });
+  });
+
+  describe('getScrollables', () => {
+    it('should return empty array when no element is provided or element has no scrollables', () => {
+      expect(getScrollables()).toEqual([]);
+      const orphan = document.createElement('div');
+      expect(getScrollables(orphan)).toEqual([]);
+    });
+
+    it('should return all scrollable ancestor elements in order', () => {
+      const outer = document.createElement('div');
+      Object.defineProperty(outer, 'scrollHeight', { value: 1000, configurable: true });
+      Object.defineProperty(outer, 'clientHeight', { value: 500, configurable: true });
+
+      const inner = document.createElement('div');
+      Object.defineProperty(inner, 'scrollHeight', { value: 400, configurable: true });
+      Object.defineProperty(inner, 'clientHeight', { value: 200, configurable: true });
+
+      const nonScrollable = document.createElement('div');
+
+      const child = document.createElement('div');
+      nonScrollable.appendChild(child);
+      inner.appendChild(nonScrollable);
+      outer.appendChild(inner);
+      container.appendChild(outer);
+
+      expect(getScrollables(child)).toEqual([inner, outer]);
     });
   });
 });

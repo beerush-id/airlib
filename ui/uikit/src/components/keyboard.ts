@@ -73,11 +73,12 @@ export function arrowRef<T extends HTMLElement>(options: ArrowRefOptions = {}) {
       const startIndex = current === -1 ? 0 : current;
       let matchedIndex = -1;
 
-      // If typing the same character repeatedly, cycle to the next match.
-      // Otherwise, search the full string starting from the current item.
-      const isCycling = searchQuery.length > 1 && searchQuery.split('').every((char) => char === searchQuery[0]);
-      const searchStr = isCycling ? searchQuery[0] : searchQuery;
-      const searchStart = isCycling ? startIndex + 1 : startIndex;
+      const isRepeatedChar = searchQuery.split('').every((char) => char === searchQuery[0]);
+      const searchStr = isRepeatedChar ? searchQuery[0] : searchQuery;
+
+      const currentText = current !== -1 ? focusable[current].textContent?.trim().toLowerCase() || '' : '';
+      const startNext = isRepeatedChar && currentText.startsWith(searchStr);
+      const searchStart = startNext ? startIndex + 1 : startIndex;
 
       for (let i = 0; i < focusable.length; i++) {
         const index = (searchStart + i) % focusable.length;

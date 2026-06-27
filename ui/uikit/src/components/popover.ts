@@ -1,4 +1,4 @@
-import { anchor, effect } from '@anchorlib/core';
+import { anchor, effect, mutable, untrack } from '@anchorlib/core';
 import type { AnchorOffset, AxisPosition, RectPlacementOptions } from '../utils/index.js';
 import {
   applyPlacement,
@@ -7,7 +7,6 @@ import {
   clearPlacement,
   createFocusTrap,
   getScrollables,
-  impure,
   placeRect,
   resolveEl,
   resolvePortalTarget,
@@ -50,7 +49,7 @@ export type PopoverInstance = {
  * @returns A PopoverInstance reactive state controller.
  */
 export function popover(init: PopoverInit): PopoverInstance {
-  if (!anchor.has(init)) init = impure(init);
+  if (!anchor.has(init)) init = mutable(init);
 
   const toggle = () => {
     state.open = !state.open;
@@ -60,7 +59,7 @@ export function popover(init: PopoverInit): PopoverInstance {
     anchor.destroy(state);
   };
 
-  const state = impure<PopoverInstance>({
+  const state = mutable<PopoverInstance>({
     x: 0,
     y: 0,
     open: false,
@@ -85,7 +84,7 @@ export function popover(init: PopoverInit): PopoverInstance {
       init
     );
 
-    anchor.assign(state, placement);
+    untrack(() => anchor.assign(state, placement));
     applyPlacement(self, placement, init.cssPrefix, init.attrPrefix);
   }
 
@@ -100,6 +99,7 @@ export function popover(init: PopoverInit): PopoverInstance {
 
     const self = resolveEl(state.element);
     const target = resolveEl(state.anchor) ?? self?.parentElement ?? undefined;
+
     if (!self || !target) return;
 
     return bindInteraction(

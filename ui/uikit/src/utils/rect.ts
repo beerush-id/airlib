@@ -44,7 +44,7 @@ export const CSS_SUFFIXES = [
   'anchor-y-center',
   'anchor-y-end',
 ];
-export const ATTR_SUFFIXES = ['-open', '-x-side', '-y-side'];
+export const ATTR_SUFFIXES = ['open', 'x-side', 'y-side'];
 
 const FLIP: Record<AxisPosition, AxisPosition> = {
   before: 'after',
@@ -249,7 +249,7 @@ export function applyPlacement(el: HTMLElement, placement: RectPlacement, cssPre
  */
 export function clearPlacement(el: HTMLElement, cssPrefix?: string, attrPrefix?: string) {
   if (cssPrefix) {
-    for (const k of CSS_SUFFIXES) el.style.removeProperty(`${cssPrefix}${k}`);
+    for (const k of CSS_SUFFIXES) el.style.removeProperty(`${cssPrefix}-${k}`);
   } else {
     el.style.left = '';
     el.style.top = '';
@@ -257,7 +257,7 @@ export function clearPlacement(el: HTMLElement, cssPrefix?: string, attrPrefix?:
   el.style.position = '';
 
   if (attrPrefix) {
-    for (const k of ATTR_SUFFIXES) el.removeAttribute(`${attrPrefix}${k}`);
+    for (const k of ATTR_SUFFIXES) el.removeAttribute(`${attrPrefix}-${k}`);
   }
 }
 

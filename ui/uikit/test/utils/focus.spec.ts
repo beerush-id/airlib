@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { KIT_CONFIGS } from '../../src/config.js';
-import { type AnyType, focusRef } from '../../src/index.js';
-import { createFocusTrap } from '../../src/utils/focus.js';
+import { createFocusTrap, focusFrom } from '../../src/utils/focus.js';
 
 describe('createFocusTrap', () => {
   let container: HTMLDivElement;
@@ -303,134 +302,25 @@ describe('createFocusTrap', () => {
   });
 });
 
-describe('focusRef', () => {
-  let container: HTMLDivElement;
-  let btn1: HTMLButtonElement;
-  let btn2: HTMLButtonElement;
+describe('focusFrom', () => {
+  it('should focus the first focusable element inside the parent container', () => {
+    const parent = document.createElement('div');
+    const input = document.createElement('input');
+    parent.appendChild(input);
+    document.body.appendChild(parent);
 
-  beforeEach(() => {
-    KIT_CONFIGS.autofocus = true;
-    KIT_CONFIGS.trapOverflow = true;
-
-    document.body.innerHTML = '';
-    document.body.style.overflow = '';
-
-    container = document.createElement('div');
-    btn1 = document.createElement('button');
-    btn2 = document.createElement('button');
-    container.appendChild(btn1);
-    container.appendChild(btn2);
-    document.body.appendChild(container);
-
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
-      cb(0);
-      return 0;
-    });
+    focusFrom(parent);
+    expect(document.activeElement).toBe(input);
+    parent.remove();
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-    container.remove();
-  });
+  it('should fall back to focusing the parent container if no focusable child exists', () => {
+    const parent = document.createElement('div');
+    parent.tabIndex = 0;
+    document.body.appendChild(parent);
 
-  it('should return a ref with current initially null', () => {
-    const ref = focusRef();
-    expect(ref.current).toBeNull();
-  });
-
-  it('should activate focus trap when current is set to an element', () => {
-    const onRelease = vi.fn();
-    const ref = focusRef<HTMLDivElement>({ onRelease, autofocus: false });
-
-    ref.current = container;
-
-    // Trap should be active: Escape should trigger onRelease
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-    expect(onRelease).toHaveBeenCalledOnce();
-
-    ref.current = null;
-  });
-
-  it('should suspend overflow when current is set and trapOverflow is true', () => {
-    const ref = focusRef<HTMLDivElement>({ autofocus: false, trapOverflow: true });
-
-    ref.current = container;
-    expect(document.body.style.overflow).toBe('hidden');
-
-    ref.current = null;
-    expect(document.body.style.overflow).toBe('');
-  });
-
-  it('should release trap when current is set back to null', () => {
-    const onRelease = vi.fn();
-    const ref = focusRef<HTMLDivElement>({ onRelease, autofocus: false });
-
-    ref.current = container;
-
-    // Release by setting to null
-    ref.current = null;
-
-    // After release, Escape should no longer trigger onRelease
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-    expect(onRelease).not.toHaveBeenCalled();
-  });
-
-  it('should release old trap and create new one when current is replaced', () => {
-    const onRelease1 = vi.fn();
-    const ref = focusRef<HTMLDivElement>({ onRelease: onRelease1, autofocus: false });
-
-    ref.current = container;
-
-    // Swap to a new container
-    const container2 = document.createElement('div');
-    const btn3 = document.createElement('button');
-    container2.appendChild(btn3);
-    document.body.appendChild(container2);
-
-    ref.current = container2;
-
-    // Old trap should be released: Escape should NOT trigger old onRelease
-    // (new trap has same onRelease since options are shared, but old listeners should be removed)
-    // Actually both share same onRelease, so let's verify the old container's listeners are gone
-    // by checking that only one set of listeners is active
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-    // Only the new trap's onRelease should fire (called once, not twice)
-    expect(onRelease1).toHaveBeenCalledOnce();
-
-    ref.current = null;
-    container2.remove();
-  });
-
-  it('should autofocus the first focusable element when current is set', () => {
-    const ref = focusRef<HTMLDivElement>({ autofocus: true });
-    ref.current = container;
-
-    expect(document.activeElement).toBe(btn1);
-
-    ref.current = null;
-  });
-
-  it('should restore previous focus when current is set to null', () => {
-    const prevFocus = document.createElement('input');
-    document.body.appendChild(prevFocus);
-    prevFocus.focus();
-
-    const ref = focusRef<HTMLDivElement>({ autofocus: true });
-    ref.current = container;
-    expect(document.activeElement).toBe(btn1);
-
-    ref.current = null;
-    expect(document.activeElement).toBe(prevFocus);
-
-    prevFocus.remove();
-  });
-
-  it('should not activate trap when current remains null', () => {
-    const onRelease = vi.fn();
-    const ref = focusRef<HTMLDivElement>({ onRelease });
-
-    // Don't set current
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-    expect(onRelease).not.toHaveBeenCalled();
+    focusFrom(parent);
+    expect(document.activeElement).toBe(parent);
+    parent.remove();
   });
 });
