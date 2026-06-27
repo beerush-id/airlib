@@ -1,6 +1,9 @@
 import { effect, isBrowser, microtask, mutable } from '@anchorlib/core';
 import { KIT_CONFIGS } from '../config.js';
+import { FOCUSABLE_SELECTORS, getFocusable } from './document.js';
 import { suspendOverflow } from './scroll.js';
+
+export { FOCUSABLE_SELECTORS };
 
 export type FocusTrapOptions = {
   onRelease?: (e: MouseEvent | KeyboardEvent) => void;
@@ -10,15 +13,13 @@ export type FocusTrapOptions = {
   releaseOnClickOutside?: boolean;
 };
 
-export const FOCUSABLE_SELECTORS = [
-  'a[href]',
-  'button:not([disabled])',
-  'textarea:not([disabled])',
-  'input:not([disabled])',
-  'select:not([disabled])',
-  '[tabindex]:not([tabindex="-1"])',
-].join(',');
-
+/**
+ * Creates a reactive DOM ref container that automatically activates and binds a focus trap
+ * whenever an element is assigned to it.
+ *
+ * @param options - Focus trapping options including auto-focus and overflow trapping.
+ * @returns A reactive mutable element reference container.
+ */
 export function focusRef<T extends HTMLElement>(options?: FocusTrapOptions) {
   const elRef = mutable<{ current: T | null }>({ current: null });
 
@@ -31,6 +32,14 @@ export function focusRef<T extends HTMLElement>(options?: FocusTrapOptions) {
   return elRef;
 }
 
+/**
+ * Traps keyboard navigation (Tab and Shift+Tab) within a specified DOM container.
+ * Optionally focuses the initial interactive child and restores prior focus upon release.
+ *
+ * @param container - Target DOM element containing focusable elements.
+ * @param options - Configuration for escape release, click-outside release, and scroll lock.
+ * @returns Teardown callback function that removes event listeners and restores state.
+ */
 export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptions) {
   if (!isBrowser() || !container) return () => {};
 
@@ -58,7 +67,7 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
     }
     if (e.key !== 'Tab') return;
 
-    const focusable = getFocusableElements(container);
+    const focusable = getFocusable(container);
     if (!focusable.length) {
       e.preventDefault();
       return;
@@ -95,11 +104,13 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
   };
 }
 
+/**
+ * Searches a parent element for the first interactive element and sets browser focus to it.
+ * Falls back to focusing the parent container itself if no interactive children exist.
+ *
+ * @param parent - The container element to search within.
+ */
 export function focusFrom(parent: HTMLElement) {
   const focusable = parent.querySelector(FOCUSABLE_SELECTORS) as HTMLElement;
   focusable ? focusable.focus() : parent.focus();
-}
-
-function getFocusableElements(container: HTMLElement): HTMLElement[] {
-  return Array.from(container.querySelectorAll(FOCUSABLE_SELECTORS));
 }

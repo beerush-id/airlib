@@ -1,8 +1,8 @@
 @theme {
   --shadow-window: 0 0 3px light-dark(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 1));
   --shadow-window-active: 0 0 30px light-dark(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 1));
-  --air-minimized-transform: translate3d(0, 100%, 0) scale(0.3);
   --spacing-resizer: calc(var(--spacing) * 1.25); /* 5px */
+  --air-minimized-transform: translate3d(0, 100%, 0) scale(0.3);
 
   @keyframes window-focus-in {
     from {

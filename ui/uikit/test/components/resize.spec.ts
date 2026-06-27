@@ -1,7 +1,7 @@
 import { createLifecycle, microtask } from '@anchorlib/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { KIT_CONFIGS } from '../../src/config.js';
-import { resizeRef, resizeState } from '../../src/utils/resize.js';
+import { resizeRef, resizeState } from '../../src/index.js';
 import { getPointer } from '../../src/utils/mouse.js';
 
 describe('resize', () => {
@@ -212,7 +212,7 @@ describe('resize', () => {
 
     it('should use default snapThreshold of 10 if KIT_CONFIGS.snapThreshold is missing', async () => {
       const original = KIT_CONFIGS.snapThreshold;
-      // @ts-ignore
+      // @ts-expect-error
       KIT_CONFIGS.snapThreshold = undefined;
 
       const state = resizeState({
@@ -506,7 +506,7 @@ describe('resize', () => {
 
     it('should use default resizeThreshold of 10 if KIT_CONFIGS.resizeThreshold is missing', () => {
       const original = KIT_CONFIGS.resizeThreshold;
-      // @ts-ignore
+      // @ts-expect-error
       KIT_CONFIGS.resizeThreshold = undefined;
 
       const ref = resizeRef({ target, trigger, dir: 'auto' });

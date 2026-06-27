@@ -4,11 +4,11 @@
   }
 
   :root:has([data-theme='light']) {
-    color-scheme: light;
+    color-scheme: only light;
   }
 
   :root:has([data-theme='dark']) {
-    color-scheme: dark;
+    color-scheme: only dark;
   }
 
   body {
@@ -50,7 +50,7 @@
     --color-ghost-surface: var(--color-surface-variant);
   }
 
-  a {
+  a:not([class]) {
     @apply air-link;
   }
 }

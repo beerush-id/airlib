@@ -2,13 +2,17 @@ import { cookies, effect, isBrowser, untrack } from '@anchorlib/core';
 
 export type ColorScheme = {
   mode: 'dark' | 'light' | 'system';
+  color: string;
   toggle: () => void;
   change: (mode: 'dark' | 'light' | 'system') => void;
   current?: 'dark' | 'light';
 };
 
-let currentState: ColorScheme | undefined;
-
+/**
+ * Retrieves the global reactive color scheme controller synced with browser cookies and system preferences.
+ *
+ * @returns A ColorScheme reactive state instance.
+ */
 export function colorScheme(): ColorScheme {
   if (currentState) return currentState;
 
@@ -19,7 +23,12 @@ export function colorScheme(): ColorScheme {
   const change = (mode: 'dark' | 'light' | 'system') => {
     state.mode = mode;
   };
-  const state = cookies<ColorScheme>('theme', { mode: 'system', toggle, change });
+  const state = cookies<ColorScheme>('theme', {
+    mode: 'system',
+    color: 'red',
+    toggle,
+    change,
+  });
 
   if (!isBrowser()) return state;
 
@@ -34,3 +43,5 @@ export function colorScheme(): ColorScheme {
   currentState = state;
   return state;
 }
+
+let currentState: ColorScheme | undefined;

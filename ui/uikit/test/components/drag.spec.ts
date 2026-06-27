@@ -1,7 +1,7 @@
 import { createLifecycle, microtask } from '@anchorlib/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SNAP_BOUND } from '../../src/config.js';
-import { dragRef, dragState } from '../../src/utils/drag.js';
+import { dragRef, dragState } from '../../src/index.js';
 import { getKeyboard } from '../../src/utils/keyboard.js';
 import { getPointer } from '../../src/utils/mouse.js';
 

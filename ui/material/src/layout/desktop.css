@@ -1,0 +1,31 @@
+@theme {
+  --air-wallpaper: url('/wallpaper/air-desktop.webp');
+  --air-wallpaper-dark: url('/wallpaper/air-desktop-dark.webp');
+}
+
+@utility air-desktop {
+  @apply w-screen min-h-screen;
+
+  &:before,
+  &:after {
+    @apply w-screen h-screen fixed top-0 left-0 pointer-events-none;
+    content: '';
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+    transition: opacity var(--duration-short) var(--ease-emphasized);
+  }
+  &:before {
+    background-image: var(--air-wallpaper);
+  }
+  &:after {
+    background-image: var(--air-wallpaper-dark);
+    opacity: 0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:after {
+      opacity: 1;
+    }
+  }
+}

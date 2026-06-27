@@ -1,6 +1,5 @@
 import { isBrowser, onCleanup } from '@anchorlib/core';
 import { KIT_CONFIGS, type SnapToBound } from '../config.js';
-import { MOUSE_BUTTONS, type MouseModifier } from './mouse.js';
 import type {
   EdgeSnaps,
   InteractionEvent,
@@ -8,7 +7,8 @@ import type {
   InteractionRefInit,
   InteractionState,
   InteractionType,
-} from './rect.js';
+  MouseModifier,
+} from '../utils/index.js';
 import {
   attachFinish,
   bindTrigger,
@@ -18,11 +18,12 @@ import {
   freezeTransition,
   interactionState,
   minMax,
+  MOUSE_BUTTONS,
   resetInteraction,
   restoreTransition,
   snapGrid,
   unbindTrigger,
-} from './rect.js';
+} from '../utils/index.js';
 
 export type ResizeSize = {
   width: number;
@@ -55,96 +56,13 @@ export type ResizeOptions = {
 export type ResizeInit = Partial<ResizeSize & ResizeOptions>;
 export type ResizeRefInit<T extends HTMLElement> = InteractionRefInit<T, ResizeOptions, ResizeEvent<T>>;
 
-export function resizeState(init: ResizeInit = {}, onChange?: (state: ResizeState) => void): ResizeState {
-  return interactionState(
-    init,
-    (state, cx, cy, rawState) => {
-      const { dir, minW, minH, maxW, maxH, snapW, snapH } = init;
-      if (!dir?.length) return;
-
-      const { cursorX, cursorY, startWidth, startHeight, offsetX, offsetY, offsetWidth, offsetHeight } =
-        rawState.start!;
-      const deltaX = cx - cursorX;
-      const deltaY = cy - cursorY;
-
-      let currentW = startWidth + (rawState.width - offsetWidth);
-      let currentH = startHeight + (rawState.height - offsetHeight);
-
-      if (dir.includes('e')) {
-        const newW = minMax(minW, maxW, snapGrid(startWidth + deltaX, snapW));
-        state.width = offsetWidth + (newW - startWidth);
-        currentW = newW;
-      } else if (dir.includes('w')) {
-        const newW = minMax(minW, maxW, snapGrid(startWidth - deltaX, snapW));
-        state.width = offsetWidth + (newW - startWidth);
-        state.x = offsetX + (startWidth - newW);
-        currentW = newW;
-      }
-
-      if (dir.includes('s')) {
-        const newH = minMax(minH, maxH, snapGrid(startHeight + deltaY, snapH));
-        state.height = offsetHeight + (newH - startHeight);
-        currentH = newH;
-      } else if (dir.includes('n')) {
-        const newH = minMax(minH, maxH, snapGrid(startHeight - deltaY, snapH));
-        state.height = offsetHeight + (newH - startHeight);
-        state.y = offsetY + (startHeight - newH);
-        currentH = newH;
-      }
-
-      // Snap dragged edges to nearby element edges
-      const edges = init.edgeSnaps;
-      if (edges) {
-        const { anchorLeft, anchorTop, anchorRight, anchorBottom } = rawState.start!;
-        const threshold = KIT_CONFIGS.snapThreshold ?? 10;
-
-        if (dir.includes('e')) {
-          const edge = anchorLeft + currentW;
-          for (const sx of edges.x) {
-            if (Math.abs(edge - sx) < threshold) {
-              const newW = minMax(minW, maxW, sx - anchorLeft);
-              state.width = offsetWidth + (newW - startWidth);
-              break;
-            }
-          }
-        } else if (dir.includes('w')) {
-          const edge = anchorRight - currentW;
-          for (const sx of edges.x) {
-            if (Math.abs(edge - sx) < threshold) {
-              const newW = minMax(minW, maxW, anchorRight - sx);
-              state.width = offsetWidth + (newW - startWidth);
-              state.x = offsetX + (startWidth - newW);
-              break;
-            }
-          }
-        }
-
-        if (dir.includes('s')) {
-          const edge = anchorTop + currentH;
-          for (const sy of edges.y) {
-            if (Math.abs(edge - sy) < threshold) {
-              const newH = minMax(minH, maxH, sy - anchorTop);
-              state.height = offsetHeight + (newH - startHeight);
-              break;
-            }
-          }
-        } else if (dir.includes('n')) {
-          const edge = anchorBottom - currentH;
-          for (const sy of edges.y) {
-            if (Math.abs(edge - sy) < threshold) {
-              const newH = minMax(minH, maxH, anchorBottom - sy);
-              state.height = offsetHeight + (newH - startHeight);
-              state.y = offsetY + (startHeight - newH);
-              break;
-            }
-          }
-        }
-      }
-    },
-    onChange
-  );
-}
-
+/**
+ * Creates a resize interaction controller bound to a DOM element.
+ * Projects computed width/height and position adjustments during pointer dragging.
+ *
+ * @param init - Resize controller options including target element and trigger handles.
+ * @returns A reactive ResizeRef controller instance.
+ */
 export function resizeRef<T extends HTMLElement>(init: ResizeRefInit<T> = {}): ResizeRef<T> {
   const options = { ...init };
 
@@ -278,4 +196,101 @@ export function resizeRef<T extends HTMLElement>(init: ResizeRefInit<T> = {}): R
       if (trigger) bindTrigger(trigger, start);
     },
   };
+}
+
+/**
+ * Creates a standalone reactive element resize state container.
+ * Computes constrained dimensions and position offsets based on active edge dragging.
+ *
+ * @param init - Resize limits, directional handles, and edge snapping preferences.
+ * @param onChange - Optional callback triggered whenever dimensions or offsets change.
+ * @returns A reactive ResizeState instance.
+ */
+export function resizeState(init: ResizeInit = {}, onChange?: (state: ResizeState) => void): ResizeState {
+  return interactionState(
+    init,
+    (state, cx, cy, rawState) => {
+      const { dir, minW, minH, maxW, maxH, snapW, snapH } = init;
+      if (!dir?.length) return;
+
+      const { cursorX, cursorY, startWidth, startHeight, offsetX, offsetY, offsetWidth, offsetHeight } =
+        rawState.start!;
+      const deltaX = cx - cursorX;
+      const deltaY = cy - cursorY;
+
+      let currentW = startWidth + (rawState.width - offsetWidth);
+      let currentH = startHeight + (rawState.height - offsetHeight);
+
+      if (dir.includes('e')) {
+        const newW = minMax(minW, maxW, snapGrid(startWidth + deltaX, snapW));
+        state.width = offsetWidth + (newW - startWidth);
+        currentW = newW;
+      } else if (dir.includes('w')) {
+        const newW = minMax(minW, maxW, snapGrid(startWidth - deltaX, snapW));
+        state.width = offsetWidth + (newW - startWidth);
+        state.x = offsetX + (startWidth - newW);
+        currentW = newW;
+      }
+
+      if (dir.includes('s')) {
+        const newH = minMax(minH, maxH, snapGrid(startHeight + deltaY, snapH));
+        state.height = offsetHeight + (newH - startHeight);
+        currentH = newH;
+      } else if (dir.includes('n')) {
+        const newH = minMax(minH, maxH, snapGrid(startHeight - deltaY, snapH));
+        state.height = offsetHeight + (newH - startHeight);
+        state.y = offsetY + (startHeight - newH);
+        currentH = newH;
+      }
+
+      const edges = init.edgeSnaps;
+      if (edges) {
+        const { anchorLeft, anchorTop, anchorRight, anchorBottom } = rawState.start!;
+        const threshold = KIT_CONFIGS.snapThreshold ?? 10;
+
+        if (dir.includes('e')) {
+          const edge = anchorLeft + currentW;
+          for (const sx of edges.x) {
+            if (Math.abs(edge - sx) < threshold) {
+              const newW = minMax(minW, maxW, sx - anchorLeft);
+              state.width = offsetWidth + (newW - startWidth);
+              break;
+            }
+          }
+        } else if (dir.includes('w')) {
+          const edge = anchorRight - currentW;
+          for (const sx of edges.x) {
+            if (Math.abs(edge - sx) < threshold) {
+              const newW = minMax(minW, maxW, anchorRight - sx);
+              state.width = offsetWidth + (newW - startWidth);
+              state.x = offsetX + (startWidth - newW);
+              break;
+            }
+          }
+        }
+
+        if (dir.includes('s')) {
+          const edge = anchorTop + currentH;
+          for (const sy of edges.y) {
+            if (Math.abs(edge - sy) < threshold) {
+              const newH = minMax(minH, maxH, sy - anchorTop);
+              state.height = offsetHeight + (newH - startHeight);
+              break;
+            }
+          }
+        } else if (dir.includes('n')) {
+          const edge = anchorBottom - currentH;
+          for (const sy of edges.y) {
+            if (Math.abs(edge - sy) < threshold) {
+              const newH = minMax(minH, maxH, anchorBottom - sy);
+              state.height = offsetHeight + (newH - startHeight);
+              state.y = offsetY + (startHeight - newH);
+              break;
+            }
+          }
+        }
+      }
+    },
+    onChange
+  );
 }

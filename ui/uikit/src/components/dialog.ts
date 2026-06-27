@@ -1,14 +1,66 @@
 import { anchor, effect, getContext, mutable, onCleanup, setContext, untrack } from '@anchorlib/core';
 import { createFocusTrap, type FocusTrapOptions } from '../utils/index.js';
 
-const DIALOG_CONTEXT_KEY = 'air-dialog';
-
 export interface DialogInit<T> {
   data?: T | (() => T);
   open?: boolean;
   container?: HTMLElement;
 }
 
+/**
+ * Creates a reactive modal dialog state controller backed by focus trapping and accessibility locks.
+ *
+ * @param init - Dialog state configuration including initial visibility, payload data, and target DOM container.
+ * @param options - Focus trapping and keyboard dismiss options.
+ * @returns A reactive DialogState controller instance.
+ */
+export function createDialog<T, O>(init: DialogInit<T> = mutable({ open: false }), options?: FocusTrapOptions) {
+  const dialog = new DialogState<T, O>(init);
+
+  effect.client(() => {
+    if (dialog.open && dialog.container) {
+      const self = dialog.container;
+
+      const release = createFocusTrap(self, {
+        ...options,
+        onRelease: (e) => {
+          dialog.hide();
+          options?.onRelease?.(e);
+        },
+      });
+
+      return () => {
+        release();
+      };
+    }
+  });
+
+  return dialog;
+}
+
+/**
+ * Binds a DialogState instance into the current Anchor component context scope.
+ *
+ * @param dialog - The dialog controller instance to register.
+ */
+export function setDialog<T, O>(dialog: DialogState<T, O>) {
+  setContext(DIALOG_CONTEXT_KEY, dialog);
+}
+
+/**
+ * Retrieves the active DialogState instance from the surrounding component context hierarchy.
+ *
+ * @returns The active DialogState controller or undefined if none is bound.
+ */
+export function getDialog<T, O>(): DialogState<T, O> | undefined {
+  return getContext<DialogState<T, O>>(DIALOG_CONTEXT_KEY);
+}
+
+const DIALOG_CONTEXT_KEY = 'air-dialog';
+
+/**
+ * Manages reactive modal lifecycle states, promise resolution flows, and payload data injection.
+ */
 export class DialogState<T, O> {
   private resolved = false;
 
@@ -80,36 +132,4 @@ export class DialogState<T, O> {
     this.resolved = true;
     return this;
   }
-}
-
-export function createDialog<T, O>(init: DialogInit<T> = mutable({ open: false }), options?: FocusTrapOptions) {
-  const dialog = new DialogState<T, O>(init);
-
-  effect.client(() => {
-    if (dialog.open && dialog.container) {
-      const self = dialog.container;
-
-      const release = createFocusTrap(self, {
-        ...options,
-        onRelease: (e) => {
-          dialog.hide();
-          options?.onRelease?.(e);
-        },
-      });
-
-      return () => {
-        release();
-      };
-    }
-  });
-
-  return dialog;
-}
-
-export function setDialog<T, O>(dialog: DialogState<T, O>) {
-  setContext(DIALOG_CONTEXT_KEY, dialog);
-}
-
-export function getDialog<T, O>(): DialogState<T, O> | undefined {
-  return getContext<DialogState<T, O>>(DIALOG_CONTEXT_KEY);
 }

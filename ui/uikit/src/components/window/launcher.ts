@@ -3,6 +3,9 @@ import type { WebWindow } from './window.js';
 
 export type ArrangeMode = 'cascade' | 'tile' | 'stack';
 
+/**
+ * Orchestrates desktop window launching, mass dismissal, and automatic screen layout arrangements (cascade, tile, stack).
+ */
 export class WindowLauncher extends Set<WebWindow<AnyType, AnyType>> {
   public launch(app: WebWindow<AnyType, AnyType>) {
     if (app.online) {

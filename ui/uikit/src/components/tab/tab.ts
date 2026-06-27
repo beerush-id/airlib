@@ -1,26 +1,45 @@
 import { anchor, getContext, type Linkable, mutable, setContext } from '@anchorlib/core';
 
-export const TAB_SYMBOL = Symbol('air-tab');
-
 export type TabOptions = {
   deferred?: boolean;
   orientation?: 'vertical' | 'horizontal';
 };
 
-export function getTab<T>() {
-  return getContext<Tab<T>>(TAB_SYMBOL);
-}
-
-export function setTab<T>(tab: Tab<T>) {
-  setContext(TAB_SYMBOL, tab);
-}
-
+/**
+ * Creates and registers a new reactive Tab navigation state container into the component context.
+ *
+ * @param options - Tab configuration preferences including layout orientation and rendering deferral.
+ * @returns A reactive Tab state instance.
+ */
 export function createTabState<T>(options?: TabOptions) {
   const tab = mutable(new Tab<T>(options), { recursive: false });
   setTab(tab);
   return tab;
 }
 
+/**
+ * Retrieves the active Tab state instance from the surrounding component context hierarchy.
+ *
+ * @returns The active Tab controller or undefined if none is bound.
+ */
+export function getTab<T>() {
+  return getContext<Tab<T>>(TAB_SYMBOL);
+}
+
+/**
+ * Binds a Tab controller instance into the current Anchor component context scope.
+ *
+ * @param tab - The Tab state instance to register.
+ */
+export function setTab<T>(tab: Tab<T>) {
+  setContext(TAB_SYMBOL, tab);
+}
+
+export const TAB_SYMBOL = Symbol('air-tab');
+
+/**
+ * Manages active tab item tracking, trigger bounding rect calculations, and item selection state.
+ */
 export class Tab<T = string> {
   public current?: T;
   public trigger?: HTMLElement;

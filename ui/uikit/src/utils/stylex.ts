@@ -4,6 +4,13 @@ export type CSSProperties = {
 export type StyleInput = CSSProperties & Record<`--${string}`, string | number>;
 export type StyleProvider = () => StyleInput;
 
+/**
+ * Normalizes CSS style objects and CSS custom properties by filtering empty values and appending
+ * pixel units to numeric dimensions where applicable.
+ *
+ * @param value - Style input object or provider function returning styles.
+ * @returns Sanitized style object ready for DOM application.
+ */
 export function stylex(value: StyleInput | StyleProvider) {
   const resolved = typeof value === 'function' ? value() : value;
   const result: StyleInput = {};

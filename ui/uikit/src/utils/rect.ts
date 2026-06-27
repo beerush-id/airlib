@@ -1,14 +1,7 @@
-import { anchor, effect, microtask } from '@anchorlib/core';
+import { microtask } from '@anchorlib/core';
 import { KIT_CONFIGS, SNAP_BOUND, type SnapToBound } from '../config.js';
-import type { AnyType } from '../types.js';
-import { getPointer, MOUSE_BUTTONS, type MouseButton } from './mouse.js';
-import { impure } from './state.js';
 
-export type InteractionType = 'stay' | 'reset';
-
-export const INTERACTIVE = 'a, button, input, textarea, select, label, [contenteditable]';
-
-export const [later] = microtask(5);
+const [later] = microtask(5);
 
 export function minMax(min: number | undefined, max: number | undefined, value: number) {
   if (typeof min === 'number') {
@@ -27,150 +20,6 @@ export function snapGrid(value: number, step: number | undefined) {
   return Math.round(value / step) * step;
 }
 
-export function trackPointer(state: { start?: unknown }, calculate: (cx: number, cy: number) => void) {
-  const pointer = getPointer();
-
-  let rafId = 0;
-  effect.client(() => {
-    if (state.start != null) {
-      const { x: cx, y: cy } = pointer;
-      rafId = requestAnimationFrame(() => {
-        calculate(cx, cy);
-      });
-    }
-
-    return () => cancelAnimationFrame(rafId);
-  });
-}
-
-export type InteractionStart = {
-  cursorX: number;
-  cursorY: number;
-  offsetX: number;
-  offsetY: number;
-  offsetWidth: number;
-  offsetHeight: number;
-  startWidth: number;
-  startHeight: number;
-  anchorLeft: number;
-  anchorTop: number;
-  anchorRight: number;
-  anchorBottom: number;
-};
-
-export type InteractionState = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  start?: InteractionStart;
-};
-
-export type InteractionRef<T extends HTMLElement> = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  active: boolean;
-  target?: T;
-  trigger?: HTMLElement;
-};
-
-export type InteractionEvent<T extends HTMLElement> = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  target?: T;
-};
-
-export type InteractionRefInit<T extends HTMLElement, Options = {}, Event = InteractionEvent<T>> = Partial<
-  Omit<InteractionRef<T>, 'active'> & Options
-> & {
-  type?: InteractionType;
-  button?: MouseButton;
-  onStart?: (e: Event) => void | true;
-  onMove?: (e: Event) => void | true;
-  onEnd?: (e: Event) => void | true;
-};
-
-export function interactionState(
-  init: { x?: number; y?: number; width?: number; height?: number },
-  calculate: (state: InteractionState, cx: number, cy: number, rawState: InteractionState) => void,
-  onChange?: (state: InteractionState) => void
-): InteractionState {
-  const { x = 0, y = 0, width = 0, height = 0 } = init;
-  const state = impure<InteractionState>({ x, y, width, height }, { recursive: false });
-  const rawState = anchor.get(state, true);
-
-  trackPointer(state, (cx, cy) => {
-    if (typeof state.start !== 'object') return;
-    calculate(state, cx, cy, rawState);
-    onChange?.(rawState);
-  });
-
-  return state;
-}
-
-export function captureStart(
-  e: MouseEvent | TouchEvent,
-  state: InteractionState,
-  button: MouseButton = MOUSE_BUTTONS.left,
-  target?: HTMLElement
-): InteractionStart | null {
-  let cursorX: number;
-  let cursorY: number;
-
-  if (e instanceof MouseEvent) {
-    if (e.button !== button) return null;
-    cursorX = e.clientX;
-    cursorY = e.clientY;
-  } else {
-    const touch = e.touches[0];
-    cursorX = touch.clientX;
-    cursorY = touch.clientY;
-  }
-
-  const rect = target?.getBoundingClientRect();
-
-  return {
-    cursorX,
-    cursorY,
-    offsetX: state.x,
-    offsetY: state.y,
-    offsetWidth: state.width,
-    offsetHeight: state.height,
-    startWidth: target?.offsetWidth || 0,
-    startHeight: target?.offsetHeight || 0,
-    anchorLeft: rect?.left ?? 0,
-    anchorTop: rect?.top ?? 0,
-    anchorRight: rect?.right ?? 0,
-    anchorBottom: rect?.bottom ?? 0,
-  };
-}
-
-export function attachFinish(fn: () => void) {
-  document.addEventListener('mouseup', fn);
-  document.addEventListener('touchend', fn, { once: true });
-  window.addEventListener('blur', fn);
-}
-
-export function detachFinish(fn: () => void) {
-  document.removeEventListener('mouseup', fn);
-  document.removeEventListener('touchend', fn);
-  window.removeEventListener('blur', fn);
-}
-
-export function bindTrigger(el: HTMLElement, fn: (e: MouseEvent | TouchEvent) => void) {
-  el.addEventListener('mousedown', fn as EventListener);
-  el.addEventListener('touchstart', fn as EventListener, { passive: true });
-}
-
-export function unbindTrigger(el: HTMLElement, fn: (e: MouseEvent | TouchEvent) => void) {
-  el.removeEventListener('mousedown', fn as EventListener);
-  el.removeEventListener('touchstart', fn as EventListener);
-}
-
 export function freezeTransition(target: HTMLElement): string {
   const saved = target.style.transition;
   target.style.transition = 'none';
@@ -185,15 +34,6 @@ export function restoreTransition(target: HTMLElement | undefined, saved: string
     target.style.transition = saved;
     if (dataMorph) target.removeAttribute(`data-${dataMorph}`);
   });
-}
-export function resetInteraction(state: InteractionState, target: HTMLElement, styles: string[]) {
-  for (const prop of styles) {
-    target.style[prop as AnyType] = '';
-  }
-  state.x = 0;
-  state.y = 0;
-  state.width = 0;
-  state.height = 0;
 }
 
 export type SnapPoint = { x: number; y: number };
@@ -233,7 +73,7 @@ export function collectSnapPoints(
   if (selectors?.length) {
     const root = target.parentElement ?? document;
     for (const sel of selectors) {
-      for (const el of root.querySelectorAll<HTMLElement>(sel)) {
+      for (const el of Array.from(root.querySelectorAll<HTMLElement>(sel))) {
         if (el === target) continue;
         pts.push(...snapPointsFor(el.getBoundingClientRect(), tRect, bound));
       }
@@ -272,7 +112,7 @@ export function collectEdgeSnaps(
   if (selectors?.length) {
     const root = target.parentElement ?? document;
     for (const sel of selectors) {
-      for (const el of root.querySelectorAll<HTMLElement>(sel)) {
+      for (const el of Array.from(root.querySelectorAll<HTMLElement>(sel))) {
         if (el === target) continue;
         addRect(el.getBoundingClientRect());
       }
@@ -280,3 +120,243 @@ export function collectEdgeSnaps(
   }
   return { x, y };
 }
+
+export type AxisPosition = 'before' | 'start' | 'center' | 'end' | 'after';
+
+export type AnchorOffset = {
+  start: number;
+  center: number;
+  end: number;
+};
+
+export type RectPlacementOptions = {
+  xPos?: AxisPosition;
+  yPos?: AxisPosition;
+  gap?: number | { x?: number; y?: number };
+  overflow?: ('flip' | 'shift')[];
+  shiftTolerance?: number;
+};
+
+export type RectPlacement = {
+  x: number;
+  y: number;
+  xSide: AxisPosition;
+  ySide: AxisPosition;
+  anchorX: AnchorOffset;
+  anchorY: AnchorOffset;
+};
+
+/**
+ * Computes the placement coordinates of a floating rectangle relative to an anchor rectangle,
+ * keeping it constrained within a boundary rectangle.
+ *
+ * Resolves horizontal and vertical axes independently by applying the preferred alignment
+ * and correcting collisions using configured overflow strategies (shift or flip).
+ *
+ * @param anchorRect - Bounding rectangle of the anchor element.
+ * @param elementRect - Bounding rectangle of the floating element.
+ * @param boundaryRect - Constraining boundary rectangle (e.g. viewport).
+ * @param options - Preferred positioning and overflow collision handling options.
+ * @returns Resolved 2D coordinates, actual axis sides, and anchor offsets.
+ */
+export function placeRect(
+  anchorRect: DOMRect,
+  elementRect: DOMRect,
+  boundaryRect: DOMRect,
+  options: RectPlacementOptions = {}
+): RectPlacement {
+  const {
+    xPos = 'center',
+    yPos = 'after',
+    gap = 8,
+    overflow: strats = ['flip', 'shift'],
+    shiftTolerance = 0.5,
+  } = options;
+
+  const gX = typeof gap === 'number' ? gap : (gap.x ?? 0);
+  const gY = typeof gap === 'number' ? gap : (gap.y ?? 0);
+  const xGap = xPos === 'before' || xPos === 'after' ? gX : 0;
+  const yGap = yPos === 'before' || yPos === 'after' ? gY : 0;
+
+  const xr = resolveAxis(
+    xPos,
+    baseCoord(xPos, anchorRect.left, anchorRect.width, elementRect.width, xGap),
+    elementRect.width,
+    anchorRect.left,
+    anchorRect.width,
+    boundaryRect.left,
+    boundaryRect.right,
+    xGap,
+    shiftTolerance,
+    strats
+  );
+
+  const yr = resolveAxis(
+    yPos,
+    baseCoord(yPos, anchorRect.top, anchorRect.height, elementRect.height, yGap),
+    elementRect.height,
+    anchorRect.top,
+    anchorRect.height,
+    boundaryRect.top,
+    boundaryRect.bottom,
+    yGap,
+    shiftTolerance,
+    strats
+  );
+
+  return {
+    x: xr.coord,
+    y: yr.coord,
+    xSide: xr.side,
+    ySide: yr.side,
+    anchorX: anchorOff(xr.coord, anchorRect.left, anchorRect.width),
+    anchorY: anchorOff(yr.coord, anchorRect.top, anchorRect.height),
+  };
+}
+
+/**
+ * Applies a computed rectangle placement onto a DOM element by assigning fixed inline position styles
+ * or CSS custom properties.
+ *
+ * @param el - The target HTMLElement to position.
+ * @param placement - The computed rectangle placement coordinates and sides.
+ * @param cssPrefix - Optional custom property prefix (e.g. '--popover').
+ * @param attrPrefix - Optional data attribute prefix for state projection.
+ */
+export function applyPlacement(el: HTMLElement, placement: RectPlacement, cssPrefix?: string, attrPrefix?: string) {
+  el.style.position = 'fixed';
+
+  if (cssPrefix) {
+    el.style.setProperty(`${cssPrefix}-x`, `${placement.x}px`);
+    el.style.setProperty(`${cssPrefix}-y`, `${placement.y}px`);
+    el.style.setProperty(`${cssPrefix}-anchor-x-start`, `${placement.anchorX.start}px`);
+    el.style.setProperty(`${cssPrefix}-anchor-x-center`, `${placement.anchorX.center}px`);
+    el.style.setProperty(`${cssPrefix}-anchor-x-end`, `${placement.anchorX.end}px`);
+    el.style.setProperty(`${cssPrefix}-anchor-y-start`, `${placement.anchorY.start}px`);
+    el.style.setProperty(`${cssPrefix}-anchor-y-center`, `${placement.anchorY.center}px`);
+    el.style.setProperty(`${cssPrefix}-anchor-y-end`, `${placement.anchorY.end}px`);
+  } else {
+    el.style.left = `${placement.x}px`;
+    el.style.top = `${placement.y}px`;
+  }
+
+  if (attrPrefix) {
+    el.setAttribute(`${attrPrefix}-open`, '');
+    el.setAttribute(`${attrPrefix}-x-side`, placement.xSide);
+    el.setAttribute(`${attrPrefix}-y-side`, placement.ySide);
+  }
+}
+
+/**
+ * Removes applied placement styles and data attributes from a DOM element.
+ *
+ * @param el - The target HTMLElement to reset.
+ * @param cssPrefix - Optional custom property prefix used during placement.
+ * @param attrPrefix - Optional attribute prefix used during placement.
+ */
+export function clearPlacement(el: HTMLElement, cssPrefix?: string, attrPrefix?: string) {
+  if (cssPrefix) {
+    for (const k of CSS_SUFFIXES) el.style.removeProperty(`${cssPrefix}${k}`);
+  } else {
+    el.style.left = '';
+    el.style.top = '';
+  }
+  el.style.position = '';
+
+  if (attrPrefix) {
+    for (const k of ATTR_SUFFIXES) el.removeAttribute(`${attrPrefix}${k}`);
+  }
+}
+
+export const CSS_SUFFIXES = [
+  'x',
+  'y',
+  'anchor-x-start',
+  'anchor-x-center',
+  'anchor-x-end',
+  'anchor-y-start',
+  'anchor-y-center',
+  'anchor-y-end',
+];
+
+export const ATTR_SUFFIXES = ['-open', '-x-side', '-y-side'];
+
+/**
+ * Calculates the initial unconstrained coordinate along a single axis based on alignment preference.
+ *
+ * @param pos - Preferred alignment side.
+ * @param near - Starting edge coordinate of the anchor.
+ * @param span - Size of the anchor along the axis.
+ * @param size - Size of the floating element along the axis.
+ * @param gap - Separation gap offset.
+ * @returns The base unconstrained coordinate.
+ */
+export function baseCoord(pos: AxisPosition, near: number, span: number, size: number, gap: number): number {
+  switch (pos) {
+    case 'before':
+      return near - size - gap;
+    case 'after':
+      return near + span + gap;
+    case 'start':
+      return near;
+    case 'center':
+      return near + (span - size) / 2;
+    case 'end':
+      return near + span - size;
+  }
+}
+
+/**
+ * Resolves collisions along a single axis by adjusting the coordinate via shifting or flipping alignment sides.
+ */
+export function resolveAxis(
+  side: AxisPosition,
+  coord: number,
+  size: number,
+  aNear: number,
+  aSpan: number,
+  bNear: number,
+  bFar: number,
+  gap: number,
+  tolerance: number,
+  strategies: ('flip' | 'shift')[]
+): { side: AxisPosition; coord: number } {
+  if (strategies.includes('shift')) {
+    const max = tolerance * aSpan;
+    const oNear = Math.max(0, bNear - coord);
+    const oFar = Math.max(0, coord + size - bFar);
+    coord += Math.max(-max, Math.min(max, oNear - oFar));
+  }
+
+  if (strategies.includes('flip')) {
+    const total = Math.max(0, bNear - coord) + Math.max(0, coord + size - bFar);
+    if (total > 0) {
+      const f = FLIP[side];
+      const fc = baseCoord(f, aNear, aSpan, size, gap);
+      if (Math.max(0, bNear - fc) + Math.max(0, fc + size - bFar) < total) {
+        return { side: f, coord: fc };
+      }
+    }
+  }
+
+  return { side, coord };
+}
+
+/**
+ * Computes the relative distances from the element coordinate to the anchor's start, center, and end positions.
+ */
+export function anchorOff(elNear: number, aNear: number, aSpan: number): AnchorOffset {
+  return {
+    start: aNear - elNear,
+    center: aNear + aSpan / 2 - elNear,
+    end: aNear + aSpan - elNear,
+  };
+}
+
+const FLIP: Record<AxisPosition, AxisPosition> = {
+  before: 'after',
+  after: 'before',
+  start: 'end',
+  end: 'start',
+  center: 'center',
+};

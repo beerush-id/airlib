@@ -1,7 +1,5 @@
 import { anchor, isBrowser, onCleanup } from '@anchorlib/core';
 import { KIT_CONFIGS, type SnapToBound } from '../config.js';
-import { getKeyboard } from './keyboard.js';
-import { MOUSE_BUTTONS, type MouseModifier } from './mouse.js';
 import {
   attachFinish,
   bindTrigger,
@@ -9,20 +7,23 @@ import {
   collectSnapPoints,
   detachFinish,
   freezeTransition,
+  getKeyboard,
+  INTERACTIVE,
   type InteractionEvent,
   type InteractionRef,
   type InteractionRefInit,
   type InteractionState,
-  interactionState,
   type InteractionType,
-  INTERACTIVE,
+  interactionState,
+  MOUSE_BUTTONS,
+  type MouseModifier,
   minMax,
   resetInteraction,
   restoreTransition,
-  snapGrid,
   type SnapPoint,
+  snapGrid,
   unbindTrigger,
-} from './rect.js';
+} from '../utils/index.js';
 
 export type DragPos = {
   x: number;
@@ -63,6 +64,14 @@ export type DragRefInit<T extends HTMLElement> = InteractionRefInit<T, DragOptio
   container?: HTMLElement;
 };
 
+/**
+ * Creates a standalone reactive 2D drag coordinate state container.
+ * Computes snapped and bounded coordinates during pointer dragging.
+ *
+ * @param init - Initial coordinate limits, grid snapping, and modifier constraints.
+ * @param onChange - Optional callback triggered whenever coordinates change.
+ * @returns A reactive DragState instance.
+ */
 export function dragState(init: DragInit = {}, onChange?: (state: DragState) => void): DragState {
   const keyboard = anchor.get(getKeyboard(), true);
 
@@ -87,7 +96,6 @@ export function dragState(init: DragInit = {}, onChange?: (state: DragState) => 
         state.y = minMax(minY, maxY, snapGrid(offsetY + deltaY, snapY));
       }
 
-      // Snap to DOM element positions
       const pts = init.snapPoints;
       if (pts?.length) {
         const proxX = snapX ?? KIT_CONFIGS.snapThreshold;
@@ -104,6 +112,13 @@ export function dragState(init: DragInit = {}, onChange?: (state: DragState) => 
   );
 }
 
+/**
+ * Creates a drag interaction controller bound to a DOM element.
+ * Automatically projects computed transforms and tracks container boundary limits.
+ *
+ * @param init - Drag controller options including target element, trigger element, and container boundaries.
+ * @returns A reactive DragRef controller instance.
+ */
 export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragRef<T> {
   const options = { ...init };
 
@@ -133,7 +148,6 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
       options.snapY = init.snapY ?? init.snap;
     }
 
-    // Collect snap targets at drag start (before new transform applied)
     if (init.snapTo?.length) {
       options.snapPoints = collectSnapPoints(target, init.snapTo, init.snapToBound ?? KIT_CONFIGS.snapBound);
     }
@@ -183,13 +197,11 @@ export function dragRef<T extends HTMLElement>(init: DragRefInit<T> = {}): DragR
     const tRect = target.getBoundingClientRect();
     const cRect = container.getBoundingClientRect();
 
-    // Only override limits not explicitly provided via init
     if (minX === undefined) options.minX = -(tRect.left - cRect.left) + gapX;
     if (minY === undefined) options.minY = -(tRect.top - cRect.top) + gapY;
     if (maxX === undefined) options.maxX = cRect.right - tRect.right - gapX;
     if (maxY === undefined) options.maxY = cRect.bottom - tRect.bottom - gapY;
 
-    // Compute snap from step percentage relative to computed range
     if (stepX) {
       const range = (options.maxX ?? maxX ?? 0) - (options.minX ?? minX ?? 0);
       options.snapX = (range * stepX) / 100;

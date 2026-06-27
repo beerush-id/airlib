@@ -16,6 +16,10 @@ import type {
   WindowStorage,
 } from './types.js';
 
+/**
+ * Represents a registered desktop application definition.
+ * Manages spawned window instance pools, storage persistence, render pipelines, and route guards.
+ */
 export class WebWindow<T extends WindowData, O> {
   children: Set<WindowInstance<T, O>> = impure(new Set(), { recursive: false });
   childMap = new Map<string, WindowInstance<T, O>>();

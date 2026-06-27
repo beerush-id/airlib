@@ -1,16 +1,19 @@
 import { effect, mutable, type StateUnsubscribe } from '@anchorlib/core';
-import { FOCUSABLE_SELECTORS } from './focus.js';
+import { getFocusable } from './document.js';
 import type { MouseModifier } from './mouse.js';
 import { impure } from './state.js';
 
-export class LiveKeyboard extends Set<string | MouseModifier> {
-  public pressed = false;
-}
+export type ArrowRefOptions = {
+  direction?: 'vertical' | 'horizontal' | 'both';
+  focusable?: string;
+};
 
-const currentKeyboard = impure(new LiveKeyboard());
-
-let disposeKeyboard: StateUnsubscribe | undefined;
-
+/**
+ * Initializes global window and document keyboard tracking to record currently pressed keys.
+ * Automatically clears state on window blur events.
+ *
+ * @returns A state subscription teardown function.
+ */
 export function watchKeyboard() {
   if (disposeKeyboard) return disposeKeyboard;
 
@@ -47,24 +50,29 @@ export function watchKeyboard() {
   return disposeKeyboard;
 }
 
+/**
+ * Retrieves the global reactive keyboard tracking set container.
+ *
+ * @returns The LiveKeyboard state instance.
+ */
 export function getKeyboard() {
   return currentKeyboard;
 }
 
-export type ArrowRefOptions = {
-  direction?: 'vertical' | 'horizontal' | 'both';
-  focusable?: string;
-};
-
+/**
+ * Creates a reactive DOM ref container that enables directional arrow key navigation (up, down, left, right),
+ * home/end jumping, and typeahead character searching across focusable children.
+ *
+ * @param options - Navigation configuration specifying allowed direction axes and custom child selectors.
+ * @returns A reactive mutable element reference container.
+ */
 export function arrowRef<T extends HTMLElement>(options: ArrowRefOptions = {}) {
   if (!options || typeof options !== 'object') options = {};
 
   const state = mutable<{ current: T | null }>({ current: null });
 
-  const getFocusable = () => {
-    const query = options.focusable ?? FOCUSABLE_SELECTORS;
-
-    const focusable = Array.from(state.current!.querySelectorAll<HTMLElement>(query) ?? []);
+  const getFocusableState = () => {
+    const focusable = getFocusable(state.current!, options.focusable);
     if (!focusable.length) return { focusable: [], current: -1 };
 
     const currentFocus = focusable.indexOf(document.activeElement as HTMLElement);
@@ -72,13 +80,13 @@ export function arrowRef<T extends HTMLElement>(options: ArrowRefOptions = {}) {
   };
 
   const nextFocus = () => {
-    const { focusable, current } = getFocusable();
+    const { focusable, current } = getFocusableState();
     const nextIndex = current === -1 || current >= focusable.length - 1 ? 0 : current + 1;
     focusable[nextIndex]?.focus();
   };
 
   const prevFocus = () => {
-    const { focusable, current } = getFocusable();
+    const { focusable, current } = getFocusableState();
     if (current === -1 && document.activeElement !== state.current) return;
     const prevIndex = current <= 0 ? focusable.length - 1 : current - 1;
     focusable[prevIndex]?.focus();
@@ -104,16 +112,16 @@ export function arrowRef<T extends HTMLElement>(options: ArrowRefOptions = {}) {
       prevFocus();
     } else if (e.key === 'Home') {
       e.preventDefault();
-      const { focusable } = getFocusable();
+      const { focusable } = getFocusableState();
       focusable[0]?.focus();
     } else if (e.key === 'End') {
       e.preventDefault();
-      const { focusable } = getFocusable();
+      const { focusable } = getFocusableState();
       focusable[focusable.length - 1]?.focus();
     } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       // Typeahead search
       searchQuery += e.key.toLowerCase();
-      const { focusable, current } = getFocusable();
+      const { focusable, current } = getFocusableState();
 
       const startIndex = current === -1 ? 0 : current;
       let matchedIndex = -1;
@@ -159,3 +167,10 @@ export function arrowRef<T extends HTMLElement>(options: ArrowRefOptions = {}) {
 
   return state;
 }
+
+export class LiveKeyboard extends Set<string | MouseModifier> {
+  public pressed = false;
+}
+
+const currentKeyboard = impure(new LiveKeyboard());
+let disposeKeyboard: StateUnsubscribe | undefined;

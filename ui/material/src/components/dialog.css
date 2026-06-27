@@ -94,6 +94,7 @@
 /* Custom Dialog Wrapper */
 @utility air-dialog {
   @apply fixed inset-0 w-screen h-screen flex items-center justify-center z-modal overflow-hidden;
+  @apply bg-scrim/75 backdrop-blur-sm;
 
   &[aria-hidden='false'] {
     animation: air-dialog-show var(--duration-short) var(--ease-standard) forwards;
@@ -112,7 +113,7 @@
 }
 
 @utility air-dialog-overlay {
-  @apply air-overlay;
+  @apply block absolute inset-0;
 }
 
 @utility air-dialog-body {

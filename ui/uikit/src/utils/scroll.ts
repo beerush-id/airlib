@@ -16,6 +16,29 @@ export function suspendOverflow(element?: HTMLElement) {
   };
 }
 
+/**
+ * Traverses the DOM tree upwards from a starting element to collect all scrollable ancestor elements.
+ *
+ * @param element - The reference element to begin traversal from.
+ * @returns An array of ancestor elements that have vertical scroll overflow.
+ */
+export function collectScrollParents(element?: HTMLElement): HTMLElement[] {
+  if (!element) return [];
+  const result: HTMLElement[] = [];
+  let p = getNearestScrollableParent(element);
+  while (p) {
+    result.push(p);
+    p = getNearestScrollableParent(p);
+  }
+  return result;
+}
+
+/**
+ * Finds the nearest ancestor element that has vertical scroll overflow.
+ *
+ * @param element - The reference element to search from.
+ * @returns The closest scrollable ancestor element, or void if none is found.
+ */
 export function getNearestScrollableParent(element?: HTMLElement): HTMLElement | void {
   let parent = element?.parentElement;
   while (parent) {

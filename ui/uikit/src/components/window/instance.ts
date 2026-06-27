@@ -6,6 +6,10 @@ import { WebWin, WINDOW_STATUS } from './registry.js';
 import type { WebWindowOptions, WindowData, WindowRect, WindowState } from './types.js';
 import type { WebWindow } from './window.js';
 
+/**
+ * Represents an active runtime desktop window instance.
+ * Coordinates window geometry adjustments (move/resize), focus lifecycle, minimize/maximize states, and DOM element binding.
+ */
 export class WindowInstance<T extends WindowData, O> {
   private _element?: HTMLElement;
 
