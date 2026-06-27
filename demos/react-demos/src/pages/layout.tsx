@@ -1,9 +1,12 @@
-import { NotFoundError, page } from '@anchorlib/react';
+import { colorScheme } from '@airlib/uikit/utils';
+import { NotFoundError, page, Style } from '@anchorlib/react';
 import { Footer } from '../components/Footer.js';
 import { Header } from '../components/Header.js';
 import { router } from '../lib/router.js';
-import { createSettings } from '../lib/settings.js';
+import { configureApp } from '../lib/settings.js';
 import { rootRoute } from './route.js';
+
+configureApp();
 
 router.catch(({ error }) => {
   if (error instanceof NotFoundError) {
@@ -24,11 +27,12 @@ router.catch(({ error }) => {
 });
 
 export const RootLayout = page(rootRoute).render(({ children }) => {
-  createSettings();
+  const theme = colorScheme();
 
   return (
     <>
       <Header />
+      <Style>{`:root { --seed-color: ${theme.color ?? 'red'}; }`}</Style>
       <main className="layout-main">{children}</main>
       <Footer />
     </>
