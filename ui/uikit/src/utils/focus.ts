@@ -1,4 +1,4 @@
-import { effect, isBrowser, microtask, mutable } from '@anchorlib/core';
+import { isBrowser, microtask } from '@anchorlib/core';
 import { KIT_CONFIGS } from '../config.js';
 import { FOCUSABLE_SELECTORS, getFocusable } from './document.js';
 import { suspendOverflow } from './scroll.js';
@@ -12,25 +12,6 @@ export type FocusTrapOptions = {
   releaseOnEsc?: boolean;
   releaseOnClickOutside?: boolean;
 };
-
-/**
- * Creates a reactive DOM ref container that automatically activates and binds a focus trap
- * whenever an element is assigned to it.
- *
- * @param options - Focus trapping options including auto-focus and overflow trapping.
- * @returns A reactive mutable element reference container.
- */
-export function focusRef<T extends HTMLElement>(options?: FocusTrapOptions) {
-  const elRef = mutable<{ current: T | null }>({ current: null });
-
-  effect(() => {
-    if (elRef.current) {
-      return createFocusTrap(elRef.current, options);
-    }
-  });
-
-  return elRef;
-}
 
 /**
  * Traps keyboard navigation (Tab and Shift+Tab) within a specified DOM container.

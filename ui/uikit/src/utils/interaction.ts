@@ -12,6 +12,57 @@ export type InteractionBindingOptions = {
   escape?: boolean;
 };
 
+export type InteractionStart = {
+  cursorX: number;
+  cursorY: number;
+  offsetX: number;
+  offsetY: number;
+  offsetWidth: number;
+  offsetHeight: number;
+  startWidth: number;
+  startHeight: number;
+  anchorLeft: number;
+  anchorTop: number;
+  anchorRight: number;
+  anchorBottom: number;
+};
+
+export type InteractionState = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  start?: InteractionStart;
+};
+
+export type InteractionRef<T extends HTMLElement> = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  active: boolean;
+  target?: T;
+  trigger?: HTMLElement;
+};
+
+export type InteractionEvent<T extends HTMLElement> = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  target?: T;
+};
+
+export type InteractionRefInit<T extends HTMLElement, Options = {}, Event = InteractionEvent<T>> = Partial<
+  Omit<InteractionRef<T>, 'active'> & Options
+> & {
+  type?: InteractionType;
+  button?: MouseButton;
+  onStart?: (e: Event) => void | true;
+  onMove?: (e: Event) => void | true;
+  onEnd?: (e: Event) => void | true;
+};
+
 export type InteractionType = 'stay' | 'reset';
 
 export const INTERACTIVE = 'a, button, input, textarea, select, label, [contenteditable]';
@@ -164,57 +215,6 @@ export function trackPointer(state: { start?: unknown }, calculate: (cx: number,
     return () => cancelAnimationFrame(rafId);
   });
 }
-
-export type InteractionStart = {
-  cursorX: number;
-  cursorY: number;
-  offsetX: number;
-  offsetY: number;
-  offsetWidth: number;
-  offsetHeight: number;
-  startWidth: number;
-  startHeight: number;
-  anchorLeft: number;
-  anchorTop: number;
-  anchorRight: number;
-  anchorBottom: number;
-};
-
-export type InteractionState = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  start?: InteractionStart;
-};
-
-export type InteractionRef<T extends HTMLElement> = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  active: boolean;
-  target?: T;
-  trigger?: HTMLElement;
-};
-
-export type InteractionEvent<T extends HTMLElement> = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  target?: T;
-};
-
-export type InteractionRefInit<T extends HTMLElement, Options = {}, Event = InteractionEvent<T>> = Partial<
-  Omit<InteractionRef<T>, 'active'> & Options
-> & {
-  type?: InteractionType;
-  button?: MouseButton;
-  onStart?: (e: Event) => void | true;
-  onMove?: (e: Event) => void | true;
-  onEnd?: (e: Event) => void | true;
-};
 
 /**
  * Initializes a reactive interaction state container that tracks spatial translation and dimensions

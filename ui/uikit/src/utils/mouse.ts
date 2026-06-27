@@ -1,8 +1,23 @@
-import { anchor, type Linkable, mutable, type StateUnsubscribe, untrack } from '@anchorlib/core';
+import { anchor, type Linkable, type StateUnsubscribe, untrack } from '@anchorlib/core';
 import { impure } from './state.js';
 
 export type MouseButton = 0 | 1 | 2 | 3 | 4;
 export type MouseModifier = 'shift' | 'ctrl' | 'alt' | 'meta';
+
+export const MOUSE_BUTTONS = {
+  left: 0,
+  right: 2,
+  middle: 1,
+  back: 3,
+  forward: 4,
+} as const;
+
+export const MOUSE_MODIFIERS = {
+  shift: 'shift',
+  ctrl: 'ctrl',
+  alt: 'alt',
+  meta: 'meta',
+} as const;
 
 /**
  * Initializes global window pointer tracking to monitor cursor coordinates, movements,
@@ -61,30 +76,6 @@ export function watchPointer() {
 export function getPointer() {
   return currentPointer;
 }
-
-/**
- * Creates a standalone reactive pointer coordinate container.
- *
- * @returns A mutable MousePointer reference.
- */
-export function createPointer() {
-  return mutable(new MousePointer());
-}
-
-export const MOUSE_BUTTONS = {
-  left: 0,
-  right: 2,
-  middle: 1,
-  back: 3,
-  forward: 4,
-} as const;
-
-export const MOUSE_MODIFIERS = {
-  shift: 'shift',
-  ctrl: 'ctrl',
-  alt: 'alt',
-  meta: 'meta',
-} as const;
 
 export class MousePointer {
   public x = 0;

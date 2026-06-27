@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { getNearestScrollableParent, suspendOverflow } from '../../src/utils/scroll.js';
+import { getNearestScrollable, suspendOverflow } from '../../src/utils/scroll.js';
 
 describe('scroll utilities', () => {
   let container: HTMLElement;
@@ -66,12 +66,12 @@ describe('scroll utilities', () => {
 
   describe('getNearestScrollableParent', () => {
     it('should return undefined when no element is provided', () => {
-      expect(getNearestScrollableParent()).toBeUndefined();
+      expect(getNearestScrollable()).toBeUndefined();
     });
 
     it('should return undefined when element has no parent', () => {
       const orphan = document.createElement('div');
-      expect(getNearestScrollableParent(orphan)).toBeUndefined();
+      expect(getNearestScrollable(orphan)).toBeUndefined();
     });
 
     it('should return undefined when no parent is scrollable', () => {
@@ -81,7 +81,7 @@ describe('scroll utilities', () => {
       container.appendChild(parent);
 
       // jsdom defaults: scrollHeight === clientHeight (both 0), so not scrollable
-      expect(getNearestScrollableParent(child)).toBeUndefined();
+      expect(getNearestScrollable(child)).toBeUndefined();
     });
 
     it('should return the nearest scrollable parent', () => {
@@ -93,7 +93,7 @@ describe('scroll utilities', () => {
       scrollable.appendChild(inner);
       container.appendChild(scrollable);
 
-      expect(getNearestScrollableParent(inner)).toBe(scrollable);
+      expect(getNearestScrollable(inner)).toBe(scrollable);
     });
 
     it('should return the closest scrollable ancestor when multiple exist', () => {
@@ -110,7 +110,7 @@ describe('scroll utilities', () => {
       outer.appendChild(inner);
       container.appendChild(outer);
 
-      expect(getNearestScrollableParent(child)).toBe(inner);
+      expect(getNearestScrollable(child)).toBe(inner);
     });
   });
 });

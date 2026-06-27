@@ -1,42 +1,65 @@
 import { microtask } from '@anchorlib/core';
-import { KIT_CONFIGS, SNAP_BOUND, type SnapToBound } from '../config.js';
+import { KIT_CONFIGS, SNAP_BOUND } from '../config.js';
+import type { SnapToBound } from '../types.js';
+
+export type EdgeSnaps = {
+  x: number[];
+  y: number[];
+};
+
+export type SnapPoint = { x: number; y: number };
+
+export type AxisPosition = 'before' | 'start' | 'center' | 'end' | 'after';
+
+export type AnchorOffset = {
+  start: number;
+  center: number;
+  end: number;
+};
+
+export type RectPlacementOptions = {
+  xPos?: AxisPosition;
+  yPos?: AxisPosition;
+  gap?: number | { x?: number; y?: number };
+  overflow?: ('flip' | 'shift')[];
+  shiftTolerance?: number;
+};
+
+export type RectPlacement = {
+  x: number;
+  y: number;
+  xSide: AxisPosition;
+  ySide: AxisPosition;
+  anchorX: AnchorOffset;
+  anchorY: AnchorOffset;
+};
+
+export const CSS_SUFFIXES = [
+  'x',
+  'y',
+  'anchor-x-start',
+  'anchor-x-center',
+  'anchor-x-end',
+  'anchor-y-start',
+  'anchor-y-center',
+  'anchor-y-end',
+];
+export const ATTR_SUFFIXES = ['-open', '-x-side', '-y-side'];
+
+const FLIP: Record<AxisPosition, AxisPosition> = {
+  before: 'after',
+  after: 'before',
+  start: 'end',
+  end: 'start',
+  center: 'center',
+};
 
 const [later] = microtask(5);
-
-export function minMax(min: number | undefined, max: number | undefined, value: number) {
-  if (typeof min === 'number') {
-    value = Math.max(min, value);
-  }
-
-  if (typeof max === 'number') {
-    value = Math.min(max, value);
-  }
-
-  return value;
-}
 
 export function snapGrid(value: number, step: number | undefined) {
   if (typeof step !== 'number' || step <= 0) return value;
   return Math.round(value / step) * step;
 }
-
-export function freezeTransition(target: HTMLElement): string {
-  const saved = target.style.transition;
-  target.style.transition = 'none';
-  return saved;
-}
-
-export function restoreTransition(target: HTMLElement | undefined, saved: string, dataMorph?: string) {
-  if (!target) return;
-  if (dataMorph) target.setAttribute(`data-${dataMorph}`, '');
-
-  later(() => {
-    target.style.transition = saved;
-    if (dataMorph) target.removeAttribute(`data-${dataMorph}`);
-  });
-}
-
-export type SnapPoint = { x: number; y: number };
 
 export function snapPointsFor(rect: DOMRect, tRect: DOMRect, bound: SnapToBound): SnapPoint[] {
   const pts: SnapPoint[] = [];
@@ -82,11 +105,6 @@ export function collectSnapPoints(
   return pts;
 }
 
-export type EdgeSnaps = {
-  x: number[];
-  y: number[];
-};
-
 export function collectEdgeSnaps(
   target?: HTMLElement,
   selectors?: string[],
@@ -120,31 +138,6 @@ export function collectEdgeSnaps(
   }
   return { x, y };
 }
-
-export type AxisPosition = 'before' | 'start' | 'center' | 'end' | 'after';
-
-export type AnchorOffset = {
-  start: number;
-  center: number;
-  end: number;
-};
-
-export type RectPlacementOptions = {
-  xPos?: AxisPosition;
-  yPos?: AxisPosition;
-  gap?: number | { x?: number; y?: number };
-  overflow?: ('flip' | 'shift')[];
-  shiftTolerance?: number;
-};
-
-export type RectPlacement = {
-  x: number;
-  y: number;
-  xSide: AxisPosition;
-  ySide: AxisPosition;
-  anchorX: AnchorOffset;
-  anchorY: AnchorOffset;
-};
 
 /**
  * Computes the placement coordinates of a floating rectangle relative to an anchor rectangle,
@@ -180,7 +173,7 @@ export function placeRect(
 
   const xr = resolveAxis(
     xPos,
-    baseCoord(xPos, anchorRect.left, anchorRect.width, elementRect.width, xGap),
+    baseCoordinate(xPos, anchorRect.left, anchorRect.width, elementRect.width, xGap),
     elementRect.width,
     anchorRect.left,
     anchorRect.width,
@@ -193,7 +186,7 @@ export function placeRect(
 
   const yr = resolveAxis(
     yPos,
-    baseCoord(yPos, anchorRect.top, anchorRect.height, elementRect.height, yGap),
+    baseCoordinate(yPos, anchorRect.top, anchorRect.height, elementRect.height, yGap),
     elementRect.height,
     anchorRect.top,
     anchorRect.height,
@@ -205,12 +198,12 @@ export function placeRect(
   );
 
   return {
-    x: xr.coord,
-    y: yr.coord,
+    x: xr.coordinate,
+    y: yr.coordinate,
     xSide: xr.side,
     ySide: yr.side,
-    anchorX: anchorOff(xr.coord, anchorRect.left, anchorRect.width),
-    anchorY: anchorOff(yr.coord, anchorRect.top, anchorRect.height),
+    anchorX: anchorOff(xr.coordinate, anchorRect.left, anchorRect.width),
+    anchorY: anchorOff(yr.coordinate, anchorRect.top, anchorRect.height),
   };
 }
 
@@ -268,19 +261,6 @@ export function clearPlacement(el: HTMLElement, cssPrefix?: string, attrPrefix?:
   }
 }
 
-export const CSS_SUFFIXES = [
-  'x',
-  'y',
-  'anchor-x-start',
-  'anchor-x-center',
-  'anchor-x-end',
-  'anchor-y-start',
-  'anchor-y-center',
-  'anchor-y-end',
-];
-
-export const ATTR_SUFFIXES = ['-open', '-x-side', '-y-side'];
-
 /**
  * Calculates the initial unconstrained coordinate along a single axis based on alignment preference.
  *
@@ -291,7 +271,7 @@ export const ATTR_SUFFIXES = ['-open', '-x-side', '-y-side'];
  * @param gap - Separation gap offset.
  * @returns The base unconstrained coordinate.
  */
-export function baseCoord(pos: AxisPosition, near: number, span: number, size: number, gap: number): number {
+export function baseCoordinate(pos: AxisPosition, near: number, span: number, size: number, gap: number): number {
   switch (pos) {
     case 'before':
       return near - size - gap;
@@ -311,7 +291,7 @@ export function baseCoord(pos: AxisPosition, near: number, span: number, size: n
  */
 export function resolveAxis(
   side: AxisPosition,
-  coord: number,
+  coordinate: number,
   size: number,
   aNear: number,
   aSpan: number,
@@ -320,26 +300,26 @@ export function resolveAxis(
   gap: number,
   tolerance: number,
   strategies: ('flip' | 'shift')[]
-): { side: AxisPosition; coord: number } {
+): { side: AxisPosition; coordinate: number } {
   if (strategies.includes('shift')) {
     const max = tolerance * aSpan;
-    const oNear = Math.max(0, bNear - coord);
-    const oFar = Math.max(0, coord + size - bFar);
-    coord += Math.max(-max, Math.min(max, oNear - oFar));
+    const oNear = Math.max(0, bNear - coordinate);
+    const oFar = Math.max(0, coordinate + size - bFar);
+    coordinate += Math.max(-max, Math.min(max, oNear - oFar));
   }
 
   if (strategies.includes('flip')) {
-    const total = Math.max(0, bNear - coord) + Math.max(0, coord + size - bFar);
+    const total = Math.max(0, bNear - coordinate) + Math.max(0, coordinate + size - bFar);
     if (total > 0) {
       const f = FLIP[side];
-      const fc = baseCoord(f, aNear, aSpan, size, gap);
+      const fc = baseCoordinate(f, aNear, aSpan, size, gap);
       if (Math.max(0, bNear - fc) + Math.max(0, fc + size - bFar) < total) {
-        return { side: f, coord: fc };
+        return { side: f, coordinate: fc };
       }
     }
   }
 
-  return { side, coord };
+  return { side, coordinate: coordinate };
 }
 
 /**
@@ -353,10 +333,30 @@ export function anchorOff(elNear: number, aNear: number, aSpan: number): AnchorO
   };
 }
 
-const FLIP: Record<AxisPosition, AxisPosition> = {
-  before: 'after',
-  after: 'before',
-  start: 'end',
-  end: 'start',
-  center: 'center',
-};
+export function freezeTransition(target: HTMLElement): string {
+  const saved = target.style.transition;
+  target.style.transition = 'none';
+  return saved;
+}
+
+export function restoreTransition(target: HTMLElement | undefined, saved: string, dataMorph?: string) {
+  if (!target) return;
+  if (dataMorph) target.setAttribute(`data-${dataMorph}`, '');
+
+  later(() => {
+    target.style.transition = saved;
+    if (dataMorph) target.removeAttribute(`data-${dataMorph}`);
+  });
+}
+
+export function minMax(min: number | undefined, max: number | undefined, value: number) {
+  if (typeof min === 'number') {
+    value = Math.max(min, value);
+  }
+
+  if (typeof max === 'number') {
+    value = Math.min(max, value);
+  }
+
+  return value;
+}

@@ -5,8 +5,8 @@ import {
   bindInteraction,
   captureSnapshot,
   clearPlacement,
-  collectScrollParents,
   createFocusTrap,
+  getScrollables,
   impure,
   placeRect,
   resolveEl,
@@ -61,9 +61,9 @@ export function popover(init: PopoverInit): PopoverInstance {
   };
 
   const state = impure<PopoverInstance>({
-    open: false,
     x: 0,
     y: 0,
+    open: false,
     xSide: init.xPos ?? 'center',
     ySide: init.yPos ?? 'after',
     anchorX: { start: 0, center: 0, end: 0 },
@@ -73,39 +73,38 @@ export function popover(init: PopoverInit): PopoverInstance {
     reposition,
   });
 
-  let rafId = 0;
-
   function reposition() {
-    const el = resolveEl(state.element);
-    const anch = resolveEl(state.anchor) ?? el?.parentElement ?? undefined;
-    if (!el || !anch || !state.open) return;
+    const self = resolveEl(state.element);
+    const target = resolveEl(state.anchor) ?? self?.parentElement ?? undefined;
+    if (!self || !target || !state.open) return;
 
-    const result = placeRect(
-      anch.getBoundingClientRect(),
-      el.getBoundingClientRect(),
+    const placement = placeRect(
+      target.getBoundingClientRect(),
+      self.getBoundingClientRect(),
       init.boundary?.getBoundingClientRect() ?? new DOMRect(0, 0, window.innerWidth, window.innerHeight),
       init
     );
 
-    anchor.assign(state, result);
-
-    applyPlacement(el, result, init.cssPrefix, init.attrPrefix);
+    anchor.assign(state, placement);
+    applyPlacement(self, placement, init.cssPrefix, init.attrPrefix);
   }
 
+  let rafId = 0;
   function schedule() {
     cancelAnimationFrame(rafId);
     rafId = requestAnimationFrame(reposition);
   }
 
   effect.client(() => {
-    const el = resolveEl(state.element);
-    const anch = resolveEl(state.anchor) ?? el?.parentElement ?? undefined;
-    if (!el || !anch) return;
-    if (!init.interaction?.length && !init.escape) return;
+    if (!init.interaction?.length) return;
+
+    const self = resolveEl(state.element);
+    const target = resolveEl(state.anchor) ?? self?.parentElement ?? undefined;
+    if (!self || !target) return;
 
     return bindInteraction(
-      anch,
-      el,
+      target,
+      self,
       init,
       () => {
         state.open = true;
@@ -121,38 +120,39 @@ export function popover(init: PopoverInit): PopoverInstance {
 
   effect.client(() => {
     if (!state.open) return;
-    const el = resolveEl(state.element);
-    const anch = resolveEl(state.anchor) ?? el?.parentElement ?? undefined;
-    if (!el || !anch) return;
 
-    const snap = captureSnapshot(el, init);
+    const self = resolveEl(state.element);
+    const target = resolveEl(state.anchor) ?? self?.parentElement ?? undefined;
+    if (!self || !target) return;
+
+    const snapshot = captureSnapshot(self, init);
 
     if (init.portal) {
       const target = resolvePortalTarget(init.portal);
-      if (target && el.parentElement !== target) target.appendChild(el);
+      if (target && self.parentElement !== target) target.appendChild(self);
     }
 
-    const ro = new ResizeObserver(schedule);
-    ro.observe(anch);
-    ro.observe(el);
+    const resizeObserver = new ResizeObserver(schedule);
+    resizeObserver.observe(target);
+    resizeObserver.observe(self);
 
-    const sp = collectScrollParents(anch);
-    for (const p of sp) p.addEventListener('scroll', schedule, { passive: true });
+    const scrollables = getScrollables(target);
+    for (const scrollable of scrollables) scrollable.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
 
     const releaseFocus = init.focus
-      ? createFocusTrap(el, { trapOverflow: false, releaseOnEsc: false, releaseOnClickOutside: false })
+      ? createFocusTrap(self, { trapOverflow: false, releaseOnEsc: false, releaseOnClickOutside: false })
       : undefined;
 
     return () => {
       cancelAnimationFrame(rafId);
-      ro.disconnect();
-      for (const p of sp) p.removeEventListener('scroll', schedule);
+      resizeObserver.disconnect();
+      for (const p of scrollables) p.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
       releaseFocus?.();
 
-      clearPlacement(el, init.cssPrefix, init.attrPrefix);
-      restoreSnapshot(el, snap);
+      clearPlacement(self, init.cssPrefix, init.attrPrefix);
+      restoreSnapshot(self, snapshot);
     };
   });
 

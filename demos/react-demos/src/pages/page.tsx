@@ -1,4 +1,13 @@
-import { Checkbox, createForm, EmailInput, FormReset, FormSubmit, Slider, Textarea, TextInput } from '@airlib/react-form';
+import {
+  Checkbox,
+  createForm,
+  EmailInput,
+  FormReset,
+  FormSubmit,
+  Slider,
+  Textarea,
+  TextInput,
+} from '@airlib/react-form';
 import { $bind, Link, Meta, mutable, page, setup, snippet, Title } from '@anchorlib/react';
 import airstackLogo from '../assets/airstack.svg';
 import { FormsPage } from './forms/index.js';
@@ -177,18 +186,17 @@ const M3Sampler = setup(() => {
     </div>
   );
 
-  const VolumesTab = snippet(() => (
-    <div className="flex items-center gap-4 max-w-sm">
-      <span className="material-symbols-outlined text-on-surface-variant">volume_down</span>
-      <Slider
-        min={0}
-        max={100}
-        value={$bind(() => ui, 'sliderVal')}
-      />
-      <span className="material-symbols-outlined text-on-surface-variant">volume_up</span>
-      <span className="air-label-md text-on-surface-variant w-8">{ui.sliderVal}</span>
-    </div>
-  ), 'Volumes');
+  const VolumesTab = snippet(
+    () => (
+      <div className="flex items-center gap-4 max-w-sm">
+        <span className="material-symbols-outlined text-on-surface-variant">volume_down</span>
+        <Slider min={0} max={100} value={$bind(() => ui, 'sliderVal')} />
+        <span className="material-symbols-outlined text-on-surface-variant">volume_up</span>
+        <span className="air-label-md text-on-surface-variant w-8">{ui.sliderVal}</span>
+      </div>
+    ),
+    'Volumes'
+  );
 
   const ControlsTab = snippet(
     () => (
@@ -209,7 +217,7 @@ const M3Sampler = setup(() => {
           </button>
           <span className="air-body-md text-on-surface-variant">{ui.switchOn ? 'Enabled' : 'Disabled'}</span>
         </div>
-        <VolumesTab/>
+        <VolumesTab />
         <div className="flex gap-3 flex-wrap items-center">
           <button
             className="air-chip cursor-pointer"

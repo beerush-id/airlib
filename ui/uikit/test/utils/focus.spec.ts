@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { KIT_CONFIGS } from '../../src/config.js';
-import type { AnyType } from '../../src/index.js';
-import { createFocusTrap, focusRef } from '../../src/utils/focus.js';
+import { type AnyType, focusRef } from '../../src/index.js';
+import { createFocusTrap } from '../../src/utils/focus.js';
 
 describe('createFocusTrap', () => {
   let container: HTMLDivElement;

@@ -1,5 +1,5 @@
 import { anchor, effect, getContext, mutable, onCleanup, setContext, untrack } from '@anchorlib/core';
-import { createFocusTrap, type FocusTrapOptions } from '../utils/index.js';
+import { createFocusTrap, type FocusTrapOptions } from '../../utils/index.js';
 
 export interface DialogInit<T> {
   data?: T | (() => T);

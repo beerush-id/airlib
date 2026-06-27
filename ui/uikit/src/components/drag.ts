@@ -1,5 +1,15 @@
 import { anchor, isBrowser, onCleanup } from '@anchorlib/core';
-import { KIT_CONFIGS, type SnapToBound } from '../config.js';
+import { KIT_CONFIGS } from '../config.js';
+import type { SnapToBound } from '../types.js';
+import type {
+  InteractionEvent,
+  InteractionRef,
+  InteractionRefInit,
+  InteractionState,
+  InteractionType,
+  MouseModifier,
+  SnapPoint,
+} from '../utils/index.js';
 import {
   attachFinish,
   bindTrigger,
@@ -8,19 +18,12 @@ import {
   detachFinish,
   freezeTransition,
   getKeyboard,
-  INTERACTIVE,
-  type InteractionEvent,
-  type InteractionRef,
-  type InteractionRefInit,
-  type InteractionState,
-  type InteractionType,
   interactionState,
-  MOUSE_BUTTONS,
-  type MouseModifier,
+  INTERACTIVE,
   minMax,
+  MOUSE_BUTTONS,
   resetInteraction,
   restoreTransition,
-  type SnapPoint,
   snapGrid,
   unbindTrigger,
 } from '../utils/index.js';

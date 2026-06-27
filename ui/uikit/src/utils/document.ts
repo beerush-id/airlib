@@ -11,6 +11,15 @@ export type ElementSnapshot = {
   activeElement: HTMLElement | null;
 };
 
+export const FOCUSABLE_SELECTORS = [
+  'a[href]',
+  'button:not([disabled])',
+  'textarea:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',');
+
 /**
  * Initializes global document focus tracking to monitor the currently active element.
  *
@@ -85,15 +94,6 @@ export function getFocusable(container: HTMLElement, selector?: string): HTMLEle
   if (!container) return [];
   return Array.from(container.querySelectorAll<HTMLElement>(selector ?? FOCUSABLE_SELECTORS));
 }
-
-export const FOCUSABLE_SELECTORS = [
-  'a[href]',
-  'button:not([disabled])',
-  'textarea:not([disabled])',
-  'input:not([disabled])',
-  'select:not([disabled])',
-  '[tabindex]:not([tabindex="-1"])',
-].join(',');
 
 /**
  * Captures an element's inline positioning styles, custom properties, and tree location

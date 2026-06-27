@@ -1,5 +1,4 @@
-import { dragRef, KIT_CONFIGS, resizeRef } from '@airlib/uikit';
-import { focusRef } from '@airlib/uikit/utils';
+import { dragRef, focusRef, KIT_CONFIGS, resizeRef } from '@airlib/uikit';
 import { nodeRef, render, setContext, setup } from '@anchorlib/react';
 import type { HTMLAttributes } from 'react';
 import { getWindow, WINDOW_CTX_SYMBOL } from '../../lib/index.js';

@@ -32,7 +32,7 @@ const accountSchema = z.object({
         state: z.string().min(2, 'State is required'),
         zipCode: z.string().regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code'),
         country: z.string().default('United States'),
-      }),
+      })
     )
     .default([]),
   preferences: z.object({
@@ -215,9 +215,7 @@ export const FormsPage = page(formsRoute).render(() => (
               </div>
               <div className="flex flex-col">
                 <span className="air-body-md font-medium text-on-surface">Marketing Emails</span>
-                <span className="air-body-sm text-on-surface-variant">
-                  Receive weekly product updates and offers.
-                </span>
+                <span className="air-body-sm text-on-surface-variant">Receive weekly product updates and offers.</span>
               </div>
             </label>
           </AccountForm.Field>

@@ -6,7 +6,7 @@
  * @returns A cleanup function that restores the original overflow style of the affected element.
  */
 export function suspendOverflow(element?: HTMLElement) {
-  const scrollable = getNearestScrollableParent(element) ?? document.body;
+  const scrollable = getNearestScrollable(element) ?? document.body;
   const prevOverflow = scrollable.style.overflow;
 
   scrollable.style.overflow = 'hidden';
@@ -22,13 +22,13 @@ export function suspendOverflow(element?: HTMLElement) {
  * @param element - The reference element to begin traversal from.
  * @returns An array of ancestor elements that have vertical scroll overflow.
  */
-export function collectScrollParents(element?: HTMLElement): HTMLElement[] {
+export function getScrollables(element?: HTMLElement): HTMLElement[] {
   if (!element) return [];
   const result: HTMLElement[] = [];
-  let p = getNearestScrollableParent(element);
+  let p = getNearestScrollable(element);
   while (p) {
     result.push(p);
-    p = getNearestScrollableParent(p);
+    p = getNearestScrollable(p);
   }
   return result;
 }
@@ -39,7 +39,7 @@ export function collectScrollParents(element?: HTMLElement): HTMLElement[] {
  * @param element - The reference element to search from.
  * @returns The closest scrollable ancestor element, or void if none is found.
  */
-export function getNearestScrollableParent(element?: HTMLElement): HTMLElement | void {
+export function getNearestScrollable(element?: HTMLElement): HTMLElement | void {
   let parent = element?.parentElement;
   while (parent) {
     if (parent.scrollHeight > parent.clientHeight) {

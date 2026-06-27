@@ -1,5 +1,6 @@
 import { isBrowser, onCleanup } from '@anchorlib/core';
-import { KIT_CONFIGS, type SnapToBound } from '../config.js';
+import { KIT_CONFIGS } from '../config.js';
+import type { SnapToBound } from '../types.js';
 import type {
   EdgeSnaps,
   InteractionEvent,

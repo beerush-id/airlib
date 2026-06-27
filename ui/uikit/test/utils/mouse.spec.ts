@@ -1,23 +1,14 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { createPointer, getPointer, MousePointer, watchPointer } from '../../src/utils/mouse.js';
+import { getPointer, MousePointer, watchPointer } from '../../src/utils/mouse.js';
 
 describe('mouse', () => {
   beforeEach(() => {
     getPointer().reset();
   });
 
-  describe('createPointer', () => {
-    it('should create a new pointer instance', () => {
-      const pointer = createPointer();
-      expect(pointer).toBeInstanceOf(MousePointer);
-      expect(pointer.x).toBe(0);
-      expect(pointer.y).toBe(0);
-    });
-  });
-
   describe('MousePointer', () => {
     it('should reset its values', () => {
-      const pointer = createPointer();
+      const pointer = new MousePointer();
       pointer.x = 10;
       pointer.modifiers.add('shift');
 

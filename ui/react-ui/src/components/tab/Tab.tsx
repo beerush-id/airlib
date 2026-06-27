@@ -1,5 +1,5 @@
-import { createTabState, getTab } from '@airlib/uikit';
-import { arrowRef, classx } from '@airlib/uikit/utils';
+import { arrowRef, createTabState, getTab } from '@airlib/uikit';
+import { classx } from '@airlib/uikit/utils';
 import { type Bindable, effect, nodeRef, render, setup } from '@anchorlib/react';
 import type { HTMLAttributes, MouseEventHandler } from 'react';
 import { stylex } from '../../utils/index.js';

@@ -14,7 +14,7 @@ export const Counter = setup(() => {
         <span>count is {state.count}</span>
       </button>
     ),
-    'Count',
+    'Count'
   );
 
   const WatchPrice = snippet(() => {

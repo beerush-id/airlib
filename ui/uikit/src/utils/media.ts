@@ -7,6 +7,21 @@ export type MediaType = {
   [K in keyof ViewportSelectors]: boolean;
 };
 
+export const MEDIA_SELECTORS = {
+  dark: '(prefers-color-scheme: dark)',
+  light: '(prefers-color-scheme: light)',
+  mobile: '(max-width: 639px)',
+  tablet: '(min-width: 640px) and (max-width: 1023px)',
+  desktop: '(min-width: 1024px)',
+  landscape: '(orientation: landscape)',
+  portrait: '(orientation: portrait)',
+  touch: '(pointer: coarse)',
+  hover: '(hover: hover)',
+  reducedMotion: '(prefers-reduced-motion: reduce)',
+  highContrast: '(prefers-contrast: more)',
+  retina: '(resolution >= 2dppx)',
+};
+
 /**
  * Initializes global window media query tracking (dark mode, breakpoints, orientations, motion/contrast features)
  * and viewport dimension listeners.
@@ -56,21 +71,6 @@ export function watchMedia() {
 export function getLiveMedia() {
   return currentMedia;
 }
-
-export const MEDIA_SELECTORS = {
-  dark: '(prefers-color-scheme: dark)',
-  light: '(prefers-color-scheme: light)',
-  mobile: '(max-width: 639px)',
-  tablet: '(min-width: 640px) and (max-width: 1023px)',
-  desktop: '(min-width: 1024px)',
-  landscape: '(orientation: landscape)',
-  portrait: '(orientation: portrait)',
-  touch: '(pointer: coarse)',
-  hover: '(hover: hover)',
-  reducedMotion: '(prefers-reduced-motion: reduce)',
-  highContrast: '(prefers-contrast: more)',
-  retina: '(resolution >= 2dppx)',
-};
 
 export class LiveMedia implements MediaType {
   public dark = false;
