@@ -92,7 +92,7 @@ export class WebWindow<T extends WindowData, O> {
     return this;
   }
 
-  public async open(init?: T) {
+  public async open(data?: T) {
     if (!isBrowser()) {
       const error = new Error(`Window violation detected.`);
       captureStack.violation.general(
@@ -111,7 +111,7 @@ export class WebWindow<T extends WindowData, O> {
       return instance;
     }
 
-    const instance = new WindowInstance<T, O>(this, this.options, init ?? ({} as T));
+    const instance = new WindowInstance<T, O>(this, this.options, data ?? ({} as T));
     this.children.add(instance);
     this.childMap.set(instance.id, instance);
     WebWin.stack.add(instance);

@@ -1,7 +1,7 @@
 export const FORM_OPTIONS = {
-  class: '',
-  errorClass: '',
-  pendingClass: '',
+  class: 'air-form',
+  errorClass: 'air-form-error',
+  pendingClass: 'air-form-pending',
   strict: true,
   validateOnInit: true,
   settleOnSubmit: true,
@@ -10,19 +10,19 @@ export const FORM_OPTIONS_KEYS = Object.keys(FORM_OPTIONS);
 export type FormDefaultOptions = Partial<typeof FORM_OPTIONS>;
 
 export const FIELD_OPTIONS = {
-  class: '',
-  labelClass: '',
-  errorClass: '',
+  class: 'air-form-field',
+  labelClass: 'air-form-field-label',
+  errorClass: 'air-form-field-error',
   requiredLabel: '*',
-  requiredClass: '',
-  mismatchLabel: '',
+  requiredClass: 'air-form-field-required',
+  mismatchLabel: 'air-form-field-mismatch',
 };
 export const FIELD_OPTIONS_KEYS = Object.keys(FIELD_OPTIONS);
 export type FieldDefaultOptions = Partial<typeof FIELD_OPTIONS>;
 
 export const INPUT_OPTIONS = {
-  class: '',
-  errorClass: '',
+  class: 'air-input',
+  errorClass: 'air-input-error',
 };
 export const INPUT_OPTIONS_KEYS = Object.keys(INPUT_OPTIONS);
 export type InputDefaultOptions = Partial<typeof INPUT_OPTIONS>;

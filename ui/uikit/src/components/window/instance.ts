@@ -79,7 +79,7 @@ export class WindowInstance<T extends WindowData, O> {
   constructor(
     private owner: WebWindow<T, O>,
     private options: WebWindowOptions<O>,
-    init: T
+    data: T
   ) {
     const rect = untrack(() => ({
       ...this.owner.storage.rect,
@@ -94,7 +94,7 @@ export class WindowInstance<T extends WindowData, O> {
       y: rect.y,
       width: rect.width,
       height: rect.height,
-      data: init,
+      data: data,
       zIndex: 0,
       status: WINDOW_STATUS.IDLE,
       minimized: false,

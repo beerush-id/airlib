@@ -17,9 +17,9 @@ export const Window = setup<WindowProps>((props) => {
   const window = getWindow();
   const nodeCtx = nodeRef<HTMLDivElement>(() => ({
     className: props.className || WINDOW_CONFIGS.class,
-    'data-minimized': window?.minimized,
-    'data-maximized': window?.maximized,
-    'data-fullscreen': window?.fullscreen,
+    'data-minimized': window?.minimized ? 'true' : 'false',
+    'data-maximized': window?.maximized ? 'true' : 'false',
+    'data-fullscreen': window?.fullscreen ? 'true' : 'false',
   }));
   const trapCtx = focusRef({ trapOverflow: false, autofocus: false, releaseOnEsc: false });
   const dragCtx = dragRef({

@@ -68,7 +68,7 @@ export function createTab<T = string>(): TabComponent<T> {
           '--air-tab-item-width': width,
           '--air-tab-item-height': height,
         }),
-      };
+      } as TabListProps;
     });
     const key = arrowRef({
       focusable: '[role="tab"]:not(:disabled)',
@@ -102,6 +102,19 @@ export function createTab<T = string>(): TabComponent<T> {
     const tab = getTab<T>();
     const item = tab?.item(props.name as T);
     const restProps = props.$omit(['name', 'className', 'activeClass', 'onClick']);
+    const ref = nodeRef<HTMLButtonElement>(
+      () =>
+        ({
+          id: `${TAB_CONFIGS.prefix}-${props.name}`,
+          tabIndex: item?.active ? 0 : -1,
+          className: classx([
+            props.className || TAB_CONFIGS.button.class,
+            { [props.activeClass ?? TAB_CONFIGS.button.activeClass]: item?.active },
+          ]),
+          'aria-selected': item?.active,
+          'aria-controls': `${TAB_CONFIGS.panelPrefix}-${props.name}`,
+        }) as TabButtonProps
+    );
 
     const activate: MouseEventHandler<HTMLButtonElement> = (e) => {
       item?.activate();
@@ -110,6 +123,8 @@ export function createTab<T = string>(): TabComponent<T> {
 
     const assignRef = (el: HTMLButtonElement | null) => {
       if (!item || !el) return;
+
+      ref.current = el;
       item.trigger = el;
 
       if (tab && item.active) {
@@ -121,20 +136,7 @@ export function createTab<T = string>(): TabComponent<T> {
 
     return render(
       () => (
-        <button
-          {...restProps}
-          ref={assignRef}
-          id={`${TAB_CONFIGS.prefix}-${props.name}`}
-          role="tab"
-          aria-selected={item?.active}
-          aria-controls={`${TAB_CONFIGS.panelPrefix}-${props.name}`}
-          tabIndex={item?.active ? 0 : -1}
-          className={classx([
-            props.className || TAB_CONFIGS.button.class,
-            { [props.activeClass ?? TAB_CONFIGS.button.activeClass]: item?.active },
-          ])}
-          onClick={activate}
-        >
+        <button {...restProps} {...ref.attributes} ref={assignRef} role="tab" onClick={activate}>
           {props.children}
         </button>
       ),
@@ -144,28 +146,26 @@ export function createTab<T = string>(): TabComponent<T> {
 
   const TabContent = setup<TabContentProps>((props) => {
     const tab = getTab<T>();
-    const ref = nodeRef<HTMLDivElement>(() => ({
-      className: classx([
-        props.className || TAB_CONFIGS.content.class,
-        { [props.activeClass ?? TAB_CONFIGS.content.activeClass]: tab?.current === props.name },
-      ]),
-      'aria-hidden': tab?.current !== props.name,
-      'aria-current': tab?.current === props.name,
-    }));
+    const ref = nodeRef<HTMLDivElement>(
+      () =>
+        ({
+          id: `${TAB_CONFIGS.panelPrefix}-${props.name}`,
+          hidden: !tab?.options?.deferred && tab?.current !== props.name,
+          className: classx([
+            props.className || TAB_CONFIGS.content.class,
+            { [props.activeClass ?? TAB_CONFIGS.content.activeClass]: tab?.current === props.name },
+          ]),
+          'aria-current': tab?.current === props.name,
+          'aria-labelledby': `${TAB_CONFIGS.prefix}-${props.name}`,
+        }) as TabContentProps
+    );
     const restProps = props.$omit(['name', 'className', 'activeClass']);
 
     if (tab?.options?.deferred) {
       return render(() => {
         if (tab.current !== props.name) return null;
         return (
-          <div
-            {...restProps}
-            {...ref.attributes}
-            ref={ref}
-            id={`${TAB_CONFIGS.panelPrefix}-${props.name}`}
-            role="tabpanel"
-            aria-labelledby={`${TAB_CONFIGS.prefix}-${props.name}`}
-          >
+          <div {...restProps} {...ref.attributes} ref={ref} role="tabpanel">
             {props.children}
           </div>
         );
@@ -174,14 +174,7 @@ export function createTab<T = string>(): TabComponent<T> {
 
     return render(
       () => (
-        <div
-          {...restProps}
-          {...ref.attributes}
-          ref={ref}
-          id={`${TAB_CONFIGS.panelPrefix}-${props.name}`}
-          role="tabpanel"
-          aria-labelledby={`${TAB_CONFIGS.prefix}-${props.name}`}
-        >
+        <div {...restProps} {...ref.attributes} ref={ref} role="tabpanel">
           {props.children}
         </div>
       ),
