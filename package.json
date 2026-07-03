@@ -58,14 +58,14 @@
   "workspaces": ["apps/*", "packages/*", "ui/*", "irpc/*", "demos/*"],
   "catalogs": {
     "lib": {
-      "@anchorlib/core": "1.2.8",
-      "@anchorlib/react": "1.2.8",
-      "@anchorlib/router": "1.2.8",
-      "@anchorlib/solid": "1.2.8",
-      "@anchorlib/storage": "1.2.8",
-      "@irpclib/http": "1.2.8",
-      "@irpclib/irpc": "1.2.8",
-      "@irpclib/ws": "1.2.8",
+      "@anchorlib/core": "^1.2.8",
+      "@anchorlib/react": "^1.2.8",
+      "@anchorlib/router": "^1.2.8",
+      "@anchorlib/solid": "^1.2.8",
+      "@anchorlib/storage": "^1.2.8",
+      "@irpclib/http": "^1.2.8",
+      "@irpclib/irpc": "^1.2.8",
+      "@irpclib/ws": "^1.2.8",
       "react": "^19.1.0",
       "react-dom": "^19.1.0",
       "solid-js": "^1.9.0",
@@ -75,7 +75,7 @@
     }
   },
   "catalog": {
-    "@anchorlib/vite-ssr": "1.2.8",
+    "@anchorlib/vite-ssr": "^1.2.8",
     "@biomejs/biome": "^2.3.0",
     "@solidjs/testing-library": "^0.8.10",
     "@tailwindcss/cli": "4.3.0",
