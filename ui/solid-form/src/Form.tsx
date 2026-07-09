@@ -6,7 +6,7 @@ import { FORM_OPTIONS, FORM_OPTIONS_KEYS, type FormDefaultOptions } from './conf
 
 export interface FormProps
   extends Omit<JSX.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'>,
-    Omit<FormDefaultOptions, 'class'> {
+  Omit<FormDefaultOptions, 'class'> {
   value?: Record<string, AnyType>;
   schema: ZodObject<ZodRawShape>;
   onSubmit?: (

@@ -1,5 +1,4 @@
 export * from './Control.js';
-export * from './Host.js';
 export * from './Launcher.js';
 export * from './Renderer.js';
 export * from './Splash.js';

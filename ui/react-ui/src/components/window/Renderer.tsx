@@ -5,28 +5,6 @@ import { createRoot } from 'react-dom/client';
 import { WINDOW_SYMBOL } from '../../lib/index.js';
 import { WINDOW_CONFIGS } from './config.js';
 
-export type WindowRendererProps = {
-  instance: WindowInstance<AnyType, AnyType>;
-};
-
-export const WindowRenderer = setup<WindowRendererProps>((props) => {
-  setContext(WINDOW_SYMBOL, props.instance);
-
-  return render(() => {
-    const { state, render: Render, splash: Splash } = props.instance;
-
-    if (state.status === 'pending' && Splash) {
-      return <Splash state={state} instance={props.instance} />;
-    }
-
-    if (!Render) {
-      return <div className={WINDOW_CONFIGS.error.class}>[WINDOW ERROR: No render function]</div>;
-    }
-
-    return <Render state={state} instance={props.instance} />;
-  }, 'WindowRenderer');
-}, 'WindowRenderer');
-
 const HOST_REG = new WeakSet();
 const ROOT_REG = new WeakMap();
 
@@ -34,15 +12,14 @@ if (isBrowser()) {
   subscribe(WebWin.windows, (s) => {
     for (const win of s.values()) {
       if (!HOST_REG.has(win)) {
-        install(win);
+        bootstrap(win);
         HOST_REG.add(win);
       }
     }
   });
 }
 
-const install = (win: WebWindow<AnyType, AnyType>) => {
-  console.log(win.instances);
+const bootstrap = (win: WebWindow<AnyType, AnyType>) => {
   subscribe(win.instances, (_s, event) => {
     if (event.type === 'set:add') {
       const host = document.createElement('air-window');
@@ -67,3 +44,25 @@ const install = (win: WebWindow<AnyType, AnyType>) => {
     }
   });
 };
+
+export type WindowRendererProps = {
+  instance: WindowInstance<AnyType, AnyType>;
+};
+
+export const WindowRenderer = setup<WindowRendererProps>((props) => {
+  setContext(WINDOW_SYMBOL, props.instance);
+
+  return render(() => {
+    const { state, render: Render, splash: Splash } = props.instance;
+
+    if (state.status === 'pending' && Splash) {
+      return <Splash state={state} instance={props.instance} />;
+    }
+
+    if (!Render) {
+      return <div className={WINDOW_CONFIGS.error.class}>[WINDOW ERROR: No render function]</div>;
+    }
+
+    return <Render state={state} instance={props.instance} />;
+  }, 'WindowRenderer');
+}, 'WindowRenderer');

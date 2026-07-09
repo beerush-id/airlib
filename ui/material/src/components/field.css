@@ -58,6 +58,10 @@
   &:has(.air-textarea) {
     @apply air-textarea-container;
   }
+
+  &:has(.air-select-field) {
+    @apply air-select-field-container;
+  }
 }
 
 @utility air-inline-field-container {
@@ -103,8 +107,9 @@
   }
 
   /* Default (Outlined) Floating Transform */
-  &:has(:is(input, textarea):focus, :is(input, textarea):not(:placeholder-shown), :is(input, textarea):-webkit-autofill)
-    .air-field-label {
+  &:has(:is(input, textarea, select):focus) .air-field-label,
+  &:has(:is(input, textarea, select):not(:placeholder-shown)) .air-field-label,
+  &:has(:is(input, textarea, select):-webkit-autofill) .air-field-label {
     /* Translate UP by the fixed padding to hit the border (0px), then slightly more (-0.375em) to perfectly center the scaled label on the outline */
     transform: translateY(calc((var(--air-field-padding-y) * -1) - 0.35em)) scale(0.75);
     background-color: var(--color-ghost-surface, var(--color-surface, #fff));

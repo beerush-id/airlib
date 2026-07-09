@@ -7,7 +7,7 @@
 /* Base Group Structure (DRY utility for border radii and z-index stacking) */
 @utility air-group-base {
   @apply inline-flex items-center;
-  gap: var(--air-group-gap, calc(var(--spacing) * 0.5));
+  gap: var(--air-group-gap);
 
   & :is(input, button, select) {
     border-radius: var(--air-group-inner-radius);

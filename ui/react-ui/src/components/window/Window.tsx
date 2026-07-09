@@ -1,11 +1,10 @@
 import { dragRef, focusRef, KIT_CONFIGS, resizeRef } from '@airlib/uikit';
-import { nodeRef, render, setContext, setup } from '@anchorlib/react';
+import { render, setContext, setup } from '@anchorlib/react';
 import type { HTMLAttributes } from 'react';
 import { getWindow, WINDOW_CTX_SYMBOL } from '../../lib/index.js';
 import type { WindowControls } from './Control.js';
 import { WINDOW_CONFIGS } from './config.js';
 import { WindowToolbar } from './Toolbar.js';
-import { onCleanup } from '@anchorlib/core';
 
 export type WindowProps = HTMLAttributes<HTMLDivElement> &
   WindowControls & {
@@ -49,8 +48,6 @@ export const Window = setup<WindowProps>((props) => {
     window,
     dragger: dragCtx,
   });
-
-  onCleanup(() => console.log('Destroyed'));
 
   return render(
     () => (

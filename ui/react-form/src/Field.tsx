@@ -1,13 +1,13 @@
 import type { FormField, FormState } from '@airlib/form';
 import { formField } from '@airlib/form';
-import { render, setup } from '@anchorlib/react';
+import { derived, render, setup } from '@anchorlib/react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import type { ZodObject, ZodRawShape } from 'zod';
 import { FIELD_OPTIONS, FIELD_OPTIONS_KEYS, type FieldDefaultOptions } from './config.js';
 
 export interface FieldProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>,
-    Omit<FieldDefaultOptions, 'class'> {
+  Omit<FieldDefaultOptions, 'class'> {
   name: string;
   match?: string | ((form: FormState<ZodObject<ZodRawShape>>) => boolean);
   label?: string;
@@ -20,6 +20,16 @@ export const Field = setup<FieldProps>((props) => {
   const fieldId = props.name.replace(/\./g, '-');
   const errorId = `${fieldId}-error`;
 
+  const className = derived(() => {
+    if (field.touched && field.error) {
+      return [props.className ?? FIELD_OPTIONS.class, props.errorClass ?? FIELD_OPTIONS.errorClass]
+        .filter(Boolean)
+        .join(' ');
+    }
+
+    return props.className ?? FIELD_OPTIONS.class;
+  });
+
   return render(() => {
     if (!field.name) {
       return (
@@ -31,7 +41,7 @@ export const Field = setup<FieldProps>((props) => {
     }
 
     return (
-      <div {...rest} className={props.className ?? FIELD_OPTIONS.class}>
+      <div {...rest} className={className.value}>
         {props.label && (
           <label htmlFor={fieldId} className={props.labelClass ?? FIELD_OPTIONS.labelClass}>
             {props.label}
@@ -45,12 +55,12 @@ export const Field = setup<FieldProps>((props) => {
         {props.children}
         {field.touched &&
           field.error?.map((error, i) => (
-            <span key={i} id={errorId} className={props.errorClass ?? FIELD_OPTIONS.errorClass} role="alert">
+            <span key={i} id={errorId} className={props.supportClass ?? FIELD_OPTIONS.supportClass} role="alert">
               {error}
             </span>
           ))}
         {field.valid && !field.matched && props.mismatchLabel && (
-          <span id={errorId} className={props.errorClass ?? FIELD_OPTIONS.errorClass} role="alert">
+          <span id={errorId} className={props.supportClass ?? FIELD_OPTIONS.supportClass} role="alert">
             {props.mismatchLabel}
           </span>
         )}

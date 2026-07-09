@@ -8,14 +8,14 @@ import { FIELD_OPTIONS, FIELD_OPTIONS_KEYS, FORM_OPTIONS, FORM_OPTIONS_KEYS } fr
 
 interface TypedFormProps<T>
   extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'>,
-    Omit<FormDefaultOptions, 'class'> {
+  Omit<FormDefaultOptions, 'class'> {
   value?: T;
   onSubmit?: (data: T, changes: Partial<T>, e: SubmitEvent<HTMLFormElement>) => Promise<void> | void;
 }
 
 interface TypedFieldProps<T, S extends ZodObject<ZodRawShape>>
   extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>,
-    Omit<FieldDefaultOptions, 'class'> {
+  Omit<FieldDefaultOptions, 'class'> {
   name: DeepPaths<T>;
   match?: DeepPaths<T> | ((form: FormState<S>) => boolean);
   label?: string;
@@ -96,6 +96,18 @@ export function createForm<T extends ZodObject<ZodRawShape>>(
     const fieldId = $props.name.replace(/\./g, '-');
     const errorId = `${fieldId}-error`;
 
+    const className = derived(() => {
+      if (field.touched && field.error) {
+        return [
+          $props.className ?? fieldOptions?.class ?? FIELD_OPTIONS.class,
+          $props.errorClass ?? fieldOptions?.errorClass ?? FIELD_OPTIONS.errorClass,
+        ]
+          .filter(Boolean)
+          .join(' ');
+      }
+      return $props.className ?? fieldOptions?.class ?? FIELD_OPTIONS.class;
+    });
+
     return render(() => {
       if (!field.name) {
         return (
@@ -109,7 +121,7 @@ export function createForm<T extends ZodObject<ZodRawShape>>(
       }
 
       return (
-        <div {...rest} className={$props.className ?? fieldOptions?.class ?? FIELD_OPTIONS.class}>
+        <div {...rest} className={className.value}>
           {$props.label && (
             <label
               htmlFor={fieldId}
@@ -129,7 +141,7 @@ export function createForm<T extends ZodObject<ZodRawShape>>(
               <span
                 key={i}
                 id={errorId}
-                className={$props.errorClass ?? fieldOptions?.errorClass ?? FIELD_OPTIONS.errorClass}
+                className={$props.supportClass ?? fieldOptions?.supportClass ?? FIELD_OPTIONS.supportClass}
                 role="alert"
               >
                 {error}
@@ -138,7 +150,7 @@ export function createForm<T extends ZodObject<ZodRawShape>>(
           {field.valid && !field.matched && $props.mismatchLabel && (
             <span
               id={errorId}
-              className={$props.errorClass ?? fieldOptions?.errorClass ?? FIELD_OPTIONS.errorClass}
+              className={$props.supportClass ?? fieldOptions?.supportClass ?? FIELD_OPTIONS.supportClass}
               role="alert"
             >
               {$props.mismatchLabel}

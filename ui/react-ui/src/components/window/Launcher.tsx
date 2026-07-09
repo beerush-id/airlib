@@ -1,7 +1,7 @@
-import { type AnyType, WebWin, type WebWindow } from '@airlib/uikit';
-import { For, render, setup, template } from '@anchorlib/react';
+import type { AnyType, WebWindow } from '@airlib/uikit';
+import { render, setup, template } from '@anchorlib/react';
 import type { ReactNode } from 'react';
-import { SearchIcon, WindowIcon } from '../../icons/index.js';
+import { WindowIcon } from '../../icons/index.js';
 import { BadgeDot } from '../badge/index.js';
 import { Tooltip } from '../tooltip/index.js';
 
@@ -9,34 +9,30 @@ export type WindowLauncherProps = {
   children?: ReactNode;
 };
 
-export const WindowLauncher = setup<WindowLauncherProps>((props) => {
-  return render(
-    () => (
-      <div className="air-window-launcher">
-        <label className="air-button-elevated">
-          <SearchIcon />
-          <input placeholder="Ask Claude..." />
-        </label>
-        <For each={Array.from(WebWin.windows.values())}>{(host) => <LaunchButton app={{ window: host }} />}</For>
-        {props.children}
-      </div>
-    ),
-    'WindowLauncher'
-  );
-}, 'WindowLauncher');
-
 export type LaunchButtonProps = {
-  app: { window: WebWindow<AnyType, ReactNode> };
+  app: WebWindow<AnyType, ReactNode>;
 };
 
-export const LaunchButton = template<LaunchButtonProps>(({ app }) => {
-  const { name, title, icon } = app.window.options;
+export const WindowDock = setup<WindowLauncherProps>((props) => {
+  return render(() => <div className="air-window-launcher">{props.children}</div>, 'WindowLauncher');
+}, 'WindowLauncher');
+
+export const WindowLauncher = template<LaunchButtonProps>(({ app }) => {
+  const { name, title, icon } = app.options;
+
+  const launch = () => {
+    if (app.online) {
+      app.restore();
+    } else {
+      app.open();
+    }
+  };
 
   return (
-    <button type="button" className="air-window-launcher-button" onClick={() => app.window.open()}>
+    <button type="button" className="air-window-launcher-button" onClick={launch}>
       <Tooltip yPos="before">{title || name}</Tooltip>
       {renderIcon(icon, title || name)}
-      {app.window.online && <BadgeDot />}
+      {app.online && <BadgeDot />}
     </button>
   );
 }, 'LaunchButton');
