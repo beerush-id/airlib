@@ -215,7 +215,7 @@ export class FormState<T extends ZodObject> {
 
       const schema = schemaOf(this.#ctx, path);
       if (schema && schema.type !== 'object' && schema.type !== 'array') {
-        const result = schema.shape.safeParse(baselineValue);
+        const result = (schema.shape as ZodObject).safeParse(baselineValue);
         if (result.success) {
           this.#ctx.errorKeys.delete(path);
           delete this.#ctx.store.errors[path];

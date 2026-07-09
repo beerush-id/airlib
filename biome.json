@@ -36,6 +36,9 @@
       "style": {
         "noNonNullAssertion": "off"
       },
+      "suspicious": {
+        "useIterableCallbackReturn": "off"
+      },
       "a11y": {
         "noLabelWithoutControl": "off",
         "useButtonType": "off",
