@@ -4,6 +4,7 @@ import type { HTMLAttributes, MouseEventHandler } from 'react';
 import { CloseIcon, MaximizeIcon, MinimizeIcon, RestoreIcon } from '../../icons/index.js';
 import { getWindowCtx } from '../../lib/index.js';
 import { WINDOW_CONFIGS } from './config.js';
+import { Tooltip } from '../tooltip/Tooltip.tsx';
 
 export type WindowControls = {
   dir?: 'ltr' | 'rtl';
@@ -56,6 +57,7 @@ export const WindowControl = setup<WindowControlProps>((props) => {
             className={props.maximizeClass ?? WINDOW_CONFIGS.controls.maximize.class}
           >
             {ctx?.window?.maximized ? <RestoreIcon /> : <MaximizeIcon />}
+            <Tooltip>{ctx?.window?.maximized ? 'Restore' : 'Maximize'}</Tooltip>
           </button>
         )}
         {props.minimize !== false && (
@@ -65,6 +67,7 @@ export const WindowControl = setup<WindowControlProps>((props) => {
             className={props.minimizeClass ?? WINDOW_CONFIGS.controls.minimize.class}
           >
             <MinimizeIcon />
+            <Tooltip>Minimize</Tooltip>
           </button>
         )}
         {props.close !== false && (
@@ -74,6 +77,7 @@ export const WindowControl = setup<WindowControlProps>((props) => {
             className={props.closeClass ?? WINDOW_CONFIGS.controls.close.class}
           >
             <CloseIcon />
+            <Tooltip>Close</Tooltip>
           </button>
         )}
       </div>

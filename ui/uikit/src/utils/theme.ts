@@ -1,11 +1,12 @@
 import { cookies, effect, isBrowser, untrack } from '@anchorlib/core';
+import { KIT_CONFIGS } from 'src/config.ts';
 
 export type ColorScheme = {
   mode: 'dark' | 'light' | 'system';
   color: string;
-  toggle: () => void;
-  change: (mode: 'dark' | 'light' | 'system') => void;
   current?: 'dark' | 'light';
+  toggle: () => void;
+  change: (mode: 'dark' | 'light', toggle?: boolean) => void;
 };
 
 /**
@@ -20,12 +21,16 @@ export function colorScheme(): ColorScheme {
     const mode = untrack(() => state.mode);
     state.mode = mode === 'dark' ? 'light' : mode === 'light' ? 'system' : 'dark';
   };
-  const change = (mode: 'dark' | 'light' | 'system') => {
-    state.mode = mode;
+  const change = (mode: 'dark' | 'light' | 'system', toggleMode?: boolean) => {
+    if (toggleMode && state.mode === mode) {
+      state.mode = 'system';
+    } else {
+      state.mode = mode;
+    }
   };
   const state = cookies<ColorScheme>('theme', {
     mode: 'system',
-    color: 'red',
+    color: KIT_CONFIGS.seedColor,
     toggle,
     change,
   });

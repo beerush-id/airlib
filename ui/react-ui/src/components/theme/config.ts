@@ -1,5 +1,6 @@
 export const THEME_CONFIGS = {
-  toggler: { class: 'air-icon-button' },
-  switchGroup: { class: 'air-segmented-group' },
-  switchButton: { class: 'air-segmented-button' },
+  color: { class: 'air-tool-icon-button' },
+  toggler: { class: 'air-tool-icon-button' },
+  switchGroup: { class: 'air-tool-group' },
+  switchButton: { class: 'air-tool-icon-button' },
 };

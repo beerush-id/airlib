@@ -10,6 +10,6 @@ export const WindowRendererHost = template(
 );
 
 export const WindowRendererSlot = template<{ host: WebWindow<AnyType, ReactNode> }>(
-  ({ host }) => <For each={() => Array.from(host.children)}>{(win) => <WindowRenderer instance={win} />}</For>,
+  ({ host }) => <For each={() => Array.from(host.instances)}>{(win) => <WindowRenderer instance={win} />}</For>,
   'WindowRendererSlot'
 );

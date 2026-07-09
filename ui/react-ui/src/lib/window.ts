@@ -6,7 +6,7 @@ import {
   type WindowData,
   type WindowInstance,
 } from '@airlib/uikit';
-import type { DragRef } from '@airlib/uikit/utils';
+import type { DragRef } from '@airlib/uikit/components';
 import { getContext, setup } from '@anchorlib/react';
 import type { ReactNode } from 'react';
 import { WindowSplash } from '../components/index.js';

@@ -14,7 +14,7 @@ export const AirApp = setup<AirAppProps>((props) => {
   return (
     <>
       {props.children}
-      <WindowRendererHost />
+      {/* <WindowRendererHost /> */}
       <ConfirmDialogHost />
     </>
   );

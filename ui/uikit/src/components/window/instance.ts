@@ -231,6 +231,7 @@ export class WindowInstance<T extends WindowData, O> {
   public minimize() {
     untrack(() => {
       this.state.minimized = true;
+      this.applyData();
     });
     return this;
   }
@@ -259,6 +260,7 @@ export class WindowInstance<T extends WindowData, O> {
   public expand() {
     untrack(() => {
       this.state.fullscreen = true;
+      this.applyData();
     });
     return this;
   }
@@ -266,6 +268,7 @@ export class WindowInstance<T extends WindowData, O> {
   public restore() {
     untrack(() => {
       this.state.minimized = false;
+      this.applyData();
     });
     this.focus();
     return this;
@@ -364,8 +367,16 @@ export class WindowInstance<T extends WindowData, O> {
       this.element.style.setProperty(`--window-${property}`, value);
     }
 
-    this.remember();
+    this.applyData().remember();
     this.element.focus();
+    return this;
+  }
+
+  private applyData() {
+    if (!this.element) return this;
+    this.element.setAttribute('data-minimized', this.state.minimized ? 'true' : 'false');
+    this.element.setAttribute('data-maximized', this.state.maximized ? 'true' : 'false');
+    this.element.setAttribute('data-fullscreen', this.state.fullscreen ? 'true' : 'false');
     return this;
   }
 

@@ -21,10 +21,10 @@ import type {
  * Manages spawned window instance pools, storage persistence, render pipelines, and route guards.
  */
 export class WebWindow<T extends WindowData, O> {
-  children: Set<WindowInstance<T, O>> = impure(new Set(), { recursive: false });
-  childMap = new Map<string, WindowInstance<T, O>>();
   guards = new Set<WindowGuard<T>>();
   providers = new Set<WindowProviderList>();
+  instances: Set<WindowInstance<T, O>> = impure(new Set(), { recursive: false });
+  instanceMap = new Map<string, WindowInstance<T, O>>();
 
   public storage: WindowStorage;
   public renderLoader?: () => Promise<WebWindowRenderer<T, O>>;
@@ -32,10 +32,10 @@ export class WebWindow<T extends WindowData, O> {
   public splashRenderer?: WebWindowRenderer<T, O>;
 
   public get online() {
-    return this.childMap.size > 0;
+    return this.instances.size > 0;
   }
 
-  constructor(private options: WebWindowOptions<O>) {
+  constructor(public options: WebWindowOptions<O>) {
     if (options.remember === 'default') {
       options.remember = KIT_CONFIGS.rememberWindows;
     }
@@ -105,15 +105,15 @@ export class WebWindow<T extends WindowData, O> {
       return new WindowInstance(this, this.options, {} as T);
     }
 
-    if (!this.options.multiple && this.children.size) {
-      const instance = [...this.children][0];
+    if (!this.options.multiple && this.instances.size) {
+      const instance = [...this.instances][0];
       instance.focus();
       return instance;
     }
 
     const instance = new WindowInstance<T, O>(this, this.options, data ?? ({} as T));
-    this.children.add(instance);
-    this.childMap.set(instance.id, instance);
+    this.instances.add(instance);
+    this.instanceMap.set(instance.id, instance);
     WebWin.stack.add(instance);
 
     await instance.focus().boot();
@@ -127,21 +127,21 @@ export class WebWindow<T extends WindowData, O> {
     }
 
     let lastInstance: WindowInstance<T, O>;
-    for (const instance of this.children) {
+    for (const instance of this.instances) {
       lastInstance = instance.restore();
     }
     return lastInstance!;
   }
 
   public close(instance: string | WindowInstance<T, O>) {
-    if (typeof instance === 'string') instance = this.childMap.get(instance)!;
-    if (!this.children.has(instance)) return;
+    if (typeof instance === 'string') instance = this.instanceMap.get(instance)!;
+    if (!this.instances.has(instance)) return;
 
     instance.cleanup();
     instance.state.status = WINDOW_STATUS.CLOSED;
 
-    this.children.delete(instance);
-    this.childMap.delete(instance.id);
+    this.instances.delete(instance);
+    this.instanceMap.delete(instance.id);
 
     WebWin.stack.rem(instance);
 

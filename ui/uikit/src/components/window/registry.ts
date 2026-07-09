@@ -12,7 +12,7 @@ export const WebWin = safeRun(() => {
   return impure(
     {
       stack: new WindowStacks(),
-      windows: new Map(),
+      windows: impure(new Map(), { recursive: false }),
       launcher: impure(new WindowLauncher()),
     },
     { recursive: false }

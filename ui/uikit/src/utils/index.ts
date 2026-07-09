@@ -1,3 +1,4 @@
+export * from './animation.js';
 export * from './classx.js';
 export * from './document.js';
 export * from './focus.js';
@@ -10,3 +11,4 @@ export * from './scroll.js';
 export * from './state.js';
 export * from './stylex.js';
 export * from './theme.js';
+export * from './uid.js';

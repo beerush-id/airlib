@@ -24,13 +24,21 @@ export function suspendOverflow(element?: HTMLElement) {
  */
 export function getScrollables(element?: HTMLElement): HTMLElement[] {
   if (!element) return [];
-  const result: HTMLElement[] = [];
-  let p = getNearestScrollable(element);
-  while (p) {
-    result.push(p);
-    p = getNearestScrollable(p);
+
+  const scrollables: HTMLElement[] = [];
+
+  let scrollable = getNearestScrollable(element);
+  while (scrollable) {
+    scrollables.push(scrollable);
+
+    if (scrollable === document.body) {
+      return scrollables;
+    }
+
+    scrollable = getNearestScrollable(scrollable);
   }
-  return result;
+
+  return scrollables;
 }
 
 /**
@@ -40,11 +48,14 @@ export function getScrollables(element?: HTMLElement): HTMLElement[] {
  * @returns The closest scrollable ancestor element, or void if none is found.
  */
 export function getNearestScrollable(element?: HTMLElement): HTMLElement | void {
-  let parent = element?.parentElement;
-  while (parent) {
-    if (parent.scrollHeight > parent.clientHeight) {
-      return parent;
+  let scrollable = element?.parentElement;
+
+  while (scrollable) {
+    const { scrollHeight, clientHeight, scrollWidth, clientWidth } = scrollable;
+    if (scrollHeight > clientHeight || scrollWidth > clientWidth || scrollable === document.body) {
+      return scrollable;
     }
-    parent = parent.parentElement;
+
+    scrollable = scrollable.parentElement;
   }
 }

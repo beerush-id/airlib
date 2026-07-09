@@ -7,26 +7,26 @@ export type ArrangeMode = 'cascade' | 'tile' | 'stack';
  * Orchestrates desktop window launching, mass dismissal, and automatic screen layout arrangements (cascade, tile, stack).
  */
 export class WindowLauncher extends Set<WebWindow<AnyType, AnyType>> {
-  public launch(app: WebWindow<AnyType, AnyType>) {
-    if (app.online) {
-      app.restore();
+  public launch(win: WebWindow<AnyType, AnyType>) {
+    if (win.online) {
+      win.restore();
     } else {
-      app.open();
+      win.open();
     }
 
     return this;
   }
 
-  public closeAll(app: WebWindow<AnyType, AnyType>) {
-    for (const child of app.children) {
+  public closeAll(win: WebWindow<AnyType, AnyType>) {
+    for (const child of win.instances) {
       child.close();
     }
 
     return this;
   }
 
-  public arrange(app: WebWindow<AnyType, AnyType>, mode: ArrangeMode = 'cascade') {
-    const instances = [...app.children].filter((i) => !i.minimized);
+  public arrange(win: WebWindow<AnyType, AnyType>, mode: ArrangeMode = 'cascade') {
+    const instances = [...win.instances].filter((i) => !i.minimized);
     const count = instances.length;
     if (!count) return this;
 

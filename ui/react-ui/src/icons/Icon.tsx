@@ -1,5 +1,6 @@
 import type { FC, ReactNode, SVGAttributes } from 'react';
 import { stylex } from '../utils/index.js';
+import { classx } from '@airlib/uikit/utils';
 import { ICON_CONFIGS } from './config.js';
 
 export interface IconProps extends Omit<SVGAttributes<SVGElement>, 'width' | 'height'> {
@@ -9,12 +10,13 @@ export interface IconProps extends Omit<SVGAttributes<SVGElement>, 'width' | 'he
 export function createIcon(content: (() => ReactNode) | ReactNode, name?: string, viewBox = '0 -960 960 960') {
   if (typeof content === 'function') {
     const IconFactory: FC<IconProps> = ({ className, size = ICON_CONFIGS.size, fill, style, ...restProps }) => (
+      // biome-ignore lint/a11y/noSvgWithoutTitle: Expect loose.
       <svg
         {...restProps}
         xmlns="http://www.w3.org/2000/svg"
         viewBox={viewBox}
         fill={fill ?? ICON_CONFIGS.fill ?? 'currentColor'}
-        className={className || ICON_CONFIGS.class}
+        className={classx([className, ICON_CONFIGS.class])}
         style={stylex({
           '--icon-size': size,
           ...style,
@@ -28,12 +30,13 @@ export function createIcon(content: (() => ReactNode) | ReactNode, name?: string
   }
 
   const Icon: FC<IconProps> = ({ className, size = ICON_CONFIGS.size, fill, style, ...restProps }) => (
+    // biome-ignore lint/a11y/noSvgWithoutTitle: Expect loose.
     <svg
       {...restProps}
       xmlns="http://www.w3.org/2000/svg"
       viewBox={viewBox}
       fill={fill ?? ICON_CONFIGS.fill ?? 'currentColor'}
-      className={className || ICON_CONFIGS.class}
+      className={classx([className, ICON_CONFIGS.class])}
       style={stylex({
         '--icon-size': size,
         ...style,

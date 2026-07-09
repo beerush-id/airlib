@@ -111,7 +111,7 @@ export function captureSnapshot(
   const vars = new Map<string, string>();
   const attrs = new Map<string, string | null>();
 
-  for (const p of ['position', 'left', 'top'] as const) styles.set(p, el.style[p]);
+  for (const p of ['left', 'top'] as const) styles.set(p, el.style[p]);
 
   if (options.cssPrefix) {
     for (const k of CSS_SUFFIXES) {
@@ -142,17 +142,22 @@ export function captureSnapshot(
  *
  * @param el - The target HTMLElement to restore.
  * @param s - The snapshot previously captured via captureSnapshot.
+ * @param forwards
+ * @param refocus
  */
-export function restoreSnapshot(el: HTMLElement, s: ElementSnapshot) {
-  for (const [p, v] of s.styles) el.style.setProperty(p, v);
-  for (const [n, v] of s.vars) v ? el.style.setProperty(n, v) : el.style.removeProperty(n);
+export function restoreSnapshot(el: HTMLElement, s: ElementSnapshot, forwards?: boolean, refocus = true) {
+  if (!forwards) {
+    for (const [p, v] of s.styles) el.style.setProperty(p, v);
+    for (const [n, v] of s.vars) v ? el.style.setProperty(n, v) : el.style.removeProperty(n);
+  }
+
   for (const [n, v] of s.attrs) v === null ? el.removeAttribute(n) : el.setAttribute(n, v);
 
   if (s.parent && el.parentElement !== s.parent) {
     s.nextSibling ? s.parent.insertBefore(el, s.nextSibling) : s.parent.appendChild(el);
   }
 
-  s.activeElement?.focus();
+  if (refocus) s.activeElement?.focus();
 }
 
 /**

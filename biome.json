@@ -39,7 +39,8 @@
       "a11y": {
         "noLabelWithoutControl": "off",
         "useButtonType": "off",
-        "noSvgWithoutTitle": "off"
+        "noSvgWithoutTitle": "off",
+        "useSemanticElements": "off"
       }
     }
   },

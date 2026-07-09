@@ -1,6 +1,8 @@
-import type { AnyType, WindowInstance } from '@airlib/uikit';
+import { type AnyType, WebWin, type WebWindow, type WindowInstance } from '@airlib/uikit';
+import { isBrowser, subscribe } from '@anchorlib/core';
 import { render, setContext, setup } from '@anchorlib/react';
-import { teleport, WINDOW_SYMBOL } from '../../lib/index.js';
+import { createRoot } from 'react-dom/client';
+import { WINDOW_SYMBOL } from '../../lib/index.js';
 import { WINDOW_CONFIGS } from './config.js';
 
 export type WindowRendererProps = {
@@ -14,13 +16,54 @@ export const WindowRenderer = setup<WindowRendererProps>((props) => {
     const { state, render: Render, splash: Splash } = props.instance;
 
     if (state.status === 'pending' && Splash) {
-      return teleport(<Splash state={state} instance={props.instance} />);
+      return <Splash state={state} instance={props.instance} />;
     }
 
     if (!Render) {
-      return teleport(<div className={WINDOW_CONFIGS.error.class}>[WINDOW ERROR: No render function]</div>);
+      return <div className={WINDOW_CONFIGS.error.class}>[WINDOW ERROR: No render function]</div>;
     }
 
-    return teleport(<Render state={state} instance={props.instance} />);
+    return <Render state={state} instance={props.instance} />;
   }, 'WindowRenderer');
 }, 'WindowRenderer');
+
+const HOST_REG = new WeakSet();
+const ROOT_REG = new WeakMap();
+
+if (isBrowser()) {
+  subscribe(WebWin.windows, (s) => {
+    for (const win of s.values()) {
+      if (!HOST_REG.has(win)) {
+        install(win);
+        HOST_REG.add(win);
+      }
+    }
+  });
+}
+
+const install = (win: WebWindow<AnyType, AnyType>) => {
+  console.log(win.instances);
+  subscribe(win.instances, (_s, event) => {
+    if (event.type === 'set:add') {
+      const host = document.createElement('air-window');
+      const root = createRoot(host);
+      const child = event.value as WindowInstance<AnyType, AnyType>;
+
+      host.style.display = 'contents';
+      host.classList.add('air-window-host');
+      host.setAttribute('data-window-id', child.id);
+      host.setAttribute('data-window-name', child.name);
+
+      document.body.appendChild(host);
+      root.render(<WindowRenderer instance={child} />);
+
+      ROOT_REG.set(child, () => {
+        root.unmount();
+        host.remove();
+      });
+    } else if (event.type === 'set:delete') {
+      const child = event.prev as WindowInstance<AnyType, AnyType>;
+      ROOT_REG.get(child)?.();
+    }
+  });
+};

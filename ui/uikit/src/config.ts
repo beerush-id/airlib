@@ -36,6 +36,7 @@ export const SNAP_BOUND = {
 } as const;
 
 export const KIT_CONFIGS: KitConfigs = {
+  seedColor: '#3c19e6',
   autofocus: true,
   trapOverflow: true,
 

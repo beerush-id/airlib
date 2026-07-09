@@ -5,6 +5,7 @@ import { getWindow, WINDOW_CTX_SYMBOL } from '../../lib/index.js';
 import type { WindowControls } from './Control.js';
 import { WINDOW_CONFIGS } from './config.js';
 import { WindowToolbar } from './Toolbar.js';
+import { onCleanup } from '@anchorlib/core';
 
 export type WindowProps = HTMLAttributes<HTMLDivElement> &
   WindowControls & {
@@ -15,12 +16,6 @@ export type WindowProps = HTMLAttributes<HTMLDivElement> &
 
 export const Window = setup<WindowProps>((props) => {
   const window = getWindow();
-  const nodeCtx = nodeRef<HTMLDivElement>(() => ({
-    className: props.className || WINDOW_CONFIGS.class,
-    'data-minimized': window?.minimized ? 'true' : 'false',
-    'data-maximized': window?.maximized ? 'true' : 'false',
-    'data-fullscreen': window?.fullscreen ? 'true' : 'false',
-  }));
   const trapCtx = focusRef({ trapOverflow: false, autofocus: false, releaseOnEsc: false });
   const dragCtx = dragRef({
     type: 'reset',
@@ -45,7 +40,6 @@ export const Window = setup<WindowProps>((props) => {
     sizeCtx.target = element;
     sizeCtx.trigger = element;
     trapCtx.current = element;
-    nodeCtx.current = element;
 
     if (props.contained) dragCtx.container = document.body;
     if (window) window.element = element;
@@ -56,9 +50,11 @@ export const Window = setup<WindowProps>((props) => {
     dragger: dragCtx,
   });
 
+  onCleanup(() => console.log('Destroyed'));
+
   return render(
     () => (
-      <div role="region" ref={assignRef} {...nodeCtx.attributes} tabIndex={-1}>
+      <div role="region" ref={assignRef} className={props.className || WINDOW_CONFIGS.class} tabIndex={-1}>
         <div className={WINDOW_CONFIGS.resize.t.class}></div>
         <div className={WINDOW_CONFIGS.resize.l.class}></div>
         <div className={WINDOW_CONFIGS.resize.r.class}></div>

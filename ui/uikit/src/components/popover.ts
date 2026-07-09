@@ -1,29 +1,34 @@
 import { anchor, effect, mutable, untrack } from '@anchorlib/core';
-import type { AnchorOffset, AxisPosition, RectPlacementOptions } from '../utils/index.js';
 import {
+  type AnchorOffset,
+  animationFrame,
   applyPlacement,
+  type AxisPosition,
   bindInteraction,
   captureSnapshot,
   clearPlacement,
   createFocusTrap,
   getScrollables,
   placeRect,
+  type RectPlacementOptions,
   resolveEl,
   resolvePortalTarget,
   restoreSnapshot,
 } from '../utils/index.js';
 
-export type Interaction = 'hover' | 'click' | 'focus';
+export type Interaction = (typeof POPOVER_INTERACTION)[keyof typeof POPOVER_INTERACTION];
 
 export type PopoverInit = RectPlacementOptions & {
-  boundary?: HTMLElement;
-  interaction?: Interaction[];
+  focus?: boolean;
   delay?: number | { open?: number; close?: number };
-  cssPrefix?: string;
-  attrPrefix?: string;
   escape?: boolean;
   portal?: boolean | HTMLElement | string;
-  focus?: boolean;
+  passive?: boolean;
+  boundary?: HTMLElement;
+  cssPrefix?: string;
+  attrPrefix?: string;
+  interaction?: Interaction[];
+  unstyled?: boolean;
 };
 
 export type PopoverInstance = {
@@ -36,10 +41,19 @@ export type PopoverInstance = {
   ySide: AxisPosition;
   anchorX: AnchorOffset;
   anchorY: AnchorOffset;
+  anchorWidth: number;
+  anchorHeight: number;
+  parent?: PopoverInstance;
   toggle(): void;
   reposition(): void;
   destroy(): void;
 };
+
+export const POPOVER_INTERACTION = {
+  hover: 'hover',
+  click: 'click',
+  focus: 'focus',
+} as const;
 
 /**
  * Creates a reactive popover component that tethers a floating element to an anchor element.
@@ -49,8 +63,6 @@ export type PopoverInstance = {
  * @returns A PopoverInstance reactive state controller.
  */
 export function popover(init: PopoverInit): PopoverInstance {
-  if (!anchor.has(init)) init = mutable(init);
-
   const toggle = () => {
     state.open = !state.open;
   };
@@ -67,14 +79,20 @@ export function popover(init: PopoverInit): PopoverInstance {
     ySide: init.yPos ?? 'after',
     anchorX: { start: 0, center: 0, end: 0 },
     anchorY: { start: 0, center: 0, end: 0 },
+    anchorWidth: 0,
+    anchorHeight: 0,
     toggle,
     destroy,
     reposition,
   });
 
+  if (!init.cssPrefix) {
+    init.cssPrefix = '--popover';
+  }
+
   function reposition() {
     const self = resolveEl(state.element);
-    const target = resolveEl(state.anchor) ?? self?.parentElement ?? undefined;
+    const target = resolveEl(state.anchor) ?? self?.parentElement;
     if (!self || !target || !state.open) return;
 
     const placement = placeRect(
@@ -85,13 +103,7 @@ export function popover(init: PopoverInit): PopoverInstance {
     );
 
     untrack(() => anchor.assign(state, placement));
-    applyPlacement(self, placement, init.cssPrefix, init.attrPrefix);
-  }
-
-  let rafId = 0;
-  function schedule() {
-    cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(reposition);
+    applyPlacement(self, placement, init.cssPrefix, init.attrPrefix, init.unstyled);
   }
 
   effect.client(() => {
@@ -118,11 +130,13 @@ export function popover(init: PopoverInit): PopoverInstance {
     );
   });
 
+  const reframe = animationFrame(reposition);
+
   effect.client(() => {
     if (!state.open) return;
 
     const self = resolveEl(state.element);
-    const target = resolveEl(state.anchor) ?? self?.parentElement ?? undefined;
+    const target = resolveEl(state.anchor) ?? self?.parentElement;
     if (!self || !target) return;
 
     const snapshot = captureSnapshot(self, init);
@@ -132,27 +146,33 @@ export function popover(init: PopoverInit): PopoverInstance {
       if (target && self.parentElement !== target) target.appendChild(self);
     }
 
-    const resizeObserver = new ResizeObserver(schedule);
-    resizeObserver.observe(target);
-    resizeObserver.observe(self);
+    const resizeObserver = !init.passive ? new ResizeObserver(reframe) : undefined;
+    resizeObserver?.observe(target);
+    resizeObserver?.observe(self);
 
-    const scrollables = getScrollables(target);
-    for (const scrollable of scrollables) scrollable.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
+    const scrollables = !init.passive ? getScrollables(target) : [];
+    for (const scrollable of scrollables) {
+      scrollable.addEventListener('wheel', reframe, { passive: true });
+    }
+    if (!init.passive) window.addEventListener('resize', reframe);
 
     const releaseFocus = init.focus
       ? createFocusTrap(self, { trapOverflow: false, releaseOnEsc: false, releaseOnClickOutside: false })
       : undefined;
 
     return () => {
-      cancelAnimationFrame(rafId);
-      resizeObserver.disconnect();
-      for (const p of scrollables) p.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
+      reframe.cancel();
+      resizeObserver?.disconnect();
+
+      for (const scrollable of scrollables) {
+        scrollable.removeEventListener('wheel', reframe);
+      }
+
+      window.removeEventListener('resize', reframe);
       releaseFocus?.();
 
-      clearPlacement(self, init.cssPrefix, init.attrPrefix);
-      restoreSnapshot(self, snapshot);
+      if (!init.passive) clearPlacement(self, init.cssPrefix, init.attrPrefix, init.unstyled);
+      restoreSnapshot(self, snapshot, init.passive, !init.passive);
     };
   });
 

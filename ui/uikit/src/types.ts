@@ -5,6 +5,7 @@ export type SnapToBound = 'edge' | 'center' | 'all';
 export type OverflowStrategy = 'flip' | 'shift' | 'resize';
 
 export type KitConfigs = {
+  seedColor: string;
   autofocus: boolean;
   trapOverflow: boolean;
   dialogPortal: string;

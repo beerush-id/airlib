@@ -10,5 +10,5 @@ export default defineConfig({
   format: ['esm'],
   unbundle: true,
   platform: 'neutral',
-  external: ['react'],
+  external: ['react', 'node:async_hooks'],
 });

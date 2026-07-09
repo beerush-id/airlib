@@ -9,7 +9,7 @@ export type EdgeSnaps = {
 
 export type SnapPoint = { x: number; y: number };
 
-export type AxisPosition = 'before' | 'start' | 'center' | 'end' | 'after';
+export type AxisPosition = (typeof AXIS_POSITION)[keyof typeof AXIS_POSITION];
 
 export type AnchorOffset = {
   start: number;
@@ -32,7 +32,17 @@ export type RectPlacement = {
   ySide: AxisPosition;
   anchorX: AnchorOffset;
   anchorY: AnchorOffset;
+  anchorWidth: number;
+  anchorHeight: number;
 };
+
+export const AXIS_POSITION = {
+  before: 'before',
+  start: 'start',
+  center: 'center',
+  end: 'end',
+  after: 'after',
+} as const;
 
 export const CSS_SUFFIXES = [
   'x',
@@ -43,6 +53,8 @@ export const CSS_SUFFIXES = [
   'anchor-y-start',
   'anchor-y-center',
   'anchor-y-end',
+  'anchor-width',
+  'anchor-height',
 ];
 export const ATTR_SUFFIXES = ['open', 'x-side', 'y-side'];
 
@@ -94,7 +106,7 @@ export function collectSnapPoints(
   pts.push(...snapPointsFor(vRect, tRect, bound));
 
   if (selectors?.length) {
-    const root = target.parentElement ?? document;
+    const root = document.body;
     for (const sel of selectors) {
       for (const el of Array.from(root.querySelectorAll<HTMLElement>(sel))) {
         if (el === target) continue;
@@ -128,7 +140,7 @@ export function collectEdgeSnaps(
   addRect(new DOMRect(0, 0, window.innerWidth, window.innerHeight));
 
   if (selectors?.length) {
-    const root = target.parentElement ?? document;
+    const root = document.body;
     for (const sel of selectors) {
       for (const el of Array.from(root.querySelectorAll<HTMLElement>(sel))) {
         if (el === target) continue;
@@ -204,6 +216,8 @@ export function placeRect(
     ySide: yr.side,
     anchorX: anchorOff(xr.coordinate, anchorRect.left, anchorRect.width),
     anchorY: anchorOff(yr.coordinate, anchorRect.top, anchorRect.height),
+    anchorWidth: anchorRect.width,
+    anchorHeight: anchorRect.height,
   };
 }
 
@@ -216,19 +230,27 @@ export function placeRect(
  * @param cssPrefix - Optional custom property prefix (e.g. '--popover').
  * @param attrPrefix - Optional data attribute prefix for state projection.
  */
-export function applyPlacement(el: HTMLElement, placement: RectPlacement, cssPrefix?: string, attrPrefix?: string) {
-  el.style.position = 'fixed';
+export function applyPlacement(
+  el: HTMLElement,
+  placement: RectPlacement,
+  cssPrefix?: string,
+  attrPrefix?: string,
+  unstyled?: boolean
+) {
+  const prefix = cssPrefix ? `${cssPrefix}-` : '--air-';
 
-  if (cssPrefix) {
-    el.style.setProperty(`${cssPrefix}-x`, `${placement.x}px`);
-    el.style.setProperty(`${cssPrefix}-y`, `${placement.y}px`);
-    el.style.setProperty(`${cssPrefix}-anchor-x-start`, `${placement.anchorX.start}px`);
-    el.style.setProperty(`${cssPrefix}-anchor-x-center`, `${placement.anchorX.center}px`);
-    el.style.setProperty(`${cssPrefix}-anchor-x-end`, `${placement.anchorX.end}px`);
-    el.style.setProperty(`${cssPrefix}-anchor-y-start`, `${placement.anchorY.start}px`);
-    el.style.setProperty(`${cssPrefix}-anchor-y-center`, `${placement.anchorY.center}px`);
-    el.style.setProperty(`${cssPrefix}-anchor-y-end`, `${placement.anchorY.end}px`);
-  } else {
+  el.style.setProperty(`${prefix}x`, `${placement.x}px`);
+  el.style.setProperty(`${prefix}y`, `${placement.y}px`);
+  el.style.setProperty(`${prefix}anchor-x-start`, `${placement.anchorX.start}px`);
+  el.style.setProperty(`${prefix}anchor-x-center`, `${placement.anchorX.center}px`);
+  el.style.setProperty(`${prefix}anchor-x-end`, `${placement.anchorX.end}px`);
+  el.style.setProperty(`${prefix}anchor-y-start`, `${placement.anchorY.start}px`);
+  el.style.setProperty(`${prefix}anchor-y-center`, `${placement.anchorY.center}px`);
+  el.style.setProperty(`${prefix}anchor-y-end`, `${placement.anchorY.end}px`);
+  el.style.setProperty(`${prefix}anchor-width`, `${placement.anchorWidth}px`);
+  el.style.setProperty(`${prefix}anchor-height`, `${placement.anchorHeight}px`);
+
+  if (!unstyled) {
     el.style.left = `${placement.x}px`;
     el.style.top = `${placement.y}px`;
   }
@@ -247,14 +269,17 @@ export function applyPlacement(el: HTMLElement, placement: RectPlacement, cssPre
  * @param cssPrefix - Optional custom property prefix used during placement.
  * @param attrPrefix - Optional attribute prefix used during placement.
  */
-export function clearPlacement(el: HTMLElement, cssPrefix?: string, attrPrefix?: string) {
-  if (cssPrefix) {
-    for (const k of CSS_SUFFIXES) el.style.removeProperty(`${cssPrefix}-${k}`);
-  } else {
+export function clearPlacement(el: HTMLElement, cssPrefix?: string, attrPrefix?: string, unstyled?: boolean) {
+  const prefix = cssPrefix ? `${cssPrefix}-` : '--air-';
+
+  for (const k of CSS_SUFFIXES) {
+    el.style.removeProperty(`${prefix}${k}`);
+  }
+
+  if (!unstyled) {
     el.style.left = '';
     el.style.top = '';
   }
-  el.style.position = '';
 
   if (attrPrefix) {
     for (const k of ATTR_SUFFIXES) el.removeAttribute(`${attrPrefix}-${k}`);

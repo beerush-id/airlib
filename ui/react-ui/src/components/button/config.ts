@@ -1,0 +1,17 @@
+export const BUTTON_CONFIGS = {
+  class: 'air-button',
+  elevatedClass: 'air-button-elevated',
+  tonalClass: 'air-button-tonal',
+  outlinedClass: 'air-button-outlined',
+  textClass: 'air-button-text',
+  groupClass: 'air-button-group',
+  iconClass: 'air-icon-button',
+  iconFilledClass: 'air-icon-button-filled',
+  iconTonalClass: 'air-icon-button-tonal',
+  iconOutlinedClass: 'air-icon-button-outlined',
+  fabClass: 'air-fab',
+  fabSurfaceClass: 'air-fab-surface',
+  fabSecondaryClass: 'air-fab-secondary',
+  fabTertiaryClass: 'air-fab-tertiary',
+  fabExtendedClass: 'air-fab-extended',
+};
