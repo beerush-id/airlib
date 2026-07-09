@@ -8,22 +8,31 @@
   @apply air-focus-ring;
   width: var(--air-color-picker-width);
   height: var(--air-color-picker-height);
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
   background-color: transparent;
   border-radius: var(--radius-md);
-  transition: outline-color var(--duration-short) var(--ease-standard);
+  transition-property: outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   &::-webkit-color-swatch-wrapper {
-    padding: 0;
+    padding-block: 0;
+    padding-inline: 0;
   }
 
   &::-webkit-color-swatch {
-    border: none;
+    border-width: 0;
+    border-style: solid;
+    border-color: transparent;
     border-radius: var(--radius-md);
   }
 
   &::-moz-color-swatch {
-    border: none;
+    border-width: 0;
+    border-style: solid;
+    border-color: transparent;
     border-radius: var(--radius-md);
   }
 }

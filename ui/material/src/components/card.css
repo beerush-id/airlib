@@ -10,36 +10,41 @@
   border-radius: var(--air-card-radius);
 
   /* Typography: Body Medium default */
-  font:
-    var(--font-body-md-weight) var(--font-body-md-size) / var(--font-body-md-line-height) var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-body-md-size);
+  font-weight: var(--font-body-md-weight);
+  line-height: var(--font-body-md-line-height);
   letter-spacing: var(--font-body-md-tracking);
   color: var(--color-on-surface);
 
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    border-color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, border-color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Elevated Card */
 @utility air-card-elevated-surface {
   --color-ghost-surface: var(--color-surface-container-low);
   background-color: var(--color-surface-container-low);
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
 }
 
 /* Filled Card */
 @utility air-card-filled-surface {
   --color-ghost-surface: var(--color-surface-container-highest);
   background-color: var(--color-surface-container-highest);
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
 }
 
 /* Outlined Card */
 @utility air-card-outlined-surface {
-  --color-ghost-surface: var(--color-surface);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-outline-variant);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-outline-variant);
 }
 
 /* Optional Interactive Modifier */
@@ -68,8 +73,9 @@
 /* Card Content Structure */
 @utility air-card-header {
   @apply flex flex-col;
-  padding: var(--air-card-padding);
-  padding-bottom: calc(var(--air-card-padding) / 2);
+  padding-block-start: var(--air-card-padding);
+  padding-block-end: calc(var(--air-card-padding) / 2);
+  padding-inline: var(--air-card-padding);
   gap: var(--spacing);
 }
 
@@ -86,19 +92,25 @@
 }
 
 @utility air-card-body {
-  padding: var(--air-card-padding);
+  padding-block-start: var(--air-card-padding);
+  padding-inline: var(--air-card-padding);
   flex-grow: 1;
 
   /* Remove top padding if body follows header */
   .air-card-header + & {
-    padding-top: 0;
+    padding-block-start: 0;
+  }
+
+  &:last-child {
+    padding-block-end: var(--air-card-padding);
   }
 }
 
 @utility air-card-actions {
   @apply flex items-center justify-end;
-  padding: var(--air-card-padding);
-  padding-top: calc(var(--air-card-padding) / 2);
+  padding-block-start: calc(var(--air-card-padding) / 2);
+  padding-block-end: var(--air-card-padding);
+  padding-inline: var(--air-card-padding);
   gap: calc(var(--spacing) * 2);
 }
 
@@ -115,12 +127,12 @@
   }
 
   & > *:first-child {
-    border-top-left-radius: var(--_outer-radius);
-    border-top-right-radius: var(--_outer-radius);
+    border-start-start-radius: var(--_outer-radius);
+    border-start-end-radius: var(--_outer-radius);
   }
 
   & > *:last-child {
-    border-bottom-left-radius: var(--_outer-radius);
-    border-bottom-right-radius: var(--_outer-radius);
+    border-end-start-radius: var(--_outer-radius);
+    border-end-end-radius: var(--_outer-radius);
   }
 }

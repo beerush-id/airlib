@@ -11,7 +11,9 @@
   @apply box-border cursor-pointer;
   @apply air-focus-ring;
   height: var(--air-slider-handle-size);
-  transition: box-shadow var(--duration-short) var(--ease-standard);
+  transition-property: box-shadow;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   /* Disable native outline so we can emulate it with box-shadow */
   outline: none;
@@ -47,7 +49,9 @@
     width: calc(var(--spacing) * 5); /* 20px */
     height: calc(var(--spacing) * 5); /* 20px */
     border-radius: var(--radius-full);
-    transition: transform var(--duration-short) var(--ease-standard);
+    transition-property: transform;
+    transition-duration: var(--duration-short);
+    transition-timing-function: var(--ease-standard);
   }
 
   &:active::after {
@@ -81,9 +85,9 @@
   height: var(--air-slider-track-height);
   border-radius: var(--radius-full);
   margin: calc(var(--air-slider-handle-size) / 2) 0;
-  transition:
-    box-shadow var(--duration-short) var(--ease-standard),
-    background-color var(--duration-short) var(--ease-standard);
+  transition-property: box-shadow, background-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   /* Disable native outline so we can emulate it with box-shadow.
      This allows the thumb's box-shadow to paint over and split the focus ring! */
@@ -108,9 +112,9 @@
     height: var(--air-slider-handle-size);
     border-radius: var(--radius-full);
     margin-top: calc((var(--air-slider-track-height) - var(--air-slider-handle-size)) / 2);
-    transition:
-      box-shadow var(--duration-short) var(--ease-standard),
-      transform var(--duration-short) var(--ease-standard);
+    transition-property: box-shadow, transform;
+    transition-duration: var(--duration-short);
+    transition-timing-function: var(--ease-standard);
   }
 
   &::-moz-range-track {
@@ -129,10 +133,12 @@
     width: var(--air-slider-handle-width);
     height: var(--air-slider-handle-size);
     border-radius: var(--radius-full);
-    border: none;
-    transition:
-      box-shadow var(--duration-short) var(--ease-standard),
-      transform var(--duration-short) var(--ease-standard);
+    border-width: 0;
+    border-style: solid;
+    border-color: transparent;
+    transition-property: box-shadow, transform;
+    transition-duration: var(--duration-short);
+    transition-timing-function: var(--ease-standard);
   }
 
   &:disabled {

@@ -31,21 +31,23 @@
 @utility air-native-dialog-base {
   @apply m-auto outline-none;
   /* Using native <dialog> element */
-  padding: var(--air-dialog-padding);
+  padding-block: var(--air-dialog-padding);
+  padding-inline: var(--air-dialog-padding);
   border-radius: var(--air-dialog-radius);
   max-width: var(--air-dialog-max-width);
   width: calc(100% - var(--air-dialog-padding) * 2);
 
   /* Reset native borders */
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
 
   /* Animations */
   opacity: 0;
   transform: scale(0.95);
-  transition:
-    opacity var(--duration-short) var(--ease-standard),
-    transform var(--duration-short) var(--ease-standard),
-    background-color var(--duration-short) var(--ease-standard);
+  transition-property: opacity, transform, background-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   &[open],
   &[aria-hidden='false'] {
@@ -58,7 +60,9 @@
     background-color: color-mix(in srgb, var(--color-scrim) 32%, transparent);
     backdrop-filter: blur(2px);
     opacity: 0;
-    transition: opacity var(--duration-short) var(--ease-standard);
+    transition-property: opacity;
+    transition-duration: var(--duration-short);
+    transition-timing-function: var(--ease-standard);
   }
 
   &[open]::backdrop {
@@ -97,10 +101,16 @@
   @apply bg-scrim/75 backdrop-blur-sm;
 
   &[aria-hidden='false'] {
-    animation: air-dialog-show var(--duration-short) var(--ease-standard) forwards;
+    animation-name: air-dialog-show;
+    animation-duration: var(--duration-short);
+    animation-timing-function: var(--ease-standard);
+    animation-fill-mode: forwards;
   }
   &[aria-hidden='true'] {
-    animation: air-dialog-hide var(--duration-short) var(--ease-standard) forwards;
+    animation-name: air-dialog-hide;
+    animation-duration: var(--duration-short);
+    animation-timing-function: var(--ease-standard);
+    animation-fill-mode: forwards;
   }
 }
 
@@ -130,10 +140,10 @@
 @utility air-dialog-header {
   @apply w-full flex items-center justify-between;
   padding-inline: var(--air-dialog-padding);
-  padding-top: var(--air-dialog-padding);
+  padding-block-start: var(--air-dialog-padding);
 
   & ~ .air-dialog-content {
-    padding-top: calc(var(--spacing) * 4);
+    padding-block-start: calc(var(--spacing) * 4);
   }
 }
 
@@ -141,14 +151,15 @@
   @apply air-dialog-header justify-center;
 
   & ~ .air-dialog-header {
-    padding-top: calc(var(--spacing) * 4);
+    padding-block-start: calc(var(--spacing) * 4);
   }
 }
 
 @utility air-dialog-title {
-  font:
-    var(--font-headline-sm-weight) var(--font-headline-sm-size) / var(--font-headline-sm-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-headline-sm-size);
+  font-weight: var(--font-headline-sm-weight);
+  line-height: var(--font-headline-sm-line-height);
   letter-spacing: var(--font-headline-sm-tracking);
   color: var(--color-on-surface);
   margin-top: 0;
@@ -157,17 +168,20 @@
 
 @utility air-dialog-content {
   @apply w-full flex flex-col text-on-surface-variant;
-  font:
-    var(--font-body-md-weight) var(--font-body-md-size) / var(--font-body-md-line-height) var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-body-md-size);
+  font-weight: var(--font-body-md-weight);
+  line-height: var(--font-body-md-line-height);
   letter-spacing: var(--font-body-md-tracking);
-  padding: var(--air-dialog-padding);
+  padding-block: var(--air-dialog-padding);
+  padding-inline: var(--air-dialog-padding);
   margin-bottom: calc(var(--spacing) * 6); /* 24px */
 }
 
 @utility air-dialog-footer {
   @apply w-full air-dialog-actions;
   padding-inline: var(--air-dialog-padding);
-  padding-bottom: var(--air-dialog-padding);
+  padding-block-end: var(--air-dialog-padding);
 }
 
 @utility air-dialog-cancel {

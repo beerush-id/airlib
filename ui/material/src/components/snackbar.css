@@ -11,22 +11,24 @@
   @apply flex items-center justify-between;
   gap: var(--air-snackbar-gap);
   min-height: var(--air-snackbar-min-height);
-  padding: calc(var(--air-snackbar-padding-x) * 0.5) var(--air-snackbar-padding-x);
+  padding-block: calc(var(--air-snackbar-padding-x) * 0.5);
+  padding-inline: var(--air-snackbar-padding-x);
   border-radius: var(--air-snackbar-radius);
 
   /* Typography: Body Medium */
-  font:
-    var(--font-body-md-weight) var(--font-body-md-size) / var(--font-body-md-line-height) var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-body-md-size);
+  font-weight: var(--font-body-md-weight);
+  line-height: var(--font-body-md-line-height);
   letter-spacing: var(--font-body-md-tracking);
 
   /* Visibility & Transitions */
   opacity: 0;
   visibility: hidden;
   transform: translateY(100%);
-  transition:
-    opacity var(--duration-medium) var(--ease-standard),
-    visibility var(--duration-medium) var(--ease-standard),
-    transform var(--duration-short) var(--ease-standard);
+  transition-property: opacity, visibility, transform;
+  transition-duration: var(--duration-medium), var(--duration-medium), var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   &[data-state='visible'] {
     opacity: 1;
@@ -45,23 +47,26 @@
 @utility air-snackbar-action {
   @apply inline-flex items-center justify-center;
   @apply cursor-pointer air-focus-ring air-state-layer;
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
   background-color: transparent;
   color: var(--color-inverse-primary);
-  padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
+  padding-block: calc(var(--spacing) * 2);
+  padding-inline: calc(var(--spacing) * 3);
   border-radius: var(--radius-full);
   --state-layer-color: var(--color-inverse-primary);
 
   /* Typography */
-  font:
-    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-lg-size);
+  font-weight: var(--font-label-lg-weight);
+  line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
 
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Composed Utilities */

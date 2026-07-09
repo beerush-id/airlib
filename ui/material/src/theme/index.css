@@ -174,9 +174,9 @@
     0 calc(var(--shadow-base) * 8) calc(var(--shadow-base) * 12) calc(var(--shadow-base) * 6) rgba(0, 0, 0, 0.15);
 
   /* Expressive Motion */
-  --duration-short: var(--duration-200, 200ms);
-  --duration-medium: var(--duration-300, 300ms);
-  --duration-long: var(--duration-500, 500ms);
+  --duration-short: 200ms;
+  --duration-medium: 300ms;
+  --duration-long: 500ms;
 
   --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --ease-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);

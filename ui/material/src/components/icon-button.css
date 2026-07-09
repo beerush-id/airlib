@@ -14,7 +14,9 @@
   border-radius: var(--air-icon-button-radius);
 
   /* Resets */
-  border: none;
+  border-width: var(--shadow-base, 1px);
+  border-style: solid;
+  border-color: transparent;
 
   /* Ensure icon scales perfectly */
   font-size: var(--air-icon-button-icon-size);
@@ -29,11 +31,9 @@
     fill: currentColor;
   }
 
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    border-color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, color, border-color, outline-color, border-radius;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   &:focus-visible {
     z-index: 1;
@@ -50,6 +50,10 @@
     width: max(100%, calc(var(--spacing) * 12)); /* 48px */
     height: max(100%, calc(var(--spacing) * 12));
     z-index: -1;
+  }
+
+  & [type='color'] {
+    @apply absolute inset-0 opacity-0 cursor-pointer;
   }
 }
 
@@ -131,7 +135,7 @@
   @apply air-icon-button-base air-state-layer;
   background-color: transparent;
   color: var(--color-on-surface-variant);
-  border: var(--shadow-base) solid var(--color-outline);
+  border-color: var(--color-outline);
   --state-layer-color: var(--color-on-surface-variant);
 
   &:focus-visible:not(:disabled) {

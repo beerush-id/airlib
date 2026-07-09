@@ -8,13 +8,20 @@
   /* Requires the main fab button class too */
   @apply z-dropdown;
 
+  & > span,
+  & > svg,
+  & > i {
+    transition-property: transform;
+    transition-duration: var(--duration-short);
+    transition-timing-function: var(--ease-standard);
+  }
+
   &[data-state='open'] {
     /* Typical M3 rotation animation for the plus icon turning into an X */
     & > span,
     & > svg,
     & > i {
       transform: rotate(45deg);
-      transition: transform var(--duration-short) var(--ease-standard);
     }
   }
 
@@ -23,7 +30,6 @@
     & > svg,
     & > i {
       transform: rotate(0deg);
-      transition: transform var(--duration-short) var(--ease-standard);
     }
   }
 }
@@ -42,9 +48,9 @@
 @utility air-fab-menu-item {
   @apply opacity-0 pointer-events-none;
   transform: scale(0.6) translateY(20px);
-  transition:
-    opacity var(--duration-short) var(--ease-standard),
-    transform var(--duration-short) var(--ease-standard);
+  transition-property: opacity, transform;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   .air-fab-menu[data-state='open'] & {
     opacity: 1;

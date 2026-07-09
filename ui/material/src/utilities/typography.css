@@ -1,4 +1,9 @@
 @theme {
+  --font-sans: 'Noto Sans', system-ui, sans-serif;
+  --font-mono: 'Roboto Mono', Menlo, Monaco, 'Courier New', monospace;
+  --font-serif: 'Roboto Serif', Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-brand: var(--font-sans);
+
   /* Typography Scale */
   --font-base: 1rem;
 
@@ -84,90 +89,108 @@
 }
 
 @utility air-display-lg {
-  font:
-    var(--font-display-lg-weight) var(--font-display-lg-size) / var(--font-display-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-display-lg-size);
+  font-weight: var(--font-display-lg-weight);
+  line-height: var(--font-display-lg-line-height);
   letter-spacing: var(--font-display-lg-tracking);
 }
 @utility air-display-md {
-  font:
-    var(--font-display-md-weight) var(--font-display-md-size) / var(--font-display-md-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-display-md-size);
+  font-weight: var(--font-display-md-weight);
+  line-height: var(--font-display-md-line-height);
   letter-spacing: var(--font-display-md-tracking);
 }
 @utility air-display-sm {
-  font:
-    var(--font-display-sm-weight) var(--font-display-sm-size) / var(--font-display-sm-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-display-sm-size);
+  font-weight: var(--font-display-sm-weight);
+  line-height: var(--font-display-sm-line-height);
   letter-spacing: var(--font-display-sm-tracking);
 }
 @utility air-headline-lg {
-  font:
-    var(--font-headline-lg-weight) var(--font-headline-lg-size) / var(--font-headline-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-headline-lg-size);
+  font-weight: var(--font-headline-lg-weight);
+  line-height: var(--font-headline-lg-line-height);
   letter-spacing: var(--font-headline-lg-tracking);
 }
 @utility air-headline-md {
-  font:
-    var(--font-headline-md-weight) var(--font-headline-md-size) / var(--font-headline-md-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-headline-md-size);
+  font-weight: var(--font-headline-md-weight);
+  line-height: var(--font-headline-md-line-height);
   letter-spacing: var(--font-headline-md-tracking);
 }
 @utility air-headline-sm {
-  font:
-    var(--font-headline-sm-weight) var(--font-headline-sm-size) / var(--font-headline-sm-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-headline-sm-size);
+  font-weight: var(--font-headline-sm-weight);
+  line-height: var(--font-headline-sm-line-height);
   letter-spacing: var(--font-headline-sm-tracking);
 }
 @utility air-title-lg {
-  font:
-    var(--font-title-lg-weight) var(--font-title-lg-size) / var(--font-title-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-title-lg-size);
+  font-weight: var(--font-title-lg-weight);
+  line-height: var(--font-title-lg-line-height);
   letter-spacing: var(--font-title-lg-tracking);
 }
 @utility air-title-md {
-  font:
-    var(--font-title-md-weight) var(--font-title-md-size) / var(--font-title-md-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-title-md-size);
+  font-weight: var(--font-title-md-weight);
+  line-height: var(--font-title-md-line-height);
   letter-spacing: var(--font-title-md-tracking);
 }
 @utility air-title-sm {
-  font:
-    var(--font-title-sm-weight) var(--font-title-sm-size) / var(--font-title-sm-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-title-sm-size);
+  font-weight: var(--font-title-sm-weight);
+  line-height: var(--font-title-sm-line-height);
   letter-spacing: var(--font-title-sm-tracking);
 }
 @utility air-body-lg {
-  font:
-    var(--font-body-lg-weight) var(--font-body-lg-size) / var(--font-body-lg-line-height) var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-body-lg-size);
+  font-weight: var(--font-body-lg-weight);
+  line-height: var(--font-body-lg-line-height);
   letter-spacing: var(--font-body-lg-tracking);
 }
 @utility air-body-md {
-  font:
-    var(--font-body-md-weight) var(--font-body-md-size) / var(--font-body-md-line-height) var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-body-md-size);
+  font-weight: var(--font-body-md-weight);
+  line-height: var(--font-body-md-line-height);
   letter-spacing: var(--font-body-md-tracking);
 }
 @utility air-body-sm {
-  font:
-    var(--font-body-sm-weight) var(--font-body-sm-size) / var(--font-body-sm-line-height) var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-body-sm-size);
+  font-weight: var(--font-body-sm-weight);
+  line-height: var(--font-body-sm-line-height);
   letter-spacing: var(--font-body-sm-tracking);
 }
 @utility air-label-lg {
-  font:
-    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-lg-size);
+  font-weight: var(--font-label-lg-weight);
+  line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
 }
 @utility air-label-md {
-  font:
-    var(--font-label-md-weight) var(--font-label-md-size) / var(--font-label-md-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-md-size);
+  font-weight: var(--font-label-md-weight);
+  line-height: var(--font-label-md-line-height);
   letter-spacing: var(--font-label-md-tracking);
 }
 @utility air-label-sm {
-  font:
-    var(--font-label-sm-weight) var(--font-label-sm-size) / var(--font-label-sm-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-sm-size);
+  font-weight: var(--font-label-sm-weight);
+  line-height: var(--font-label-sm-line-height);
   letter-spacing: var(--font-label-sm-tracking);
 }
 

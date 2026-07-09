@@ -21,16 +21,19 @@
   @apply cursor-pointer box-border h-full;
   @apply air-focus-ring air-state-layer;
 
-  font:
-    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-lg-size);
+  font-weight: var(--font-label-lg-weight);
+  line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
 
-  border: 1px solid transparent;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
 
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, outline-color, border-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   &:focus-visible {
     z-index: 1;
@@ -40,7 +43,8 @@
 /* Primary Action Area */
 @utility air-split-button-primary {
   @apply air-split-button-base flex-1;
-  padding: 0 var(--air-button-padding-x);
+  padding-block: 0;
+  padding-inline: var(--air-button-padding-x);
   gap: var(--air-button-gap);
   border-start-start-radius: var(--air-split-button-radius-outer);
   border-end-start-radius: var(--air-split-button-radius-outer);
@@ -56,7 +60,8 @@
 /* Trailing Action Area (Dropdown Arrow) */
 @utility air-split-button-trailing {
   @apply air-split-button-base;
-  padding: 0 calc(var(--air-button-padding-x) * 0.5);
+  padding-block: 0;
+  padding-inline: calc(var(--air-button-padding-x) * 0.5);
   border-start-start-radius: var(--air-split-button-radius-inner);
   border-end-start-radius: var(--air-split-button-radius-inner);
   border-start-end-radius: var(--air-split-button-radius-outer);

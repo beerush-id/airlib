@@ -14,11 +14,16 @@
 
   /* Assume left drawer by default */
   inset-inline-start: 0;
-  border-radius: 0 var(--air-drawer-radius) var(--air-drawer-radius) 0;
+  border-start-start-radius: 0;
+  border-start-end-radius: var(--air-drawer-radius);
+  border-end-end-radius: var(--air-drawer-radius);
+  border-end-start-radius: 0;
 
   /* Animation */
   transform: translateX(-100%);
-  transition: transform var(--duration-medium) var(--ease-emphasized-decelerate);
+  transition-property: transform;
+  transition-duration: var(--duration-medium);
+  transition-timing-function: var(--ease-emphasized-decelerate);
 
   &[data-state='open'] {
     transform: translateX(0);
@@ -27,7 +32,10 @@
   /* Standard/Persistent drawer modifier */
   &.air-drawer-persistent {
     position: relative;
-    border-radius: 0;
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
     transform: none; /* Always visible */
   }
 }
@@ -39,7 +47,9 @@
 
   &.air-drawer-persistent {
     background-color: var(--color-surface);
-    border-inline-end: 1px solid var(--color-outline-variant);
+    border-inline-end-width: 1px;
+    border-inline-end-style: solid;
+    border-inline-end-color: var(--color-outline-variant);
   }
 }
 
@@ -49,7 +59,9 @@
   z-index: 40;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--duration-medium) var(--ease-standard);
+  transition-property: opacity;
+  transition-duration: var(--duration-medium);
+  transition-timing-function: var(--ease-standard);
 
   &[data-state='open'] {
     opacity: 1;

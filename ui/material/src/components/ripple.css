@@ -10,7 +10,10 @@
   background-color: currentColor;
   opacity: var(--opacity-pressed);
   transform: scale(0);
-  animation: air-ripple-expand 0.4s cubic-bezier(0.2, 0, 0, 1) forwards;
+  animation-name: air-ripple-expand;
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  animation-fill-mode: forwards;
 }
 
 @keyframes air-ripple-expand {

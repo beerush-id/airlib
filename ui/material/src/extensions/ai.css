@@ -3,7 +3,9 @@
    ============================== */
 @utility air-ai-prompt {
   @apply flex flex-col w-full bg-surface-container-low rounded-[28px] overflow-hidden;
-  transition: box-shadow var(--duration-short) var(--ease-standard);
+  transition-property: box-shadow;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   &:focus-within {
     box-shadow: 0 0 0 1px var(--color-primary);
@@ -32,7 +34,7 @@
   }
 
   .air-ai-prompt:has(.air-ai-prompt-attachments) & {
-    padding-top: calc(var(--spacing) * 2); /* Reduced top padding when attachments exist */
+    padding-block-start: calc(var(--spacing) * 2); /* Reduced top padding when attachments exist */
   }
 }
 
@@ -70,7 +72,8 @@
   & .air-ai-message-bubble {
     background-color: transparent;
     color: var(--color-on-surface);
-    padding: calc(var(--spacing) * 2) 0; /* Agent messages usually flow like normal text */
+    padding-block: calc(var(--spacing) * 2);
+    padding-inline: 0; /* Agent messages usually flow like normal text */
   }
 }
 
@@ -102,7 +105,9 @@
 
   & .dot {
     @apply w-2 h-2 rounded-full bg-on-surface-variant;
-    animation: pulse-dot 1.5s infinite;
+    animation-name: pulse-dot;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
   }
   & .dot:nth-child(2) {
     animation-delay: 0.2s;
@@ -129,6 +134,9 @@
 
 @utility air-ai-sparkle {
   color: var(--color-primary);
-  animation: sparkle-spin 3s infinite ease-in-out;
+  animation-name: sparkle-spin;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
   display: inline-block;
 }

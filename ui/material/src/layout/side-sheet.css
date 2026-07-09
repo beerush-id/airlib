@@ -12,13 +12,18 @@
   max-width: var(--air-side-sheet-max-width);
   z-index: 50;
 
-  transition: transform var(--duration-medium) var(--ease-emphasized-decelerate);
+  transition-property: transform;
+  transition-duration: var(--duration-medium);
+  transition-timing-function: var(--ease-emphasized-decelerate);
 }
 
 /* Right Anchored (Default) */
 @utility air-side-sheet-right {
   inset-inline-end: 0;
-  border-radius: var(--air-side-sheet-radius) 0 0 var(--air-side-sheet-radius);
+  border-start-start-radius: var(--air-side-sheet-radius);
+  border-end-start-radius: var(--air-side-sheet-radius);
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
   transform: translateX(100%);
 
   &[data-state='open'] {
@@ -29,7 +34,10 @@
 /* Left Anchored */
 @utility air-side-sheet-left {
   inset-inline-start: 0;
-  border-radius: 0 var(--air-side-sheet-radius) var(--air-side-sheet-radius) 0;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  border-start-end-radius: var(--air-side-sheet-radius);
+  border-end-end-radius: var(--air-side-sheet-radius);
   transform: translateX(-100%);
 
   &[data-state='open'] {
@@ -53,7 +61,9 @@
   z-index: 40;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--duration-medium) var(--ease-standard);
+  transition-property: opacity;
+  transition-duration: var(--duration-medium);
+  transition-timing-function: var(--ease-standard);
 
   &[data-state='open'] {
     opacity: 1;

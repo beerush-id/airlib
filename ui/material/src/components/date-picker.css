@@ -26,19 +26,21 @@
   border-radius: var(--radius-full);
 
   /* Typography: Body Large */
-  font:
-    var(--font-body-lg-weight) var(--font-body-lg-size) / var(--font-body-lg-line-height) var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-body-lg-size);
+  font-weight: var(--font-body-lg-weight);
+  line-height: var(--font-body-lg-line-height);
   letter-spacing: var(--font-body-lg-tracking);
 
   /* Reset */
-  border: 1px solid transparent; /* reserve border space */
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent; /* reserve border space */
   background-color: transparent;
 
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    border-color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, color, border-color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Default state */
@@ -73,9 +75,10 @@
   color: var(--color-on-surface-variant);
 
   /* Typography: Label Large for Days of Week */
-  font:
-    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-lg-size);
+  font-weight: var(--font-label-lg-weight);
+  line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
 }
 

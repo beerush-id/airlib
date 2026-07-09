@@ -29,18 +29,20 @@
   border-radius: var(--radius-md);
 
   /* Display Large */
-  font:
-    var(--font-display-lg-weight) var(--font-display-lg-size) / var(--font-display-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-display-lg-size);
+  font-weight: var(--font-display-lg-weight);
+  line-height: var(--font-display-lg-line-height);
   letter-spacing: var(--font-display-lg-tracking);
 
   /* Reset */
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
 
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Default Unit Surface */
@@ -56,9 +58,10 @@
 }
 
 @utility air-time-picker-separator {
-  font:
-    var(--font-display-lg-weight) var(--font-display-lg-size) / var(--font-display-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-display-lg-size);
+  font-weight: var(--font-display-lg-weight);
+  line-height: var(--font-display-lg-line-height);
   letter-spacing: var(--font-display-lg-tracking);
   color: var(--color-on-surface);
 }

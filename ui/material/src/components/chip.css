@@ -10,17 +10,21 @@
   @apply inline-flex items-center justify-center;
   @apply box-border cursor-pointer;
   height: var(--air-chip-height);
-  padding: 0 var(--air-chip-padding-x);
+  padding-block: 0;
+  padding-inline: var(--air-chip-padding-x);
   border-radius: var(--air-chip-radius);
 
   /* Typography: Label Large (Default MD) */
-  font:
-    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-lg-size);
+  font-weight: var(--font-label-lg-weight);
+  line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
 
   /* Resets */
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
   @apply no-underline select-none air-focus-ring;
 
   /* Smart Icon Padding (M3 Spec) */
@@ -32,16 +36,16 @@
     padding-inline-end: var(--air-chip-icon-padding-x);
   }
 
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    border-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, border-color, color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Outlined Variant (Default M3 Chip) */
 @utility air-chip-outlined-surface {
-  border: 1px solid var(--color-outline-variant);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-outline-variant);
   background-color: transparent;
   color: var(--color-on-surface-variant);
 }
@@ -114,9 +118,10 @@
   --air-chip-height: calc(var(--spacing) * 6);
   --air-chip-padding-x: calc(var(--spacing) * 2);
   --air-chip-radius: var(--radius-xs);
-  font:
-    var(--font-label-md-weight) var(--font-label-md-size) / var(--font-label-md-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-md-size);
+  font-weight: var(--font-label-md-weight);
+  line-height: var(--font-label-md-line-height);
   letter-spacing: var(--font-label-md-tracking);
 }
 
@@ -124,9 +129,10 @@
   --air-chip-height: calc(var(--spacing) * 8);
   --air-chip-padding-x: calc(var(--spacing) * 4);
   --air-chip-radius: var(--radius-sm);
-  font:
-    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-lg-size);
+  font-weight: var(--font-label-lg-weight);
+  line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
 }
 
@@ -134,8 +140,9 @@
   --air-chip-height: calc(var(--spacing) * 10);
   --air-chip-padding-x: calc(var(--spacing) * 6);
   --air-chip-radius: var(--radius-md);
-  font:
-    var(--font-title-sm-weight) var(--font-title-sm-size) / var(--font-title-sm-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-title-sm-size);
+  font-weight: var(--font-title-sm-weight);
+  line-height: var(--font-title-sm-line-height);
   letter-spacing: var(--font-title-sm-tracking);
 }

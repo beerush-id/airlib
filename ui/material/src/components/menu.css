@@ -1,16 +1,20 @@
 /* Component Variables */
 @theme {
-  --air-menu-min-width: calc(var(--spacing) * 28);
+  --air-menu-min-width: calc(var(--spacing) * 50);
   --air-menu-radius: var(--radius-lg);
-  --air-menu-padding-y: calc(var(--spacing) * 2);
+  --air-menu-padding-x: calc(var(--spacing) * 1);
+  --air-menu-padding-y: calc(var(--spacing) * 1);
 
-  --air-menu-item-height: calc(var(--spacing) * 12);
-  --air-menu-item-padding-x: calc(var(--spacing) * 4);
+  --air-menu-item-radius: var(--radius-xs);
+  --air-menu-item-height: calc(var(--spacing) * 10);
+  --air-menu-item-padding-x: calc(var(--spacing) * 3);
 }
 
 /* Menu Surface (the floating container) */
 @utility air-menu-surface {
-  @apply absolute z-popover m-0 box-border overflow-hidden;
+  @apply m-0 box-border overflow-y-auto;
+  padding-block: var(--air-menu-padding-y);
+  padding-inline: var(--air-menu-padding-x);
   list-style: none;
   min-width: var(--air-menu-min-width);
   background-color: var(--color-surface-container);
@@ -20,11 +24,12 @@
   opacity: 0;
   transform: scale(0.95);
   transform-origin: top left;
-  transition:
-    opacity 0.15s ease,
-    transform 0.15s ease;
+  transition-property: opacity, transform;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
   visibility: hidden;
 
+  &[data-open],
   &[data-state='open'] {
     opacity: 1;
     transform: scale(1);
@@ -34,25 +39,38 @@
 
 /* Menu Item Base */
 @utility air-menu-item-base {
-  @apply flex items-center w-full box-border;
+  @apply flex items-center gap-2 w-full box-border;
   @apply text-left cursor-pointer no-underline h-full;
-  @apply air-focus-ring;
+
+  outline: none;
   height: var(--air-menu-item-height);
-  padding: 0 var(--air-menu-item-padding-x);
+  padding-inline: var(--air-menu-item-padding-x);
+  border-radius: var(--air-menu-item-radius);
 
   /* Typography: Label Large */
-  font:
-    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-lg-size);
+  font-weight: var(--font-label-lg-weight);
+  line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
 
   /* Resets (if applied to a button) */
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
 
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
+
+  &:first-child {
+    border-start-start-radius: calc(var(--air-menu-radius) * 0.75);
+    border-start-end-radius: calc(var(--air-menu-radius) * 0.75);
+  }
+  &:last-child {
+    border-end-start-radius: calc(var(--air-menu-radius) * 0.75);
+    border-end-end-radius: calc(var(--air-menu-radius) * 0.75);
+  }
 }
 
 /* Default Visuals */
@@ -70,7 +88,7 @@
 
 /* Composed Utilities */
 @utility air-menu {
-  @apply air-menu-surface;
+  @apply air-menu-surface fixed z-popover shadow-lg;
 }
 
 @utility air-menu-item {
@@ -82,4 +100,18 @@
     @apply air-menu-item-disabled;
     --state-layer-color: transparent;
   }
+}
+
+@utility air-menu-separator {
+  @apply border-b border-solid border-b-outline-variant my-1 mx-2;
+}
+
+@utility air-menu-item-text {
+  @apply flex-1 font-semibold;
+}
+
+@utility air-menu-item-tips {
+  @apply rounded-sm px-2 py-1 ml-4;
+  @apply bg-surface-container-highest pointer-events-none;
+  @apply text-xs text-on-surface-variant font-semibold;
 }

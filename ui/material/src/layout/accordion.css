@@ -4,24 +4,27 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: calc(var(--spacing) * 4); /* 16px */
+  padding-block: calc(var(--spacing) * 4);
+  padding-inline: calc(var(--spacing) * 4); /* 16px */
   border-radius: inherit;
 
   /* Typography: Title Medium */
-  font:
-    var(--font-title-md-weight) var(--font-title-md-size) / var(--font-title-md-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-title-md-size);
+  font-weight: var(--font-title-md-weight);
+  line-height: var(--font-title-md-line-height);
   letter-spacing: var(--font-title-md-tracking);
 
   /* Resets */
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
   @apply air-focus-ring;
   cursor: pointer;
   text-align: left;
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Accordion Header Surface */
@@ -34,7 +37,9 @@
 @utility air-accordion-content-base {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows var(--duration-medium) var(--ease-emphasized-decelerate);
+  transition-property: grid-template-rows;
+  transition-duration: var(--duration-medium);
+  transition-timing-function: var(--ease-emphasized-decelerate);
 
   &[data-state='open'] {
     grid-template-rows: 1fr;
@@ -44,16 +49,15 @@
 @utility air-accordion-inner-base {
   overflow: hidden;
   min-height: 0;
-  padding: 0 calc(var(--spacing) * 4);
-  padding-top: 0;
-  padding-bottom: 0;
-  transition:
-    padding-top var(--duration-medium) var(--ease-emphasized-decelerate),
-    padding-bottom var(--duration-medium) var(--ease-emphasized-decelerate);
+  padding-block: 0;
+  padding-inline: calc(var(--spacing) * 4);
+  transition-property: padding-top, padding-bottom, padding-block-start, padding-block-end;
+  transition-duration: var(--duration-medium);
+  transition-timing-function: var(--ease-emphasized-decelerate);
 
   .air-accordion-content[data-state='open'] & {
-    padding-top: calc(var(--spacing) * 4);
-    padding-bottom: calc(var(--spacing) * 4);
+    padding-block-start: calc(var(--spacing) * 4);
+    padding-block-end: calc(var(--spacing) * 4);
   }
 }
 
@@ -67,8 +71,8 @@
 
   /* Soften the bottom radius when the accordion is open */
   .air-accordion-item:has(.air-accordion-content[data-state='open']) > & {
-    border-bottom-left-radius: var(--_inner-radius, var(--radius-sm));
-    border-bottom-right-radius: var(--_inner-radius, var(--radius-sm));
+    border-end-start-radius: var(--_inner-radius, var(--radius-sm));
+    border-end-end-radius: var(--_inner-radius, var(--radius-sm));
   }
 }
 
@@ -94,17 +98,19 @@
   }
 
   & > *:first-child {
-    border-top-left-radius: var(--_outer-radius);
-    border-top-right-radius: var(--_outer-radius);
+    border-start-start-radius: var(--_outer-radius);
+    border-start-end-radius: var(--_outer-radius);
   }
 
   & > *:last-child {
-    border-bottom-left-radius: var(--_outer-radius);
-    border-bottom-right-radius: var(--_outer-radius);
+    border-end-start-radius: var(--_outer-radius);
+    border-end-end-radius: var(--_outer-radius);
   }
 }
 
 @utility air-accordion-item {
   background-color: var(--color-surface-container-low);
-  transition: background-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }

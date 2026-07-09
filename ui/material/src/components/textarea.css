@@ -1,0 +1,58 @@
+/* Container Wrapper (Specific textarea overrides) */
+@utility air-textarea-container {
+  @apply air-floating-field-container;
+
+  /* Filled Floating Transform Override */
+  &:has(.air-textarea-filled:focus) .air-field-label,
+  &:has(.air-textarea-filled:not(:placeholder-shown)) .air-field-label,
+  &:has(.air-textarea-filled:-webkit-autofill) .air-field-label {
+    transform: translateY(calc((var(--air-field-padding-y) * -1) + calc(var(--spacing) * 2))) scale(0.75);
+    background-color: transparent;
+  }
+}
+
+@utility air-textarea {
+  @apply air-text-field;
+  height: auto;
+  min-height: calc(var(--air-text-field-height) * 2);
+  padding-block: var(--air-field-padding-y);
+  resize: vertical;
+}
+
+@utility air-textarea-filled {
+  @apply air-text-field-filled;
+  padding-block-start: calc(var(--spacing) * 6);
+  padding-block-end: calc(var(--spacing) * 3);
+}
+
+@utility air-textarea-sm {
+  @apply air-text-field-sm;
+  min-height: calc(var(--air-text-field-height) * 2);
+}
+
+@utility air-textarea-md {
+  @apply air-text-field-md;
+  min-height: calc(var(--air-text-field-height) * 2);
+}
+
+@utility air-textarea-lg {
+  @apply air-text-field-lg;
+  min-height: calc(var(--air-text-field-height) * 2);
+}
+
+@utility air-textarea-error {
+  @apply air-text-field-error;
+}
+
+@utility air-textarea-input {
+  @apply air-textarea;
+
+  &::placeholder {
+    opacity: 1;
+  }
+}
+
+@utility air-textarea-input-filled {
+  @apply air-textarea-input air-textarea-filled;
+  padding-block: var(--air-field-padding-y);
+}

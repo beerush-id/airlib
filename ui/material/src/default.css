@@ -13,12 +13,20 @@
 
   body {
     --color-ghost-surface: var(--color-surface-container-lowest);
-    background-color: var(--color-surface-container-lowest);
-    color: var(--color-on-surface);
-    font:
-      var(--font-body-md-weight) var(--font-body-md-size) / var(--font-body-md-line-height) var(--font-brand, system-ui);
-    letter-spacing: var(--font-body-md-tracking);
+
     margin: 0;
+    background-color: var(--color-surface-container-lowest);
+
+    color: var(--color-on-surface);
+    font-family: var(--font-brand);
+    font-size: var(--font-body-md-size);
+    font-weight: var(--font-body-md-weight);
+    line-height: var(--font-body-md-line-height);
+    letter-spacing: var(--font-body-md-tracking);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* Make ghost surface context-aware so components like floating labels automatically match their container's background */

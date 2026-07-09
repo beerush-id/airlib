@@ -4,26 +4,34 @@
   --air-group-gap: calc(var(--spacing) * 0.5);
 }
 
-/* Container for standard buttons */
-@utility air-button-group {
+/* Base Group Structure (DRY utility for border radii and z-index stacking) */
+@utility air-group-base {
   @apply inline-flex items-center;
-  gap: var(--air-group-gap);
+  gap: var(--air-group-gap, calc(var(--spacing) * 0.5));
 
-  & > [class*='air-button'] {
-    border-radius: var(--air-group-radius-inner);
+  & :is(input, button, select) {
+    border-radius: var(--air-group-inner-radius);
   }
 
-  & > [class*='air-button']:focus-visible:not(:disabled) {
+  & :is(input, button, select):focus,
+  & :is(input, button, select):focus-visible {
     z-index: 1;
   }
 
-  & > [class*='air-button']:first-child {
-    border-top-left-radius: var(--air-group-radius-outer);
-    border-bottom-left-radius: var(--air-group-radius-outer);
+  & :is(input, button, select):first-child {
+    border-start-start-radius: var(--air-group-outer-radius);
+    border-end-start-radius: var(--air-group-outer-radius);
   }
 
-  & > [class*='air-button']:last-child {
-    border-top-right-radius: var(--air-group-radius-outer);
-    border-bottom-right-radius: var(--air-group-radius-outer);
+  & :is(input, button, select):last-child {
+    border-start-end-radius: var(--air-group-outer-radius);
+    border-end-end-radius: var(--air-group-outer-radius);
   }
+}
+
+/* Container for standard buttons */
+@utility air-button-group {
+  @apply air-group-base;
+  --air-group-outer-radius: var(--air-group-radius-outer);
+  --air-group-inner-radius: var(--air-group-radius-inner);
 }

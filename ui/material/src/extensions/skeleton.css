@@ -17,12 +17,15 @@
     var(--color-surface-container) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer-loading 2.5s infinite linear;
+  animation-name: shimmer-loading;
+  animation-duration: 2.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
   border-radius: var(--radius-sm);
   pointer-events: none;
   user-select: none;
   box-shadow: none;
-  text-decoration: none;
+  text-decoration-line: none;
 
   /* Hide any inner vectors or images */
   & > img,

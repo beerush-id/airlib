@@ -6,13 +6,17 @@
 @utility air-checkbox-container {
   @apply inline-flex items-center justify-center relative cursor-pointer air-state-layer;
   aspect-ratio: 1;
-  width: var(--air-checkbox-target);
-  height: var(--air-checkbox-target);
+  width: calc(var(--spacing) * 6); /* 24px visual slot */
+  height: calc(var(--spacing) * 6);
   border-radius: var(--radius-full);
 
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
   background-color: transparent;
-  transition: background-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   --state-layer-color: var(--color-on-surface);
 
@@ -31,23 +35,39 @@
     outline-color: var(--color-secondary);
     outline-offset: var(--focus-ring-offset);
   }
+
+  /* Override state-layer ::before to create a 48x48 clickable touch target */
+  &::before {
+    inset: auto;
+    width: var(--air-checkbox-target);
+    height: var(--air-checkbox-target);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: var(--radius-full);
+    pointer-events: auto;
+  }
 }
 
 @utility air-checkbox-base {
-  @apply flex items-center justify-center box-border appearance-none;
+  @apply flex items-center justify-center box-border appearance-none relative;
   width: var(--air-checkbox-size);
   height: var(--air-checkbox-size);
   border-radius: calc(var(--spacing) * 0.5); /* 2px */
-  border: 2px solid var(--color-on-surface-variant);
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--color-on-surface-variant);
   background-color: transparent;
   color: transparent;
 
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    border-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    box-shadow var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, border-color, color, box-shadow, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
+
+  & > [data-icon] {
+    @apply absolute inset-0.5 w-full h-full -translate-0.5;
+    opacity: 0;
+  }
 }
 
 @utility air-checkbox-icon {
@@ -55,7 +75,9 @@
   height: calc(var(--spacing) * 3.5);
   fill: currentColor;
   opacity: 0;
-  transition: opacity var(--duration-short) var(--ease-standard);
+  transition-property: opacity;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Composable States */
@@ -63,6 +85,10 @@
   background-color: var(--color-primary);
   border-color: var(--color-primary);
   color: var(--color-on-primary);
+
+  & > [data-icon='checked'] {
+    opacity: 1;
+  }
 }
 
 @utility air-checkbox-checked-icon {
@@ -77,6 +103,10 @@
   background-color: var(--color-primary);
   border-color: var(--color-primary);
   color: var(--color-on-primary);
+
+  & > [data-icon='mixed'] {
+    opacity: 1;
+  }
 }
 
 @utility air-checkbox-disabled {
@@ -130,7 +160,9 @@
     inset: 0;
     pointer-events: none;
     opacity: 0;
-    transition: opacity var(--duration-short) var(--ease-standard);
+    transition-property: opacity;
+    transition-duration: var(--duration-short);
+    transition-timing-function: var(--ease-standard);
     background-color: currentColor;
     mask-size: 100% 100%;
     mask-position: center;

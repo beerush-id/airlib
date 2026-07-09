@@ -19,6 +19,6 @@
 
 @utility air-masonry-item {
   break-inside: avoid;
-  margin-bottom: var(--air-masonry-gap);
+  margin-block-end: var(--air-masonry-gap);
   display: block; /* ensure block-level for avoiding breaks */
 }

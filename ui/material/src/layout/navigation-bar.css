@@ -24,18 +24,21 @@
   gap: var(--spacing);
 
   /* Reset */
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
   background-color: transparent;
 
   /* Typography: Label Medium */
-  font:
-    var(--font-label-md-weight) var(--font-label-md-size) / var(--font-label-md-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-md-size);
+  font-weight: var(--font-label-md-weight);
+  line-height: var(--font-label-md-line-height);
   letter-spacing: var(--font-label-md-tracking);
 
-  transition:
-    color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Item Surface Visuals */
@@ -52,9 +55,9 @@
   @apply flex items-center justify-center rounded-full;
   width: calc(var(--spacing) * 16); /* 64px */
   height: calc(var(--spacing) * 8); /* 32px */
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Icon Container Visuals */

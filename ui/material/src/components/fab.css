@@ -12,19 +12,20 @@
   @apply inline-flex items-center justify-center;
   @apply box-border cursor-pointer;
   @apply air-focus-ring;
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
   width: var(--air-fab-size);
   height: var(--air-fab-size);
   border-radius: var(--air-fab-radius);
-  padding: 0 var(--air-fab-padding-x);
+  padding-block: 0;
+  padding-inline: var(--air-fab-padding-x);
   gap: var(--air-fab-gap);
   min-width: var(--air-fab-min-width);
 
-  transition:
-    box-shadow var(--duration-short) var(--ease-standard),
-    background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: box-shadow, background-color, color, outline-color, border-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Size Variants */
@@ -46,9 +47,10 @@
   --air-fab-gap: calc(var(--spacing) * 2);
 
   /* Typography: Label Large */
-  font:
-    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-lg-size);
+  font-weight: var(--font-label-lg-weight);
+  line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
 
   /* Smart Icon Padding */

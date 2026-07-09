@@ -6,25 +6,31 @@
 @utility air-radio-base {
   @apply inline-flex items-center justify-center relative;
   @apply cursor-pointer;
-  width: var(--air-radio-target);
-  height: var(--air-radio-target);
+  width: calc(var(--spacing) * 6); /* 24px visual slot */
+  height: calc(var(--spacing) * 6);
   border-radius: var(--radius-full);
 
   /* Reset */
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
   background-color: transparent;
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 @utility air-radio-visual {
   @apply relative box-border rounded-full;
   width: var(--air-radio-size);
   height: var(--air-radio-size);
-  border: 2px solid var(--color-on-surface-variant);
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--color-on-surface-variant);
 
-  transition: border-color var(--duration-short) var(--ease-standard);
+  transition-property: border-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 @utility air-radio-visual-dot {
@@ -33,7 +39,9 @@
   width: calc(var(--air-radio-size) * 0.5);
   height: calc(var(--air-radio-size) * 0.5);
   background-color: var(--color-primary);
-  transition: transform var(--duration-short) var(--ease-standard);
+  transition-property: transform;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Composable States */
@@ -59,6 +67,18 @@
 @utility air-radio {
   @apply air-radio-base air-state-layer;
   --state-layer-color: var(--color-on-surface-variant);
+
+  /* Override state-layer ::before to create a 48x48 clickable touch target */
+  &::before {
+    inset: auto;
+    width: var(--air-radio-target);
+    height: var(--air-radio-target);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: var(--radius-full);
+    pointer-events: auto;
+  }
 
   &[aria-checked='true'] {
     --state-layer-color: var(--color-primary);

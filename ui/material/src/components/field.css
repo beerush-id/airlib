@@ -1,0 +1,209 @@
+@theme {
+  --air-field-color: var(--color-on-surface);
+  --air-field-outline-color: var(--color-outline);
+  --air-field-outline-focus-color: var(--color-primary);
+  --air-field-label-size: var(--font-body-lg-size);
+  --air-field-label-weight: var(--font-body-sm-weight);
+  --air-field-label-line-height: var(--font-body-lg-line-height);
+  --air-field-label-color: var(--color-on-surface-variant);
+  --air-field-supporting-color: var(--color-on-surface-variant);
+
+  --air-field-padding-x: calc(var(--spacing) * 4);
+  --air-field-padding-y: calc(var(--spacing) * 5);
+  --air-field-icon-padding-x: calc(var(--spacing) * 12);
+
+  --air-field-radius: var(--radius-md);
+  --air-field-font-size: var(--font-body-lg-size);
+
+  /* Small Tokens */
+  --air-field-padding-x-sm: calc(var(--spacing) * 3);
+  --air-field-padding-y-sm: calc(var(--spacing) * 3);
+  --air-field-icon-padding-x-sm: calc(var(--spacing) * 10);
+  --air-field-font-size-sm: var(--font-body-md-size);
+  --air-field-radius-sm: var(--radius-sm);
+  --air-field-label-size-sm: var(--font-body-md-size);
+  --air-field-label-line-height-sm: var(--font-body-md-line-height);
+
+  /* Medium Tokens (Default) */
+  --air-field-padding-x-md: calc(var(--spacing) * 4);
+  --air-field-padding-y-md: calc(var(--spacing) * 5);
+  --air-field-icon-padding-x-md: calc(var(--spacing) * 12);
+  --air-field-font-size-md: var(--font-body-lg-size);
+  --air-field-radius-md: var(--radius-md);
+  --air-field-label-size-md: var(--font-body-lg-size);
+  --air-field-label-line-height-md: var(--font-body-lg-line-height);
+
+  /* Large Tokens */
+  --air-field-padding-x-lg: calc(var(--spacing) * 5);
+  --air-field-padding-y-lg: calc(var(--spacing) * 6);
+  --air-field-icon-padding-x-lg: calc(var(--spacing) * 14);
+  --air-field-font-size-lg: var(--font-body-lg-size);
+  --air-field-radius-lg: var(--radius-lg);
+  --air-field-label-size-lg: var(--font-body-lg-size);
+  --air-field-label-line-height-lg: var(--font-body-lg-line-height);
+}
+
+/* Base Field wrapper (routes to specific containers based on input type) */
+@utility air-field {
+  @apply block w-full;
+
+  &:has(.air-checkbox, .air-switch, .air-radio) {
+    @apply air-inline-field-container;
+  }
+
+  &:has(.air-text-field) {
+    @apply air-text-field-container;
+  }
+
+  &:has(.air-textarea) {
+    @apply air-textarea-container;
+  }
+}
+
+@utility air-inline-field-container {
+  @apply flex items-center cursor-pointer gap-4;
+}
+
+/* Container Wrapper (Shared styling for all floating label types) */
+@utility air-floating-field-container {
+  @apply flex flex-col relative w-full outline-none;
+  margin-top: calc(var(--spacing) * 2);
+
+  /* Smart Layout & Padding Setup */
+  --air-field-leading-padding: var(--air-field-padding-x);
+  --air-field-trailing-padding: var(--air-field-padding-x);
+
+  &:has(> :is(.air-icon, .air-icon-button) ~ :is(input, select, textarea)) {
+    --air-field-leading-padding: var(--air-field-icon-padding-x);
+  }
+
+  &:has(> :is(input, select, textarea) ~ :is(.air-icon, .air-icon-button)) {
+    --air-field-trailing-padding: var(--air-field-icon-padding-x);
+  }
+
+  /* Floating label positional setup */
+  & .air-field-label {
+    position: absolute;
+    line-height: 1;
+    top: var(--air-field-padding-y);
+    inset-inline-start: calc(var(--air-field-leading-padding, var(--air-field-padding-x)) + 1px);
+    margin-inline-start: calc(var(--spacing) * -1);
+    margin-bottom: 0;
+    pointer-events: none;
+    padding-block: 0;
+    padding-inline: var(--spacing);
+    border-radius: var(--radius-md);
+
+    transform-origin: left top;
+    transform: translateY(0) scale(1);
+    will-change: transform, color, background-color;
+    transition-property: transform, color, background-color;
+    transition-duration: var(--duration-short);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  /* Default (Outlined) Floating Transform */
+  &:has(:is(input, textarea):focus, :is(input, textarea):not(:placeholder-shown), :is(input, textarea):-webkit-autofill)
+    .air-field-label {
+    /* Translate UP by the fixed padding to hit the border (0px), then slightly more (-0.375em) to perfectly center the scaled label on the outline */
+    transform: translateY(calc((var(--air-field-padding-y) * -1) - 0.35em)) scale(0.75);
+    background-color: var(--color-ghost-surface, var(--color-surface, #fff));
+  }
+}
+
+@utility air-field-sm {
+  --air-field-label-size: var(--air-field-label-size-sm);
+  --air-field-label-line-height: var(--air-field-label-line-height-sm);
+  --air-field-padding-x: var(--air-field-padding-x-sm);
+  --air-field-padding-y: var(--air-field-padding-y-sm);
+  --air-field-icon-padding-x: var(--air-field-icon-padding-x-sm);
+
+  --air-field-font-size: var(--air-field-font-size-sm);
+  --air-field-radius: var(--air-field-radius-sm);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-sm;
+  }
+}
+
+@utility air-field-md {
+  --air-field-label-size: var(--air-field-label-size-md);
+  --air-field-label-line-height: var(--air-field-label-line-height-md);
+  --air-field-padding-x: var(--air-field-padding-x-md);
+  --air-field-padding-y: var(--air-field-padding-y-md);
+  --air-field-icon-padding-x: var(--air-field-icon-padding-x-md);
+
+  --air-field-font-size: var(--air-field-font-size-md);
+  --air-field-radius: var(--air-field-radius-md);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-md;
+  }
+}
+
+@utility air-field-lg {
+  --air-field-label-size: var(--air-field-label-size-lg);
+  --air-field-label-line-height: var(--air-field-label-line-height-lg);
+  --air-field-padding-x: var(--air-field-padding-x-lg);
+  --air-field-padding-y: var(--air-field-padding-y-lg);
+  --air-field-icon-padding-x: var(--air-field-icon-padding-x-lg);
+
+  --air-field-font-size: var(--air-field-font-size-lg);
+  --air-field-radius: var(--air-field-radius-lg);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-lg;
+  }
+}
+
+@utility air-field-error {
+  --air-field-color: var(--color-error);
+  --air-field-outline-color: var(--color-error);
+  --air-field-outline-focus-color: var(--color-error);
+  --air-field-label-color: var(--color-error);
+  --air-field-supporting-color: var(--color-error);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-error;
+  }
+}
+
+@utility air-field-disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+@utility air-field-label {
+  @apply block;
+  font-weight: var(--air-field-label-weight);
+  font-size: var(--air-field-label-size);
+  line-height: var(--font-body-sm-line-height);
+  font-family: var(--font-brand, system-ui);
+  letter-spacing: var(--font-body-sm-tracking);
+  margin-bottom: var(--spacing);
+  color: var(--air-field-label-color);
+  transition-property: color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
+
+  .air-field:has(:focus-within) & {
+    color: var(--air-field-outline-focus-color);
+  }
+}
+
+@utility air-field-supporting-text {
+  @apply block;
+  font-weight: var(--font-body-sm-weight);
+  font-size: var(--font-body-sm-size);
+  line-height: var(--font-body-sm-line-height);
+  font-family: var(--font-brand, system-ui);
+  letter-spacing: var(--font-body-sm-tracking);
+  margin-top: var(--spacing);
+  padding-block: 0;
+  padding-inline: var(--spacing);
+  color: var(--air-field-supporting-color);
+  transition-property: color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
+}

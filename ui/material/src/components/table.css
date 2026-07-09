@@ -2,13 +2,33 @@
   @apply w-full text-left;
   border-collapse: separate;
   border-spacing: 0 calc(var(--spacing) * 1); /* 4px vertical gap */
+
+  /* Top Outer Radius (Applies to the first row of the first group) */
+  & > :first-child > tr:first-child > :first-child {
+    border-start-start-radius: var(--radius-xl);
+  }
+  & > :first-child > tr:first-child > :last-child {
+    border-start-end-radius: var(--radius-xl);
+  }
+
+  /* Bottom Outer Radius (Applies to the last row of the last group) */
+  & > :last-child > tr:last-child > :first-child {
+    border-end-start-radius: var(--radius-xl);
+  }
+  & > :last-child > tr:last-child > :last-child {
+    border-end-end-radius: var(--radius-xl);
+  }
 }
 
 @utility air-table-header-cell {
   height: calc(var(--spacing) * 16);
-  padding: 0 calc(var(--spacing) * 6); /* 0 24px */
+  padding-block: 0;
+  padding-inline: calc(var(--spacing) * 6); /* 0 24px */
 
-  font: 600 var(--font-title-sm-size) / var(--font-title-sm-line-height) var(--font-brand, system-ui);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-title-sm-size);
+  line-height: var(--font-title-sm-line-height);
   letter-spacing: var(--font-title-sm-tracking);
 
   color: var(--color-on-surface);
@@ -29,10 +49,9 @@
 /* Base row setup for focus and z-index */
 @utility air-table-row {
   @apply air-focus-ring relative;
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   &:focus-visible {
     z-index: var(--z-index-elevated);
@@ -66,10 +85,13 @@
 }
 
 @utility air-table-cell {
-  padding: calc(var(--spacing) * 3) calc(var(--spacing) * 6); /* 12px 24px */
+  padding-block: calc(var(--spacing) * 3);
+  padding-inline: calc(var(--spacing) * 6); /* 12px 24px */
 
-  font:
-    var(--font-body-md-weight) var(--font-body-md-size) / var(--font-body-md-line-height) var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-body-md-size);
+  font-weight: var(--font-body-md-weight);
+  line-height: var(--font-body-md-line-height);
   letter-spacing: var(--font-body-md-tracking);
 
   color: var(--color-on-surface);
@@ -87,18 +109,22 @@
   }
 }
 
-/* Top Outer Radius (Applies to the first row of the first group) */
-.air-table-view > :first-child > tr:first-child > :first-child {
-  border-start-start-radius: var(--radius-xl);
-}
-.air-table-view > :first-child > tr:first-child > :last-child {
-  border-start-end-radius: var(--radius-xl);
-}
+@utility air-table-sort {
+  @apply flex items-center gap-1;
 
-/* Bottom Outer Radius (Applies to the last row of the last group) */
-.air-table-view > :last-child > tr:last-child > :first-child {
-  border-end-start-radius: var(--radius-xl);
-}
-.air-table-view > :last-child > tr:last-child > :last-child {
-  border-end-end-radius: var(--radius-xl);
+  & > .air-icon {
+    opacity: 0;
+    transition-property: opacity, transform;
+    transition-duration: var(--duration-short);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  &[data-active='true'] > .air-icon,
+  &:hover > .air-icon {
+    opacity: 1;
+  }
+
+  &[data-active='true'][data-order='desc'] > .air-icon {
+    transform: rotate(180deg);
+  }
 }

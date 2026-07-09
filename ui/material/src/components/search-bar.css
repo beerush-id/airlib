@@ -7,10 +7,13 @@
   @apply flex items-center w-full box-border;
   height: var(--air-search-bar-height);
   border-radius: var(--radius-full);
-  padding: 0 calc(var(--spacing) * 3);
+  padding-block: 0;
+  padding-inline: calc(var(--spacing) * 3);
   gap: calc(var(--spacing) * 3);
 
-  transition: background-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Visual Surface */
@@ -20,14 +23,17 @@
 
 @utility air-search-bar-input-base {
   @apply flex-1 h-full outline-none;
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
   background-color: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
   color: var(--color-on-surface);
 
   /* Title Small */
-  font:
-    var(--font-title-sm-weight) var(--font-title-sm-size) / var(--font-title-sm-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-title-sm-size);
+  font-weight: var(--font-title-sm-weight);
+  line-height: var(--font-title-sm-line-height);
   letter-spacing: var(--font-title-sm-tracking);
 
   &::placeholder {

@@ -15,7 +15,9 @@
 
 @utility air-progress-linear-bar {
   @apply absolute inset-y-0 left-0;
-  transition: width var(--duration-short) var(--ease-standard);
+  transition-property: width;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 @utility air-progress-linear-primary {
@@ -24,7 +26,10 @@
 
 @utility air-progress-linear-indeterminate {
   width: 50%;
-  animation: air-indeterminate-linear 1.5s infinite linear;
+  animation-name: air-indeterminate-linear;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
   transform-origin: left;
 }
 
@@ -47,14 +52,19 @@
 }
 
 @utility air-progress-circular-indeterminate {
-  animation: air-indeterminate-circular-spin 2s linear infinite;
+  animation-name: air-indeterminate-circular-spin;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 @utility air-progress-circular-circle {
   stroke-width: 4px;
   stroke-linecap: round;
   fill: transparent;
-  transition: stroke-dasharray var(--duration-short) var(--ease-standard);
+  transition-property: stroke-dasharray;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 @utility air-progress-circular-primary {
@@ -62,7 +72,10 @@
 }
 
 @utility air-progress-circular-circle-indeterminate {
-  animation: air-indeterminate-circular-dash 1.5s ease-in-out infinite;
+  animation-name: air-indeterminate-circular-dash;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
 }
 
 @keyframes air-indeterminate-circular-spin {

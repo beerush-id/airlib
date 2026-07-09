@@ -14,36 +14,39 @@
 @utility air-segmented-button-base {
   @apply inline-flex items-center justify-center;
   height: var(--air-segmented-height);
-  padding: 0 calc(var(--spacing) * 3);
+  padding-block: 0;
+  padding-inline: calc(var(--spacing) * 3);
   gap: calc(var(--spacing) * 2);
 
   /* Typography: Label Large */
-  font:
-    var(--font-label-lg-weight) var(--font-label-lg-size) / var(--font-label-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-lg-size);
+  font-weight: var(--font-label-lg-weight);
+  line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
 
   /* Reset */
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
   @apply box-border cursor-pointer air-focus-ring;
 
   /* Inner radius default */
   border-radius: var(--air-segmented-radius-inner);
 
   &:first-child {
-    border-top-left-radius: var(--air-segmented-radius-outer);
-    border-bottom-left-radius: var(--air-segmented-radius-outer);
+    border-start-start-radius: var(--air-segmented-radius-outer);
+    border-end-start-radius: var(--air-segmented-radius-outer);
   }
 
   &:last-child {
-    border-top-right-radius: var(--air-segmented-radius-outer);
-    border-bottom-right-radius: var(--air-segmented-radius-outer);
+    border-start-end-radius: var(--air-segmented-radius-outer);
+    border-end-end-radius: var(--air-segmented-radius-outer);
   }
 
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   &:focus-visible {
     z-index: 1;
@@ -56,23 +59,10 @@
   color: var(--color-on-surface);
 }
 
-/* Selected/Pressed State */
-@utility air-segmented-button-selected-surface {
-  background-color: var(--color-secondary-container);
-  color: var(--color-on-secondary-container);
-}
-
 /* Composed Utilities */
 @utility air-segmented-button {
-  @apply air-segmented-button-base air-segmented-button-surface air-state-layer;
+  @apply air-segmented-button-base air-segmented-button-surface air-state-layer air-toggle-state;
   --state-layer-color: var(--color-on-surface);
-
-  &[aria-pressed='true'],
-  &[aria-selected='true'],
-  &[aria-checked='true'] {
-    @apply air-segmented-button-selected-surface;
-    --state-layer-color: var(--color-on-secondary-container);
-  }
 
   &:disabled,
   &[aria-disabled='true'] {

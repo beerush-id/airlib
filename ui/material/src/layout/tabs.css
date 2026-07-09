@@ -47,13 +47,13 @@
   }
 
   & > [role='tablist'] {
-    border-top-left-radius: var(--_outer-radius);
-    border-top-right-radius: var(--_outer-radius);
+    border-start-start-radius: var(--_outer-radius);
+    border-start-end-radius: var(--_outer-radius);
   }
 
   & > [role='tabpanel'] {
-    border-bottom-left-radius: var(--_outer-radius);
-    border-bottom-right-radius: var(--_outer-radius);
+    border-end-start-radius: var(--_outer-radius);
+    border-end-end-radius: var(--_outer-radius);
 
     &[aria-hidden='true'] {
       display: none;
@@ -67,25 +67,29 @@
   align-items: center;
   justify-content: center;
   height: var(--air-tabs-height);
-  padding: 0 calc(var(--spacing) * 4);
+  padding-block: 0;
+  padding-inline: calc(var(--spacing) * 4);
 
   /* Typography: Title Small */
-  font:
-    var(--font-title-sm-weight) var(--font-title-sm-size) / var(--font-title-sm-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-title-sm-size);
+  font-weight: var(--font-title-sm-weight);
+  line-height: var(--font-title-sm-line-height);
   letter-spacing: var(--font-title-sm-tracking);
   white-space: nowrap;
 
   /* Resets */
-  border: none;
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
   background-color: color-mix(in srgb, var(--color-on-surface-variant) 0%, transparent);
   outline: none;
   cursor: pointer;
   position: relative;
 
-  transition:
-    color var(--duration-short) var(--ease-standard),
-    background-color var(--duration-short) var(--ease-standard);
+  transition-property: color, background-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 @utility air-tab-indicator-base {
@@ -95,12 +99,13 @@
   right: var(--air-tab-item-x);
   width: var(--air-tab-item-width);
   height: var(--air-tabs-indicator-height);
-  border-radius: var(--air-tabs-indicator-height) var(--air-tabs-indicator-height) 0 0;
-  transition:
-    width var(--duration-short) var(--ease-standard),
-    height var(--duration-short) var(--ease-standard),
-    top var(--duration-short) var(--ease-standard),
-    left var(--duration-short) var(--ease-standard);
+  border-start-start-radius: var(--air-tabs-indicator-height);
+  border-start-end-radius: var(--air-tabs-indicator-height);
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+  transition-property: width, height, top, left;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Tab Surface */

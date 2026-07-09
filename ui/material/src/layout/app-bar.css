@@ -9,11 +9,14 @@
   justify-content: space-between;
   width: 100%;
   height: var(--air-app-bar-height);
-  padding: 0 calc(var(--spacing) * 4); /* 16px */
+  padding-block: 0;
+  padding-inline: calc(var(--spacing) * 4); /* 16px */
   box-sizing: border-box;
 
   /* Transitions for scroll elevation */
-  transition: background-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Surface Visuals */
@@ -27,9 +30,10 @@
 }
 
 @utility air-app-bar-title {
-  font:
-    var(--font-title-lg-weight) var(--font-title-lg-size) / var(--font-title-lg-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-title-lg-size);
+  font-weight: var(--font-title-lg-weight);
+  line-height: var(--font-title-lg-line-height);
   letter-spacing: var(--font-title-lg-tracking);
   margin: 0;
   flex: 1;

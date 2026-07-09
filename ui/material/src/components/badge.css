@@ -17,11 +17,13 @@
 
   height: var(--air-badge-size);
   min-width: var(--air-badge-size);
-  padding: 0 var(--air-badge-padding-x);
+  padding-block: 0;
+  padding-inline: var(--air-badge-padding-x);
 
-  font:
-    var(--font-label-sm-weight) var(--air-badge-font-size) / var(--font-label-sm-line-height)
-    var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--air-badge-font-size);
+  font-weight: var(--font-label-sm-weight);
+  line-height: var(--font-label-sm-line-height);
   letter-spacing: var(--font-label-sm-tracking);
 }
 

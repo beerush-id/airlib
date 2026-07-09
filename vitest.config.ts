@@ -15,7 +15,12 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       enabled: true,
-      include: ['ui/form/src/**/*.{ts,tsx}', 'ui/react-form/src/**/*.{ts,tsx}', 'ui/solid-form/src/**/*.{ts,tsx}', 'irpc/fs/src/**/*.ts'],
+      include: [
+        'ui/form/src/**/*.{ts,tsx}',
+        'ui/react-form/src/**/*.{ts,tsx}',
+        'ui/solid-form/src/**/*.{ts,tsx}',
+        'irpc/fs/src/**/*.ts',
+      ],
       exclude: ['ui/form/src/**/types.ts', 'irpc/fs/src/**/types.ts'],
       reportsDirectory: 'docs/.vitepress/dist/coverage/details',
     },

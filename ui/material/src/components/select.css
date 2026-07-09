@@ -1,30 +1,58 @@
 /* Select uses text-field as the trigger and menu as the dropdown */
 
+@utility air-select {
+  @apply flex flex-col gap-1;
+}
+
 @utility air-select-trigger {
   /* Inherits text-field-base but resets cursor to pointer */
   @apply cursor-pointer;
 }
 
 @utility air-select-caret {
-  transition: transform var(--duration-short) var(--ease-standard);
+  transition-property: transform;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 @utility air-select-caret-expanded {
   transform: rotate(180deg);
 }
 
-@utility air-select-option-selected-surface {
-  background-color: var(--color-secondary-container);
-  color: var(--color-on-secondary-container);
-  font-weight: bold;
-}
-
 /* Composed Utilities */
 @utility air-select-option {
-  @apply air-menu-item;
+  @apply air-menu-item air-toggle-state;
+}
 
-  &[aria-selected='true'] {
-    @apply air-select-option-selected-surface;
-    --state-layer-color: var(--color-on-secondary-container);
+@utility air-select-button {
+  @apply air-button-tonal;
+
+  .air-icon {
+    transition-property: transform;
+    transition-duration: var(--duration-short);
+    transition-timing-function: var(--ease-standard);
   }
+
+  &[aria-expanded='true'] .air-icon {
+    transform: rotate(180deg);
+  }
+}
+
+@utility air-select-menu {
+  @apply flex flex-col air-menu gap-1;
+}
+
+@utility air-select-item {
+  @apply air-menu-item px-3 gap-3 air-toggle-state;
+}
+
+@utility air-select-checkbox {
+  @apply air-checkbox;
+}
+
+@utility air-select-badge {
+  @apply air-chip-elevated air-chip-sm bg-error text-on-error ml-4;
+  @apply air-label-sm-strong;
+
+  font-weight: bold;
 }

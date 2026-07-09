@@ -9,9 +9,9 @@
     opacity: 0;
     pointer-events: none;
     border-radius: inherit;
-    transition:
-      opacity var(--duration-short) var(--ease-standard),
-      background-color var(--duration-short) var(--ease-standard);
+    transition-property: opacity, background-color;
+    transition-duration: var(--duration-short);
+    transition-timing-function: var(--ease-standard);
 
     /* By default, state layers use the on-surface color, but components can override this */
     background-color: var(--state-layer-color, var(--color-on-surface));

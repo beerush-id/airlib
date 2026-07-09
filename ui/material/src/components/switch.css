@@ -14,15 +14,16 @@
   height: var(--air-switch-track-height);
   border-radius: var(--radius-full);
 
-  transition:
-    background-color var(--duration-short) var(--ease-standard),
-    border-color var(--duration-short) var(--ease-standard),
-    outline-color var(--duration-short) var(--ease-standard);
+  transition-property: background-color, border-color, outline-color;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Track Visuals */
 @utility air-switch-track {
-  border: 2px solid var(--color-outline);
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--color-outline);
   background-color: var(--color-surface-variant);
 }
 
@@ -45,13 +46,9 @@
   height: calc(var(--spacing) * 4);
   border-radius: var(--radius-full);
 
-  transition:
-    inset-inline-start var(--duration-short) var(--ease-standard),
-    width var(--duration-short) var(--ease-standard),
-    height var(--duration-short) var(--ease-standard),
-    background-color var(--duration-short) var(--ease-standard),
-    box-shadow var(--duration-short) var(--ease-standard),
-    transform var(--duration-short) var(--ease-standard);
+  transition-property: inset-inline-start, width, height, background-color, box-shadow, transform;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 /* Handle Visuals */
@@ -93,7 +90,9 @@
   height: calc(var(--spacing) * 4);
   fill: var(--color-surface-variant);
   opacity: 0;
-  transition: opacity var(--duration-short) var(--ease-standard);
+  transition-property: opacity;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 }
 
 @utility air-switch-icon-checked {
@@ -104,6 +103,20 @@
 /* Composed Utilities */
 @utility air-switch {
   @apply air-switch-base air-switch-track;
+
+  /* Ensure minimum 48x48 touch target without affecting visual flow layout */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    min-width: calc(var(--spacing) * 12); /* 48px */
+    min-height: calc(var(--spacing) * 12); /* 48px */
+    pointer-events: auto;
+  }
 
   &[aria-checked='true'] {
     @apply air-switch-track-checked;

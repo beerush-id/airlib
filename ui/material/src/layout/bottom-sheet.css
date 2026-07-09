@@ -8,9 +8,14 @@
   @apply fixed bottom-0 left-1/2 w-full z-modal;
   transform: translateX(-50%) translateY(100%);
   max-width: var(--air-bottom-sheet-max-width);
-  border-radius: var(--air-bottom-sheet-radius) var(--air-bottom-sheet-radius) 0 0;
+  border-start-start-radius: var(--air-bottom-sheet-radius);
+  border-start-end-radius: var(--air-bottom-sheet-radius);
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
 
-  transition: transform var(--duration-medium) var(--ease-emphasized-decelerate);
+  transition-property: transform;
+  transition-duration: var(--duration-medium);
+  transition-timing-function: var(--ease-emphasized-decelerate);
 
   &[data-state='open'] {
     transform: translateX(-50%) translateY(0);
@@ -27,7 +32,9 @@
   @apply opacity-50 rounded-full;
   width: calc(var(--spacing) * 8); /* 32px */
   height: var(--spacing); /* 4px */
-  margin: calc(var(--spacing) * 4) auto calc(var(--spacing) * 4); /* 16px auto */
+  margin-block-start: calc(var(--spacing) * 4);
+  margin-block-end: calc(var(--spacing) * 4);
+  margin-inline: auto;
 }
 
 @utility air-bottom-sheet-handle-surface {
@@ -36,7 +43,9 @@
 
 @utility air-bottom-sheet-scrim-base {
   @apply fixed inset-0 z-fixed opacity-0 pointer-events-none;
-  transition: opacity var(--duration-medium) var(--ease-standard);
+  transition-property: opacity;
+  transition-duration: var(--duration-medium);
+  transition-timing-function: var(--ease-standard);
 
   &[data-state='open'] {
     opacity: 1;
