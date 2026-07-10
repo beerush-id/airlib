@@ -1,4 +1,4 @@
-import { createDialog } from '@airlib/uikit/components';
+import { createDialog } from '@airlib/headless/components';
 import { captureStack, isBrowser } from '@anchorlib/core';
 import { DIALOG_CONFIGS } from './config.js';
 import { WarningIcon } from '../../icons/Warning.js';

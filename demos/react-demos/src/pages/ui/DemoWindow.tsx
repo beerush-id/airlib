@@ -1,6 +1,6 @@
 import { Window, WindowToolbar } from '@airlib/react-ui';
 import { SearchIcon } from '@airlib/react-ui/icons';
-import type { WebWindowRenderer } from '@airlib/uikit';
+import type { WebWindowRenderer } from '@airlib/headless';
 
 export const DemoWindow: WebWindowRenderer<any, any> = () => (
   <Window headless title="Asset Browser">

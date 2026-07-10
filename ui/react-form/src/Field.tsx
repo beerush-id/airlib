@@ -7,7 +7,7 @@ import { FIELD_OPTIONS, FIELD_OPTIONS_KEYS, type FieldDefaultOptions } from './c
 
 export interface FieldProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>,
-  Omit<FieldDefaultOptions, 'class'> {
+    Omit<FieldDefaultOptions, 'class'> {
   name: string;
   match?: string | ((form: FormState<ZodObject<ZodRawShape>>) => boolean);
   label?: string;

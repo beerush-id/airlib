@@ -1,4 +1,4 @@
-import { classx } from '@airlib/uikit/utils';
+import { classx } from '@airlib/headless/utils';
 import { template } from '@anchorlib/react';
 import { type ElementProps, renderChild } from '../supporting.js';
 import { DISPLAY_CONFIGS } from './config.js';

@@ -5,8 +5,8 @@ import {
   type WebWindowRenderer,
   type WindowData,
   type WindowInstance,
-} from '@airlib/uikit';
-import type { DragRef } from '@airlib/uikit/components';
+} from '@airlib/headless';
+import type { DragRef } from '@airlib/headless/components';
 import { getContext, setup } from '@anchorlib/react';
 import type { ReactNode } from 'react';
 import { WindowSplash } from '../components/index.js';

@@ -1,5 +1,5 @@
-import { POPOVER_INTERACTION } from '@airlib/uikit/components';
-import { AXIS_POSITION } from '@airlib/uikit/utils';
+import { POPOVER_INTERACTION } from '@airlib/headless/components';
+import { AXIS_POSITION } from '@airlib/headless/utils';
 
 export const TOOLTIP_CONFIGS = {
   xPos: AXIS_POSITION.center,

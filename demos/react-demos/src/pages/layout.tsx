@@ -1,4 +1,4 @@
-import { colorScheme } from '@airlib/uikit/utils';
+import { colorScheme } from '@airlib/headless/utils';
 import { NotFoundError, page, Style } from '@anchorlib/react';
 import { Footer } from '../components/Footer.js';
 import { Header } from '../components/Header.js';
@@ -33,7 +33,7 @@ export const RootLayout = page(rootRoute).render(({ children }) => {
     <>
       <Header />
       <Style>{`:root { --seed-color: ${theme.color ?? 'red'}; }`}</Style>
-      <main className="layout-main">{children}</main>
+      <main className="w-full min-h-screen pt-16 flex flex-col">{children}</main>
       <Footer />
     </>
   );

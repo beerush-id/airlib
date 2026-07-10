@@ -1,5 +1,5 @@
-import { popover, type PopoverInit } from '@airlib/uikit';
-import { classx } from '@airlib/uikit/utils';
+import { popover, type PopoverInit } from '@airlib/headless';
+import { classx } from '@airlib/headless/utils';
 import { isFunction, isObject } from '@anchorlib/core';
 import { render, setup } from '@anchorlib/react';
 import type { ComponentProps, ReactNode } from 'react';

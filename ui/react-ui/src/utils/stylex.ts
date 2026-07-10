@@ -1,4 +1,4 @@
-import { stylex as _stylex } from '@airlib/uikit/utils';
+import { stylex as _stylex } from '@airlib/headless/utils';
 import { $use, type Linked } from '@anchorlib/react';
 import type { CSSProperties } from 'react';
 

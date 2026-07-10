@@ -1,4 +1,4 @@
-import { classx } from '@airlib/uikit/utils';
+import { classx } from '@airlib/headless/utils';
 import { type Bindable, render, setup } from '@anchorlib/react';
 import type { ComponentProps, InputEventHandler } from 'react';
 import { TEXT_FIELD_CONFIGS } from './config.js';
@@ -26,7 +26,7 @@ export const TextField = setup<TextFieldProps>((props) => {
         onInput={handleInput}
         className={classx([
           TEXT_FIELD_CONFIGS.class,
-          props.variant !== 'outlined' ? TEXT_FIELD_CONFIGS.filledClass : undefined,
+          props.variant === 'filled' ? TEXT_FIELD_CONFIGS.filledClass : undefined,
           props.size ? TEXT_FIELD_CONFIGS.size[props.size] : undefined,
           props.className,
         ])}

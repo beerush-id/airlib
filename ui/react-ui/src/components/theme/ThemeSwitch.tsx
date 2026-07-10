@@ -1,4 +1,4 @@
-import { colorScheme } from '@airlib/uikit/utils';
+import { colorScheme } from '@airlib/headless/utils';
 import { render, setup } from '@anchorlib/react';
 import type { HTMLAttributes } from 'react';
 import { DarkModeIcon, LightModeIcon } from '../../icons/index.js';

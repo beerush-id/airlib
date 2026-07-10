@@ -1,4 +1,4 @@
-import { colorScheme } from '@airlib/uikit/utils';
+import { colorScheme } from '@airlib/headless/utils';
 import { page, Style } from '@anchorlib/react';
 import { configureApp } from '../../lib/settings.js';
 import { desktopRoute } from './route.js';

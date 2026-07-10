@@ -1,5 +1,5 @@
-import { classx } from '@airlib/uikit/utils';
-import { setup, render, template } from '@anchorlib/react';
+import { classx } from '@airlib/headless/utils';
+import { render, setup, template } from '@anchorlib/react';
 import type { ComponentProps, MouseEventHandler } from 'react';
 import { type ElementProps } from '../supporting.js';
 import { FIELD_CONFIGS } from './config.js';

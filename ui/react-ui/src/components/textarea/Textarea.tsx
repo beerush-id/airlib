@@ -1,5 +1,5 @@
-import { classx } from '@airlib/uikit/utils';
-import { setup, render, type Bindable } from '@anchorlib/react';
+import { classx } from '@airlib/headless/utils';
+import { type Bindable, render, setup } from '@anchorlib/react';
 import type { ComponentProps, InputEventHandler } from 'react';
 import { TEXTAREA_CONFIGS } from './config.js';
 
@@ -26,7 +26,7 @@ export const Textarea = setup<TextareaProps>((props) => {
         onInput={handleInput}
         className={classx([
           TEXTAREA_CONFIGS.class,
-          props.variant !== 'outlined' ? TEXTAREA_CONFIGS.filledClass : undefined,
+          props.variant === 'filled' ? TEXTAREA_CONFIGS.filledClass : undefined,
           props.size ? TEXTAREA_CONFIGS.size[props.size] : undefined,
           props.className,
         ])}

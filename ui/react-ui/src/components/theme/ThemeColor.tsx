@@ -1,4 +1,4 @@
-import { colorScheme } from '@airlib/uikit/utils';
+import { colorScheme } from '@airlib/headless/utils';
 import { derived, microtask, render, setup } from '@anchorlib/react';
 import type { ComponentProps, InputEventHandler } from 'react';
 import { THEME_CONFIGS } from './config.ts';

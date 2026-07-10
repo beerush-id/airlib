@@ -1,4 +1,4 @@
-import { getDialog } from '@airlib/uikit/components';
+import { getDialog } from '@airlib/headless/components';
 import { captureStack } from '@anchorlib/core';
 import { render, setup } from '@anchorlib/react';
 import type { HTMLAttributes, MouseEventHandler } from 'react';

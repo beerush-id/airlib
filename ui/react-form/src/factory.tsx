@@ -8,14 +8,14 @@ import { FIELD_OPTIONS, FIELD_OPTIONS_KEYS, FORM_OPTIONS, FORM_OPTIONS_KEYS } fr
 
 interface TypedFormProps<T>
   extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'>,
-  Omit<FormDefaultOptions, 'class'> {
+    Omit<FormDefaultOptions, 'class'> {
   value?: T;
   onSubmit?: (data: T, changes: Partial<T>, e: SubmitEvent<HTMLFormElement>) => Promise<void> | void;
 }
 
 interface TypedFieldProps<T, S extends ZodObject<ZodRawShape>>
   extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>,
-  Omit<FieldDefaultOptions, 'class'> {
+    Omit<FieldDefaultOptions, 'class'> {
   name: DeepPaths<T>;
   match?: DeepPaths<T> | ((form: FormState<S>) => boolean);
   label?: string;

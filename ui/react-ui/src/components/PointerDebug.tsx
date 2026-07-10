@@ -1,4 +1,4 @@
-import { getPointer } from '@airlib/uikit/utils';
+import { getPointer } from '@airlib/headless/utils';
 import { render, setup } from '@anchorlib/react';
 import { MouseIcon } from '../icons/index.js';
 

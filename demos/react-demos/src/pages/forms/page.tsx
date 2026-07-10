@@ -21,8 +21,8 @@ const accountSchema = z.object({
     email: z.string().email('Invalid email address'),
     bio: z.string().max(160, 'Bio must be under 160 characters').optional(),
   }),
-  password: z.string().min(8),
-  passwordConfirm: z.string().min(8),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+  passwordConfirm: z.string().min(8, 'Confirm Password must be at least 8 characters'),
   addresses: z
     .array(
       z.object({
@@ -81,7 +81,7 @@ export const FormsPage = page(formsRoute).render(() => (
             <EmailInput placeholder="jane@example.com" />
           </AccountForm.Field>
 
-          <AccountForm.Field name="profile.bio" label="Biography" className="air-text-field sm:col-span-2">
+          <AccountForm.Field name="profile.bio" label="Biography" className="air-field sm:col-span-2">
             <Textarea placeholder="Tell us a bit about yourself..." rows={3} />
           </AccountForm.Field>
         </div>
@@ -119,39 +119,41 @@ export const FormsPage = page(formsRoute).render(() => (
             <div className="air-card-body space-y-2">
               <For each={() => items}>
                 {(_, index) => (
-                  <div className="air-card-filled air-card-body grid gap-6 sm:grid-cols-2">
-                    <AccountForm.Field
-                      name={`addresses.${index}.street`}
-                      label="Street Address"
-                      className="air-text-field sm:col-span-2"
-                    >
-                      <TextInput placeholder="123 Main St, Apt 4B" />
-                    </AccountForm.Field>
-
-                    <AccountForm.Field name={`addresses.${index}.city`} label="City">
-                      <TextInput placeholder="San Francisco" />
-                    </AccountForm.Field>
-
-                    <div className="grid grid-cols-2 gap-6">
-                      <AccountForm.Field name={`addresses.${index}.state`} label="State">
-                        <TextInput placeholder="CA" maxLength={2} />
-                      </AccountForm.Field>
-                      <AccountForm.Field name={`addresses.${index}.zipCode`} label="ZIP Code">
-                        <TextInput placeholder="94105" />
-                      </AccountForm.Field>
-                    </div>
-
-                    {/* Remove Address Button */}
-                    <div className="sm:col-span-2 flex justify-end pt-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          items.splice(index, 1);
-                        }}
-                        className="air-button-text text-error"
+                  <div className="air-card-outlined">
+                    <div className="air-card-body grid gap-6 sm:grid-cols-2">
+                      <AccountForm.Field
+                        name={`addresses.${index}.street`}
+                        label="Street Address"
+                        className="air-field sm:col-span-2"
                       >
-                        Remove Address
-                      </button>
+                        <TextInput placeholder="123 Main St, Apt 4B" />
+                      </AccountForm.Field>
+
+                      <AccountForm.Field name={`addresses.${index}.city`} label="City">
+                        <TextInput placeholder="San Francisco" />
+                      </AccountForm.Field>
+
+                      <div className="grid grid-cols-2 gap-6">
+                        <AccountForm.Field name={`addresses.${index}.state`} label="State">
+                          <TextInput placeholder="CA" maxLength={2} />
+                        </AccountForm.Field>
+                        <AccountForm.Field name={`addresses.${index}.zipCode`} label="ZIP Code">
+                          <TextInput placeholder="94105" />
+                        </AccountForm.Field>
+                      </div>
+
+                      {/* Remove Address Button */}
+                      <div className="sm:col-span-2 flex justify-end pt-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            items.splice(index, 1);
+                          }}
+                          className="air-button-text text-error"
+                        >
+                          Remove Address
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}

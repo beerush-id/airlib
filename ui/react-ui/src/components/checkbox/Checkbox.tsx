@@ -1,4 +1,4 @@
-import { classx } from '@airlib/uikit/utils';
+import { classx } from '@airlib/headless/utils';
 import { type Bindable, derived, nodeRef, setup } from '@anchorlib/react';
 import type { MouseEvent, MouseEventHandler } from 'react';
 import { CheckIcon, CheckIndeterminateIcon } from '../../icons/index.js';

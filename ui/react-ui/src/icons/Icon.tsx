@@ -1,6 +1,6 @@
 import type { FC, ReactNode, SVGAttributes } from 'react';
 import { stylex } from '../utils/index.js';
-import { classx } from '@airlib/uikit/utils';
+import { classx } from '@airlib/headless/utils';
 import { ICON_CONFIGS } from './config.js';
 
 export interface IconProps extends Omit<SVGAttributes<SVGElement>, 'width' | 'height'> {

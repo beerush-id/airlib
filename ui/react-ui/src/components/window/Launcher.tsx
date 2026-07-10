@@ -1,4 +1,4 @@
-import type { AnyType, WebWindow } from '@airlib/uikit';
+import type { AnyType, WebWindow } from '@airlib/headless';
 import { render, setup, template } from '@anchorlib/react';
 import type { ReactNode } from 'react';
 import { WindowIcon } from '../../icons/index.js';

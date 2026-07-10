@@ -3,25 +3,22 @@ import { configureForm } from '@airlib/react-form';
 export const configureApp = () => {
   configureForm({
     field: {
-      class: 'air-text-field',
-      labelClass: 'air-text-field-label',
-      errorClass: 'air-text-field-error',
-      requiredClass: 'text-error',
+      class: 'air-field',
+      errorClass: 'air-field-error',
+      labelClass: 'air-field-label',
+      supportClass: 'air-field-supporting-text',
+      requiredClass: 'air-field-required',
     },
     input: {
-      class: '',
-      errorClass: 'air-text-field-input-error',
+      class: 'air-text-field',
+      errorClass: 'air-text-field-error',
     },
-    textInput: { class: 'air-text-field-input-filled' },
-    email: { class: 'air-text-field-input-filled' },
-    password: { class: 'air-text-field-input-filled' },
-    number: { class: 'air-text-field-input-filled' },
-    textarea: { class: 'air-textarea-input-filled' },
-    select: { class: 'air-select-input-filled' },
     color: { class: 'air-color-picker' },
-    slider: { class: 'air-slider-primary' },
-    checkbox: { class: 'air-checkbox-input' },
     reset: { class: 'air-button-outlined' },
     submit: { class: 'air-button' },
+    slider: { class: 'air-slider-primary' },
+    select: { class: 'air-select-field' },
+    textarea: { class: 'air-textarea' },
+    checkbox: { class: 'air-checkbox-input' },
   });
 };

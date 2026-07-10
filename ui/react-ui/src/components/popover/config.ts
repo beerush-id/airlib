@@ -1,4 +1,4 @@
-import { AXIS_POSITION } from '@airlib/uikit/utils';
+import { AXIS_POSITION } from '@airlib/headless/utils';
 
 export const POPOVER_CONFIGS = {
   xPos: AXIS_POSITION.center,

@@ -1,5 +1,5 @@
-import { arrowRef, popover, type PopoverInit, type PopoverInstance } from '@airlib/uikit';
-import { classx } from '@airlib/uikit/utils';
+import { arrowRef, popover, type PopoverInit, type PopoverInstance } from '@airlib/headless';
+import { classx } from '@airlib/headless/utils';
 import { derived, effect } from '@anchorlib/core';
 import { type Bindable, createContext, render, setup } from '@anchorlib/react';
 import type { ComponentProps, HTMLAttributes, MouseEventHandler, ReactNode } from 'react';

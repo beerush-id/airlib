@@ -180,11 +180,11 @@
 }
 
 @utility air-field-label {
-  @apply block;
+  @apply flex items-center;
   font-weight: var(--air-field-label-weight);
   font-size: var(--air-field-label-size);
   line-height: var(--font-body-sm-line-height);
-  font-family: var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui), serif;
   letter-spacing: var(--font-body-sm-tracking);
   margin-bottom: var(--spacing);
   color: var(--air-field-label-color);
@@ -202,7 +202,7 @@
   font-weight: var(--font-body-sm-weight);
   font-size: var(--font-body-sm-size);
   line-height: var(--font-body-sm-line-height);
-  font-family: var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui), serif;
   letter-spacing: var(--font-body-sm-tracking);
   margin-top: var(--spacing);
   padding-block: 0;
@@ -211,4 +211,8 @@
   transition-property: color;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
+}
+
+@utility air-field-required {
+  @apply text-error air-label-sm ml-0.5 -mt-1;
 }

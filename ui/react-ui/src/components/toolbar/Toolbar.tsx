@@ -1,4 +1,4 @@
-import { classx } from '@airlib/uikit/utils';
+import { classx } from '@airlib/headless/utils';
 import { type Bindable, type ComponentProps, createContext, derived, render, setup, template } from '@anchorlib/react';
 import type { HTMLAttributes, InputEventHandler, MouseEventHandler } from 'react';
 import { type ElementProps, renderChild } from '../supporting.js';

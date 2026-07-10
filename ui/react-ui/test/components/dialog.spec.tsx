@@ -1,4 +1,4 @@
-import { createDialog } from '@airlib/uikit';
+import { createDialog } from '@airlib/headless';
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Dialog } from '../../src/index.js';

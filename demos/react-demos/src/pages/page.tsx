@@ -8,6 +8,7 @@ import {
   Textarea,
   TextInput,
 } from '@airlib/react-form';
+import { Field, FieldLabel, TextField } from '@airlib/react-ui';
 import { $bind, Link, Meta, mutable, page, setup, snippet, Title } from '@anchorlib/react';
 import airstackLogo from '../assets/airstack.svg';
 import { FormsPage } from './forms/index.js';
@@ -17,13 +18,13 @@ import { indexRoute } from './route.js';
 
 // ── AIR Form: Contact form schema ────────────────────────────────────────────
 
-const ContactForm = createForm(contactSchema);
+const ContactForm = createForm(contactSchema as never);
 
 // ── IRPC Section: Live price tile with manual call/stop ──────────────────────
 
 const PriceTile = setup(() => {
   const symbol = mutable({ value: 'USD' });
-  const stream = watchPrice.with(() => [symbol.value]);
+  const stream = watchPrice.with(() => [symbol.value], 500);
 
   const symbols = ['USD', 'EUR', 'GBP'];
 
@@ -123,18 +124,18 @@ const ProfileDemo = setup(() => {
 
       {/* Inputs — each TextInput/Textarea is a setup component, handles its own reactive read */}
       <div className="flex flex-col gap-4">
-        <div className="air-text-field">
-          <TextInput placeholder=" " value={$bind(() => profile, 'name')} />
-          <label className="air-text-field-label">Name</label>
-        </div>
-        <div className="air-text-field">
-          <TextInput placeholder=" " value={$bind(() => profile, 'role')} />
-          <label className="air-text-field-label">Role</label>
-        </div>
-        <div className="air-text-field">
-          <Textarea placeholder=" " rows={3} value={$bind(() => profile, 'bio')} />
-          <label className="air-text-field-label">Bio</label>
-        </div>
+        <Field>
+          <FieldLabel>Full Name</FieldLabel>
+          <TextField value={$bind(profile, 'name')} placeholder="E.g. Jane Doe" />
+        </Field>
+        <Field>
+          <FieldLabel>Role</FieldLabel>
+          <TextField value={$bind(profile, 'role')} placeholder="E.g. Engineer" />
+        </Field>
+        <Field>
+          <FieldLabel>Bio</FieldLabel>
+          <Textarea value={$bind(profile, 'bio')} placeholder="Tell us about yourself" />
+        </Field>
         <p className="air-body-sm text-on-surface-variant">
           Mutate directly —{' '}
           <code className="font-mono bg-surface-variant px-1 rounded text-xs">profile.name = ...</code>. No hooks, no
@@ -281,7 +282,7 @@ const M3Sampler = setup(() => {
 // ── Root Page ─────────────────────────────────────────────────────────────────
 
 export const RootPage = page(indexRoute).render(() => (
-  <>
+  <div className="container-main">
     <Title>AIR Libraries — Zero Boilerplate, AI Native</Title>
     <Meta
       name="description"
@@ -391,11 +392,11 @@ export const RootPage = page(indexRoute).render(() => (
                 <EmailInput placeholder="jane@example.com" />
               </ContactForm.Field>
 
-              <ContactForm.Field name="message" label="Message" className="air-text-field sm:col-span-2">
+              <ContactForm.Field name="message" label="Message" className="air-field sm:col-span-2">
                 <Textarea placeholder="What are you building?" rows={3} />
               </ContactForm.Field>
 
-              <ContactForm.Field name="updates" className="flex flex-col gap-1 sm:col-span-2">
+              <ContactForm.Field name="updates" className="sm:col-span-2">
                 <label className="flex cursor-pointer items-center gap-3">
                   <Checkbox id="updates-check" />
                   <span className="air-body-md text-on-surface">Keep me updated on releases</span>
@@ -478,7 +479,7 @@ export const RootPage = page(indexRoute).render(() => (
         <code className="font-mono air-body-sm text-on-surface block">bun add @anchorlib/react @irpclib/irpc</code>
       </div>
     </section>
-  </>
+  </div>
 ));
 
 export default RootPage;

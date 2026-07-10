@@ -1,6 +1,6 @@
 import { dialogConfirm } from '@airlib/react-ui/components';
 import { page, setup } from '@anchorlib/react';
-import { uiRoute } from './route.js';
+import { uiIndexRoute } from './route.js';
 import { TabDemo } from './Tabs.js';
 
 const DialogConfirmDemo = setup(() => {
@@ -9,12 +9,12 @@ const DialogConfirmDemo = setup(() => {
       type: 'help',
       title: 'Are you sure?',
       message: 'Are you sure you want to perform this action?',
-      // warningMessage: "This action can't be undone and you may lost access to the state.",
     }).then(console.log);
   };
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="w-full gap-4 flex flex-col">
+      <h2 className="air-headline-sm">Dialogs</h2>
       <button type="button" className="air-button" onClick={handleClick}>
         Confirm Action
       </button>
@@ -22,10 +22,15 @@ const DialogConfirmDemo = setup(() => {
   );
 }, 'DialogConfirmDemo');
 
-export const UIPage = page(uiRoute).render(() => (
-  <>
-    <h1>React UI</h1>
+export const UIPage = page(uiIndexRoute).render(() => (
+  <div className="flex flex-col gap-6 max-w-4xl">
+    <h1 className="air-display-sm mb-4">UI Components</h1>
+    <p className="air-body-lg text-on-surface-variant">
+      Welcome to the AIR Components preview. Select a component from the sidebar to view its documentation and examples.
+    </p>
     <DialogConfirmDemo />
     <TabDemo />
-  </>
+  </div>
 ));
+
+export default UIPage;

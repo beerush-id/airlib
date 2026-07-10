@@ -1,7 +1,7 @@
-import { arrowRef, popover, type PopoverInstance } from '@airlib/uikit';
-import type { PopoverInit } from '@airlib/uikit/components';
-import { classx, uIndex } from '@airlib/uikit/utils';
-import { anchor, derived, isFunction, isObject, mutable } from '@anchorlib/core';
+import { arrowRef, popover, type PopoverInstance } from '@airlib/headless';
+import type { PopoverInit } from '@airlib/headless/components';
+import { classx, uIndex } from '@airlib/headless/utils';
+import { derived, isFunction, isObject, mutable } from '@anchorlib/core';
 import { type Bindable, type ComponentProps, createContext, effect, render, setup } from '@anchorlib/react';
 import type { ComponentProps as ReactProps, MouseEventHandler, ReactNode } from 'react';
 import { CheckIcon, DropDown } from '../../icons/index.js';

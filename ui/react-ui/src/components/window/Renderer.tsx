@@ -1,4 +1,4 @@
-import { type AnyType, WebWin, type WebWindow, type WindowInstance } from '@airlib/uikit';
+import { type AnyType, WebWin, type WebWindow, type WindowInstance } from '@airlib/headless';
 import { isBrowser, subscribe } from '@anchorlib/core';
 import { render, setContext, setup } from '@anchorlib/react';
 import { createRoot } from 'react-dom/client';

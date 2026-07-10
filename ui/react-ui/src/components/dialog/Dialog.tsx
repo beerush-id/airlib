@@ -1,5 +1,5 @@
-import { type AnyType, type DialogState, dragRef, getDialog, setDialog } from '@airlib/uikit';
-import { MOUSE_MODIFIERS } from '@airlib/uikit/utils';
+import { type AnyType, type DialogState, dragRef, getDialog, setDialog } from '@airlib/headless';
+import { MOUSE_MODIFIERS } from '@airlib/headless/utils';
 import { render, setup } from '@anchorlib/react';
 import type { ReactNode } from 'react';
 import { teleport } from '../../lib/index.js';

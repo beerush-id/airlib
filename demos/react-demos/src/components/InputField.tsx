@@ -12,13 +12,13 @@ export const InputField = setup<{
   return render(() => (
     <div className="flex flex-col gap-1 text-left w-full">
       <div className="air-text-field">
-        <label htmlFor={props.id} className="air-text-field-label">
+        <label htmlFor={props.id} className="air-field-label">
           {props.label}
         </label>
         <input
           id={props.id}
           type={props.type ?? 'text'}
-          className="air-text-field-input"
+          className="air-text-field"
           value={props.value}
           onChange={(e) => {
             props.value = e.currentTarget.value;

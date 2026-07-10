@@ -29,7 +29,7 @@ const Counter = setup(() => {
 
 export function TabDemo() {
   return (
-    <div className="mt-8 mb-16 w-full gap-4 flex flex-col">
+    <div className="w-full gap-4 flex flex-col">
       <h2 className="air-headline-sm">Tabs</h2>
       <Tab className="air-tab flex-1" value="flight">
         <Tab.List>

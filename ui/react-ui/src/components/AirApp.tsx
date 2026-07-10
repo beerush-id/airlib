@@ -1,4 +1,4 @@
-import { enableLiveObjects } from '@airlib/uikit';
+import { enableLiveObjects } from '@airlib/headless';
 import { onMount, setup } from '@anchorlib/react';
 import type { HTMLAttributes } from 'react';
 import { ConfirmDialogHost } from './dialog/index.js';

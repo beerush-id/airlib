@@ -1,6 +1,6 @@
-import { classx } from '@airlib/uikit/utils';
+import { classx } from '@airlib/headless/utils';
 import { type Bindable, render, setup } from '@anchorlib/react';
-import type { KeyboardEventHandler, MouseEventHandler } from 'react';
+import type { MouseEventHandler } from 'react';
 import { type ElementProps } from '../supporting.js';
 import { RADIO_CONFIGS } from './config.js';
 
