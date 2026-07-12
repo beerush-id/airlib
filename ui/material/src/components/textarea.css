@@ -13,6 +13,7 @@
 
 @utility air-textarea {
   @apply air-text-field;
+  field-sizing: content;
   height: auto;
   min-height: calc(var(--air-text-field-height) * 2);
   padding-block: var(--air-field-padding-y);

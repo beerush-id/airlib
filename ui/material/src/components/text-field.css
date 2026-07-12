@@ -18,7 +18,7 @@
 
 @utility air-text-field {
   @apply w-full box-border;
-  field-sizing: content;
+  field-sizing: fixed;
   height: var(--air-text-field-height);
   padding-block: 0;
   padding-inline-start: var(--air-field-leading-padding, var(--air-field-padding-x));

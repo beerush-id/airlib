@@ -4,7 +4,7 @@
   --air-toolbar-padding-x: calc(var(--spacing) * 2); /* 8px */
   --air-toolbar-padding-y: calc(var(--spacing) * 2); /* 8px */
   --air-toolbar-gap: calc(var(--spacing) * 2); /* 8px */
-  --air-toolbar-radius: var(--radius-md);
+  --air-toolbar-radius: var(--radius-lg);
   --air-toolbar-group-gap: calc(var(--spacing) * 2); /* 8px */
   --air-toolbar-group-label-color: var(--color-on-surface);
 }
@@ -24,7 +24,7 @@
 
 /* Surface Variants */
 @utility air-toolbar-surface {
-  background-color: var(--color-surface);
+  background-color: var(--color-surface-container-high);
   color: var(--color-on-surface);
 }
 
@@ -178,7 +178,7 @@
 /* Tool Icon Utility */
 @utility air-tool-icon {
   @apply air-icon select-none box-border;
-  --icon-size: calc(var(--spacing) * 4); /* 16px */
+  --air-icon-size: calc(var(--spacing) * 4); /* 16px */
   color: var(--color-on-surface-variant);
   flex-shrink: 0;
 }

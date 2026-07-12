@@ -39,7 +39,7 @@
 }
 
 @utility air-select-menu {
-  @apply flex flex-col air-menu gap-1;
+  @apply flex flex-col air-menu gap-0.5;
 }
 
 @utility air-select-item {
@@ -51,7 +51,7 @@
 }
 
 @utility air-select-badge {
-  @apply air-chip-elevated air-chip-sm bg-error text-on-error ml-4;
+  @apply air-chip-elevated air-chip-sm bg-secondary text-on-secondary ml-4;
   @apply air-label-sm-strong;
 
   font-weight: bold;

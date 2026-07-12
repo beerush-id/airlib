@@ -4,10 +4,12 @@
   --air-button-icon-padding-x: calc(var(--spacing) * 4);
   --air-button-gap: calc(var(--spacing) * 2);
   --air-button-radius: var(--radius-full);
+  --air-button-icon-size: calc(var(--spacing) * 4.5);
 }
 
 /* Base Structure */
 @utility air-button-base {
+  --air-icon-size: var(--air-button-icon-size);
   @apply inline-flex items-center justify-center;
   @apply select-none box-border cursor-pointer air-focus-ring;
 
@@ -51,15 +53,15 @@
 
 @utility air-button-icon-slot {
   /* Smart Icon Padding (M3 Spec: 16px on icon sides, 24px on text sides) */
-  &:has(> .air-icon:first-child:not(:last-child)) {
+  &:has(> .air-icon:first-of-type:not(:last-of-type)) {
     padding-inline-start: var(--air-button-icon-padding-x);
   }
 
-  &:has(> .air-icon:last-child:not(:first-child)) {
+  &:has(> .air-icon:last-of-type:not(:first-of-type)) {
     padding-inline-end: var(--air-button-icon-padding-x);
   }
 
-  &:has(> .air-icon:only-child) {
+  &:has(> .air-icon:only-of-type) {
     padding-inline-start: var(--air-button-icon-padding-x);
     padding-inline-end: var(--air-button-icon-padding-x);
   }
@@ -173,6 +175,7 @@
   --air-button-padding-x: calc(var(--spacing) * 2);
   --air-button-icon-padding-x: var(--spacing);
   --air-button-gap: var(--spacing);
+  --air-button-icon-size: calc(var(--spacing) * 3.5);
   font-size: var(--font-label-sm-size);
   font-weight: var(--font-label-sm-weight);
   line-height: var(--font-label-sm-line-height);
@@ -184,6 +187,7 @@
   --air-button-padding-x: calc(var(--spacing) * 4);
   --air-button-icon-padding-x: calc(var(--spacing) * 2.5);
   --air-button-gap: calc(var(--spacing) * 1.5);
+  --air-button-icon-size: calc(var(--spacing) * 4);
   font-size: var(--font-label-md-size);
   font-weight: var(--font-label-md-weight);
   line-height: var(--font-label-md-line-height);
@@ -195,6 +199,7 @@
   --air-button-padding-x: calc(var(--spacing) * 6);
   --air-button-icon-padding-x: calc(var(--spacing) * 4);
   --air-button-gap: calc(var(--spacing) * 2);
+  --air-button-icon-size: calc(var(--spacing) * 4.5);
   font-size: var(--font-label-lg-size);
   font-weight: var(--font-label-lg-weight);
   line-height: var(--font-label-lg-line-height);
@@ -206,6 +211,7 @@
   --air-button-padding-x: calc(var(--spacing) * 8);
   --air-button-icon-padding-x: calc(var(--spacing) * 5.5);
   --air-button-gap: calc(var(--spacing) * 2.5);
+  --air-button-icon-size: calc(var(--spacing) * 5);
   font-size: var(--font-title-sm-size);
   font-weight: var(--font-title-sm-weight);
   line-height: var(--font-title-sm-line-height);
@@ -217,6 +223,7 @@
   --air-button-padding-x: calc(var(--spacing) * 10);
   --air-button-icon-padding-x: calc(var(--spacing) * 7);
   --air-button-gap: calc(var(--spacing) * 3);
+  --air-button-icon-size: calc(var(--spacing) * 6);
   font-size: var(--font-title-md-size);
   font-weight: var(--font-title-md-weight);
   line-height: var(--font-title-md-line-height);

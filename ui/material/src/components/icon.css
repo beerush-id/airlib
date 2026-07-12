@@ -1,8 +1,12 @@
+@theme {
+  --air-icon-size: calc(var(--spacing) * 6);
+}
+
 @utility air-icon {
   font-family: var(--icon-font);
   font-weight: var(--icon-weight);
   font-style: normal;
-  font-size: var(--icon-size, calc(var(--spacing) * 6)); /* 24px default */
+  font-size: var(--air-icon-size); /* 24px default */
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
