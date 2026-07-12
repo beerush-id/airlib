@@ -1,7 +1,7 @@
-import type { FC, ReactNode, SVGAttributes } from 'react';
-import { stylex } from '../utils/index.js';
 import { classx } from '@airlib/headless/utils';
-import { ICON_CONFIGS } from './config.js';
+import type { FC, ReactNode, SVGAttributes } from 'react';
+import { ICON_CONFIGS } from '../components/icon/config.js';
+import { stylex } from '../utils/index.js';
 
 export interface IconProps extends Omit<SVGAttributes<SVGElement>, 'width' | 'height'> {
   size?: number;
@@ -9,8 +9,7 @@ export interface IconProps extends Omit<SVGAttributes<SVGElement>, 'width' | 'he
 
 export function createIcon(content: (() => ReactNode) | ReactNode, name?: string, viewBox = '0 -960 960 960') {
   if (typeof content === 'function') {
-    const IconFactory: FC<IconProps> = ({ className, size = ICON_CONFIGS.size, fill, style, ...restProps }) => (
-      // biome-ignore lint/a11y/noSvgWithoutTitle: Expect loose.
+    const IconFactory: FC<IconProps> = ({ className, size, fill, style, ...restProps }) => (
       <svg
         {...restProps}
         xmlns="http://www.w3.org/2000/svg"
@@ -18,7 +17,7 @@ export function createIcon(content: (() => ReactNode) | ReactNode, name?: string
         fill={fill ?? ICON_CONFIGS.fill ?? 'currentColor'}
         className={classx([className, ICON_CONFIGS.class])}
         style={stylex({
-          '--icon-size': size,
+          '--air-icon-size': size,
           ...style,
         })}
       >
@@ -29,8 +28,7 @@ export function createIcon(content: (() => ReactNode) | ReactNode, name?: string
     return IconFactory;
   }
 
-  const Icon: FC<IconProps> = ({ className, size = ICON_CONFIGS.size, fill, style, ...restProps }) => (
-    // biome-ignore lint/a11y/noSvgWithoutTitle: Expect loose.
+  const Icon: FC<IconProps> = ({ className, size, fill, style, ...restProps }) => (
     <svg
       {...restProps}
       xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +36,7 @@ export function createIcon(content: (() => ReactNode) | ReactNode, name?: string
       fill={fill ?? ICON_CONFIGS.fill ?? 'currentColor'}
       className={classx([className, ICON_CONFIGS.class])}
       style={stylex({
-        '--icon-size': size,
+        '--air-icon-size': size,
         ...style,
       })}
     >
