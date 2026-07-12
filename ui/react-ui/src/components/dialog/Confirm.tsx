@@ -45,9 +45,13 @@ export async function dialogConfirm(data: DialogConfirmData) {
   try {
     return await dialog.show(data);
   } finally {
-    setTimeout(() => {
+    if (DIALOG_CONFIGS.disposalDelay) {
+      setTimeout(() => {
+        CONFIRM_DIALOG_LIST.delete(dialog);
+      }, DIALOG_CONFIGS.disposalDelay);
+    } else {
       CONFIRM_DIALOG_LIST.delete(dialog);
-    }, DIALOG_CONFIGS.disposalDelay);
+    }
   }
 }
 

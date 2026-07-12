@@ -3,7 +3,7 @@ import { ErrorIcon, HelpIcon, InfoIcon, WarningIcon } from '../../icons/index.js
 export const DIALOG_CONFIGS = {
   class: 'air-dialog',
   portal: 'body',
-  disposalDelay: 500,
+  disposalDelay: 0,
 
   overlay: { class: 'air-dialog-overlay' },
   body: { class: 'air-dialog-body' },

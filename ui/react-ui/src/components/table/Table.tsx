@@ -112,7 +112,7 @@ export function createTable<T extends object = Record<string, unknown>>() {
   }, 'Table');
 
   const TableHeaderRow = setup<ReactProps<'tr'>>((props) => {
-    const $props = props as never as ElementProps<'tr'>;
+    const $props = props as never as ReactProps<'tr'>;
     const table = context.get();
 
     if (!table) {

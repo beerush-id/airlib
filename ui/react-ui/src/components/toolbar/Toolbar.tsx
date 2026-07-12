@@ -19,6 +19,8 @@ export const Toolbar = template<ToolbarProps>(({ children, className, variant = 
 
 export const ToolbarSeparator = template<HTMLAttributes<HTMLDivElement>>(
   ({ className, ...rest }) => (
+    // biome-ignore lint/a11y/useFocusableInteractive: False alarm.
+    // biome-ignore lint/a11y/useAriaPropsForRole: False alarm.
     <div {...rest} role="separator" className={classx([TOOLBAR_CONFIGS.separatorClass, className])} />
   ),
   'ToolbarSeparator'
@@ -179,9 +181,9 @@ export const ToolField = template<ElementProps<'div'>>(
 
 export const ToolIcon = template<ElementProps<'span'>>(
   ({ children, className, ...rest }) => (
-    <span {...rest} aria-hidden="true" className={classx([TOOLBAR_CONFIGS.toolIconClass, className])}>
+    <i {...rest} aria-hidden="true" className={classx([TOOLBAR_CONFIGS.toolIconClass, className])}>
       {renderChild(children)}
-    </span>
+    </i>
   ),
   'ToolIcon'
 );
@@ -220,7 +222,7 @@ export const ToolToggleGroup = setup<ToolToggleGroupProps>((props) => {
   );
 }, 'ToolToggleGroup');
 
-export function createToogleGroup<T = string | number>() {
+export function createToggleGroup<T = string | number>() {
   return {
     Group: ToolToggleGroup as ReturnType<typeof setup<ToolToggleGroupProps<T>>>,
     Button: ToolButton as ReturnType<typeof setup<ToolButtonProps<T>>>,
