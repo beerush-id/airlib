@@ -29,6 +29,14 @@ describe('theme', () => {
       expect(theme.current).toBe('light');
     });
 
+    it('should revert to system when change is called with toggle flag on active mode', () => {
+      const theme = colorScheme();
+      theme.change('dark');
+      expect(theme.mode).toBe('dark');
+      theme.change('dark', true);
+      expect(theme.mode).toBe('system');
+    });
+
     it('should return state early if not in browser context', async () => {
       const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       vi.stubGlobal('window', undefined);

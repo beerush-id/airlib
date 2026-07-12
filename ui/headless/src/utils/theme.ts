@@ -1,5 +1,5 @@
 import { cookies, effect, isBrowser, untrack } from '@anchorlib/core';
-import { KIT_CONFIGS } from 'src/config.ts';
+import { KIT_CONFIGS } from '../config.js';
 
 export type ColorScheme = {
   mode: 'dark' | 'light' | 'system';

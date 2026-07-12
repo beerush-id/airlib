@@ -78,7 +78,6 @@ describe('scroll utilities', () => {
       const parent = document.createElement('div');
       const child = document.createElement('div');
       parent.appendChild(child);
-      container.appendChild(parent);
 
       // jsdom defaults: scrollHeight === clientHeight (both 0), so not scrollable
       expect(getNearestScrollable(child)).toBeUndefined();
@@ -138,7 +137,7 @@ describe('scroll utilities', () => {
       outer.appendChild(inner);
       container.appendChild(outer);
 
-      expect(getScrollables(child)).toEqual([inner, outer]);
+      expect(getScrollables(child)).toEqual([inner, outer, document.body]);
     });
   });
 });

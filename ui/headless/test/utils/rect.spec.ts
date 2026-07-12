@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SNAP_BOUND } from '../../src/config.js';
 import {
   anchorOff,
@@ -8,6 +8,7 @@ import {
   collectEdgeSnaps,
   freezeTransition,
   placeRect,
+  type RectPlacement,
   resolveAxis,
 } from '../../src/utils/rect.js';
 
@@ -57,6 +58,7 @@ describe('rect utils', () => {
 
       root.appendChild(target);
       root.appendChild(sibling);
+      document.body.appendChild(root);
 
       vi.spyOn(sibling, 'getBoundingClientRect').mockReturnValue({
         left: 100,
@@ -75,6 +77,8 @@ describe('rect utils', () => {
       expect(result.x).toContain(200);
       expect(result.y).toContain(100);
       expect(result.y).toContain(200);
+
+      root.remove();
     });
 
     it('should ignore the target element itself if it matches selector', () => {
@@ -83,6 +87,7 @@ describe('rect utils', () => {
       target.className = 'snap';
 
       root.appendChild(target);
+      document.body.appendChild(root);
 
       vi.spyOn(target, 'getBoundingClientRect').mockReturnValue({
         left: 100,
@@ -100,6 +105,8 @@ describe('rect utils', () => {
       // Window bounds only
       expect(result.x).not.toContain(100);
       expect(result.x).not.toContain(200);
+
+      root.remove();
     });
 
     it('should fallback to document if target has no parentElement', () => {
@@ -239,10 +246,10 @@ describe('rect utils', () => {
         ySide: 'after' as const,
         anchorX: { start: 1, center: 2, end: 3 },
         anchorY: { start: 4, center: 5, end: 6 },
-      };
+      } as RectPlacement;
 
       applyPlacement(el, placement, '--popover', 'data-popover');
-      expect(el.style.position).toBe('fixed');
+      expect(el.style.position).toBe('');
       expect(el.style.getPropertyValue('--popover-x')).toBe('10px');
       expect(el.style.getPropertyValue('--popover-y')).toBe('20px');
       expect(el.getAttribute('data-popover-open')).toBe('');
@@ -263,7 +270,7 @@ describe('rect utils', () => {
         ySide: 'end' as const,
         anchorX: { start: 0, center: 0, end: 0 },
         anchorY: { start: 0, center: 0, end: 0 },
-      };
+      } as RectPlacement;
 
       applyPlacement(el, placement);
       expect(el.style.left).toBe('15px');

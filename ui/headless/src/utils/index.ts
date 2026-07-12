@@ -4,6 +4,7 @@ export * from './document.js';
 export * from './focus.js';
 export * from './interaction.js';
 export * from './keyboard.js';
+export * from './list.js';
 export * from './media.js';
 export * from './mouse.js';
 export * from './rect.js';

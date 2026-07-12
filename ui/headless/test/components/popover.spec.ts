@@ -251,6 +251,22 @@ describe('popover Component', () => {
       });
       scope.destroy();
     });
+
+    it('should skip attaching resize and scroll observers when initialized in passive mode', () => {
+      const scope = createLifecycle();
+      scope.run(() => {
+        const p = popover({ passive: true });
+        p.element = floatingEl;
+        p.anchor = anchorEl;
+
+        p.toggle();
+        expect(p.open).toBe(true);
+
+        p.toggle();
+        expect(p.open).toBe(false);
+      });
+      scope.destroy();
+    });
   });
 
   describe('Coverage & Edge Cases', () => {

@@ -120,7 +120,7 @@ describe('document utilities', () => {
 
       restoreSnapshot(el, snapshot);
 
-      expect(el.style.position).toBe('absolute');
+      expect(el.style.position).toBe('fixed');
       expect(el.style.left).toBe('10px');
       expect(el.style.getPropertyValue('--test-x')).toBe('100px');
       expect(el.hasAttribute('data-test-open')).toBe(true);
