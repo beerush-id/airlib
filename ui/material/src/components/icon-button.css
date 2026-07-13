@@ -8,15 +8,13 @@
 @utility air-icon-button-base {
   @apply inline-flex items-center justify-center;
   @apply box-border p-0 cursor-pointer select-none no-underline;
-  @apply air-focus-ring;
+  @apply air-focus-ring air-touch-area;
   width: var(--air-icon-button-size);
   height: var(--air-icon-button-size);
   border-radius: var(--air-icon-button-radius);
 
   /* Resets */
-  border-width: var(--shadow-base, 1px);
-  border-style: solid;
-  border-color: transparent;
+  border: none;
 
   /* Ensure icon scales perfectly */
   font-size: var(--air-icon-button-icon-size);
@@ -37,19 +35,6 @@
 
   &:focus-visible {
     z-index: 1;
-  }
-
-  /* A11y 48x48 minimum hit area */
-  position: relative;
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: max(100%, calc(var(--spacing) * 12)); /* 48px */
-    height: max(100%, calc(var(--spacing) * 12));
-    z-index: -1;
   }
 
   & [type='color'] {
@@ -135,6 +120,8 @@
   @apply air-icon-button-base air-state-layer;
   background-color: transparent;
   color: var(--color-on-surface-variant);
+  border-width: var(--shadow-base, 1px);
+  border-style: solid;
   border-color: var(--color-outline);
   --state-layer-color: var(--color-on-surface-variant);
 
@@ -158,22 +145,27 @@
 
 /* Icon Button Sizes */
 @utility air-icon-button-xs {
+  @apply air-segment-xs;
   --air-icon-button-size: calc(var(--spacing) * 6);
   --air-icon-button-icon-size: calc(var(--spacing) * 4);
 }
 @utility air-icon-button-sm {
+  @apply air-segment-sm;
   --air-icon-button-size: calc(var(--spacing) * 8);
   --air-icon-button-icon-size: calc(var(--spacing) * 5);
 }
 @utility air-icon-button-md {
+  @apply air-segment-md;
   --air-icon-button-size: calc(var(--spacing) * 10);
   --air-icon-button-icon-size: calc(var(--spacing) * 6);
 }
 @utility air-icon-button-lg {
+  @apply air-segment-lg;
   --air-icon-button-size: calc(var(--spacing) * 12);
   --air-icon-button-icon-size: calc(var(--spacing) * 7);
 }
 @utility air-icon-button-xl {
+  @apply air-segment-xl;
   --air-icon-button-size: calc(var(--spacing) * 14);
   --air-icon-button-icon-size: calc(var(--spacing) * 8);
 }

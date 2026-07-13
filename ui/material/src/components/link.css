@@ -38,21 +38,61 @@
   }
 }
 
-/* Nav Link — subtle, no underline, for navbars and sidebars */
+/* Navigation Container Structure */
+@utility air-nav {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 1); /* gap-1 (4px) */
+}
+
+@utility air-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 1); /* 4px */
+}
+
+@utility air-nav-subgroup {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 1); /* 4px */
+  padding-inline-start: calc(var(--spacing) * 2); /* 8px */
+  padding-block-start: calc(var(--spacing) * 1); /* 4px */
+  margin-inline-start: calc(var(--spacing) * 3); /* 12px */
+  border-inline-start-width: 1px;
+  border-inline-start-style: solid;
+  border-inline-start-color: color-mix(in srgb, var(--color-outline-variant) 40%, transparent);
+}
+
+/* Nav Link — pill affordance, for navbars and sidebars */
 @utility air-link-nav {
   @apply air-link-base;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing) * 2); /* 8px */
+  padding-block: calc(var(--spacing) * 1.5); /* 6px */
+  padding-inline: calc(var(--spacing) * 3); /* 12px */
+  border-radius: var(--radius-sm);
+  text-decoration: none;
   color: var(--color-on-surface-variant);
+  font-weight: 500;
+  transition-property: background-color, color, border-radius;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
 
   &:hover {
     color: var(--color-on-surface);
+    background-color: var(--color-surface-container-high);
   }
 
-  &[aria-current='page'] {
+  &[aria-current='page'],
+  &.active {
     color: var(--color-primary);
+    background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    border-radius: var(--radius-full);
   }
 
   &:focus-visible {
-    text-decoration-color: color-mix(in srgb, var(--color-on-surface-variant) 60%, transparent);
+    @apply air-focus-ring;
   }
 }
 

@@ -1,0 +1,110 @@
+@theme {
+  --air-status-height: calc(var(--spacing) * 5); /* 20px */
+  --air-status-padding-x: calc(var(--spacing) * 2); /* 8px */
+  --air-status-dot-size: calc(var(--spacing) * 1.5); /* 6px */
+}
+
+/* Base shape and placement */
+@utility air-status-base {
+  @apply inline-flex items-center justify-center gap-1.5 box-border select-none;
+  position: relative;
+  height: var(--air-status-height);
+  padding-block: 0;
+  padding-inline: var(--air-status-padding-x);
+  border-radius: var(--radius-full);
+
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-md-size); /* 12px */
+  font-weight: 500;
+  line-height: var(--font-label-md-line-height);
+  letter-spacing: var(--font-label-md-tracking);
+}
+
+@utility air-status-dot {
+  @apply inline-block shrink-0 box-border;
+  width: var(--air-status-dot-size);
+  height: var(--air-status-dot-size);
+  border-radius: var(--radius-full);
+  background-color: currentColor;
+}
+
+/* Sizing Variants */
+@utility air-status-sm {
+  --air-status-height: calc(var(--spacing) * 4); /* 16px */
+  --air-status-padding-x: calc(var(--spacing) * 1.5); /* 6px */
+  --air-status-dot-size: calc(var(--spacing) * 1); /* 4px */
+  font-size: var(--font-label-sm-size); /* 10px */
+  line-height: var(--font-label-sm-line-height);
+  letter-spacing: var(--font-label-sm-tracking);
+}
+
+@utility air-status-md {
+  --air-status-height: calc(var(--spacing) * 5); /* 20px */
+  --air-status-padding-x: calc(var(--spacing) * 2); /* 8px */
+  --air-status-dot-size: calc(var(--spacing) * 1.5); /* 6px */
+  font-size: var(--font-label-md-size); /* 12px */
+  line-height: var(--font-label-md-line-height);
+  letter-spacing: var(--font-label-md-tracking);
+}
+
+@utility air-status-lg {
+  --air-status-height: calc(var(--spacing) * 6); /* 24px */
+  --air-status-padding-x: calc(var(--spacing) * 2.5); /* 10px */
+  --air-status-dot-size: calc(var(--spacing) * 2); /* 8px */
+  font-size: var(--font-label-lg-size); /* 14px */
+  line-height: var(--font-label-lg-line-height);
+  letter-spacing: var(--font-label-lg-tracking);
+}
+
+/* Color & Semantic Variants */
+@utility air-status-surface {
+  @apply air-status-base;
+  background-color: var(--color-surface-container-high);
+  color: var(--color-on-surface);
+}
+
+@utility air-status-primary {
+  @apply air-status-base;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+@utility air-status-secondary {
+  @apply air-status-base;
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+@utility air-status-tertiary {
+  @apply air-status-base;
+  background-color: var(--color-tertiary-container);
+  color: var(--color-on-tertiary-container);
+}
+
+@utility air-status-error {
+  @apply air-status-base;
+  background-color: light-dark(oklch(0.92 0.08 25), oklch(0.28 0.09 25));
+  color: light-dark(oklch(0.35 0.15 25), oklch(0.94 0.08 25));
+}
+
+@utility air-status-success {
+  @apply air-status-base;
+  background-color: light-dark(oklch(0.92 0.08 150), oklch(0.25 0.07 150));
+  color: light-dark(oklch(0.3 0.1 150), oklch(0.92 0.08 150));
+}
+
+@utility air-status-warning {
+  @apply air-status-base;
+  background-color: light-dark(oklch(0.94 0.09 75), oklch(0.3 0.08 75));
+  color: light-dark(oklch(0.35 0.12 75), oklch(0.95 0.09 75));
+}
+
+@utility air-status-info {
+  @apply air-status-base;
+  background-color: light-dark(oklch(0.92 0.06 240), oklch(0.25 0.06 240));
+  color: light-dark(oklch(0.32 0.09 240), oklch(0.92 0.06 240));
+}
+
+@utility air-status {
+  @apply air-status-surface air-status-md;
+}

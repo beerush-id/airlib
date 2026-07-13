@@ -1,0 +1,16 @@
+/* Touch Target Hit Area Expansion (M3 Spec: 48x48px minimum hit area on coarse pointer devices) */
+@utility air-touch-area {
+  @media (pointer: coarse) {
+    & {
+      position: relative;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%);
+      width: max(100%, calc(var(--spacing) * 12)); /* 48px */
+      height: max(100%, calc(var(--spacing) * 12));
+    }
+  }
+}

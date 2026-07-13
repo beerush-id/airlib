@@ -1,5 +1,7 @@
 /* Accordion Header Layout */
 @utility air-accordion-header-base {
+  @apply air-focus-ring;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -19,10 +21,9 @@
   border-width: 0;
   border-style: solid;
   border-color: transparent;
-  @apply air-focus-ring;
   cursor: pointer;
   text-align: left;
-  transition-property: background-color, color, outline-color;
+  transition-property: background-color, color, outline-color, border-radius;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
 }
@@ -34,17 +35,6 @@
 }
 
 /* Accordion Content */
-@utility air-accordion-content-base {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition-property: grid-template-rows;
-  transition-duration: var(--duration-medium);
-  transition-timing-function: var(--ease-emphasized-decelerate);
-
-  &[data-state='open'] {
-    grid-template-rows: 1fr;
-  }
-}
 
 @utility air-accordion-inner-base {
   overflow: hidden;
@@ -56,7 +46,7 @@
   transition-timing-function: var(--ease-emphasized-decelerate);
 
   .air-accordion-content[data-state='open'] & {
-    padding-block-start: calc(var(--spacing) * 4);
+    padding-block-start: 0;
     padding-block-end: calc(var(--spacing) * 4);
   }
 }
@@ -77,7 +67,15 @@
 }
 
 @utility air-accordion-content {
-  @apply air-accordion-content-base;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition-property: grid-template-rows;
+  transition-duration: var(--duration-medium);
+  transition-timing-function: var(--ease-emphasized-decelerate);
+
+  &[data-state='open'] {
+    grid-template-rows: 1fr;
+  }
 }
 
 @utility air-accordion-inner {
@@ -88,29 +86,19 @@
 @utility air-accordion-group {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--spacing) * 0.5); /* 2px */
+  gap: var(--air-segment-gap);
 
-  --_inner-radius: var(--radius-sm);
-  --_outer-radius: var(--air-card-radius, var(--radius-xl));
+  --air-segment-outer-radius: var(--air-card-radius, var(--radius-xl));
+  --air-segment-inner-radius: var(--radius-sm);
 
-  & > * {
-    border-radius: var(--_inner-radius);
-  }
-
-  & > *:first-child {
-    border-start-start-radius: var(--_outer-radius);
-    border-start-end-radius: var(--_outer-radius);
-  }
-
-  & > *:last-child {
-    border-end-start-radius: var(--_outer-radius);
-    border-end-end-radius: var(--_outer-radius);
+  & > .air-accordion-item {
+    @apply air-segment-col;
   }
 }
 
 @utility air-accordion-item {
   background-color: var(--color-surface-container-low);
-  transition-property: background-color;
+  transition-property: background-color, border-radius;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
 }

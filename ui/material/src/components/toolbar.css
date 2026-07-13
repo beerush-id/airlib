@@ -133,12 +133,12 @@
 
 /* Compact Toolbar Button Variant (32px height, transparent resting state, M3 styling) */
 @utility air-tool-button {
-  @apply air-button-base air-tool-state air-tool-button-icon-slot;
+  @apply air-button-base air-tool-state air-tool-button-icon-slot air-touch-area;
   --air-button-height: calc(var(--spacing) * 8);
   --air-button-padding-x: calc(var(--spacing) * 3);
   --air-button-icon-padding-x: calc(var(--spacing) * 2);
   --air-button-gap: calc(var(--spacing) * 1.5);
-  --air-button-radius: var(--radius-md);
+  --air-button-radius: var(--radius-full);
 
   font-size: var(--font-label-md-size);
   font-weight: var(--font-label-md-weight);
@@ -148,7 +148,7 @@
 
 /* Compact Toolbar Icon Button Variant (32x32px square/centered, M3 styling) */
 @utility air-tool-icon-button {
-  @apply air-icon-button-base air-tool-state;
+  @apply air-icon-button-base air-tool-state air-touch-area;
   --air-icon-button-size: calc(var(--spacing) * 8); /* 32px */
   --air-icon-button-icon-size: calc(var(--spacing) * 4.5); /* 18px */
   --air-icon-button-radius: var(--radius-full);

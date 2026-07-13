@@ -11,7 +11,7 @@
 @utility air-button-base {
   --air-icon-size: var(--air-button-icon-size);
   @apply inline-flex items-center justify-center;
-  @apply select-none box-border cursor-pointer air-focus-ring;
+  @apply select-none box-border cursor-pointer air-focus-ring air-touch-area;
 
   gap: var(--air-button-gap);
   height: var(--air-button-height);
@@ -37,6 +37,11 @@
 
   &:focus-visible {
     z-index: 1;
+  }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    @apply air-button-disabled;
   }
 
   & :is(input) {
@@ -82,7 +87,8 @@
   color: var(--color-on-primary);
   --state-layer-color: var(--color-on-primary);
 
-  &:disabled {
+  &:disabled,
+  &[aria-disabled='true'] {
     @apply air-button-disabled;
   }
 }
@@ -94,7 +100,8 @@
   color: var(--color-primary);
   --state-layer-color: var(--color-primary);
 
-  &:disabled {
+  &:disabled,
+  &[aria-disabled='true'] {
     @apply air-button-disabled;
   }
 }
@@ -106,7 +113,8 @@
   color: var(--color-on-secondary-container);
   --state-layer-color: var(--color-on-secondary-container);
 
-  &:disabled {
+  &:disabled,
+  &[aria-disabled='true'] {
     @apply air-button-disabled;
   }
 }
@@ -121,11 +129,12 @@
   border-color: var(--color-outline);
   --state-layer-color: var(--color-primary);
 
-  &:focus-visible:not(:disabled) {
+  &:focus-visible:not(:disabled, [aria-disabled='true']) {
     border-color: var(--color-primary);
   }
 
-  &:disabled {
+  &:disabled,
+  &[aria-disabled='true'] {
     @apply air-button-disabled;
   }
 }
@@ -139,7 +148,8 @@
   padding-inline: calc(var(--air-button-padding-x) * 0.5); /* 12px */
   --state-layer-color: var(--color-primary);
 
-  &:disabled {
+  &:disabled,
+  &[aria-disabled='true'] {
     @apply air-button-disabled;
   }
 }
@@ -164,7 +174,8 @@
   color: var(--color-on-surface);
   --state-layer-color: var(--color-on-surface);
 
-  &:disabled {
+  &:disabled,
+  &[aria-disabled='true'] {
     @apply air-button-disabled;
   }
 }
@@ -174,7 +185,7 @@
   @apply air-segment-xs;
   --air-button-height: calc(var(--spacing) * 6);
   --air-button-padding-x: calc(var(--spacing) * 2);
-  --air-button-icon-padding-x: var(--spacing);
+  --air-button-icon-padding-x: calc(var(--spacing) * 2);
   --air-button-gap: var(--spacing);
   --air-button-icon-size: calc(var(--spacing) * 3.5);
   font-size: var(--font-label-sm-size);

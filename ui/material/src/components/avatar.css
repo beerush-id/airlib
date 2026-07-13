@@ -1,0 +1,65 @@
+@utility air-avatar {
+  @apply inline-flex items-center justify-center shrink-0 font-semibold select-none overflow-hidden box-border;
+  width: var(--air-avatar-size, calc(var(--spacing) * 10));
+  height: var(--air-avatar-size, calc(var(--spacing) * 10));
+  border-radius: var(--air-avatar-radius, var(--radius-full));
+  --air-icon-size: calc(var(--spacing) * 6);
+}
+
+@utility air-avatar-img {
+  @apply w-full h-full object-cover select-none;
+}
+
+/* Shapes */
+@utility air-avatar-circle {
+  --air-avatar-radius: var(--radius-full);
+}
+
+@utility air-avatar-rounded {
+  --air-avatar-radius: var(--radius-md);
+}
+
+/* Sizes */
+@utility air-avatar-sm {
+  --air-avatar-size: calc(var(--spacing) * 8);
+  --air-icon-size: calc(var(--spacing) * 4.5);
+  @apply air-label-md;
+}
+
+@utility air-avatar-md {
+  --air-avatar-size: calc(var(--spacing) * 10);
+  --air-icon-size: calc(var(--spacing) * 6);
+  @apply air-label-lg;
+}
+
+@utility air-avatar-lg {
+  --air-avatar-size: calc(var(--spacing) * 14);
+  --air-icon-size: calc(var(--spacing) * 8);
+  @apply air-title-lg;
+}
+
+/* Variants */
+@utility air-avatar-surface {
+  background-color: var(--color-surface-container-high);
+  color: var(--color-on-surface);
+}
+
+@utility air-avatar-primary {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+@utility air-avatar-secondary {
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+@utility air-avatar-tertiary {
+  background-color: var(--color-tertiary-container);
+  color: var(--color-on-tertiary-container);
+}
+
+@utility air-avatar-error {
+  background-color: var(--color-error-container);
+  color: var(--color-on-error-container);
+}

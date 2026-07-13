@@ -43,10 +43,12 @@
   --air-segment-inner-radius: calc(var(--spacing) * 2);
 }
 @utility air-segment-lg {
-  --air-segment-inner-radius: calc(var(--spacing) * 4);
+  --air-segment-outer-radius: calc(var(--spacing) * 6);
+  --air-segment-inner-radius: calc(var(--spacing) * 3);
 }
 @utility air-segment-xl {
-  --air-segment-inner-radius: calc(var(--spacing) * 5);
+  --air-segment-outer-radius: calc(var(--spacing) * 7);
+  --air-segment-inner-radius: calc(var(--spacing) * 4);
 }
 
 @utility air-segment-row {

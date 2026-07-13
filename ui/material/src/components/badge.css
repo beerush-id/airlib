@@ -10,9 +10,7 @@
 
 /* Base shape and placement */
 @utility air-badge-base {
-  @apply absolute top-0 right-0;
   @apply inline-flex items-center justify-center box-border;
-  transform: translate(30%, -30%);
   border-radius: var(--radius-full);
 
   height: var(--air-badge-size);
@@ -25,6 +23,11 @@
   font-weight: var(--font-label-sm-weight);
   line-height: var(--font-label-sm-line-height);
   letter-spacing: var(--font-label-sm-tracking);
+
+  .air-badge-container > & {
+    @apply absolute top-0 right-0;
+    transform: translate(30%, -30%);
+  }
 }
 
 /* Sizing Utilities */
@@ -56,9 +59,35 @@
   color: var(--color-on-secondary-container);
 }
 
+@utility air-badge-surface-color {
+  background-color: var(--color-surface-container-high);
+  color: var(--color-on-surface);
+}
+
+@utility air-badge-tertiary-surface {
+  background-color: var(--color-tertiary-container);
+  color: var(--color-on-tertiary-container);
+}
+
 /* Composed Utilities */
 @utility air-badge {
   @apply air-badge-base air-badge-lg air-badge-error-surface;
+}
+
+@utility air-badge-primary {
+  @apply air-badge-base air-badge-lg air-badge-primary-surface;
+}
+
+@utility air-badge-secondary {
+  @apply air-badge-base air-badge-lg air-badge-secondary-surface;
+}
+
+@utility air-badge-surface {
+  @apply air-badge-base air-badge-lg air-badge-surface-color;
+}
+
+@utility air-badge-tertiary {
+  @apply air-badge-base air-badge-lg air-badge-tertiary-surface;
 }
 
 @utility air-badge-dot {

@@ -8,7 +8,7 @@
 @utility air-group-base {
   @apply inline-flex items-center;
 
-  --air-segment-outer-radius: var(--air-group-outer-radius);
+  --air-segment-outer-radius: var(--air-group-outer-radius, var(--air-group-radius-outer));
   gap: var(--air-group-gap);
 
   & > :is(input, button, select) {

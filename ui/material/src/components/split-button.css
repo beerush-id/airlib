@@ -1,62 +1,22 @@
-@theme {
-  --air-split-button-height: var(--air-button-height, 40px);
-  --air-split-button-radius-outer: calc(var(--air-split-button-height) / 2);
-  --air-split-button-gap: calc(var(--spacing) * 0.5);
-}
-
 /* Container */
 @utility air-split-button-group {
-  @apply inline-flex items-center;
-  --air-segment-outer-radius: var(--air-split-button-radius-outer);
-  gap: var(--air-split-button-gap);
-  height: var(--air-split-button-height);
+  @apply air-button-group;
 }
 
-/* Base style for both halves */
+/* Leading Action Area (Base) */
 @utility air-split-button-base {
-  @apply inline-flex items-center justify-center;
-  @apply cursor-pointer box-border h-full air-segment-row;
-  @apply air-focus-ring air-state-layer;
-
-  font-family: var(--font-brand, system-ui), serif;
-  font-size: var(--font-label-lg-size);
-  font-weight: var(--font-label-lg-weight);
-  line-height: var(--font-label-lg-line-height);
-  letter-spacing: var(--font-label-lg-tracking);
-  border: none;
-
-  transition-property: background-color, outline-color, border-color, border-radius;
-  transition-duration: var(--duration-short);
-  transition-timing-function: var(--ease-standard);
-
-  &:focus-visible {
-    z-index: 1;
-  }
-}
-
-/* Primary Action Area */
-@utility air-split-button-primary {
-  @apply air-split-button-base flex-1;
-  padding-block: 0;
-  padding-inline: var(--air-button-padding-x);
-  gap: var(--air-button-gap);
-
-  /* Smart Icon Padding for Primary Action */
-  &:has(> .air-icon:first-child:not(:last-child)) {
-    padding-inline-start: var(--air-button-icon-padding-x, calc(var(--spacing) * 4));
-  }
+  @apply air-button-base air-state-layer air-segment-row air-button-icon-slot flex-1;
 }
 
 /* Trailing Action Area (Dropdown Arrow) */
 @utility air-split-button-trailing {
-  @apply air-split-button-base;
-  padding-block: 0;
+  @apply air-button-base air-state-layer air-segment-row;
   padding-inline: calc(var(--air-button-padding-x) * 0.5);
 }
 
 /* Color Variants */
 @utility air-split-button-filled {
-  & > .air-split-button-primary,
+  & > .air-split-button-base,
   & > .air-split-button-trailing {
     background-color: var(--color-primary);
     color: var(--color-on-primary);
@@ -65,7 +25,7 @@
 }
 
 @utility air-split-button-tonal {
-  & > .air-split-button-primary,
+  & > .air-split-button-base,
   & > .air-split-button-trailing {
     background-color: var(--color-secondary-container);
     color: var(--color-on-secondary-container);
@@ -74,7 +34,7 @@
 }
 
 @utility air-split-button-elevated {
-  & > .air-split-button-primary,
+  & > .air-split-button-base,
   & > .air-split-button-trailing {
     background-color: var(--color-surface-container-low);
     color: var(--color-primary);
@@ -84,14 +44,16 @@
 }
 
 @utility air-split-button-outlined {
-  & > .air-split-button-primary,
+  & > .air-split-button-base,
   & > .air-split-button-trailing {
     background-color: transparent;
     color: var(--color-primary);
+    border-width: var(--shadow-base, 1px);
+    border-style: solid;
     border-color: var(--color-outline);
     --state-layer-color: var(--color-primary);
 
-    &:focus-visible:not(:disabled) {
+    &:focus-visible:not(:disabled, [aria-disabled='true']) {
       border-color: var(--color-primary);
     }
   }
