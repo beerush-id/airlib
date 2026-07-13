@@ -1,10 +1,31 @@
-import { Avatar, Card, CardBody, CardGroup, CardHeader, CardTitle, Icon } from '@airlib/react-ui/components';
-import { page, setup } from '@anchorlib/react';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardGroup,
+  CardHeader,
+  CardTitle,
+  CodeBlock,
+  Icon,
+  Tooltip,
+} from '@airlib/react-ui/components';
+import { $bind, mutable, page, Show, setup } from '@anchorlib/react';
 import { avatarRoute } from '../route.js';
+import ImageFallback from './ImageFallback.js';
+import Semantic from './Semantic.js';
+import Shapes from './Shapes.js';
+import Sizing from './Sizing.js';
 
 const AvatarDemo = setup(() => {
+  const codeState = mutable({
+    image: false,
+    semantic: false,
+    sizing: false,
+    shapes: false,
+  });
+
   return (
-    <div className="flex flex-col gap-8">
+    <div className="w-full flex flex-col gap-8">
       <div>
         <h1 className="air-display-sm mb-4">Avatars</h1>
         <p className="air-body-lg text-on-surface-variant max-w-3xl">
@@ -13,129 +34,109 @@ const AvatarDemo = setup(() => {
         </p>
       </div>
 
-      <CardGroup>
-        <Card variant="outlined">
-          <CardHeader>
-            <CardTitle>Image & Monogram Fallbacks</CardTitle>
-            <p className="air-body-sm">
-              Pass `src` and `alt`. If the image is omitted or fails to load, the avatar automatically computes and
-              displays monogram initials (`abbr`) from `alt`.
-            </p>
-          </CardHeader>
-          <CardBody>
-            <div className="flex flex-wrap gap-6 items-center">
-              <div className="flex flex-col gap-1.5 items-center">
-                <Avatar
-                  size="lg"
-                  variant="primary"
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&h=128&fit=crop&crop=faces"
-                  alt="Jane Doe"
-                />
-                <span className="air-body-sm text-on-surface-variant">Image URL</span>
-              </div>
-
-              <div className="flex flex-col gap-1.5 items-center">
-                <Avatar
-                  size="lg"
-                  variant="secondary"
-                  src="https://broken-image-link-fallback.example.org/photo.jpg"
-                  alt="Alex Smith"
-                />
-                <span className="air-body-sm text-on-surface-variant">Error to Abbr (`AS`)</span>
-              </div>
-
-              <div className="flex flex-col gap-1.5 items-center">
-                <Avatar size="lg" variant="tertiary" alt="Maria Garcia" />
-                <span className="air-body-sm text-on-surface-variant">Auto Abbr (`MG`)</span>
-              </div>
-
-              <div className="flex flex-col gap-1.5 items-center">
-                <Avatar size="lg" variant="error">
-                  PRO
-                </Avatar>
-                <span className="air-body-sm text-on-surface-variant">Explicit Initials (`PRO`)</span>
-              </div>
+      <CardGroup className="w-full">
+        <Card variant="outlined" className="w-full">
+          <CardHeader className="flex-row">
+            <div className="flex flex-col gap-2 flex-1">
+              <CardTitle>Image & Monogram Fallbacks</CardTitle>
+              <p className="air-body-sm">
+                Pass `src` and `alt`. If the image is omitted or fails to load, the avatar automatically computes and
+                displays monogram initials (`abbr`) from `alt`.
+              </p>
             </div>
-          </CardBody>
+            <Button variant="text" active={$bind(codeState, 'image')}>
+              <Icon name={() => (codeState.image ? 'code_off' : 'code')} />
+              <Tooltip>{() => (codeState.image ? 'Hide Code' : 'Show Code')}</Tooltip>
+            </Button>
+          </CardHeader>
+          <Show when={() => !codeState.image}>
+            <CardBody>
+              <ImageFallback />
+            </CardBody>
+          </Show>
+          <Show when={() => codeState.image}>
+            <CardBody>
+              <CodeBlock code={async () => (await import('./ImageFallback.tsx?raw')).default} />
+            </CardBody>
+          </Show>
         </Card>
 
         <Card variant="outlined">
-          <CardHeader>
-            <CardTitle>Semantic Variants</CardTitle>
-            <p className="air-body-sm">
-              Avatars support all semantic color palettes (`surface`, `primary`, `secondary`, `tertiary`, and `error`)
-              with icons and text monograms.
-            </p>
-          </CardHeader>
-          <CardBody>
-            <div className="flex flex-wrap gap-4 items-center">
-              <Avatar variant="surface">
-                <Icon name="person" />
-              </Avatar>
-              <Avatar variant="primary">
-                <Icon name="dns" />
-              </Avatar>
-              <Avatar variant="secondary">
-                <Icon name="verified_user" />
-              </Avatar>
-              <Avatar variant="tertiary">
-                <Icon name="memory" />
-              </Avatar>
-              <Avatar variant="error">
-                <Icon name="backup" />
-              </Avatar>
-              <Avatar variant="primary" alt="Alex Smith" />
-              <Avatar variant="secondary" alt="Jane Doe" />
+          <CardHeader className="flex-row">
+            <div className="flex flex-col gap-2 flex-1">
+              <CardTitle>Semantic Variants</CardTitle>
+              <p className="air-body-sm">
+                Avatars support all semantic color palettes (`surface`, `primary`, `secondary`, `tertiary`, and `error`)
+                with icons and text monograms.
+              </p>
             </div>
-          </CardBody>
+            <Button variant="text" active={$bind(codeState, 'semantic')}>
+              <Icon name={() => (codeState.semantic ? 'code_off' : 'code')} />
+              <Tooltip>{() => (codeState.semantic ? 'Hide Code' : 'Show Code')}</Tooltip>
+            </Button>
+          </CardHeader>
+          <Show when={() => !codeState.semantic}>
+            <CardBody>
+              <Semantic />
+            </CardBody>
+          </Show>
+          <Show when={() => codeState.semantic}>
+            <CardBody>
+              <CodeBlock code={async () => (await import('./Semantic.tsx?raw')).default} />
+            </CardBody>
+          </Show>
         </Card>
 
         <Card variant="outlined">
-          <CardHeader>
-            <CardTitle>Sizing (`sm`, `md`, `lg`)</CardTitle>
-            <p className="air-body-sm">
-              Compact (`32px`), standard (`40px`), and large (`56px`) avatar sizes to accommodate various density
-              requirements.
-            </p>
-          </CardHeader>
-          <CardBody>
-            <div className="flex flex-wrap gap-6 items-center">
-              <Avatar variant="primary" size="sm">
-                <Icon name="person" />
-              </Avatar>
-              <Avatar variant="primary" size="md">
-                <Icon name="person" />
-              </Avatar>
-              <Avatar variant="primary" size="lg">
-                <Icon name="person" />
-              </Avatar>
-              <Avatar variant="tertiary" size="sm" alt="Alex Smith" />
-              <Avatar variant="tertiary" size="md" alt="Alex Smith" />
-              <Avatar variant="tertiary" size="lg" alt="Alex Smith" />
+          <CardHeader className="flex-row">
+            <div className="flex flex-col gap-2 flex-1">
+              <CardTitle>Sizing (`sm`, `md`, `lg`)</CardTitle>
+              <p className="air-body-sm">
+                Compact (`32px`), standard (`40px`), and large (`56px`) avatar sizes to accommodate various density
+                requirements.
+              </p>
             </div>
-          </CardBody>
+            <Button variant="text" active={$bind(codeState, 'sizing')}>
+              <Icon name={() => (codeState.sizing ? 'code_off' : 'code')} />
+              <Tooltip>{() => (codeState.sizing ? 'Hide Code' : 'Show Code')}</Tooltip>
+            </Button>
+          </CardHeader>
+          <Show when={() => !codeState.sizing}>
+            <CardBody>
+              <Sizing />
+            </CardBody>
+          </Show>
+          <Show when={() => codeState.sizing}>
+            <CardBody>
+              <CodeBlock code={async () => (await import('./Sizing.tsx?raw')).default} />
+            </CardBody>
+          </Show>
         </Card>
 
         <Card variant="outlined">
-          <CardHeader>
-            <CardTitle>Shapes (`circle`, `rounded`)</CardTitle>
-            <p className="air-body-sm">
-              Circular (`rounded-full`) or rounded square (`rounded-md`) shapes suitable for both user profiles and
-              entity representations.
-            </p>
-          </CardHeader>
-          <CardBody>
-            <div className="flex flex-wrap gap-4 items-center">
-              <Avatar variant="primary" shape="circle">
-                <Icon name="person" />
-              </Avatar>
-              <Avatar variant="primary" shape="rounded">
-                <Icon name="description" />
-              </Avatar>
-              <Avatar variant="secondary" size="lg" shape="circle" alt="Alex Smith" />
-              <Avatar variant="secondary" size="lg" shape="rounded" alt="Alex Smith" />
+          <CardHeader className="flex-row">
+            <div className="flex flex-col gap-2 flex-1">
+              <CardTitle>Shapes (`circle`, `rounded`)</CardTitle>
+              <p className="air-body-sm">
+                Circular (`rounded-full`) or rounded square (`rounded-md`) shapes suitable for both user profiles and
+                entity representations.
+              </p>
             </div>
-          </CardBody>
+            <Button variant="text" active={$bind(codeState, 'shapes')}>
+              <Icon name={() => (codeState.shapes ? 'code_off' : 'code')} />
+              <Tooltip>{() => (codeState.shapes ? 'Hide Code' : 'Show Code')}</Tooltip>
+            </Button>
+          </CardHeader>
+          <Show when={() => !codeState.shapes}>
+            <CardBody>
+              <Shapes />
+            </CardBody>
+          </Show>
+          <Show when={() => codeState.shapes}>
+            <CardBody>
+              <CodeBlock code={async () => (await import('./Shapes.tsx?raw')).default} />
+            </CardBody>
+          </Show>
         </Card>
       </CardGroup>
     </div>

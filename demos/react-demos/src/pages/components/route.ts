@@ -1,10 +1,16 @@
 import { rootRoute } from '../route.js';
 
-export const uiRoute = rootRoute.route('/ui');
+export const uiRoute = rootRoute.route('/components');
 export const uiIndexRoute = uiRoute.route('/');
 export const accordionRoute = uiRoute.route('/accordion');
+export const codeBlockRoute = uiRoute.route('/code-block');
+export const collapsibleRoute = uiRoute.route('/collapsible');
+export const avatarRoute = uiRoute.route('/avatar');
 export const badgeRoute = uiRoute.route('/badge');
+export const statusRoute = uiRoute.route('/status');
 export const buttonRoute = uiRoute.route('/button');
+export const iconButtonRoute = uiRoute.route('/icon-button');
+export const fabRoute = uiRoute.route('/fab');
 export const cardRoute = uiRoute.route('/card');
 export const chipRoute = uiRoute.route('/chip');
 export const dialogRoute = uiRoute.route('/dialog');

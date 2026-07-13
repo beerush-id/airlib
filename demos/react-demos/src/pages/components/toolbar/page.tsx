@@ -4,7 +4,7 @@ import {
   CardGroup,
   CardHeader,
   CardTitle,
-  createToogleGroup,
+  createToggleGroup,
   Select,
   SelectItem,
   SelectMenu,
@@ -23,7 +23,7 @@ import {
   ToolInput,
   Tooltip,
 } from '@airlib/react-ui/components';
-import { $bind, mutable, page, setup, template, history, $use } from '@anchorlib/react';
+import { $bind, $use, history, mutable, page, setup, template } from '@anchorlib/react';
 import { toolbarRoute } from '../route.js';
 
 const ALIGNMENT = {
@@ -61,7 +61,7 @@ const ToolbarDemo = setup(() => {
     zoom: 100,
   });
 
-  const Align = createToogleGroup<Alignment>();
+  const Align = createToggleGroup<Alignment>();
 
   const CodeView = template<{ state: object }>((props) => (
     <pre className="air-pre rounded-md bg-surface p-4">
@@ -127,6 +127,7 @@ const ToolbarDemo = setup(() => {
                         <ToolButton ref={ref}>
                           <span>{state.text ?? 'Font'}</span>
                           <ToolIcon>arrow_drop_down</ToolIcon>
+                          <Tooltip>Font Family</Tooltip>
                         </ToolButton>
                       )}
                     </SelectTrigger>
@@ -237,12 +238,12 @@ const ToolbarDemo = setup(() => {
                   <ToolGroup>
                     <ToolButton active={$bind(dataViewState, 'filterActive')} className="px-4">
                       <ToolIcon>filter_list</ToolIcon>
-                      Filter
+                      <span>Filter</span>
                       <Tooltip>Filter by status or date</Tooltip>
                     </ToolButton>
                     <ToolButton active={$bind(dataViewState, 'sortAsc')} className="px-4">
                       <ToolIcon>sort</ToolIcon>
-                      {() => (dataViewState.sortAsc ? 'Sort: Asc' : 'Sort: Desc')}
+                      {() => (dataViewState.sortAsc ? <span>Sort: Asc</span> : <span>Sort: Desc</span>)}
                       <Tooltip>Toggle ascending / descending order</Tooltip>
                     </ToolButton>
                   </ToolGroup>
@@ -378,7 +379,7 @@ const ToolbarDemo = setup(() => {
             </p>
           </CardHeader>
           <CardBody>
-            <div className="inline-flex flex-col gap-6 w-fit bg-surface p-4 rounded-xl">
+            <div className="inline-flex flex-col gap-6 w-fit bg-surface-container-high p-4 rounded-xl">
               <div className="flex flex-col gap-4">
                 {/* Typography Section */}
                 <ToolbarGroup>
@@ -401,7 +402,7 @@ const ToolbarDemo = setup(() => {
                         <Tooltip>Line Height</Tooltip>
                       </ToolIcon>
                       <ToolFieldInput
-                        className="text-center"
+                        className="text-center w-12"
                         value={$bind(editorState, 'lineHeight')}
                         aria-label="Line Height"
                       />
@@ -412,7 +413,7 @@ const ToolbarDemo = setup(() => {
                         <Tooltip>Letter Spacing</Tooltip>
                       </ToolIcon>
                       <ToolFieldInput
-                        className="text-center"
+                        className="text-center w-12"
                         value={$bind(editorState, 'letterSpacing')}
                         aria-label="Letter Spacing"
                       />

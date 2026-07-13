@@ -5,9 +5,15 @@ import {
   CardHeader,
   CardTitle,
   createTable,
-  Field,
   IconButton,
-  TextField,
+  Toolbar,
+  ToolbarSeparator,
+  ToolButton,
+  ToolField,
+  ToolFieldInput,
+  ToolGroup,
+  ToolIcon,
+  Tooltip,
 } from '@airlib/react-ui/components';
 import { $bind, $use, derived, effect, mutable, page, setup, snippet } from '@anchorlib/react';
 import { tableRoute } from '../route.js';
@@ -131,7 +137,7 @@ const TableDemo = setup(() => {
     query: '',
     selected: [] as User[],
     page: 1,
-    pageSize: 10,
+    pageSize: 25,
     total: BASE_DATA.length,
   });
 
@@ -175,29 +181,19 @@ const TableDemo = setup(() => {
     const end = Math.min(state.page * state.pageSize, state.total);
 
     return (
-      <div className="flex items-center justify-between p-4 border-t border-outline-variant">
-        <div className="air-body-sm text-on-surface-variant">
+      <Toolbar className="w-full pl-4 rounded-full">
+        <div className="air-body-sm text-on-surface-variant flex-1">
           Showing {start} to {end} of {state.total} users
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="px-3 py-1.5 text-sm font-medium border border-outline-variant rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-default"
-            disabled={state.page <= 1}
-            onClick={handlePrev}
-          >
-            Previous
-          </button>
-          <button
-            type="button"
-            className="px-3 py-1.5 text-sm font-medium border border-outline-variant rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-default"
-            disabled={state.page >= maxPage}
-            onClick={handleNext}
-          >
-            Next
-          </button>
-        </div>
-      </div>
+        <ToolGroup>
+          <ToolButton disabled={state.page <= 1} onClick={handlePrev}>
+            Prev
+          </ToolButton>
+          <ToolButton disabled={state.page >= maxPage} onClick={handleNext}>
+            Prev
+          </ToolButton>
+        </ToolGroup>
+      </Toolbar>
     );
   }, 'Pagination');
 
@@ -214,72 +210,83 @@ const TableDemo = setup(() => {
       <CardGroup>
         <Card variant="outlined">
           <CardHeader>
-            <div className="flex items-center justify-between w-full">
-              <div>
+            <div className="flex items-center justify-between w-full gap-6">
+              <div className="flex-1">
                 <CardTitle>Segmented Data Table</CardTitle>
-                <p className="air-body-sm">A table displaying rows of data.</p>
+                <p className="air-card-subtitle">A table displaying rows of data.</p>
               </div>
-              <div className="w-64">
-                <Field>
-                  <TextField placeholder="Search users..." value={$bind(() => state, 'query')} />
-                </Field>
-              </div>
+              <Toolbar className="justify-between flex-1 rounded-full">
+                <ToolField className="flex-1 rounded-full">
+                  <ToolIcon>search</ToolIcon>
+                  <ToolFieldInput placeholder="Search keywords..." value={$bind(() => state, 'query')} />
+                </ToolField>
+
+                <ToolbarSeparator />
+
+                <ToolButton className="rounded-full">
+                  <ToolIcon>filter_list</ToolIcon>
+                  <span>Filter</span>
+                  <Tooltip>Filter by status or date</Tooltip>
+                </ToolButton>
+              </Toolbar>
             </div>
           </CardHeader>
-          <CardBody>
-            <div className="overflow-x-auto">
-              <UserTable rows={$use(state, 'rows')} selection={$use(state, 'selected')}>
-                <UserTable.Head>
-                  <UserTable.HeaderRow>
-                    <UserTable.Header>
-                      <UserTable.Sort value="name" label="Name" />
-                    </UserTable.Header>
-                    <UserTable.Header>
-                      <UserTable.Sort value="role" label="Role" />
-                    </UserTable.Header>
-                    <UserTable.Header>
-                      <UserTable.Sort value="status" label="Status" />
-                    </UserTable.Header>
-                    <UserTable.Header className="text-right">Actions</UserTable.Header>
-                  </UserTable.HeaderRow>
-                </UserTable.Head>
-                <UserTable.Body>
-                  {(item) => (
-                    <UserTable.Row item={item} variant="filled" key={item.id}>
-                      <UserTable.Cell>
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
-                            <span className="air-icon text-on-primary-container">person</span>
-                          </div>
-                          <div>
-                            <div className="air-title-sm">{item.name}</div>
-                            <div className="air-body-sm text-on-surface-variant">{item.email}</div>
-                          </div>
+          <CardBody className="flex flex-col gap-4">
+            <UserTable rows={$use(state, 'rows')} selection={$use(state, 'selected')}>
+              <UserTable.Head>
+                <UserTable.HeaderRow>
+                  <UserTable.Header>
+                    <UserTable.Sort value="name" label="Name" />
+                  </UserTable.Header>
+                  <UserTable.Header>
+                    <UserTable.Sort value="role" label="Role" />
+                  </UserTable.Header>
+                  <UserTable.Header>
+                    <UserTable.Sort value="status" label="Status" />
+                  </UserTable.Header>
+                  <UserTable.Header className="text-right">
+                    <span>Actions</span>
+                  </UserTable.Header>
+                </UserTable.HeaderRow>
+              </UserTable.Head>
+              <UserTable.Body>
+                {(item) => (
+                  <UserTable.Row item={item} variant="filled" key={item.id}>
+                    <UserTable.Cell>
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                          <span className="air-icon text-on-primary-container">person</span>
                         </div>
-                      </UserTable.Cell>
-                      <UserTable.Cell>{item.role}</UserTable.Cell>
-                      <UserTable.Cell>
-                        <span
-                          className={`air-chip air-chip-sm border-0 ${
-                            item.status === 'Active'
-                              ? 'bg-tertiary-container text-on-tertiary-container'
-                              : 'bg-surface-container text-on-surface'
-                          }`}
-                        >
-                          {item.status}
-                        </span>
-                      </UserTable.Cell>
-                      <UserTable.Cell className="text-right">
-                        <IconButton>
-                          <span className="air-icon">more_vert</span>
-                        </IconButton>
-                      </UserTable.Cell>
-                    </UserTable.Row>
-                  )}
-                </UserTable.Body>
-              </UserTable>
-              <Pagination />
-            </div>
+                        <div>
+                          <h3 className="air-title-sm">{item.name}</h3>
+                          <span className="air-body-sm text-on-surface-variant">{item.email}</span>
+                        </div>
+                      </div>
+                    </UserTable.Cell>
+                    <UserTable.Cell>
+                      <span>{item.role}</span>
+                    </UserTable.Cell>
+                    <UserTable.Cell>
+                      <span
+                        className={`air-chip air-chip-sm border-0 ${
+                          item.status === 'Active'
+                            ? 'bg-tertiary-container text-on-tertiary-container'
+                            : 'bg-surface-container text-on-surface'
+                        }`}
+                      >
+                        {item.status}
+                      </span>
+                    </UserTable.Cell>
+                    <UserTable.Cell className="text-right">
+                      <IconButton>
+                        <span className="air-icon">more_vert</span>
+                      </IconButton>
+                    </UserTable.Cell>
+                  </UserTable.Row>
+                )}
+              </UserTable.Body>
+            </UserTable>
+            <Pagination />
           </CardBody>
         </Card>
       </CardGroup>

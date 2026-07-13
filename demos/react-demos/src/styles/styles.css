@@ -3,6 +3,7 @@
 @import '@airlib/material';
 @import '@airlib/material/default.css';
 
+@source '../../node_modules/@airlib/headless/dist';
 @source '../../node_modules/@airlib/react-ui/dist';
 
 /* ── Custom Brand Tokens ── */

@@ -296,7 +296,7 @@ export const RootPage = page(indexRoute).render(() => (
         <h1 className="air-display-sm font-bold text-on-surface tracking-tight">AIR Libraries</h1>
       </div>
 
-      <p className="air-title-md text-on-surface-variant max-w-lg text-center leading-relaxed mb-8">
+      <p className="air-title-md text-on-surface-variant max-w-xl text-center leading-relaxed mb-8">
         Fine-grained reactivity, isomorphic RPC, and schema-driven forms.
         <br />
         No boilerplate. No ceremony. Ships fast.
