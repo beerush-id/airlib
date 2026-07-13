@@ -1,16 +1,16 @@
 import { classx } from '@airlib/headless/utils';
 import { template } from '@anchorlib/react';
-import type { ComponentProps } from 'react';
 import { stylex } from '../../utils/index.js';
+import { type ElementProps, renderDynamic } from '../renderer.ts';
 import { ICON_CONFIGS } from './config.js';
 
-export type IconProps = Omit<ComponentProps<'span'>, 'children'> & {
-  name: string;
+export type IconProps = ElementProps<'span'> & {
+  name?: string | (() => string);
   size?: number;
 };
 
-export const Icon = template<IconProps>(
-  ({ name, className, size, style, ...restProps }) => (
+export const Icon = template<IconProps>(({ name, className, children, size, style, ...restProps }) => {
+  return (
     <span
       {...restProps}
       aria-hidden="true"
@@ -20,13 +20,12 @@ export const Icon = template<IconProps>(
         ...style,
       })}
     >
-      {name}
+      {children ? renderDynamic(children) : typeof name === 'function' ? name() : name}
     </span>
-  ),
-  'Icon'
-);
+  );
+}, 'Icon');
 
-export type SVGIconProps = ComponentProps<'svg'> & {
+export type SVGIconProps = ElementProps<'svg'> & {
   size?: number;
 };
 
@@ -43,7 +42,7 @@ export const SVGIcon = template<SVGIconProps>(
         ...style,
       })}
     >
-      {children}
+      {renderDynamic(children)}
     </svg>
   ),
   'SVGIcon'

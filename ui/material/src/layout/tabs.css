@@ -69,6 +69,7 @@
   height: var(--air-tabs-height);
   padding-block: 0;
   padding-inline: calc(var(--spacing) * 4);
+  gap: calc(var(--spacing) * 2);
 
   /* Typography: Title Small */
   font-family: var(--font-brand, system-ui);
@@ -160,6 +161,12 @@
   &:disabled,
   &[aria-disabled='true'] {
     @apply air-tab-item-disabled;
+  }
+
+  & > .air-icon,
+  & > svg {
+    @apply shrink-0;
+    --air-icon-size: calc(var(--spacing) * 5);
   }
 }
 

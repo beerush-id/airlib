@@ -1,0 +1,30 @@
+@theme {
+  --air-page-gap: calc(var(--spacing) * 4);
+  --air-page-width: calc(var(--spacing) * 256);
+  --air-page-space-x: calc(var(--spacing) * 4);
+  --air-page-space-y: calc(var(--spacing) * 4);
+  --air-page-sidebar-width: calc(var(--spacing) * 56);
+}
+
+@utility air-page {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  max-width: var(--air-page-width);
+  margin-inline: auto;
+  padding-block: var(--air-page-space-y);
+  padding-inline: var(--air-page-space-x);
+}
+
+@utility air-sidebar {
+  @apply sticky flex flex-col overflow-y-auto;
+  width: var(--air-page-sidebar-width);
+  gap: var(--air-page-gap);
+  padding-inline-end: var(--air-page-space-x);
+}
+
+@utility air-content {
+  --_space-x: calc(var(--air-page-space-x) * 2);
+  width: calc(var(--air-page-width) - var(--air-page-sidebar-width) - var(--_space-x));
+  padding-inline-start: var(--air-page-space-x);
+}

@@ -93,6 +93,10 @@
   }
 }
 
+@utility air-button-filled {
+  @apply air-button;
+}
+
 /* Elevated Button (High Emphasis) */
 @utility air-button-elevated {
   @apply air-button-base air-button-icon-slot air-state-layer;

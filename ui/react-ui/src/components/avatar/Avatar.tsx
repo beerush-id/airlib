@@ -23,7 +23,7 @@ export const Avatar = setup<AvatarProps>((props) => {
 
   const content = () => {
     if (props.children) return renderDynamic(props.children);
-    if (Boolean(props.src) && !state.error) {
+    if (props.src && !state.error) {
       return (
         <img
           src={props.src}

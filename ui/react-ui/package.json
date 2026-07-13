@@ -65,6 +65,7 @@
     "jsdom": "catalog:",
     "publint": "catalog:",
     "rimraf": "catalog:",
+    "shiki": "catalog:lib",
     "tsdown": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"

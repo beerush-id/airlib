@@ -1,0 +1,33 @@
+@utility air-code-block {
+  @apply w-full rounded-xl select-text relative;
+  @apply bg-surface-container-low text-on-surface;
+
+  pre {
+    @apply w-auto m-0 p-4 md:p-6 bg-transparent! outline-none;
+  }
+
+  code {
+    @apply font-mono text-sm leading-relaxed outline-none;
+  }
+}
+
+@utility air-code-block-inner {
+  @apply relative z-0 w-full overflow-auto;
+}
+
+@utility air-code-block-copy {
+  @apply absolute z-10 top-2 right-2;
+}
+
+@utility air-code-block-pending {
+  @apply flex items-center justify-center p-4;
+
+  & > .air-progress-circular {
+    @apply w-8 h-8;
+  }
+}
+
+@utility air-code-block-error {
+  @apply flex items-center gap-2;
+  @apply text-error text-sm px-4 py-2;
+}

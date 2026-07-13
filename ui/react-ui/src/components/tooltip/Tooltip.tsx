@@ -4,8 +4,9 @@ import { isFunction, isObject } from '@anchorlib/core';
 import { render, setup } from '@anchorlib/react';
 import type { ComponentProps, ReactNode } from 'react';
 import { TOOLTIP_CONFIGS } from './config.js';
+import { renderDynamic, type ElementProps } from '../renderer.ts';
 
-export interface TooltipProps extends Pick<PopoverInit, 'xPos' | 'yPos'>, ComponentProps<'div'> {
+export interface TooltipProps extends Pick<PopoverInit, 'xPos' | 'yPos'>, ElementProps<'div'> {
   rich?: boolean;
   children?: ReactNode;
   className?: string;
@@ -40,7 +41,7 @@ export const Tooltip = setup<TooltipProps>((props) => {
         role="tooltip"
         className={classx([props.rich ? TOOLTIP_CONFIGS.richClass : TOOLTIP_CONFIGS.class, props.className])}
       >
-        {props.children}
+        {renderDynamic(props.children)}
       </div>
     ),
     'Tooltip'

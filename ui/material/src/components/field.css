@@ -43,7 +43,6 @@
   --air-field-label-line-height-lg: var(--font-body-lg-line-height);
 }
 
-/* Base Field wrapper (routes to specific containers based on input type) */
 @utility air-field {
   @apply block w-full;
 
@@ -61,6 +60,15 @@
 
   &:has(.air-select-field) {
     @apply air-select-field-container;
+  }
+
+  &:has(:disabled),
+  &[aria-disabled='true'] {
+    @apply air-field-disabled;
+
+    & :is(.air-checkbox, .air-switch, .air-radio) {
+      opacity: 1;
+    }
   }
 }
 

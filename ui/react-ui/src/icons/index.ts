@@ -1,5 +1,6 @@
 export * from './Check.js';
 export * from './Close.js';
+export * from './ContentPaste.js';
 export * from './DarkMode.js';
 export * from './DropDown.js';
 export * from './DropUp.js';

@@ -25,6 +25,25 @@
     --state-layer-color: var(--color-primary);
   }
 
+  &:disabled,
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+    pointer-events: none;
+
+    &::before {
+      pointer-events: none;
+    }
+
+    & :is(.air-checkbox, .air-checkbox-base) {
+      @apply air-checkbox-disabled;
+    }
+
+    &[aria-checked='true'] :is(.air-checkbox, .air-checkbox-base),
+    &[aria-checked='mixed'] :is(.air-checkbox, .air-checkbox-base) {
+      @apply air-checkbox-disabled-checked;
+    }
+  }
+
   &:focus-visible {
     outline: none;
   }
