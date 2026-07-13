@@ -1,7 +1,7 @@
 import { classx } from '@airlib/headless/utils';
 import { type Bindable, type ComponentProps, createContext, derived, render, setup, template } from '@anchorlib/react';
 import type { HTMLAttributes, InputEventHandler, MouseEventHandler } from 'react';
-import { type ElementProps, renderChild } from '../supporting.js';
+import { type ElementProps, renderDynamic } from '../renderer.js';
 import { TOOLBAR_CONFIGS } from './config.js';
 
 export type ToolbarProps = ElementProps<'div'> & {
@@ -12,7 +12,7 @@ export const Toolbar = template<ToolbarProps>(({ children, className, variant = 
   const baseClass = variant === 'outlined' ? TOOLBAR_CONFIGS.outlinedClass : TOOLBAR_CONFIGS.class;
   return (
     <div {...rest} role="toolbar" className={classx([baseClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </div>
   );
 }, 'Toolbar');
@@ -29,7 +29,7 @@ export const ToolbarSeparator = template<HTMLAttributes<HTMLDivElement>>(
 export const ToolbarGroup = template<ElementProps<'div'>>(
   ({ children, className, ...rest }) => (
     <div {...rest} role="group" className={classx([TOOLBAR_CONFIGS.groupClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </div>
   ),
   'ToolbarGroup'
@@ -38,7 +38,7 @@ export const ToolbarGroup = template<ElementProps<'div'>>(
 export const ToolbarGroupLabel = template<ElementProps<'span'>>(
   ({ children, className, ...rest }) => (
     <span {...rest} className={classx([TOOLBAR_CONFIGS.groupLabelClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </span>
   ),
   'ToolbarGroupLabel'
@@ -47,7 +47,7 @@ export const ToolbarGroupLabel = template<ElementProps<'span'>>(
 export const ToolbarGroupContent = template<ElementProps<'div'>>(
   ({ children, className, ...rest }) => (
     <div {...rest} className={classx([TOOLBAR_CONFIGS.groupContentClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </div>
   ),
   'ToolbarGroupContent'
@@ -56,7 +56,7 @@ export const ToolbarGroupContent = template<ElementProps<'div'>>(
 export const ToolGroup = template<ElementProps<'div'>>(
   ({ children, className, ...rest }) => (
     <div {...rest} role="group" className={classx([TOOLBAR_CONFIGS.toolGroupClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </div>
   ),
   'ToolGroup'
@@ -92,7 +92,7 @@ export const ToolButton = setup<ToolButtonProps>((props) => {
         className={classx([TOOLBAR_CONFIGS.toolButtonClass, props.className])}
         onClick={handleClick}
       >
-        {renderChild(props.children)}
+        {renderDynamic(props.children)}
       </button>
     ),
     'ToolButton'
@@ -129,7 +129,7 @@ export const ToolIconButton = setup<ToolIconButtonProps>((props) => {
         className={classx([TOOLBAR_CONFIGS.toolIconButtonClass, props.className])}
         onClick={handleClick}
       >
-        {renderChild(props.children)}
+        {renderDynamic(props.children)}
       </button>
     ),
     'ToolIconButton'
@@ -173,7 +173,7 @@ export const ToolFieldInput = template<ToolInputProps>((props) => {
 export const ToolField = template<ElementProps<'div'>>(
   ({ children, className, ...rest }) => (
     <div {...rest} className={classx([TOOLBAR_CONFIGS.toolFieldClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </div>
   ),
   'ToolField'
@@ -181,9 +181,9 @@ export const ToolField = template<ElementProps<'div'>>(
 
 export const ToolIcon = template<ElementProps<'span'>>(
   ({ children, className, ...rest }) => (
-    <i {...rest} aria-hidden="true" className={classx([TOOLBAR_CONFIGS.toolIconClass, className])}>
-      {renderChild(children)}
-    </i>
+    <span {...rest} aria-hidden="true" className={classx([TOOLBAR_CONFIGS.toolIconClass, className])}>
+      {renderDynamic(children)}
+    </span>
   ),
   'ToolIcon'
 );
@@ -215,7 +215,7 @@ export const ToolToggleGroup = setup<ToolToggleGroupProps>((props) => {
   return render(
     () => (
       <div {...restProps} role="group" className={classx([TOOLBAR_CONFIGS.toolGroupClass, props.className])}>
-        {renderChild(props.children)}
+        {renderDynamic(props.children)}
       </div>
     ),
     'ToolToggleGroup'

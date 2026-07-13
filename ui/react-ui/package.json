@@ -3,7 +3,16 @@
   "name": "@airlib/react-ui",
   "version": "1.0.0",
   "description": "React components for AIR MUI — Material Design 3 headless component library. Thin wrappers connecting @airlib/headless headless logic to React with fine-grained ARIA mapping.",
-  "keywords": ["react", "material-design", "headless", "ui", "components", "air-stack", "anchor", "typescript"],
+  "keywords": [
+    "react",
+    "material-design",
+    "headless",
+    "ui",
+    "components",
+    "air-stack",
+    "anchor",
+    "typescript"
+  ],
   "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
   "repository": {
     "type": "git",
@@ -26,6 +35,10 @@
       "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js"
     },
+    "./form": {
+      "types": "./dist/form/index.d.ts",
+      "import": "./dist/form/index.js"
+    },
     "./icons": {
       "types": "./dist/icons/index.d.ts",
       "import": "./dist/icons/index.js"
@@ -35,7 +48,9 @@
       "import": "./dist/utils/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "directories": {
     "dist": "dist"
   },
@@ -55,6 +70,7 @@
     "vitest": "catalog:"
   },
   "peerDependencies": {
+    "@airlib/form": "workspace:*",
     "@airlib/headless": "workspace:*",
     "@anchorlib/core": "catalog:lib",
     "@anchorlib/react": "catalog:lib",

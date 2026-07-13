@@ -28,7 +28,7 @@
   font-weight: var(--font-body-lg-weight);
   font-size: var(--air-field-font-size);
   line-height: var(--font-body-lg-line-height);
-  font-family: var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui), serif;
   letter-spacing: var(--font-body-lg-tracking);
 
   border-width: 1px;
@@ -37,7 +37,7 @@
   background-color: transparent;
   color: var(--air-field-color, var(--color-on-surface));
 
-  transition-property: background-color, border-color, box-shadow, color;
+  transition-property: background-color, border-color, box-shadow, color, border-radius;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
 

@@ -4,8 +4,9 @@
   --air-toolbar-padding-x: calc(var(--spacing) * 2); /* 8px */
   --air-toolbar-padding-y: calc(var(--spacing) * 2); /* 8px */
   --air-toolbar-gap: calc(var(--spacing) * 2); /* 8px */
-  --air-toolbar-radius: var(--radius-lg);
+  --air-toolbar-radius: var(--radius-full);
   --air-toolbar-group-gap: calc(var(--spacing) * 2); /* 8px */
+  --air-toolbar-outer-radius: calc(var(--spacing) * 4);
   --air-toolbar-group-label-color: var(--color-on-surface);
 }
 
@@ -114,9 +115,25 @@
   }
 }
 
+/* Smart Icon Padding (M3 Spec: 16px on icon sides, 24px on text sides) */
+@utility air-tool-button-icon-slot {
+  &:has(> .air-tool-icon:first-of-type:not(:last-of-type)) {
+    padding-inline-start: calc(var(--spacing) * 2);
+  }
+
+  &:has(> .air-tool-icon:last-of-type:not(:first-of-type)) {
+    padding-inline-end: calc(var(--spacing) * 2);
+  }
+
+  &:has(> .air-tool-icon:only-of-type) {
+    padding-inline-start: calc(var(--spacing) * 2);
+    padding-inline-end: calc(var(--spacing) * 2);
+  }
+}
+
 /* Compact Toolbar Button Variant (32px height, transparent resting state, M3 styling) */
 @utility air-tool-button {
-  @apply air-button-base air-button-icon-slot air-tool-state;
+  @apply air-button-base air-tool-state air-tool-button-icon-slot;
   --air-button-height: calc(var(--spacing) * 8);
   --air-button-padding-x: calc(var(--spacing) * 3);
   --air-button-icon-padding-x: calc(var(--spacing) * 2);
@@ -127,10 +144,6 @@
   font-weight: var(--font-label-md-weight);
   line-height: var(--font-label-md-line-height);
   letter-spacing: var(--font-label-md-tracking);
-
-  &:has(.air-tool-icon:last-child, .air-icon:last-child) {
-    padding-inline-end: calc(var(--spacing) * 2);
-  }
 }
 
 /* Compact Toolbar Icon Button Variant (32x32px square/centered, M3 styling) */
@@ -138,15 +151,15 @@
   @apply air-icon-button-base air-tool-state;
   --air-icon-button-size: calc(var(--spacing) * 8); /* 32px */
   --air-icon-button-icon-size: calc(var(--spacing) * 4.5); /* 18px */
-  --air-icon-button-radius: var(--radius-md);
+  --air-icon-button-radius: var(--radius-full);
   --air-icon-size: calc(var(--spacing) * 4);
 }
 
 /* Container for grouped toolbar controls (inputs, buttons, selects) with M3 non-flat radii */
 @utility air-tool-group {
   @apply air-group-base;
-  --air-group-outer-radius: var(--radius-md, 12px);
-  --air-group-inner-radius: var(--radius-xs, 4px);
+  --air-segment-outer-radius: var(--air-toolbar-outer-radius);
+  --air-segment-inner-radius: calc(var(--spacing) * 1.5);
 }
 
 /* Compact Toolbar Input Variant (32px height, subtle background, M3 styling) */
@@ -154,7 +167,7 @@
   @apply air-text-field-input;
   --air-text-field-height: calc(var(--spacing) * 8);
   --air-field-font-size: var(--font-body-sm-size);
-  --air-field-radius: var(--radius-md);
+  --air-field-radius: var(--radius-full);
   --air-field-padding-x: calc(var(--spacing) * 3);
   --air-field-padding-y: calc(var(--spacing) * 1.5);
 
@@ -190,8 +203,8 @@
   padding-block: 0;
   padding-inline-start: calc(var(--spacing) * 2);
   padding-inline-end: calc(var(--spacing) * 2);
-  gap: calc(var(--spacing) * 1.5);
-  border-radius: var(--radius-md);
+  gap: calc(var(--spacing) * 1);
+  border-radius: var(--radius-full);
   background-color: var(--color-surface-container-low, var(--color-surface-variant));
   border-width: 1px;
   border-style: solid;

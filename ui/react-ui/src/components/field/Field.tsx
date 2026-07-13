@@ -1,7 +1,7 @@
 import { classx } from '@airlib/headless/utils';
 import { render, setup, template } from '@anchorlib/react';
 import type { ComponentProps, MouseEventHandler } from 'react';
-import { type ElementProps } from '../supporting.js';
+import type { ElementProps } from '../renderer.js';
 import { FIELD_CONFIGS } from './config.js';
 
 export interface FieldProps extends ComponentProps<'label'> {

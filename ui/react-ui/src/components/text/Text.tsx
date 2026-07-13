@@ -1,6 +1,6 @@
 import { classx } from '@airlib/headless/utils';
 import { template } from '@anchorlib/react';
-import { type ElementProps, renderChild } from '../supporting.js';
+import { type ElementProps, renderDynamic } from '../renderer.js';
 import { TEXT_CONFIGS } from './config.js';
 
 export type TextProps = ElementProps<'p'> & {
@@ -12,7 +12,7 @@ export const Text = template<TextProps>(({ children, className, size = 'md', str
   const key = `${size}${strong ? 'Strong' : ''}` as keyof typeof TEXT_CONFIGS;
   return (
     <p {...rest} className={classx([TEXT_CONFIGS[key], className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </p>
   );
 }, 'Paragraph');

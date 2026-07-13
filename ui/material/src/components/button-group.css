@@ -1,31 +1,38 @@
 @theme {
-  --air-group-radius-outer: calc(var(--air-button-height, 40px) / 2);
-  --air-group-radius-inner: var(--radius-sm, 8px);
+  --air-group-radius-outer: calc(var(--air-button-height) / 2);
+  --air-group-radius-inner: var(--radius-sm);
   --air-group-gap: calc(var(--spacing) * 0.5);
 }
 
 /* Base Group Structure (DRY utility for border radii and z-index stacking) */
 @utility air-group-base {
   @apply inline-flex items-center;
+
+  --air-segment-outer-radius: var(--air-group-outer-radius);
   gap: var(--air-group-gap);
 
-  & :is(input, button, select) {
-    border-radius: var(--air-group-inner-radius);
+  & > :is(input, button, select) {
+    @apply air-segment-row;
+  }
+  & > :has(input, button, select) :is(input, button, select) {
+    @apply air-segment-base;
+
+    &:not(:hover, :active, :focus),
+    &:disabled {
+      @apply air-segment-inner;
+    }
+  }
+  & > :first-child:is(input, button, select),
+  & > :first-child:has(input, button, select) :is(input, button, select) {
+    @apply air-segment-row-start;
+  }
+  & > :last-child:is(input, button, select),
+  & > :last-child:has(input, button, select) :is(input, button, select) {
+    @apply air-segment-row-end;
   }
 
-  & :is(input, button, select):focus,
   & :is(input, button, select):focus-visible {
     z-index: 1;
-  }
-
-  & :is(input, button, select):first-child {
-    border-start-start-radius: var(--air-group-outer-radius);
-    border-end-start-radius: var(--air-group-outer-radius);
-  }
-
-  & :is(input, button, select):last-child {
-    border-start-end-radius: var(--air-group-outer-radius);
-    border-end-end-radius: var(--air-group-outer-radius);
   }
 }
 

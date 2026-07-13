@@ -2,7 +2,7 @@ import { classx } from '@airlib/headless/utils';
 import { type Bindable, derived, nodeRef, setup } from '@anchorlib/react';
 import type { MouseEvent, MouseEventHandler } from 'react';
 import { CheckIcon, CheckIndeterminateIcon } from '../../icons/index.js';
-import type { ElementProps } from '../supporting.js';
+import type { ElementProps } from '../renderer.js';
 import { CHECKBOX_CONFIGS } from './config.js';
 
 export interface CheckboxProps extends Omit<ElementProps<'button'>, 'aria-checked' | 'onChange'> {

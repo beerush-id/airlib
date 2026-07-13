@@ -1,50 +1,35 @@
 @theme {
   --air-segmented-height: calc(var(--spacing) * 10);
   --air-segmented-radius-outer: calc(var(--air-segmented-height) / 2);
-  --air-segmented-radius-inner: var(--radius-sm, 8px);
   --air-segmented-gap: calc(var(--spacing) * 0.5);
 }
 
 @utility air-segmented-group {
   @apply inline-flex items-center;
+  --air-segment-outer-radius: var(--air-segmented-radius-outer);
   gap: var(--air-segmented-gap);
 }
 
 /* Base Layout */
 @utility air-segmented-button-base {
-  @apply inline-flex items-center justify-center;
+  @apply inline-flex items-center justify-center air-segment-row;
   height: var(--air-segmented-height);
   padding-block: 0;
   padding-inline: calc(var(--spacing) * 3);
   gap: calc(var(--spacing) * 2);
 
   /* Typography: Label Large */
-  font-family: var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui), serif;
   font-size: var(--font-label-lg-size);
   font-weight: var(--font-label-lg-weight);
   line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
 
   /* Reset */
-  border-width: 0;
-  border-style: solid;
-  border-color: transparent;
+  border: none;
   @apply box-border cursor-pointer air-focus-ring;
 
-  /* Inner radius default */
-  border-radius: var(--air-segmented-radius-inner);
-
-  &:first-child {
-    border-start-start-radius: var(--air-segmented-radius-outer);
-    border-end-start-radius: var(--air-segmented-radius-outer);
-  }
-
-  &:last-child {
-    border-start-end-radius: var(--air-segmented-radius-outer);
-    border-end-end-radius: var(--air-segmented-radius-outer);
-  }
-
-  transition-property: background-color, color, outline-color;
+  transition-property: background-color, color, outline-color, border-radius;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
 

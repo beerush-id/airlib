@@ -1,16 +1,13 @@
 @theme {
   --air-split-button-height: var(--air-button-height, 40px);
-  --air-split-button-radius-outer: calc(
-    var(--air-split-button-height) /
-    2
-  ); /* Prevent CSS proportional radius scaling bug */
-  --air-split-button-radius-inner: var(--radius-sm, 8px);
+  --air-split-button-radius-outer: calc(var(--air-split-button-height) / 2);
   --air-split-button-gap: calc(var(--spacing) * 0.5);
 }
 
 /* Container */
 @utility air-split-button-group {
   @apply inline-flex items-center;
+  --air-segment-outer-radius: var(--air-split-button-radius-outer);
   gap: var(--air-split-button-gap);
   height: var(--air-split-button-height);
 }
@@ -18,20 +15,17 @@
 /* Base style for both halves */
 @utility air-split-button-base {
   @apply inline-flex items-center justify-center;
-  @apply cursor-pointer box-border h-full;
+  @apply cursor-pointer box-border h-full air-segment-row;
   @apply air-focus-ring air-state-layer;
 
-  font-family: var(--font-brand, system-ui);
+  font-family: var(--font-brand, system-ui), serif;
   font-size: var(--font-label-lg-size);
   font-weight: var(--font-label-lg-weight);
   line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
+  border: none;
 
-  border-width: 0;
-  border-style: solid;
-  border-color: transparent;
-
-  transition-property: background-color, outline-color, border-color;
+  transition-property: background-color, outline-color, border-color, border-radius;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
 
@@ -46,10 +40,6 @@
   padding-block: 0;
   padding-inline: var(--air-button-padding-x);
   gap: var(--air-button-gap);
-  border-start-start-radius: var(--air-split-button-radius-outer);
-  border-end-start-radius: var(--air-split-button-radius-outer);
-  border-start-end-radius: var(--air-split-button-radius-inner);
-  border-end-end-radius: var(--air-split-button-radius-inner);
 
   /* Smart Icon Padding for Primary Action */
   &:has(> .air-icon:first-child:not(:last-child)) {
@@ -62,10 +52,6 @@
   @apply air-split-button-base;
   padding-block: 0;
   padding-inline: calc(var(--air-button-padding-x) * 0.5);
-  border-start-start-radius: var(--air-split-button-radius-inner);
-  border-end-start-radius: var(--air-split-button-radius-inner);
-  border-start-end-radius: var(--air-split-button-radius-outer);
-  border-end-end-radius: var(--air-split-button-radius-outer);
 }
 
 /* Color Variants */

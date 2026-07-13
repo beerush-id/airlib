@@ -1,6 +1,6 @@
 import { classx } from '@airlib/headless/utils';
 import { template } from '@anchorlib/react';
-import { type ElementProps, renderChild } from '../supporting.js';
+import { type ElementProps, renderDynamic } from '../renderer.js';
 import { CHIP_CONFIGS } from './config.js';
 
 export type ChipProps = ElementProps<'button'> & {
@@ -14,7 +14,7 @@ export const Chip = template<ChipProps>(({ children, className, variant, selecte
 
   return (
     <button {...rest} type={type} className={classx([baseClass, className])} role="checkbox" aria-checked={selected}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </button>
   );
 }, 'Chip');

@@ -1,6 +1,6 @@
 import { classx } from '@airlib/headless/utils';
 import { template } from '@anchorlib/react';
-import { type ElementProps, renderChild } from '../supporting.js';
+import { type ElementProps, renderDynamic } from '../renderer.js';
 import { SUBTITLE_CONFIGS } from './config.js';
 
 export type SubtitleProps = ElementProps<'p'> & {
@@ -9,7 +9,7 @@ export type SubtitleProps = ElementProps<'p'> & {
 export const Subtitle = template<SubtitleProps>(
   ({ children, className, strong, ...rest }) => (
     <p {...rest} className={classx([strong ? SUBTITLE_CONFIGS.strongClass : SUBTITLE_CONFIGS.class, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </p>
   ),
   'Subtitle'

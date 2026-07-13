@@ -1,6 +1,6 @@
 import { classx } from '@airlib/headless/utils';
 import { template } from '@anchorlib/react';
-import { type ElementProps, renderChild } from '../supporting.js';
+import { type ElementProps, renderDynamic } from '../renderer.js';
 import { BUTTON_CONFIGS } from './config.js';
 
 export type ButtonProps = ElementProps<'button'> & {
@@ -16,7 +16,7 @@ export const Button = template<ButtonProps>(({ children, className, variant, typ
 
   return (
     <button {...rest} type={type} className={classx([baseClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </button>
   );
 }, 'Button');
@@ -24,7 +24,7 @@ export const Button = template<ButtonProps>(({ children, className, variant, typ
 export const ButtonGroup = template<ElementProps<'div'>>(
   ({ children, className, ...rest }) => (
     <div {...rest} className={classx([BUTTON_CONFIGS.groupClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </div>
   ),
   'ButtonGroup'
@@ -42,7 +42,7 @@ export const IconButton = template<IconButtonProps>(({ children, className, vari
 
   return (
     <button {...rest} type={type} className={classx([baseClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </button>
   );
 }, 'IconButton');
@@ -62,7 +62,7 @@ export const Fab = template<FabProps>(({ children, className, variant, extended,
 
   return (
     <button {...rest} type={type} className={classx([baseClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </button>
   );
 }, 'Fab');

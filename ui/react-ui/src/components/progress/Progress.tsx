@@ -1,6 +1,6 @@
 import { classx } from '@airlib/headless/utils';
 import { template } from '@anchorlib/react';
-import { type ElementProps } from '../supporting.js';
+import type { ElementProps } from '../renderer.js';
 import { PROGRESS_CONFIGS } from './config.js';
 
 export type LinearProgressProps = ElementProps<'div'> & {

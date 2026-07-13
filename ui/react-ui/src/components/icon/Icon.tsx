@@ -11,7 +11,7 @@ export type IconProps = Omit<ComponentProps<'span'>, 'children'> & {
 
 export const Icon = template<IconProps>(
   ({ name, className, size, style, ...restProps }) => (
-    <i
+    <span
       {...restProps}
       aria-hidden="true"
       className={classx([ICON_CONFIGS.class, className])}
@@ -21,7 +21,7 @@ export const Icon = template<IconProps>(
       })}
     >
       {name}
-    </i>
+    </span>
   ),
   'Icon'
 );

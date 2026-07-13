@@ -1,9 +1,9 @@
 import { classx } from '@airlib/headless/utils';
 import { type Bindable, render, setup } from '@anchorlib/react';
 import type { MouseEventHandler } from 'react';
-import { type ElementProps } from '../supporting.js';
-import { SWITCH_CONFIGS } from './config.js';
 import { CheckIcon } from '../../icons/index.js';
+import type { ElementProps } from '../renderer.js';
+import { SWITCH_CONFIGS } from './config.js';
 
 export interface SwitchProps extends Omit<ElementProps<'button'>, 'aria-checked'> {
   checked?: Bindable<boolean>;

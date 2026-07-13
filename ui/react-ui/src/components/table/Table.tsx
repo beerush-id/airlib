@@ -15,14 +15,14 @@ import {
 import type { ComponentProps as ReactProps, ReactNode } from 'react';
 import { DropDown } from '../../icons/index.js';
 import { Checkbox } from '../checkbox/index.js';
-import { type ElementProps, renderChild } from '../supporting.js';
+import { type ElementProps, renderDynamic } from '../renderer.js';
 import { Tooltip } from '../tooltip/index.js';
 import { TABLE_CONFIGS } from './config.js';
 
 export const TableHead = template<ElementProps<'thead'>>(
   ({ children, className, ...rest }) => (
     <thead {...rest} className={className}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </thead>
   ),
   'TableHead'
@@ -31,7 +31,7 @@ export const TableHead = template<ElementProps<'thead'>>(
 export const TableHeader = template<ElementProps<'th'>>(
   ({ children, className, ...rest }) => (
     <th {...rest} className={classx([TABLE_CONFIGS.headerCellClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </th>
   ),
   'TableHeader'
@@ -40,7 +40,7 @@ export const TableHeader = template<ElementProps<'th'>>(
 export const TableCell = template<ElementProps<'td'>>(
   ({ children, className, ...rest }) => (
     <td {...rest} className={classx([TABLE_CONFIGS.cellClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </td>
   ),
   'TableCell'

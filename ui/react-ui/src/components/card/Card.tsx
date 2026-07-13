@@ -1,6 +1,6 @@
 import { classx } from '@airlib/headless/utils';
 import { template } from '@anchorlib/react';
-import { type ElementProps, renderChild } from '../supporting.js';
+import { type ElementProps, renderDynamic } from '../renderer.js';
 import { CARD_CONFIGS } from './config.js';
 
 export type CardProps = ElementProps<'div'> & {
@@ -14,7 +14,7 @@ export const Card = template<CardProps>(({ children, className, variant, ...rest
 
   return (
     <div {...rest} className={classx([baseClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </div>
   );
 }, 'Card');
@@ -22,7 +22,7 @@ export const Card = template<CardProps>(({ children, className, variant, ...rest
 export const CardGroup = template<ElementProps<'div'>>(
   ({ children, className, ...rest }) => (
     <div {...rest} className={classx([CARD_CONFIGS.groupClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </div>
   ),
   'CardGroup'
@@ -31,7 +31,7 @@ export const CardGroup = template<ElementProps<'div'>>(
 export const CardHeader = template<ElementProps<'div'>>(
   ({ children, className, ...rest }) => (
     <div {...rest} className={classx([CARD_CONFIGS.headerClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </div>
   ),
   'CardHeader'
@@ -40,7 +40,7 @@ export const CardHeader = template<ElementProps<'div'>>(
 export const CardTitle = template<ElementProps<'h3'>>(
   ({ children, className, ...rest }) => (
     <h3 {...rest} className={classx([CARD_CONFIGS.titleClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </h3>
   ),
   'CardTitle'
@@ -49,7 +49,7 @@ export const CardTitle = template<ElementProps<'h3'>>(
 export const CardBody = template<ElementProps<'div'>>(
   ({ children, className, ...rest }) => (
     <div {...rest} className={classx([CARD_CONFIGS.bodyClass, className])}>
-      {renderChild(children)}
+      {renderDynamic(children)}
     </div>
   ),
   'CardBody'

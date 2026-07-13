@@ -1,7 +1,7 @@
 import { classx } from '@airlib/headless/utils';
 import { type Bindable, render, setup } from '@anchorlib/react';
 import type { MouseEventHandler } from 'react';
-import { type ElementProps } from '../supporting.js';
+import type { ElementProps } from '../renderer.js';
 import { RADIO_CONFIGS } from './config.js';
 
 export interface RadioProps extends Omit<ElementProps<'button'>, 'aria-checked'> {
