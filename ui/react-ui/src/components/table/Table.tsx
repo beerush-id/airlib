@@ -13,8 +13,8 @@ import {
   template,
 } from '@anchorlib/react';
 import type { ComponentProps as ReactProps, ReactNode } from 'react';
+import { Checkbox } from '../../form/index.js';
 import { DropDown } from '../../icons/index.js';
-import { Checkbox } from '../checkbox/index.js';
 import { type ElementProps, renderDynamic } from '../renderer.js';
 import { Tooltip } from '../tooltip/index.js';
 import { TABLE_CONFIGS } from './config.js';
@@ -135,11 +135,12 @@ export function createTable<T extends object = Record<string, unknown>>() {
       }
     };
 
-    const isChecked = $use(() => {
+    const checked = derived(() => {
       if (!table.rows || !table.selection) return false;
       if (table.selection.length === table.rows.length && table.rows.length > 0) return true;
-      if (table.selection.length > 0) return 'mixed';
-      return false;
+    });
+    const indeterminate = derived(() => {
+      return table?.selection && !checked.value && table.selection.length > 0;
     });
 
     return render(() => {
@@ -147,7 +148,7 @@ export function createTable<T extends object = Record<string, unknown>>() {
         <tr {...restProps} className={classx([TABLE_CONFIGS.rowClass, $props.className])}>
           {Array.isArray(table.selection) && (
             <th className={TABLE_CONFIGS.headerCellClass}>
-              <Checkbox checked={isChecked} onClick={handleSelectAll} />
+              <Checkbox checked={checked.value} indeterminate={indeterminate.value} onClick={handleSelectAll} />
             </th>
           )}
           {$props.children}

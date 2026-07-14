@@ -6,7 +6,6 @@ import { LIST_CONFIGS, type ListItemVariant, type ListVariant } from './config.j
 export type ListProps = ElementProps<'div'> & {
   variant?: ListVariant;
   segmented?: boolean;
-  segemented?: boolean;
 };
 
 export type ListItemProps = ElementProps<'div'> & {
@@ -46,21 +45,18 @@ export const ListItem = template<ListItemProps>(
 );
 
 export const List = template<ListProps>(
-  ({ children, className, variant = 'surface', segmented, segemented, ...rest }) => {
-    const isSegmented = segmented ?? segemented ?? true;
-    return (
-      <div
-        {...rest}
-        className={classx([
-          LIST_CONFIGS.groupClass,
-          LIST_CONFIGS.variant[variant],
-          isSegmented ? LIST_CONFIGS.segmentedClass : LIST_CONFIGS.contiguousClass,
-          className,
-        ])}
-      >
-        {renderDynamic(children)}
-      </div>
-    );
-  },
+  ({ children, className, variant = 'surface', segmented, ...rest }) => (
+    <div
+      {...rest}
+      className={classx([
+        LIST_CONFIGS.groupClass,
+        LIST_CONFIGS.variant[variant],
+        segmented ? LIST_CONFIGS.segmentedClass : LIST_CONFIGS.contiguousClass,
+        className,
+      ])}
+    >
+      {renderDynamic(children)}
+    </div>
+  ),
   'List'
 );

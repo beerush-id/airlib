@@ -14,7 +14,7 @@ export default () => (
     </Field>
 
     <Field>
-      <Checkbox checked="mixed" />
+      <Checkbox indeterminate />
       <span>Indeterminate</span>
     </Field>
   </div>

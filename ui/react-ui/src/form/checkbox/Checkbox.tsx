@@ -16,7 +16,7 @@ export interface CheckboxProps extends Omit<ElementProps<'button'>, 'aria-checke
 export const Checkbox = setup<CheckboxProps>((props) => {
   (props as AnyType).type = 'checkbox';
 
-  const restProps = props.$omit(['checked', 'className', 'onClick', 'onChange', 'disabled']);
+  const restProps = props.$omit(['checked', 'className', 'onClick', 'onChange', 'disabled', 'indeterminate']);
   const input = formInput(props as AnyType);
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {

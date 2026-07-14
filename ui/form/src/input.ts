@@ -32,8 +32,8 @@ export class FormInput<T> {
     return this.#props?.type ?? FORM_INPUT.text;
   }
 
-  get value() {
-    return this.#buffer.value;
+  get value(): T {
+    return this.#buffer.value as T;
   }
 
   set value(raw: string) {

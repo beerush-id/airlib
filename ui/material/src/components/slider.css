@@ -79,7 +79,7 @@
 }
 
 /* Native Input Variant Base */
-@utility air-slider {
+@utility air-slider-input {
   @apply relative w-full cursor-pointer air-focus-ring;
   appearance: none;
   height: var(--air-slider-track-height);
@@ -184,6 +184,23 @@
 }
 
 /* Composed Utilities */
-@utility air-slider-primary {
-  @apply air-slider air-slider-native-primary-surface;
+@utility air-slider-input-primary {
+  @apply air-slider-input air-slider-native-primary-surface;
+}
+
+@utility air-slider {
+  @apply air-slider-base;
+}
+
+@utility air-slider-track {
+  @apply air-slider-track-base air-slider-track-secondary;
+}
+
+@utility air-slider-track-active {
+  @apply air-slider-track-active-base air-slider-track-active-primary;
+  width: var(--air-slider-value, 0%);
+}
+
+@utility air-slider-handle {
+  @apply air-slider-handle-base air-slider-handle-primary;
 }

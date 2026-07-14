@@ -1,10 +1,12 @@
 import { Card, CardBody, CardGroup, CardHeader, CardTitle, Field, FieldLabel } from '@airlib/react-ui/components';
 import {
   Checkbox,
+  EmailField,
   Form,
   FormField,
   FormReset,
   FormSubmit,
+  PasswordField,
   Radio,
   RadioGroup,
   Select,
@@ -21,6 +23,14 @@ import { z } from 'zod';
 
 const formSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters'),
+  password: z
+    .string()
+    .min(8, 'Minimum password length is 8 characters')
+    .max(20, 'Password cannot exceed 20 characters'),
+  confirmPassword: z
+    .string()
+    .min(8, 'Minimum password length is 8 characters')
+    .max(20, 'Password cannot exceed 20 characters'),
   email: z.string().email('Invalid email address'),
   bio: z.string().max(100, 'Bio is too long').optional(),
   role: z.enum(['admin', 'user', 'guest']).default('user'),
@@ -54,7 +64,20 @@ const General = setup(() => {
                 <TextField placeholder="Enter your username" />
               </FormField>
               <FormField name="email" label="Email Address">
-                <TextField type="email" placeholder="Enter your email" />
+                <EmailField placeholder="Enter your email" />
+              </FormField>
+            </div>
+            <div className="flex items-start gap-4">
+              <FormField name="password" label="Password">
+                <PasswordField placeholder="Enter your password" />
+              </FormField>
+              <FormField
+                name="confirmPassword"
+                label="Confirm Password"
+                match="password"
+                mismatchLabel="Password doesn't match"
+              >
+                <PasswordField placeholder="Confirm your password" />
               </FormField>
             </div>
             <div className="flex items-start gap-4">

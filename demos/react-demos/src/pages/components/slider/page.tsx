@@ -1,8 +1,14 @@
-import { Card, CardBody, CardGroup, CardHeader, CardTitle } from '@airlib/react-ui/components';
-import { page, setup } from '@anchorlib/react';
+import { Card, CardBody, CardGroup, CardHeader, CardTitle, Field, FieldLabel } from '@airlib/react-ui/components';
+import { Slider } from '@airlib/react-ui/form';
+import { $bind, mutable, page, setup } from '@anchorlib/react';
 import { sliderRoute } from '../route.js';
 
 const SliderDemo = setup(() => {
+  const data = mutable({
+    continuous: 40,
+    discrete: 3,
+  });
+
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -20,13 +26,27 @@ const SliderDemo = setup(() => {
             <p className="air-body-sm">Select a value along a continuous range.</p>
           </CardHeader>
           <CardBody>
-            <div className="flex flex-col gap-8 max-w-md">
-              <div className="flex items-center h-12 w-full">
-                <input type="range" className="air-slider-primary w-full" min="0" max="100" defaultValue="40" />
-              </div>
-              <div className="flex items-center h-12 w-full">
-                <input type="range" className="air-slider-secondary w-full" min="0" max="100" defaultValue="70" />
-              </div>
+            <div className="flex flex-col gap-8 max-w-md w-full">
+
+              <Field>
+                <FieldLabel required>Volume</FieldLabel>
+                <Slider min={0} max={100} value={$bind(data, 'continuous')} />
+              </Field>
+            </div>
+          </CardBody>
+        </Card>
+
+        <Card variant="outlined">
+          <CardHeader>
+            <CardTitle>Discrete Slider</CardTitle>
+            <p className="air-body-sm">Use discrete sliders with step value when specific values are required.</p>
+          </CardHeader>
+          <CardBody>
+            <div className="flex flex-col gap-8 max-w-md w-full">
+              <Field>
+                <FieldLabel>Rating</FieldLabel>
+                <Slider min={1} max={5} step={1} value={$bind(data, 'discrete')} />
+              </Field>
             </div>
           </CardBody>
         </Card>

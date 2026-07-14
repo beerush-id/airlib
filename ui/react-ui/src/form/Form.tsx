@@ -2,8 +2,8 @@ import {
   type AnyType,
   type DeepPaths,
   type FormField as FormFieldType,
-  type FormState,
   formField,
+  type FormState,
   formState,
   getForm,
   type PathValue,
@@ -20,8 +20,8 @@ import type {
   SubmitEvent,
 } from 'react';
 import { BUTTON_CONFIGS } from 'src/components/button/config.ts';
-import { type input, type ZodObject, type ZodRawShape, z } from 'zod';
-import { FieldSupportingText } from '../components/field/Field.js';
+import { type input, z, type ZodObject, type ZodRawShape } from 'zod';
+import { FieldSupportingText } from '../components/index.js';
 import { FIELD_CONFIG, FORM_CONFIG, RESET_CONFIG, SUBMIT_CONFIG } from './config.js';
 
 interface TypedFormProps<S extends ZodObject<ZodRawShape>, T>
@@ -129,7 +129,7 @@ export function createForm<T extends ZodObject<ZodRawShape>>(schema: T): TypedFo
         FIELD_CONFIG.class,
         $props.block && FIELD_CONFIG.blockClass,
         FIELD_CONFIG.size[$props.size as never],
-        field.touched && field.error ? FIELD_CONFIG.errorClass : undefined,
+        field.touched && (field.error || !field.matched) ? FIELD_CONFIG.errorClass : undefined,
         $props.className,
       ])
     );
@@ -302,10 +302,8 @@ export function createForm<T extends ZodObject<ZodRawShape>>(schema: T): TypedFo
   }) as TypedForm<T>;
 }
 
-const DefaultForm = createForm<ZodObject<ZodRawShape>>(z.object({}) as AnyType);
-
-export const Form = DefaultForm;
-export const FormField = DefaultForm.Field;
-export const FormFieldList = DefaultForm.FieldList;
-export const FormSubmit = DefaultForm.Submit;
-export const FormReset = DefaultForm.Reset;
+export const Form = createForm<ZodObject<ZodRawShape>>(z.object({}) as AnyType);
+export const FormField = Form.Field;
+export const FormFieldList = Form.FieldList;
+export const FormSubmit = Form.Submit;
+export const FormReset = Form.Reset;

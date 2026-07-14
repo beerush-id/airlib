@@ -5,5 +5,6 @@ export const TEXTAREA_CONFIGS = {
     lg: 'air-textarea-lg',
   },
   class: 'air-textarea',
+  errorClass: 'air-textarea-error',
   filledClass: 'air-textarea-filled',
 };
