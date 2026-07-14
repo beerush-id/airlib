@@ -9,7 +9,7 @@ export type FormInputProps<T = unknown> = {
   type?: InputType;
   name?: string;
   value?: T;
-  checked?: boolean;
+  checked?: boolean | 'mixed';
   disabled?: boolean;
   required?: boolean;
 };
@@ -115,7 +115,7 @@ export class FormInput<T> {
     }
     this.#props = props;
     this.#buffer = mutable({ value: '', checked: false });
-    this.#initial = { value: props.value, checked: props.checked };
+    this.#initial = { value: props.value, checked: props.checked as boolean };
     this.#parse = parse;
     this.#stringify = stringify as (value: T, type: InputType) => string;
 

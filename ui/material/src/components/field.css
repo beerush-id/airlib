@@ -46,7 +46,7 @@
 @utility air-field {
   @apply block w-full;
 
-  &:has(.air-checkbox, .air-switch, .air-radio) {
+  &:not(.air-field-block):has(.air-checkbox, .air-switch, .air-radio) {
     @apply air-inline-field-container;
   }
 
@@ -60,6 +60,10 @@
 
   &:has(.air-select-field) {
     @apply air-select-field-container;
+  }
+
+  &.air-field-block {
+    @apply flex flex-col gap-4;
   }
 
   &:has(:disabled),
@@ -115,9 +119,9 @@
   }
 
   /* Default (Outlined) Floating Transform */
-  &:has(:is(input, textarea, select):focus) .air-field-label,
-  &:has(:is(input, textarea, select):not(:placeholder-shown)) .air-field-label,
-  &:has(:is(input, textarea, select):-webkit-autofill) .air-field-label {
+  &:has(:is(input, textarea, select, .air-select-field):focus) .air-field-label,
+  &:has(:is(input, textarea, select, .air-select-field):not(:placeholder-shown)) .air-field-label,
+  &:has(:is(input, textarea, select, .air-select-field):-webkit-autofill) .air-field-label {
     /* Translate UP by the fixed padding to hit the border (0px), then slightly more (-0.375em) to perfectly center the scaled label on the outline */
     transform: translateY(calc((var(--air-field-padding-y) * -1) - 0.35em)) scale(0.75);
     background-color: var(--color-ghost-surface, var(--color-surface, #fff));
@@ -200,7 +204,7 @@
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
 
-  .air-field:has(:focus-within) & {
+  .air-field:has(:focus-within, :active) & {
     color: var(--air-field-outline-focus-color);
   }
 }
@@ -219,6 +223,16 @@
   transition-property: color;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
+}
+
+@utility air-field-inline {
+  @apply flex flex-col gap-1;
+
+  .air-field-label,
+  .air-field-supporting-text {
+    padding: 0;
+    margin: 0;
+  }
 }
 
 @utility air-field-required {

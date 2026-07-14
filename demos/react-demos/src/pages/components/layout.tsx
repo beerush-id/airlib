@@ -11,6 +11,7 @@ import { CodeBlockPage } from './code-block/page.js';
 import { CollapsiblePage } from './collapsible/page.js';
 import { DialogPage } from './dialog/page.js';
 import { FabPage } from './fab/page.js';
+import { FormPage } from './form/page.js';
 import { IconButtonPage } from './icon-button/page.js';
 import { ListPage } from './list/page.js';
 import { MenuPage } from './menu/page.js';
@@ -47,11 +48,11 @@ export const UILayout = page(uiRoute).render(({ children }) => (
               <Link to={AccordionPage} className="air-link-nav">
                 <span className="air-list-view-item-content">Accordion</span>
               </Link>
-              <Link to={CollapsiblePage} className="air-link-nav">
-                <span className="air-list-view-item-content">Collapsible</span>
-              </Link>
               <Link to={CardPage} className="air-link-nav">
                 <span className="air-list-view-item-content">Card</span>
+              </Link>
+              <Link to={CollapsiblePage} className="air-link-nav">
+                <span className="air-list-view-item-content">Collapsible</span>
               </Link>
               <Link to={DialogPage} className="air-link-nav">
                 <span className="air-list-view-item-content">Dialog</span>
@@ -67,11 +68,11 @@ export const UILayout = page(uiRoute).render(({ children }) => (
               <Link to={ButtonPage} className="air-link-nav">
                 <span className="air-list-view-item-content">Button</span>
               </Link>
-              <Link to={IconButtonPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Icon Button</span>
-              </Link>
               <Link to={FabPage} className="air-link-nav">
                 <span className="air-list-view-item-content">Floating Action Button</span>
+              </Link>
+              <Link to={IconButtonPage} className="air-link-nav">
+                <span className="air-list-view-item-content">Icon Button</span>
               </Link>
               <Link to={MenuPage} className="air-link-nav">
                 <span className="air-list-view-item-content">Menu</span>
@@ -89,6 +90,9 @@ export const UILayout = page(uiRoute).render(({ children }) => (
             <div className="air-nav-subgroup">
               <Link to={CheckboxPage} className="air-link-nav">
                 <span className="air-list-view-item-content">Checkbox</span>
+              </Link>
+              <Link to={FormPage} className="air-link-nav">
+                <span className="air-list-view-item-content">Form</span>
               </Link>
               <Link to={PickerPage} className="air-link-nav">
                 <span className="air-list-view-item-content">Picker</span>
@@ -137,11 +141,11 @@ export const UILayout = page(uiRoute).render(({ children }) => (
               <Link to={ProgressPage} className="air-link-nav">
                 <span className="air-list-view-item-content">Progress</span>
               </Link>
-              <Link to={TypographyPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Typography</span>
-              </Link>
               <Link to={StatusPage} className="air-link-nav">
                 <span className="air-list-view-item-content">Status</span>
+              </Link>
+              <Link to={TypographyPage} className="air-link-nav">
+                <span className="air-list-view-item-content">Typography</span>
               </Link>
             </div>
           </Collapsible>

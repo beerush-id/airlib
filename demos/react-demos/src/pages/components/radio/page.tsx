@@ -1,4 +1,5 @@
-import { Card, CardBody, CardGroup, CardHeader, CardTitle, Radio, Field } from '@airlib/react-ui/components';
+import { Card, CardBody, CardGroup, CardHeader, CardTitle, Field } from '@airlib/react-ui/components';
+import { Radio } from '@airlib/react-ui/form';
 import { page, setup } from '@anchorlib/react';
 import { radioRoute } from '../route.js';
 

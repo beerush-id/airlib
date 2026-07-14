@@ -8,4 +8,6 @@ export const FIELD_CONFIGS = {
   errorClass: 'air-field-error',
   labelClass: 'air-field-label',
   supportingTextClass: 'air-field-supporting-text',
+  requiredLabel: '*',
+  requiredClass: 'air-field-required',
 };

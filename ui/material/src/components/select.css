@@ -72,11 +72,17 @@
 
 @utility air-select-field {
   @apply air-text-field appearance-none cursor-pointer;
+  @apply flex items-center justify-start;
+
   padding-inline-end: calc(var(--air-field-trailing-padding, var(--air-field-padding-x)) + calc(var(--spacing) * 6));
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 24 24' fill='%2349454f' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right var(--air-field-trailing-padding, var(--air-field-padding-x)) center;
   background-size: calc(var(--spacing) * 5) calc(var(--spacing) * 5);
+
+  .air-select-badge {
+    @apply ml-auto mr-2;
+  }
 }
 
 @utility air-select-field-filled {

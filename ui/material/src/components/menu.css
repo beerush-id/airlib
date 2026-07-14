@@ -88,7 +88,8 @@
 
 /* Composed Utilities */
 @utility air-menu {
-  @apply air-menu-surface fixed z-popover shadow-lg;
+  @apply air-menu-surface fixed z-popover;
+  box-shadow: 0 calc(var(--spacing) * 0.5) calc(var(--spacing) * 4) light-dark(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.5));
 }
 
 @utility air-menu-item {

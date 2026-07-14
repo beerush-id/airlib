@@ -82,7 +82,9 @@ const IconButtonDemo = setup(() => {
           <CardHeader className="flex-row">
             <div className="flex flex-col gap-2 flex-1">
               <CardTitle>Tool Icon Buttons</CardTitle>
-              <p className="air-body-sm">Compact square icon buttons designed specifically for toolbars and rich text editors.</p>
+              <p className="air-body-sm">
+                Compact square icon buttons designed specifically for toolbars and rich text editors.
+              </p>
             </div>
             <Button variant="text" active={$bind(codeState, 'tools')}>
               <Icon name={() => (codeState.tools ? 'code_off' : 'code')} />

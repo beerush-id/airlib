@@ -1,3 +1,7 @@
+import { derived } from '@anchorlib/core';
+import { classx } from 'src/utils/classx.ts';
+import type { SizeClassifier, Sizing } from './sizing.ts';
+
 export const VARIANTS = {
   text: 'text',
   tonal: 'tonal',
@@ -29,3 +33,26 @@ export type ColorClassifier = {
 } & {
   default?: string;
 };
+
+export type DecorationInput = {
+  size?: Sizing;
+  variant?: Variant;
+};
+
+export type DecorationConfig = {
+  size?: SizeClassifier;
+  variant?: VariantClassifier;
+};
+
+export function decorationClass(init: DecorationInput, config?: DecorationConfig) {
+  const sizeConfig = { ...config?.size };
+  const variantConfig = { ...config?.variant };
+
+  return derived(() => {
+    const { variant = 'default' } = init;
+    const baseClass = variantConfig[variant];
+    const sizeClass = sizeConfig[init.size!];
+
+    return classx([baseClass, sizeClass]);
+  });
+}

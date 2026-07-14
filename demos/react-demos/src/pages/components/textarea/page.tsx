@@ -4,11 +4,11 @@ import {
   CardGroup,
   CardHeader,
   CardTitle,
-  Textarea,
   Field,
   FieldLabel,
   FieldSupportingText,
 } from '@airlib/react-ui/components';
+import { Textarea } from '@airlib/react-ui/form';
 import { page, setup } from '@anchorlib/react';
 import { textareaRoute } from '../route.js';
 

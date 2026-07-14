@@ -1,7 +1,7 @@
 import { classx } from '@airlib/headless/utils';
 import { render, setup, template } from '@anchorlib/react';
 import type { ComponentProps, MouseEventHandler } from 'react';
-import type { ElementProps } from '../renderer.js';
+import { type ElementProps, renderDynamic } from '../renderer.js';
 import { FIELD_CONFIGS } from './config.js';
 
 export interface FieldProps extends ComponentProps<'label'> {
@@ -14,15 +14,14 @@ export const Field = setup<FieldProps>((props) => {
 
   const handleClick: MouseEventHandler<HTMLLabelElement> = (e) => {
     const target = e.target as HTMLElement;
-    // If the click is directly on the label text or wrapper (not on a button/input inside it)
+
     if (target.tagName !== 'BUTTON' && target.tagName !== 'INPUT' && !target.closest('button')) {
-      // Find the first interactive control inside the label
       const control = e.currentTarget.querySelector('button, input');
+
       if (control instanceof HTMLElement) {
-        // Prevent the browser's default label behavior since we are handling it manually,
-        // and because a label click on a nested button isn't standard HTML behavior anyway.
         e.preventDefault();
         control.click();
+        control.focus();
       }
     }
     props.onClick?.(e);
@@ -47,10 +46,15 @@ export const Field = setup<FieldProps>((props) => {
   );
 }, 'Field');
 
-export const FieldLabel = template<ElementProps<'span'>>(
-  ({ children, className, ...rest }) => (
+export type FieldLabelProps = ElementProps<'span'> & {
+  required?: boolean;
+};
+
+export const FieldLabel = template<FieldLabelProps>(
+  ({ children, className, required, ...rest }) => (
     <span {...rest} className={classx([FIELD_CONFIGS.labelClass, className])}>
-      {children}
+      {renderDynamic(children)}
+      {required && <span className={FIELD_CONFIGS.requiredClass}>{FIELD_CONFIGS.requiredLabel}</span>}
     </span>
   ),
   'FieldLabel'
@@ -59,7 +63,7 @@ export const FieldLabel = template<ElementProps<'span'>>(
 export const FieldSupportingText = template<ElementProps<'span'>>(
   ({ children, className, ...rest }) => (
     <span {...rest} className={classx([FIELD_CONFIGS.supportingTextClass, className])}>
-      {children}
+      {renderDynamic(children)}
     </span>
   ),
   'FieldSupportingText'

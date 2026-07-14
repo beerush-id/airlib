@@ -1,9 +1,9 @@
 import { anchor, effect, mutable, untrack } from '@anchorlib/core';
 import {
   type AnchorOffset,
+  type AxisPosition,
   animationFrame,
   applyPlacement,
-  type AxisPosition,
   bindInteraction,
   captureSnapshot,
   clearPlacement,
@@ -28,6 +28,7 @@ export type PopoverInit = RectPlacementOptions & {
   cssPrefix?: string;
   attrPrefix?: string;
   interaction?: Interaction[];
+  trapOverflow?: boolean;
   unstyled?: boolean;
 };
 
@@ -95,9 +96,10 @@ export function popover(init: PopoverInit): PopoverInstance {
     const target = resolveEl(state.anchor) ?? self?.parentElement;
     if (!self || !target || !state.open) return;
 
+    const selfRect = self.getBoundingClientRect();
     const placement = placeRect(
       target.getBoundingClientRect(),
-      self.getBoundingClientRect(),
+      new DOMRect(selfRect.x, selfRect.y, self.offsetWidth, self.offsetHeight),
       init.boundary?.getBoundingClientRect() ?? new DOMRect(0, 0, window.innerWidth, window.innerHeight),
       init
     );
@@ -157,7 +159,7 @@ export function popover(init: PopoverInit): PopoverInstance {
     if (!init.passive) window.addEventListener('resize', reframe);
 
     const releaseFocus = init.focus
-      ? createFocusTrap(self, { trapOverflow: false, releaseOnEsc: false, releaseOnClickOutside: false })
+      ? createFocusTrap(self, { trapOverflow: init.trapOverflow, releaseOnEsc: false, releaseOnClickOutside: false })
       : undefined;
 
     return () => {

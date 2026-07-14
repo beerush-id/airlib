@@ -1,4 +1,5 @@
-import { Card, CardBody, CardGroup, CardHeader, CardTitle, Switch, Field } from '@airlib/react-ui/components';
+import { Card, CardBody, CardGroup, CardHeader, CardTitle, Field } from '@airlib/react-ui/components';
+import { Switch } from '@airlib/react-ui/form';
 import { page, setup } from '@anchorlib/react';
 import { switchRoute } from '../route.js';
 

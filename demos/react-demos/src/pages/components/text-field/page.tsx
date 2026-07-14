@@ -4,11 +4,11 @@ import {
   CardGroup,
   CardHeader,
   CardTitle,
-  TextField,
   Field,
   FieldLabel,
   FieldSupportingText,
 } from '@airlib/react-ui/components';
+import { TextField } from '@airlib/react-ui/form';
 import { page, setup } from '@anchorlib/react';
 import { textFieldRoute } from '../route.js';
 

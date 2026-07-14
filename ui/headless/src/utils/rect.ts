@@ -327,10 +327,7 @@ export function resolveAxis(
   strategies: ('flip' | 'shift')[]
 ): { side: AxisPosition; coordinate: number } {
   if (strategies.includes('shift')) {
-    const max = tolerance * aSpan;
-    const oNear = Math.max(0, bNear - coordinate);
-    const oFar = Math.max(0, coordinate + size - bFar);
-    coordinate += Math.max(-max, Math.min(max, oNear - oFar));
+    coordinate = Math.max(bNear, Math.min(bFar - size, coordinate));
   }
 
   if (strategies.includes('flip')) {

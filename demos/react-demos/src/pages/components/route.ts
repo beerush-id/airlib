@@ -33,3 +33,4 @@ export const textareaRoute = uiRoute.route('/textarea');
 export const textFieldRoute = uiRoute.route('/text-field');
 export const typographyRoute = uiRoute.route('/typography');
 export const toolbarRoute = uiRoute.route('/toolbar');
+export const formRoute = uiRoute.route('/form');

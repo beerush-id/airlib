@@ -102,3 +102,15 @@
     --state-layer-color: transparent;
   }
 }
+
+@utility air-radio-group {
+  @apply flex gap-8 items-center justify-start;
+
+  .air-field {
+    @apply w-auto;
+  }
+
+  .air-field-label {
+    @apply p-0 m-0;
+  }
+}

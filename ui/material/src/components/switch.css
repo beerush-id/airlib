@@ -41,6 +41,7 @@
 /* Base Handle */
 @utility air-switch-handle {
   @apply absolute flex items-center justify-center;
+  --air-icon-size: calc(var(--spacing) * 4);
   inset-inline-start: calc(var(--spacing) * 1.5); /* 6px resting unselected */
   width: calc(var(--spacing) * 4); /* 16px resting unselected */
   height: calc(var(--spacing) * 4);

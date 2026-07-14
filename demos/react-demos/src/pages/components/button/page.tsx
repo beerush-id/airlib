@@ -135,8 +135,9 @@ const ButtonDemo = setup(() => {
               <CardTitle>Compact Tool & Icon Buttons</CardTitle>
               <p className="air-body-sm">
                 Compact 32px tool buttons (<code className="text-primary font-mono">air-tool-button</code> for text
-                labels) and square tool icon buttons (<code className="text-primary font-mono">air-tool-icon-button</code>{' '}
-                for icons or formatting symbols) designed for toolbars and compact action bars.
+                labels) and square tool icon buttons (
+                <code className="text-primary font-mono">air-tool-icon-button</code> for icons or formatting symbols)
+                designed for toolbars and compact action bars.
               </p>
             </div>
             <Button variant="text" active={$bind(codeState, 'compact')}>

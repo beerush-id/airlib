@@ -43,7 +43,8 @@
         "noLabelWithoutControl": "off",
         "useButtonType": "off",
         "noSvgWithoutTitle": "off",
-        "useSemanticElements": "off"
+        "useSemanticElements": "off",
+        "useKeyWithClickEvents": "off"
       },
       "correctness": {
         "noUnusedImports": {
