@@ -5,5 +5,6 @@ export const CARD_CONFIGS = {
   groupClass: 'air-card-group',
   headerClass: 'air-card-header',
   titleClass: 'air-card-title',
+  subtitleClass: 'air-card-subtitle',
   bodyClass: 'air-card-body',
 };

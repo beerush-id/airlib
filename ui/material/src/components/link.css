@@ -1,3 +1,18 @@
+@theme {
+  /* Base Link Colors */
+  --air-link-fg: var(--color-primary);
+  --air-link-hover-decoration: color-mix(in srgb, var(--air-link-fg) 60%, transparent);
+  --air-link-visited-fg: var(--color-tertiary);
+  --air-link-visited-hover-decoration: color-mix(in srgb, var(--air-link-visited-fg) 60%, transparent);
+
+  /* Nav Link Colors */
+  --air-link-nav-fg: var(--color-on-surface-variant);
+  --air-link-nav-hover-fg: var(--color-primary);
+  --air-link-nav-hover-bg: transparent;
+  --air-link-nav-active-fg: var(--color-primary);
+  --air-link-nav-active-bg: color-mix(in srgb, var(--air-link-nav-active-fg) 12%, transparent);
+}
+
 /* ── Link Utilities ── */
 
 @utility air-link-base {
@@ -18,24 +33,55 @@
 /* Inline Link — for body text, paragraph links */
 @utility air-link {
   @apply air-link-base;
-  color: var(--color-primary);
+  color: var(--air-link-fg);
 
   &:hover {
-    color: var(--color-primary);
-    text-decoration-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
+    color: var(--air-link-fg);
+    text-decoration-color: var(--air-link-hover-decoration);
   }
 
   &:visited {
-    color: var(--color-tertiary);
+    color: var(--air-link-visited-fg);
 
     &:hover {
-      text-decoration-color: color-mix(in srgb, var(--color-tertiary) 60%, transparent);
+      text-decoration-color: var(--air-link-visited-hover-decoration);
     }
   }
 
   &:focus-visible {
-    text-decoration-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
+    text-decoration-color: var(--air-link-hover-decoration);
   }
+}
+
+/* Color Variants */
+@utility air-link-secondary {
+  --air-link-fg: var(--color-secondary);
+  --air-link-nav-active-fg: var(--color-secondary);
+}
+
+@utility air-link-tertiary {
+  --air-link-fg: var(--color-tertiary);
+  --air-link-nav-active-fg: var(--color-tertiary);
+}
+
+@utility air-link-error {
+  --air-link-fg: var(--color-error);
+  --air-link-nav-active-fg: var(--color-error);
+}
+
+@utility air-link-success {
+  --air-link-fg: var(--color-success);
+  --air-link-nav-active-fg: var(--color-success);
+}
+
+@utility air-link-warning {
+  --air-link-fg: var(--color-warning);
+  --air-link-nav-active-fg: var(--color-warning);
+}
+
+@utility air-link-info {
+  --air-link-fg: var(--color-info);
+  --air-link-nav-active-fg: var(--color-info);
 }
 
 /* Navigation Container Structure */
@@ -43,6 +89,11 @@
   display: flex;
   flex-direction: column;
   gap: calc(var(--spacing) * 1); /* gap-1 (4px) */
+
+  /* Apply link styling to headless collapsible triggers used in nav */
+  & .air-collapsible-trigger {
+    @apply air-link-nav;
+  }
 }
 
 @utility air-nav-group {
@@ -73,21 +124,21 @@
   padding-inline: calc(var(--spacing) * 3); /* 12px */
   border-radius: var(--radius-sm);
   text-decoration: none;
-  color: var(--color-on-surface-variant);
+  color: var(--air-link-nav-fg);
   font-weight: 500;
   transition-property: background-color, color, border-radius;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
 
   &:hover {
-    color: var(--color-on-surface);
-    background-color: var(--color-surface-container-high);
+    color: var(--air-link-nav-hover-fg);
+    background-color: var(--air-link-nav-hover-bg);
   }
 
   &[aria-current='page'],
   &.active {
-    color: var(--color-primary);
-    background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--air-link-nav-active-fg);
+    background-color: var(--air-link-nav-active-bg);
     border-radius: var(--radius-full);
   }
 
@@ -100,7 +151,7 @@
 @utility air-link-standalone {
   @apply air-link-base inline-flex items-center;
   gap: calc(var(--spacing) * 1);
-  color: var(--color-primary);
+  color: var(--air-link-fg);
   font-weight: 600;
 
   /* Arrow affordance via pseudo-element */
@@ -113,7 +164,7 @@
   }
 
   &:hover {
-    color: var(--color-primary);
+    color: var(--air-link-fg);
     gap: calc(var(--spacing) * 2);
 
     &::after {
@@ -122,6 +173,6 @@
   }
 
   &:focus-visible {
-    text-decoration-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
+    text-decoration-color: var(--air-link-hover-decoration);
   }
 }

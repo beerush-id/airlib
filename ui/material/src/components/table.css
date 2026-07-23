@@ -1,3 +1,52 @@
+@theme {
+  --air-table-header-height: calc(var(--spacing) * 16);
+  --air-table-header-padding-x: calc(var(--spacing) * 6);
+  --air-table-header-size: var(--font-title-sm-size);
+  --air-table-header-line-height: var(--font-title-sm-line-height);
+
+  --air-table-cell-padding-y: calc(var(--spacing) * 3);
+  --air-table-cell-padding-x: calc(var(--spacing) * 6);
+  --air-table-cell-size: var(--font-body-md-size);
+  --air-table-cell-line-height: var(--font-body-md-line-height);
+
+  /* Colors */
+  --air-table-header-bg: var(--color-surface-container-high);
+  --air-table-row-filled-bg: var(--color-surface-container-low);
+  --air-table-row-selected-bg: var(--color-secondary-container);
+  --air-table-row-selected-fg: var(--color-on-secondary-container);
+
+  /* Size Variants (sm to xxl defaults can scale down/up proportionally) */
+  --air-table-header-height-xs: calc(var(--spacing) * 10);
+  --air-table-header-padding-x-xs: calc(var(--spacing) * 3);
+  --air-table-cell-padding-y-xs: calc(var(--spacing) * 1);
+  --air-table-cell-padding-x-xs: calc(var(--spacing) * 3);
+
+  --air-table-header-height-sm: calc(var(--spacing) * 12);
+  --air-table-header-padding-x-sm: calc(var(--spacing) * 4);
+  --air-table-cell-padding-y-sm: calc(var(--spacing) * 2);
+  --air-table-cell-padding-x-sm: calc(var(--spacing) * 4);
+
+  --air-table-header-height-md: calc(var(--spacing) * 16);
+  --air-table-header-padding-x-md: calc(var(--spacing) * 6);
+  --air-table-cell-padding-y-md: calc(var(--spacing) * 3);
+  --air-table-cell-padding-x-md: calc(var(--spacing) * 6);
+
+  --air-table-header-height-lg: calc(var(--spacing) * 18);
+  --air-table-header-padding-x-lg: calc(var(--spacing) * 8);
+  --air-table-cell-padding-y-lg: calc(var(--spacing) * 4);
+  --air-table-cell-padding-x-lg: calc(var(--spacing) * 8);
+
+  --air-table-header-height-xl: calc(var(--spacing) * 20);
+  --air-table-header-padding-x-xl: calc(var(--spacing) * 10);
+  --air-table-cell-padding-y-xl: calc(var(--spacing) * 5);
+  --air-table-cell-padding-x-xl: calc(var(--spacing) * 10);
+
+  --air-table-header-height-xxl: calc(var(--spacing) * 24);
+  --air-table-header-padding-x-xxl: calc(var(--spacing) * 12);
+  --air-table-cell-padding-y-xxl: calc(var(--spacing) * 6);
+  --air-table-cell-padding-x-xxl: calc(var(--spacing) * 12);
+}
+
 @utility air-table-view {
   @apply w-full text-left;
   border-collapse: separate;
@@ -21,18 +70,18 @@
 }
 
 @utility air-table-header-cell {
-  height: calc(var(--spacing) * 16);
+  height: var(--air-table-header-height);
   padding-block: 0;
-  padding-inline: calc(var(--spacing) * 6); /* 0 24px */
+  padding-inline: var(--air-table-header-padding-x);
 
   font-family: var(--font-brand);
   font-weight: var(--font-weight-semibold);
-  font-size: var(--font-title-sm-size);
-  line-height: var(--font-title-sm-line-height);
+  font-size: var(--air-table-header-size);
+  line-height: var(--air-table-header-line-height);
   letter-spacing: var(--font-title-sm-tracking);
 
   color: var(--color-on-surface);
-  background-color: var(--color-surface-container-high); /* Stand out from surface-container rows */
+  background-color: var(--air-table-header-bg);
   vertical-align: middle;
 
   &:first-child {
@@ -61,37 +110,37 @@
 /* Filled Segmented Variant */
 @utility air-table-row-filled {
   @apply air-table-row cursor-pointer;
-  background-color: var(--color-surface-container-low);
+  background-color: var(--air-table-row-filled-bg);
 
   &:hover {
-    background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-low));
+    background-color: color-mix(in srgb, var(--color-on-surface) 8%, var(--air-table-row-filled-bg));
   }
 
   &:focus-visible {
-    background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-low));
+    background-color: color-mix(in srgb, var(--color-on-surface) 12%, var(--air-table-row-filled-bg));
   }
 
   &[aria-selected='true'] {
-    background-color: var(--color-secondary-container);
-    color: var(--color-on-secondary-container);
+    background-color: var(--air-table-row-selected-bg);
+    color: var(--air-table-row-selected-fg);
 
     &:hover {
-      background-color: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
+      background-color: color-mix(in srgb, var(--air-table-row-selected-fg) 8%, var(--air-table-row-selected-bg));
     }
     &:focus-visible {
-      background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
+      background-color: color-mix(in srgb, var(--air-table-row-selected-fg) 12%, var(--air-table-row-selected-bg));
     }
   }
 }
 
 @utility air-table-cell {
-  padding-block: calc(var(--spacing) * 3);
-  padding-inline: calc(var(--spacing) * 6); /* 12px 24px */
+  padding-block: var(--air-table-cell-padding-y);
+  padding-inline: var(--air-table-cell-padding-x);
 
   font-family: var(--font-brand, system-ui);
-  font-size: var(--font-body-md-size);
+  font-size: var(--air-table-cell-size);
   font-weight: var(--font-body-md-weight);
-  line-height: var(--font-body-md-line-height);
+  line-height: var(--air-table-cell-line-height);
   letter-spacing: var(--font-body-md-tracking);
 
   color: var(--color-on-surface);
@@ -127,4 +176,84 @@
   &[data-active='true'][data-order='desc'] > .air-icon {
     transform: rotate(180deg);
   }
+}
+
+/* Sizing Variants */
+@utility air-table-xs {
+  --air-table-header-height: var(--air-table-header-height-xs);
+  --air-table-header-padding-x: var(--air-table-header-padding-x-xs);
+  --air-table-cell-padding-y: var(--air-table-cell-padding-y-xs);
+  --air-table-cell-padding-x: var(--air-table-cell-padding-x-xs);
+}
+
+@utility air-table-sm {
+  --air-table-header-height: var(--air-table-header-height-sm);
+  --air-table-header-padding-x: var(--air-table-header-padding-x-sm);
+  --air-table-cell-padding-y: var(--air-table-cell-padding-y-sm);
+  --air-table-cell-padding-x: var(--air-table-cell-padding-x-sm);
+}
+
+@utility air-table-md {
+  --air-table-header-height: var(--air-table-header-height-md);
+  --air-table-header-padding-x: var(--air-table-header-padding-x-md);
+  --air-table-cell-padding-y: var(--air-table-cell-padding-y-md);
+  --air-table-cell-padding-x: var(--air-table-cell-padding-x-md);
+}
+
+@utility air-table-lg {
+  --air-table-header-height: var(--air-table-header-height-lg);
+  --air-table-header-padding-x: var(--air-table-header-padding-x-lg);
+  --air-table-cell-padding-y: var(--air-table-cell-padding-y-lg);
+  --air-table-cell-padding-x: var(--air-table-cell-padding-x-lg);
+}
+
+@utility air-table-xl {
+  --air-table-header-height: var(--air-table-header-height-xl);
+  --air-table-header-padding-x: var(--air-table-header-padding-x-xl);
+  --air-table-cell-padding-y: var(--air-table-cell-padding-y-xl);
+  --air-table-cell-padding-x: var(--air-table-cell-padding-x-xl);
+}
+
+@utility air-table-xxl {
+  --air-table-header-height: var(--air-table-header-height-xxl);
+  --air-table-header-padding-x: var(--air-table-header-padding-x-xxl);
+  --air-table-cell-padding-y: var(--air-table-cell-padding-y-xxl);
+  --air-table-cell-padding-x: var(--air-table-cell-padding-x-xxl);
+}
+
+/* Row Color Variants */
+@utility air-table-row-secondary {
+  --air-table-row-filled-bg: var(--color-secondary-container);
+  --color-on-surface: var(--color-on-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+@utility air-table-row-tertiary {
+  --air-table-row-filled-bg: var(--color-tertiary-container);
+  --color-on-surface: var(--color-on-tertiary-container);
+  color: var(--color-on-tertiary-container);
+}
+
+@utility air-table-row-error {
+  --air-table-row-filled-bg: var(--color-error-container);
+  --color-on-surface: var(--color-on-error-container);
+  color: var(--color-on-error-container);
+}
+
+@utility air-table-row-success {
+  --air-table-row-filled-bg: var(--color-success-container);
+  --color-on-surface: var(--color-on-success-container);
+  color: var(--color-on-success-container);
+}
+
+@utility air-table-row-warning {
+  --air-table-row-filled-bg: var(--color-warning-container);
+  --color-on-surface: var(--color-on-warning-container);
+  color: var(--color-on-warning-container);
+}
+
+@utility air-table-row-info {
+  --air-table-row-filled-bg: var(--color-info-container);
+  --color-on-surface: var(--color-on-info-container);
+  color: var(--color-on-info-container);
 }

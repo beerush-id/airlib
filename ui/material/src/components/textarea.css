@@ -26,6 +26,11 @@
   padding-block-end: calc(var(--spacing) * 3);
 }
 
+@utility air-textarea-xs {
+  @apply air-text-field-xs;
+  min-height: calc(var(--air-text-field-height) * 2);
+}
+
 @utility air-textarea-sm {
   @apply air-text-field-sm;
   min-height: calc(var(--air-text-field-height) * 2);
@@ -41,8 +46,38 @@
   min-height: calc(var(--air-text-field-height) * 2);
 }
 
+@utility air-textarea-xl {
+  @apply air-text-field-xl;
+  min-height: calc(var(--air-text-field-height) * 2);
+}
+
+@utility air-textarea-xxl {
+  @apply air-text-field-xxl;
+  min-height: calc(var(--air-text-field-height) * 2);
+}
+
 @utility air-textarea-error {
   @apply air-text-field-error;
+}
+
+@utility air-textarea-secondary {
+  @apply air-text-field-secondary;
+}
+
+@utility air-textarea-tertiary {
+  @apply air-text-field-tertiary;
+}
+
+@utility air-textarea-success {
+  @apply air-text-field-success;
+}
+
+@utility air-textarea-warning {
+  @apply air-text-field-warning;
+}
+
+@utility air-textarea-info {
+  @apply air-text-field-info;
 }
 
 @utility air-textarea-input {

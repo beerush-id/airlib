@@ -1,5 +1,33 @@
 @theme {
   --air-progress-linear-height: var(--spacing); /* 4px */
+  --air-progress-circular-size: calc(var(--spacing) * 12); /* 48px */
+  --air-progress-circular-thickness: 4px;
+
+  /* Size Variants */
+  --air-progress-linear-height-xs: calc(var(--spacing) * 0.5); /* 2px */
+  --air-progress-linear-height-sm: calc(var(--spacing) * 0.75); /* 3px */
+  --air-progress-linear-height-md: var(--spacing); /* 4px */
+  --air-progress-linear-height-lg: calc(var(--spacing) * 1.5); /* 6px */
+  --air-progress-linear-height-xl: calc(var(--spacing) * 2); /* 8px */
+  --air-progress-linear-height-xxl: calc(var(--spacing) * 3); /* 12px */
+
+  --air-progress-circular-size-xs: calc(var(--spacing) * 6); /* 24px */
+  --air-progress-circular-size-sm: calc(var(--spacing) * 8); /* 32px */
+  --air-progress-circular-size-md: calc(var(--spacing) * 12); /* 48px */
+  --air-progress-circular-size-lg: calc(var(--spacing) * 16); /* 64px */
+  --air-progress-circular-size-xl: calc(var(--spacing) * 20); /* 80px */
+  --air-progress-circular-size-xxl: calc(var(--spacing) * 24); /* 96px */
+
+  --air-progress-circular-thickness-xs: 2px;
+  --air-progress-circular-thickness-sm: 3px;
+  --air-progress-circular-thickness-md: 4px;
+  --air-progress-circular-thickness-lg: 5px;
+  --air-progress-circular-thickness-xl: 6px;
+  --air-progress-circular-thickness-xxl: 8px;
+
+  /* Colors */
+  --air-progress-track-bg: var(--color-surface-container-highest);
+  --air-progress-fill-bg: var(--color-primary);
 }
 
 /* Linear Progress */
@@ -10,7 +38,7 @@
 }
 
 @utility air-progress-linear-surface {
-  background-color: var(--color-surface-container-highest);
+  background-color: var(--air-progress-track-bg);
 }
 
 @utility air-progress-linear-bar {
@@ -21,7 +49,7 @@
 }
 
 @utility air-progress-linear-primary {
-  background-color: var(--color-primary);
+  background-color: var(--air-progress-fill-bg);
 }
 
 @utility air-progress-linear-indeterminate {
@@ -47,8 +75,8 @@
 
 /* Circular Progress */
 @utility air-progress-circular-base {
-  width: calc(var(--spacing) * 12); /* 48px */
-  height: calc(var(--spacing) * 12);
+  width: var(--air-progress-circular-size);
+  height: var(--air-progress-circular-size);
 }
 
 @utility air-progress-circular-indeterminate {
@@ -59,7 +87,7 @@
 }
 
 @utility air-progress-circular-circle {
-  stroke-width: 4px;
+  stroke-width: var(--air-progress-circular-thickness);
   stroke-linecap: round;
   fill: transparent;
   transition-property: stroke-dasharray;
@@ -68,7 +96,7 @@
 }
 
 @utility air-progress-circular-primary {
-  stroke: var(--color-primary);
+  stroke: var(--air-progress-fill-bg);
 }
 
 @utility air-progress-circular-circle-indeterminate {
@@ -106,3 +134,45 @@
 @utility air-progress-circular {
   @apply air-progress-circular-base;
 }
+
+/* Size Variants (Linear) */
+@utility air-progress-linear-xs { --air-progress-linear-height: var(--air-progress-linear-height-xs); }
+@utility air-progress-linear-sm { --air-progress-linear-height: var(--air-progress-linear-height-sm); }
+@utility air-progress-linear-md { --air-progress-linear-height: var(--air-progress-linear-height-md); }
+@utility air-progress-linear-lg { --air-progress-linear-height: var(--air-progress-linear-height-lg); }
+@utility air-progress-linear-xl { --air-progress-linear-height: var(--air-progress-linear-height-xl); }
+@utility air-progress-linear-xxl { --air-progress-linear-height: var(--air-progress-linear-height-xxl); }
+
+/* Size Variants (Circular) */
+@utility air-progress-circular-xs {
+  --air-progress-circular-size: var(--air-progress-circular-size-xs);
+  --air-progress-circular-thickness: var(--air-progress-circular-thickness-xs);
+}
+@utility air-progress-circular-sm {
+  --air-progress-circular-size: var(--air-progress-circular-size-sm);
+  --air-progress-circular-thickness: var(--air-progress-circular-thickness-sm);
+}
+@utility air-progress-circular-md {
+  --air-progress-circular-size: var(--air-progress-circular-size-md);
+  --air-progress-circular-thickness: var(--air-progress-circular-thickness-md);
+}
+@utility air-progress-circular-lg {
+  --air-progress-circular-size: var(--air-progress-circular-size-lg);
+  --air-progress-circular-thickness: var(--air-progress-circular-thickness-lg);
+}
+@utility air-progress-circular-xl {
+  --air-progress-circular-size: var(--air-progress-circular-size-xl);
+  --air-progress-circular-thickness: var(--air-progress-circular-thickness-xl);
+}
+@utility air-progress-circular-xxl {
+  --air-progress-circular-size: var(--air-progress-circular-size-xxl);
+  --air-progress-circular-thickness: var(--air-progress-circular-thickness-xxl);
+}
+
+/* Color Variants */
+@utility air-progress-secondary { --air-progress-fill-bg: var(--color-secondary); }
+@utility air-progress-tertiary { --air-progress-fill-bg: var(--color-tertiary); }
+@utility air-progress-error { --air-progress-fill-bg: var(--color-error); }
+@utility air-progress-success { --air-progress-fill-bg: var(--color-success); }
+@utility air-progress-warning { --air-progress-fill-bg: var(--color-warning); }
+@utility air-progress-info { --air-progress-fill-bg: var(--color-info); }

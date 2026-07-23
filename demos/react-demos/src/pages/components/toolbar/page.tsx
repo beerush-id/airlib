@@ -128,7 +128,7 @@ const ToolbarDemo = setup(() => {
                         </ToolButton>
                       )}
                     </SelectTrigger>
-                    <SelectMenu>
+                    <SelectMenu className="air-menu-sm">
                       <SelectItem value="Arial">Arial</SelectItem>
                       <SelectItem value="Courier New">Courier New</SelectItem>
                       <SelectItem value="Helvetica">Helvetica</SelectItem>

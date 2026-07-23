@@ -46,6 +46,15 @@ export const CardTitle = template<ElementProps<'h3'>>(
   'CardTitle'
 );
 
+export const CardSubtitle = template<ElementProps<'p'>>(
+  ({ children, className, ...rest }) => (
+    <p {...rest} className={classx([CARD_CONFIGS.subtitleClass, className])}>
+      {renderDynamic(children)}
+    </p>
+  ),
+  'CardTitle'
+);
+
 export const CardBody = template<ElementProps<'div'>>(
   ({ children, className, ...rest }) => (
     <div {...rest} className={classx([CARD_CONFIGS.bodyClass, className])}>

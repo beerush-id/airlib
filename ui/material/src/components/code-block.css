@@ -1,9 +1,19 @@
+@theme {
+  --air-code-block-radius: var(--radius-xl);
+  --air-code-block-bg: var(--color-surface-container-low);
+  --air-code-block-fg: var(--color-on-surface);
+  --air-code-block-error-fg: var(--color-error);
+}
+
 @utility air-code-block {
-  @apply w-full rounded-xl select-text relative;
-  @apply bg-surface-container-low text-on-surface;
+  @apply w-full select-text relative;
+  border-radius: var(--air-code-block-radius);
+  background-color: var(--air-code-block-bg);
+  color: var(--air-code-block-fg);
 
   pre {
-    @apply w-auto m-0 p-4 md:p-6 bg-transparent! outline-none;
+    @apply w-auto m-0 p-4 md:p-6 outline-none;
+    background-color: transparent !important;
   }
 
   code {
@@ -29,5 +39,6 @@
 
 @utility air-code-block-error {
   @apply flex items-center gap-2;
-  @apply text-error text-sm px-4 py-2;
+  @apply text-sm px-4 py-2;
+  color: var(--air-code-block-error-fg);
 }

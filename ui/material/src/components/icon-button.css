@@ -2,11 +2,67 @@
   --air-icon-button-size: calc(var(--spacing) * 10);
   --air-icon-button-icon-size: calc(var(--spacing) * 6);
   --air-icon-button-radius: var(--radius-full);
+
+  /* Size Variants */
+  --air-icon-button-size-xs: calc(var(--spacing) * 6);
+  --air-icon-button-icon-size-xs: calc(var(--spacing) * 4);
+
+  --air-icon-button-size-sm: calc(var(--spacing) * 8);
+  --air-icon-button-icon-size-sm: calc(var(--spacing) * 5);
+
+  --air-icon-button-size-md: calc(var(--spacing) * 10);
+  --air-icon-button-icon-size-md: calc(var(--spacing) * 6);
+
+  --air-icon-button-size-lg: calc(var(--spacing) * 12);
+  --air-icon-button-icon-size-lg: calc(var(--spacing) * 7);
+
+  --air-icon-button-size-xl: calc(var(--spacing) * 14);
+  --air-icon-button-icon-size-xl: calc(var(--spacing) * 8);
+
+  --air-icon-button-size-xxl: calc(var(--spacing) * 16);
+  --air-icon-button-icon-size-xxl: calc(var(--spacing) * 9);
+
+  /* Base/Standard */
+  --air-icon-button-bg: transparent;
+  --air-icon-button-fg: var(--color-on-surface-variant);
+  --air-icon-button-state: var(--color-on-surface-variant);
+  --air-icon-button-active-fg: var(--color-primary);
+  --air-icon-button-selected-fg: var(--color-primary);
+
+  /* Filled */
+  --air-icon-button-filled-bg: var(--color-primary);
+  --air-icon-button-filled-fg: var(--color-on-primary);
+  --air-icon-button-filled-state: var(--color-on-primary);
+
+  --air-icon-button-filled-unselected-bg: var(--color-surface-variant);
+  --air-icon-button-filled-unselected-fg: var(--color-primary);
+  --air-icon-button-filled-unselected-state: var(--color-primary);
+
+  /* Tonal */
+  --air-icon-button-tonal-bg: var(--color-secondary-container);
+  --air-icon-button-tonal-fg: var(--color-on-secondary-container);
+  --air-icon-button-tonal-state: var(--color-on-secondary-container);
+
+  --air-icon-button-tonal-unselected-bg: var(--color-surface-variant);
+  --air-icon-button-tonal-unselected-fg: var(--color-on-surface-variant);
+  --air-icon-button-tonal-unselected-state: var(--color-on-surface-variant);
+
+  /* Outlined */
+  --air-icon-button-outlined-bg: transparent;
+  --air-icon-button-outlined-fg: var(--color-on-surface-variant);
+  --air-icon-button-outlined-border: var(--color-outline);
+  --air-icon-button-outlined-border-focus: var(--color-on-surface);
+  --air-icon-button-outlined-state: var(--color-on-surface-variant);
+
+  --air-icon-button-outlined-selected-bg: var(--color-inverse-surface);
+  --air-icon-button-outlined-selected-fg: var(--color-inverse-on-surface);
+  --air-icon-button-outlined-selected-border: transparent;
+  --air-icon-button-outlined-selected-state: var(--color-inverse-on-surface);
 }
 
 /* Base Layout */
 @utility air-icon-button-base {
-  @apply inline-flex items-center justify-center;
+  @apply inline-flex items-center justify-center relative;
   @apply box-border p-0 cursor-pointer select-none no-underline;
   @apply air-focus-ring air-touch-area;
   width: var(--air-icon-button-size);
@@ -58,18 +114,18 @@
 /* Composed Utilities */
 @utility air-icon-button {
   @apply air-icon-button-base air-state-layer;
-  background-color: transparent;
-  color: var(--color-on-surface-variant);
-  --state-layer-color: var(--color-on-surface-variant);
+  background-color: var(--air-icon-button-bg);
+  color: var(--air-icon-button-fg);
+  --state-layer-color: var(--air-icon-button-state);
 
   &:active:not(:disabled) {
-    color: var(--color-primary);
+    color: var(--air-icon-button-active-fg);
   }
 
   &[aria-pressed='true'],
   &[aria-selected='true'] {
-    color: var(--color-primary);
-    --state-layer-color: var(--color-primary);
+    color: var(--air-icon-button-selected-fg);
+    --state-layer-color: var(--air-icon-button-selected-fg);
   }
 
   &:disabled {
@@ -80,15 +136,15 @@
 
 @utility air-icon-button-filled {
   @apply air-icon-button-base air-state-layer;
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
-  --state-layer-color: var(--color-on-primary);
+  background-color: var(--air-icon-button-filled-bg);
+  color: var(--air-icon-button-filled-fg);
+  --state-layer-color: var(--air-icon-button-filled-state);
 
   &[aria-pressed='false'],
   &[aria-selected='false'] {
-    background-color: var(--color-surface-variant);
-    color: var(--color-primary);
-    --state-layer-color: var(--color-primary);
+    background-color: var(--air-icon-button-filled-unselected-bg);
+    color: var(--air-icon-button-filled-unselected-fg);
+    --state-layer-color: var(--air-icon-button-filled-unselected-state);
   }
 
   &:disabled {
@@ -99,15 +155,15 @@
 
 @utility air-icon-button-tonal {
   @apply air-icon-button-base air-state-layer;
-  background-color: var(--color-secondary-container);
-  color: var(--color-on-secondary-container);
-  --state-layer-color: var(--color-on-secondary-container);
+  background-color: var(--air-icon-button-tonal-bg);
+  color: var(--air-icon-button-tonal-fg);
+  --state-layer-color: var(--air-icon-button-tonal-state);
 
   &[aria-pressed='false'],
   &[aria-selected='false'] {
-    background-color: var(--color-surface-variant);
-    color: var(--color-on-surface-variant);
-    --state-layer-color: var(--color-on-surface-variant);
+    background-color: var(--air-icon-button-tonal-unselected-bg);
+    color: var(--air-icon-button-tonal-unselected-fg);
+    --state-layer-color: var(--air-icon-button-tonal-unselected-state);
   }
 
   &:disabled {
@@ -118,23 +174,23 @@
 
 @utility air-icon-button-outlined {
   @apply air-icon-button-base air-state-layer;
-  background-color: transparent;
-  color: var(--color-on-surface-variant);
+  background-color: var(--air-icon-button-outlined-bg);
+  color: var(--air-icon-button-outlined-fg);
   border-width: var(--shadow-base, 1px);
   border-style: solid;
-  border-color: var(--color-outline);
-  --state-layer-color: var(--color-on-surface-variant);
+  border-color: var(--air-icon-button-outlined-border);
+  --state-layer-color: var(--air-icon-button-outlined-state);
 
   &:focus-visible:not(:disabled) {
-    border-color: var(--color-on-surface);
+    border-color: var(--air-icon-button-outlined-border-focus);
   }
 
   &[aria-pressed='true'],
   &[aria-selected='true'] {
-    background-color: var(--color-inverse-surface);
-    color: var(--color-inverse-on-surface);
-    border-color: transparent;
-    --state-layer-color: var(--color-inverse-on-surface);
+    background-color: var(--air-icon-button-outlined-selected-bg);
+    color: var(--air-icon-button-outlined-selected-fg);
+    border-color: var(--air-icon-button-outlined-selected-border);
+    --state-layer-color: var(--air-icon-button-outlined-selected-state);
   }
 
   &:disabled {
@@ -143,29 +199,121 @@
   }
 }
 
+/* Color Variants */
+@utility air-icon-button-secondary {
+  --air-icon-button-active-fg: var(--color-secondary);
+  --air-icon-button-selected-fg: var(--color-secondary);
+
+  --air-icon-button-filled-bg: var(--color-secondary);
+  --air-icon-button-filled-fg: var(--color-on-secondary);
+  --air-icon-button-filled-state: var(--color-on-secondary);
+  --air-icon-button-filled-unselected-fg: var(--color-secondary);
+  --air-icon-button-filled-unselected-state: var(--color-secondary);
+}
+
+@utility air-icon-button-tertiary {
+  --air-icon-button-active-fg: var(--color-tertiary);
+  --air-icon-button-selected-fg: var(--color-tertiary);
+
+  --air-icon-button-filled-bg: var(--color-tertiary);
+  --air-icon-button-filled-fg: var(--color-on-tertiary);
+  --air-icon-button-filled-state: var(--color-on-tertiary);
+  --air-icon-button-filled-unselected-fg: var(--color-tertiary);
+  --air-icon-button-filled-unselected-state: var(--color-tertiary);
+
+  --air-icon-button-tonal-bg: var(--color-tertiary-container);
+  --air-icon-button-tonal-fg: var(--color-on-tertiary-container);
+  --air-icon-button-tonal-state: var(--color-on-tertiary-container);
+}
+
+@utility air-icon-button-error {
+  --air-icon-button-active-fg: var(--color-error);
+  --air-icon-button-selected-fg: var(--color-error);
+
+  --air-icon-button-filled-bg: var(--color-error);
+  --air-icon-button-filled-fg: var(--color-on-error);
+  --air-icon-button-filled-state: var(--color-on-error);
+  --air-icon-button-filled-unselected-fg: var(--color-error);
+  --air-icon-button-filled-unselected-state: var(--color-error);
+
+  --air-icon-button-tonal-bg: var(--color-error-container);
+  --air-icon-button-tonal-fg: var(--color-on-error-container);
+  --air-icon-button-tonal-state: var(--color-on-error-container);
+}
+
+@utility air-icon-button-success {
+  --air-icon-button-active-fg: var(--color-success);
+  --air-icon-button-selected-fg: var(--color-success);
+
+  --air-icon-button-filled-bg: var(--color-success);
+  --air-icon-button-filled-fg: var(--color-on-success);
+  --air-icon-button-filled-state: var(--color-on-success);
+  --air-icon-button-filled-unselected-fg: var(--color-success);
+  --air-icon-button-filled-unselected-state: var(--color-success);
+
+  --air-icon-button-tonal-bg: var(--color-success-container);
+  --air-icon-button-tonal-fg: var(--color-on-success-container);
+  --air-icon-button-tonal-state: var(--color-on-success-container);
+}
+
+@utility air-icon-button-warning {
+  --air-icon-button-active-fg: var(--color-warning);
+  --air-icon-button-selected-fg: var(--color-warning);
+
+  --air-icon-button-filled-bg: var(--color-warning);
+  --air-icon-button-filled-fg: var(--color-on-warning);
+  --air-icon-button-filled-state: var(--color-on-warning);
+  --air-icon-button-filled-unselected-fg: var(--color-warning);
+  --air-icon-button-filled-unselected-state: var(--color-warning);
+
+  --air-icon-button-tonal-bg: var(--color-warning-container);
+  --air-icon-button-tonal-fg: var(--color-on-warning-container);
+  --air-icon-button-tonal-state: var(--color-on-warning-container);
+}
+
+@utility air-icon-button-info {
+  --air-icon-button-active-fg: var(--color-info);
+  --air-icon-button-selected-fg: var(--color-info);
+
+  --air-icon-button-filled-bg: var(--color-info);
+  --air-icon-button-filled-fg: var(--color-on-info);
+  --air-icon-button-filled-state: var(--color-on-info);
+  --air-icon-button-filled-unselected-fg: var(--color-info);
+  --air-icon-button-filled-unselected-state: var(--color-info);
+
+  --air-icon-button-tonal-bg: var(--color-info-container);
+  --air-icon-button-tonal-fg: var(--color-on-info-container);
+  --air-icon-button-tonal-state: var(--color-on-info-container);
+}
+
 /* Icon Button Sizes */
 @utility air-icon-button-xs {
   @apply air-segment-xs;
-  --air-icon-button-size: calc(var(--spacing) * 6);
-  --air-icon-button-icon-size: calc(var(--spacing) * 4);
+  --air-icon-button-size: var(--air-icon-button-size-xs);
+  --air-icon-button-icon-size: var(--air-icon-button-icon-size-xs);
 }
 @utility air-icon-button-sm {
   @apply air-segment-sm;
-  --air-icon-button-size: calc(var(--spacing) * 8);
-  --air-icon-button-icon-size: calc(var(--spacing) * 5);
+  --air-icon-button-size: var(--air-icon-button-size-sm);
+  --air-icon-button-icon-size: var(--air-icon-button-icon-size-sm);
 }
 @utility air-icon-button-md {
   @apply air-segment-md;
-  --air-icon-button-size: calc(var(--spacing) * 10);
-  --air-icon-button-icon-size: calc(var(--spacing) * 6);
+  --air-icon-button-size: var(--air-icon-button-size-md);
+  --air-icon-button-icon-size: var(--air-icon-button-icon-size-md);
 }
 @utility air-icon-button-lg {
   @apply air-segment-lg;
-  --air-icon-button-size: calc(var(--spacing) * 12);
-  --air-icon-button-icon-size: calc(var(--spacing) * 7);
+  --air-icon-button-size: var(--air-icon-button-size-lg);
+  --air-icon-button-icon-size: var(--air-icon-button-icon-size-lg);
 }
 @utility air-icon-button-xl {
   @apply air-segment-xl;
-  --air-icon-button-size: calc(var(--spacing) * 14);
-  --air-icon-button-icon-size: calc(var(--spacing) * 8);
+  --air-icon-button-size: var(--air-icon-button-size-xl);
+  --air-icon-button-icon-size: var(--air-icon-button-icon-size-xl);
+}
+@utility air-icon-button-xxl {
+  @apply air-segment-xxl;
+  --air-icon-button-size: var(--air-icon-button-size-xxl);
+  --air-icon-button-icon-size: var(--air-icon-button-icon-size-xxl);
 }

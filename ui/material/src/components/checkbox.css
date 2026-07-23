@@ -1,6 +1,54 @@
 @theme {
+  /* Base / Size Variants (md) */
   --air-checkbox-target: calc(var(--spacing) * 12); /* 48px */
   --air-checkbox-size: calc(var(--spacing) * 4.5); /* 18px */
+  --air-checkbox-radius: calc(var(--spacing) * 0.5); /* 2px */
+  --air-checkbox-border-width: 2px;
+
+  /* Size Variants (xs) */
+  --air-checkbox-target-xs: calc(var(--spacing) * 8);
+  --air-checkbox-size-xs: calc(var(--spacing) * 3.5);
+
+  /* Size Variants (sm) */
+  --air-checkbox-target-sm: calc(var(--spacing) * 10);
+  --air-checkbox-size-sm: calc(var(--spacing) * 4);
+
+  /* Size Variants (md) */
+  --air-checkbox-target-md: calc(var(--spacing) * 12);
+  --air-checkbox-size-md: calc(var(--spacing) * 4.5);
+
+  /* Size Variants (lg) */
+  --air-checkbox-target-lg: calc(var(--spacing) * 14);
+  --air-checkbox-size-lg: calc(var(--spacing) * 5);
+
+  /* Size Variants (xl) */
+  --air-checkbox-target-xl: calc(var(--spacing) * 16);
+  --air-checkbox-size-xl: calc(var(--spacing) * 5.5);
+
+  /* Size Variants (xxl) */
+  --air-checkbox-target-xxl: calc(var(--spacing) * 20);
+  --air-checkbox-size-xxl: calc(var(--spacing) * 6);
+
+  /* Resting */
+  --air-checkbox-resting-border: var(--color-on-surface-variant);
+  --air-checkbox-resting-state: var(--color-on-surface);
+
+  /* Checked / Indeterminate */
+  --air-checkbox-checked-bg: var(--color-primary);
+  --air-checkbox-checked-border: var(--color-primary);
+  --air-checkbox-checked-fg: var(--color-on-primary);
+  --air-checkbox-checked-state: var(--color-primary);
+
+  /* Disabled */
+  --air-checkbox-disabled-border: var(--color-on-surface);
+  --air-checkbox-disabled-opacity: 0.38;
+
+  /* Disabled Checked */
+  --air-checkbox-disabled-checked-bg: var(--color-on-surface);
+  --air-checkbox-disabled-checked-fg: var(--color-surface);
+
+  /* Focus Ring */
+  --air-checkbox-focus-ring: var(--color-secondary);
 }
 
 @utility air-checkbox-container {
@@ -18,11 +66,11 @@
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
 
-  --state-layer-color: var(--color-on-surface);
+  --state-layer-color: var(--air-checkbox-resting-state);
 
   &[aria-checked='true'],
   &[aria-checked='mixed'] {
-    --state-layer-color: var(--color-primary);
+    --state-layer-color: var(--air-checkbox-checked-state);
   }
 
   &:disabled,
@@ -44,14 +92,14 @@
     }
   }
 
-  &:focus-visible {
+  &:focus {
     outline: none;
   }
 
   &:focus-visible:not(:disabled) :is(.air-checkbox, .air-checkbox-base) {
     outline-width: var(--focus-ring-width);
     outline-style: solid;
-    outline-color: var(--color-secondary);
+    outline-color: var(--air-checkbox-focus-ring);
     outline-offset: var(--focus-ring-offset);
   }
 
@@ -72,10 +120,10 @@
   @apply flex items-center justify-center box-border appearance-none relative;
   width: var(--air-checkbox-size);
   height: var(--air-checkbox-size);
-  border-radius: calc(var(--spacing) * 0.5); /* 2px */
-  border-width: 2px;
+  border-radius: var(--air-checkbox-radius);
+  border-width: var(--air-checkbox-border-width);
   border-style: solid;
-  border-color: var(--color-on-surface-variant);
+  border-color: var(--air-checkbox-resting-border);
   background-color: transparent;
   color: transparent;
 
@@ -101,9 +149,9 @@
 
 /* Composable States */
 @utility air-checkbox-checked {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--color-on-primary);
+  background-color: var(--air-checkbox-checked-bg);
+  border-color: var(--air-checkbox-checked-border);
+  color: var(--air-checkbox-checked-fg);
 
   & > [data-icon='checked'] {
     opacity: 1;
@@ -119,9 +167,9 @@
 }
 
 @utility air-checkbox-indeterminate {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--color-on-primary);
+  background-color: var(--air-checkbox-checked-bg);
+  border-color: var(--air-checkbox-checked-border);
+  color: var(--air-checkbox-checked-fg);
 
   & > [data-icon='mixed'] {
     opacity: 1;
@@ -129,27 +177,110 @@
 }
 
 @utility air-checkbox-disabled {
-  border-color: var(--color-on-surface);
-  opacity: 0.38;
+  border-color: var(--air-checkbox-disabled-border);
+  opacity: var(--air-checkbox-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
 }
 
 @utility air-checkbox-disabled-checked {
-  background-color: var(--color-on-surface);
+  background-color: var(--air-checkbox-disabled-border);
   border-color: transparent;
-  color: var(--color-surface);
+  color: var(--air-checkbox-disabled-checked-fg);
+}
+
+/* Size Variants */
+@utility air-checkbox-xs {
+  --air-checkbox-size: var(--air-checkbox-size-xs);
+  --air-checkbox-target: var(--air-checkbox-target-xs);
+}
+
+@utility air-checkbox-sm {
+  --air-checkbox-size: var(--air-checkbox-size-sm);
+  --air-checkbox-target: var(--air-checkbox-target-sm);
+}
+
+@utility air-checkbox-md {
+  --air-checkbox-size: var(--air-checkbox-size-md);
+  --air-checkbox-target: var(--air-checkbox-target-md);
+}
+
+@utility air-checkbox-lg {
+  --air-checkbox-size: var(--air-checkbox-size-lg);
+  --air-checkbox-target: var(--air-checkbox-target-lg);
+}
+
+@utility air-checkbox-xl {
+  --air-checkbox-size: var(--air-checkbox-size-xl);
+  --air-checkbox-target: var(--air-checkbox-target-xl);
+}
+
+@utility air-checkbox-xxl {
+  --air-checkbox-size: var(--air-checkbox-size-xxl);
+  --air-checkbox-target: var(--air-checkbox-target-xxl);
+}
+
+/* Color Variants */
+@utility air-checkbox-secondary {
+  --air-checkbox-checked-bg: var(--color-secondary);
+  --air-checkbox-checked-border: var(--color-secondary);
+  --air-checkbox-checked-fg: var(--color-on-secondary);
+  --air-checkbox-checked-state: var(--color-secondary);
+  --air-checkbox-focus-ring: var(--color-secondary);
+}
+
+@utility air-checkbox-tertiary {
+  --air-checkbox-checked-bg: var(--color-tertiary);
+  --air-checkbox-checked-border: var(--color-tertiary);
+  --air-checkbox-checked-fg: var(--color-on-tertiary);
+  --air-checkbox-checked-state: var(--color-tertiary);
+  --air-checkbox-focus-ring: var(--color-tertiary);
+}
+
+@utility air-checkbox-error {
+  --air-checkbox-checked-bg: var(--color-error);
+  --air-checkbox-checked-border: var(--color-error);
+  --air-checkbox-checked-fg: var(--color-on-error);
+  --air-checkbox-checked-state: var(--color-error);
+  --air-checkbox-focus-ring: var(--color-error);
+}
+
+@utility air-checkbox-success {
+  --air-checkbox-checked-bg: var(--color-success);
+  --air-checkbox-checked-border: var(--color-success);
+  --air-checkbox-checked-fg: var(--color-on-success);
+  --air-checkbox-checked-state: var(--color-success);
+  --air-checkbox-focus-ring: var(--color-success);
+}
+
+@utility air-checkbox-warning {
+  --air-checkbox-checked-bg: var(--color-warning);
+  --air-checkbox-checked-border: var(--color-warning);
+  --air-checkbox-checked-fg: var(--color-on-warning);
+  --air-checkbox-checked-state: var(--color-warning);
+  --air-checkbox-focus-ring: var(--color-warning);
+}
+
+@utility air-checkbox-info {
+  --air-checkbox-checked-bg: var(--color-info);
+  --air-checkbox-checked-border: var(--color-info);
+  --air-checkbox-checked-fg: var(--color-on-info);
+  --air-checkbox-checked-state: var(--color-info);
+  --air-checkbox-focus-ring: var(--color-info);
 }
 
 /* Composed Utilities */
 @utility air-checkbox {
   @apply air-checkbox-base;
 
-  &:focus-visible {
+  &:focus {
     outline: none;
+  }
+
+  &:focus-visible {
     box-shadow:
       0 0 0 var(--focus-ring-offset) var(--color-surface),
-      0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--color-secondary);
+      0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--air-checkbox-focus-ring);
   }
 }
 
@@ -157,7 +288,7 @@
   @apply air-checkbox air-state-layer;
 
   /* Define the default ripple color for the state layer */
-  --state-layer-color: var(--color-on-surface);
+  --state-layer-color: var(--air-checkbox-resting-state);
 
   /* Override state-layer ::before to create a 48x48 clickable touch target */
   &::before {
@@ -191,7 +322,7 @@
   &:checked,
   &[aria-checked='true'] {
     @apply air-checkbox-checked;
-    --state-layer-color: var(--color-primary);
+    --state-layer-color: var(--air-checkbox-checked-state);
 
     &::after {
       opacity: 1;
@@ -202,7 +333,7 @@
   &:indeterminate,
   &[aria-checked='mixed'] {
     @apply air-checkbox-indeterminate;
-    --state-layer-color: var(--color-primary);
+    --state-layer-color: var(--air-checkbox-checked-state);
 
     &::after {
       opacity: 1;

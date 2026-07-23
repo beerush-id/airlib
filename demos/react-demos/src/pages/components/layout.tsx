@@ -1,5 +1,13 @@
-import { Collapsible, CollapsibleGroup } from '@airlib/react-ui/components';
-import { Link, page } from '@anchorlib/react';
+import {
+  Collapsible,
+  CollapsibleGroup,
+  ListItemContent,
+  ToolField,
+  ToolFieldInput,
+  ToolIcon,
+} from '@airlib/react-ui/components';
+import { SearchIcon } from '@airlib/react-ui/icons';
+import { $bind, For, Link, mutable, page, Show } from '@anchorlib/react';
 import { AccordionPage } from './accordion/page.js';
 import { AvatarPage } from './avatar/page.js';
 import { BadgePage } from './badge/page.js';
@@ -34,137 +42,126 @@ import { ToolbarPage } from './toolbar/page.js';
 import { TooltipPage } from './tooltip/page.js';
 import { TypographyPage } from './typography/page.js';
 
-export const UILayout = page(uiRoute).render(({ children }) => (
-  <div className="air-page">
-    <aside className="air-sidebar top-[80px] max-h-[calc(100vh-96px)]">
-      <nav className="air-nav">
-        <Link to={UIPage} className="air-link-nav">
-          <span className="air-list-view-item-content">Overview</span>
-        </Link>
+type NavPage = {
+  to: ReturnType<typeof page>;
+  label: string;
+};
 
-        <CollapsibleGroup className="w-full">
-          <Collapsible name="layout" label="Layout & Surface" expanded={true}>
-            <div className="air-nav-subgroup">
-              <Link to={AccordionPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Accordion</span>
-              </Link>
-              <Link to={CardPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Card</span>
-              </Link>
-              <Link to={CollapsiblePage} className="air-link-nav">
-                <span className="air-list-view-item-content">Collapsible</span>
-              </Link>
-              <Link to={DialogPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Dialog</span>
-              </Link>
-              <Link to={SideSheetPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Side Sheet</span>
-              </Link>
-            </div>
-          </Collapsible>
+type NavGroup = {
+  name: string;
+  label: string;
+  pages: NavPage[];
+};
 
-          <Collapsible name="actions" label="Actions & Nav" expanded={true}>
-            <div className="air-nav-subgroup">
-              <Link to={ButtonPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Button</span>
-              </Link>
-              <Link to={FabPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Floating Action Button</span>
-              </Link>
-              <Link to={IconButtonPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Icon Button</span>
-              </Link>
-              <Link to={MenuPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Menu</span>
-              </Link>
-              <Link to={TabPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Tabs</span>
-              </Link>
-              <Link to={ToolbarPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Toolbar</span>
-              </Link>
-            </div>
-          </Collapsible>
+const NAV_GROUPS: NavGroup[] = [
+  {
+    name: 'layout',
+    label: 'Layout & Surface',
+    pages: [
+      { to: AccordionPage, label: 'Accordion' },
+      { to: CardPage, label: 'Card' },
+      { to: CollapsiblePage, label: 'Collapsible' },
+      { to: DialogPage, label: 'Dialog' },
+      { to: SideSheetPage, label: 'Side Sheet' },
+    ],
+  },
+  {
+    name: 'actions',
+    label: 'Actions & Nav',
+    pages: [
+      { to: ButtonPage, label: 'Button' },
+      { to: FabPage, label: 'Floating Action Button' },
+      { to: IconButtonPage, label: 'Icon Button' },
+      { to: MenuPage, label: 'Menu' },
+      { to: TabPage, label: 'Tabs' },
+      { to: ToolbarPage, label: 'Toolbar' },
+    ],
+  },
+  {
+    name: 'forms',
+    label: 'Form Controls',
+    pages: [
+      { to: CheckboxPage, label: 'Checkbox' },
+      { to: FormPage, label: 'Form' },
+      { to: PickerPage, label: 'Picker' },
+      { to: RadioPage, label: 'Radio Button' },
+      { to: SelectPage, label: 'Select' },
+      { to: SliderPage, label: 'Slider' },
+      { to: SwitchPage, label: 'Switch' },
+      { to: TextFieldPage, label: 'Text Field' },
+      { to: TextareaPage, label: 'Textarea' },
+    ],
+  },
+  {
+    name: 'data',
+    label: 'Data & Display',
+    pages: [
+      { to: AvatarPage, label: 'Avatar' },
+      { to: BadgePage, label: 'Badge' },
+      { to: ChipPage, label: 'Chip' },
+      { to: CodeBlockPage, label: 'Code Block' },
+      { to: TablePage, label: 'Data Table' },
+      { to: ListPage, label: 'List' },
+      { to: ProgressPage, label: 'Progress' },
+      { to: StatusPage, label: 'Status' },
+      { to: TypographyPage, label: 'Typography' },
+    ],
+  },
+  {
+    name: 'feedback',
+    label: 'Feedback & Overlays',
+    pages: [
+      { to: SnackbarPage, label: 'Snackbar' },
+      { to: TooltipPage, label: 'Tooltip' },
+    ],
+  },
+];
 
-          <Collapsible name="forms" label="Form Controls" expanded={true}>
-            <div className="air-nav-subgroup">
-              <Link to={CheckboxPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Checkbox</span>
-              </Link>
-              <Link to={FormPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Form</span>
-              </Link>
-              <Link to={PickerPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Picker</span>
-              </Link>
-              <Link to={RadioPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Radio Button</span>
-              </Link>
-              <Link to={SelectPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Select</span>
-              </Link>
-              <Link to={SliderPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Slider</span>
-              </Link>
-              <Link to={SwitchPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Switch</span>
-              </Link>
-              <Link to={TextFieldPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Text Field</span>
-              </Link>
-              <Link to={TextareaPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Textarea</span>
-              </Link>
-            </div>
-          </Collapsible>
+export const UILayout = page(uiRoute).render(({ children }) => {
+  const filter = mutable('');
+  const shouldVisible = (item) => {
+    return !filter.value || item.label.toLowerCase().includes(filter.value.toLowerCase());
+  };
 
-          <Collapsible name="data" label="Data & Display" expanded={true}>
-            <div className="air-nav-subgroup">
-              <Link to={AvatarPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Avatar</span>
-              </Link>
-              <Link to={BadgePage} className="air-link-nav">
-                <span className="air-list-view-item-content">Badge</span>
-              </Link>
-              <Link to={ChipPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Chip</span>
-              </Link>
-              <Link to={CodeBlockPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Code Block</span>
-              </Link>
-              <Link to={TablePage} className="air-link-nav">
-                <span className="air-list-view-item-content">Data Table</span>
-              </Link>
-              <Link to={ListPage} className="air-link-nav">
-                <span className="air-list-view-item-content">List</span>
-              </Link>
-              <Link to={ProgressPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Progress</span>
-              </Link>
-              <Link to={StatusPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Status</span>
-              </Link>
-              <Link to={TypographyPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Typography</span>
-              </Link>
-            </div>
-          </Collapsible>
+  return (
+    <div className="air-page">
+      <aside className="air-sidebar top-20 max-h-[calc(100vh-96px)]">
+        <nav className="air-nav">
+          <ToolField className="w-full mb-4">
+            <ToolIcon>
+              <SearchIcon />
+            </ToolIcon>
+            <ToolFieldInput value={$bind(filter)} placeholder={'Search menu...'} />
+          </ToolField>
 
-          <Collapsible name="feedback" label="Feedback & Overlays" expanded={true}>
-            <div className="air-nav-subgroup">
-              <Link to={SnackbarPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Snackbar</span>
-              </Link>
-              <Link to={TooltipPage} className="air-link-nav">
-                <span className="air-list-view-item-content">Tooltip</span>
-              </Link>
-            </div>
-          </Collapsible>
-        </CollapsibleGroup>
-      </nav>
-    </aside>
-    <div className="air-content">{children}</div>
-  </div>
-));
+          <Link to={UIPage} className="air-link-nav">
+            <ListItemContent>Overview</ListItemContent>
+          </Link>
+
+          <CollapsibleGroup className="w-full">
+            <For each={NAV_GROUPS}>
+              {(group) => (
+                <Collapsible key={group.name} name={group.name} label={group.label} expanded>
+                  <div className="air-nav-subgroup">
+                    <For each={group.pages}>
+                      {(nav) => (
+                        <Show when={() => shouldVisible(nav)}>
+                          <Link key={nav.label} to={nav.to} className="air-link-nav">
+                            <ListItemContent>{nav.label}</ListItemContent>
+                          </Link>
+                        </Show>
+                      )}
+                    </For>
+                  </div>
+                </Collapsible>
+              )}
+            </For>
+          </CollapsibleGroup>
+        </nav>
+      </aside>
+      <div className="air-content">{children}</div>
+    </div>
+  );
+});
 
 export default UILayout;

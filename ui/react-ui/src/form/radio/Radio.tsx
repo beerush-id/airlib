@@ -25,7 +25,7 @@ export const Radio = setup<RadioProps>((props) => {
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     if (selection) {
-      selection.value = props.value;
+      selection.select(props.value);
     } else {
       input.checked = true;
     }
@@ -46,13 +46,13 @@ export const Radio = setup<RadioProps>((props) => {
         <span
           className={classx([
             RADIO_CONFIGS.visualClass,
-            selection?.value === props.value || (input.checked && RADIO_CONFIGS.visualCheckedClass),
+            (selection?.value === props.value || input.checked) && RADIO_CONFIGS.visualCheckedClass,
           ])}
         >
           <span
             className={classx([
               RADIO_CONFIGS.dotClass,
-              selection?.value === props.value || (input.checked && RADIO_CONFIGS.dotCheckedClass),
+              (selection?.value === props.value || input.checked) && RADIO_CONFIGS.dotCheckedClass,
             ])}
           />
         </span>

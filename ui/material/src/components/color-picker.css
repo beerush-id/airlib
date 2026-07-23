@@ -1,6 +1,7 @@
 @theme {
   --air-color-picker-width: calc(var(--spacing) * 10);
   --air-color-picker-height: calc(var(--spacing) * 10);
+  --air-color-picker-radius: var(--radius-md);
 }
 
 @utility air-color-picker {
@@ -12,7 +13,7 @@
   border-style: solid;
   border-color: transparent;
   background-color: transparent;
-  border-radius: var(--radius-md);
+  border-radius: var(--air-color-picker-radius);
   transition-property: outline-color;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
@@ -26,13 +27,13 @@
     border-width: 0;
     border-style: solid;
     border-color: transparent;
-    border-radius: var(--radius-md);
+    border-radius: var(--air-color-picker-radius);
   }
 
   &::-moz-color-swatch {
     border-width: 0;
     border-style: solid;
     border-color: transparent;
-    border-radius: var(--radius-md);
+    border-radius: var(--air-color-picker-radius);
   }
 }

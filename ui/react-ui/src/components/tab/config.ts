@@ -2,6 +2,7 @@ export const TAB_CONFIGS = {
   class: 'air-tab',
   prefix: 'air-tab',
   panelPrefix: 'air-tab-panel',
+  outlinedClass: 'air-tab-outlined',
 
   list: {
     class: 'air-tab-list',

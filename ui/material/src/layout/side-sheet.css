@@ -1,6 +1,9 @@
 @theme {
   --air-side-sheet-radius: var(--radius-xl); /* 28px */
   --air-side-sheet-max-width: 25rem; /* 400px */
+  --air-side-sheet-bg: var(--color-surface-container-low);
+  --air-side-sheet-fg: var(--color-on-surface);
+  --air-side-sheet-scrim-bg: color-mix(in srgb, var(--color-scrim) 32%, transparent);
 }
 
 /* Base Layout */
@@ -47,8 +50,8 @@
 
 /* Surface Visuals */
 @utility air-side-sheet-surface {
-  background-color: var(--color-surface-container-low);
-  color: var(--color-on-surface);
+  background-color: var(--air-side-sheet-bg);
+  color: var(--air-side-sheet-fg);
 
   /* Divider on the edge touching the screen edge usually isn't needed, but 
      sometimes used on the inner edge depending on elevation setup. 
@@ -72,7 +75,7 @@
 }
 
 @utility air-side-sheet-scrim-surface {
-  background-color: color-mix(in srgb, var(--color-scrim) 32%, transparent);
+  background-color: var(--air-side-sheet-scrim-bg);
 }
 
 /* Composed Utilities */

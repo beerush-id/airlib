@@ -39,11 +39,11 @@
 }
 
 @utility air-select-menu {
-  @apply flex flex-col air-menu gap-0.5;
+  @apply air-menu;
 }
 
 @utility air-select-item {
-  @apply air-menu-item px-3 gap-3 air-toggle-state;
+  @apply air-menu-item air-toggle-state;
 }
 
 @utility air-select-checkbox {
@@ -89,6 +89,10 @@
   @apply air-text-field-filled;
 }
 
+@utility air-select-field-xs {
+  @apply air-text-field-xs;
+}
+
 @utility air-select-field-sm {
   @apply air-text-field-sm;
 }
@@ -101,8 +105,36 @@
   @apply air-text-field-lg;
 }
 
+@utility air-select-field-xl {
+  @apply air-text-field-xl;
+}
+
+@utility air-select-field-xxl {
+  @apply air-text-field-xxl;
+}
+
 @utility air-select-field-error {
   @apply air-text-field-error;
+}
+
+@utility air-select-field-secondary {
+  @apply air-text-field-secondary;
+}
+
+@utility air-select-field-tertiary {
+  @apply air-text-field-tertiary;
+}
+
+@utility air-select-field-success {
+  @apply air-text-field-success;
+}
+
+@utility air-select-field-warning {
+  @apply air-text-field-warning;
+}
+
+@utility air-select-field-info {
+  @apply air-text-field-info;
 }
 
 @utility air-select-field-input {

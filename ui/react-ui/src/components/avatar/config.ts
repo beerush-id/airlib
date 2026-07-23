@@ -1,5 +1,7 @@
+import type { Sizing } from '@airlib/headless';
+
 export type AvatarVariant = 'surface' | 'primary' | 'secondary' | 'tertiary' | 'error';
-export type AvatarSize = 'sm' | 'md' | 'lg';
+export type AvatarSize = Sizing;
 export type AvatarShape = 'circle' | 'rounded';
 
 export const AVATAR_CONFIGS = {
@@ -13,9 +15,12 @@ export const AVATAR_CONFIGS = {
     error: 'air-avatar-error',
   } as Record<AvatarVariant, string>,
   size: {
+    xs: 'air-avatar-xs',
     sm: 'air-avatar-sm',
     md: 'air-avatar-md',
     lg: 'air-avatar-lg',
+    xl: 'air-avatar-xl',
+    xxl: 'air-avatar-xxl',
   } as Record<AvatarSize, string>,
   shape: {
     circle: 'air-avatar-circle',

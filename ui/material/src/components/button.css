@@ -5,12 +5,91 @@
   --air-button-gap: calc(var(--spacing) * 2);
   --air-button-radius: var(--radius-full);
   --air-button-icon-size: calc(var(--spacing) * 4.5);
+
+  /* Size Variants (xs) */
+  --air-button-height-xs: calc(var(--spacing) * 6);
+  --air-button-padding-x-xs: calc(var(--spacing) * 2);
+  --air-button-icon-padding-x-xs: calc(var(--spacing) * 2);
+  --air-button-gap-xs: var(--spacing);
+  --air-button-icon-size-xs: calc(var(--spacing) * 3.5);
+
+  /* Size Variants (sm) */
+  --air-button-height-sm: calc(var(--spacing) * 8);
+  --air-button-padding-x-sm: calc(var(--spacing) * 4);
+  --air-button-icon-padding-x-sm: calc(var(--spacing) * 2.5);
+  --air-button-gap-sm: calc(var(--spacing) * 1.5);
+  --air-button-icon-size-sm: calc(var(--spacing) * 4);
+
+  /* Size Variants (md) */
+  --air-button-height-md: calc(var(--spacing) * 10);
+  --air-button-padding-x-md: calc(var(--spacing) * 6);
+  --air-button-icon-padding-x-md: calc(var(--spacing) * 4);
+  --air-button-gap-md: calc(var(--spacing) * 2);
+  --air-button-icon-size-md: calc(var(--spacing) * 4.5);
+
+  /* Size Variants (lg) */
+  --air-button-height-lg: calc(var(--spacing) * 12);
+  --air-button-padding-x-lg: calc(var(--spacing) * 8);
+  --air-button-icon-padding-x-lg: calc(var(--spacing) * 5.5);
+  --air-button-gap-lg: calc(var(--spacing) * 2.5);
+  --air-button-icon-size-lg: calc(var(--spacing) * 5);
+
+  /* Size Variants (xl) */
+  --air-button-height-xl: calc(var(--spacing) * 14);
+  --air-button-padding-x-xl: calc(var(--spacing) * 10);
+  --air-button-icon-padding-x-xl: calc(var(--spacing) * 7);
+  --air-button-gap-xl: calc(var(--spacing) * 3);
+  --air-button-icon-size-xl: calc(var(--spacing) * 6);
+
+  /* Size Variants (xxl) */
+  --air-button-height-xxl: calc(var(--spacing) * 16);
+  --air-button-padding-x-xxl: calc(var(--spacing) * 12);
+  --air-button-icon-padding-x-xxl: calc(var(--spacing) * 8);
+  --air-button-gap-xxl: calc(var(--spacing) * 3.5);
+  --air-button-icon-size-xxl: calc(var(--spacing) * 7);
+
+  /* Filled Button */
+  --air-button-filled-bg: var(--color-primary);
+  --air-button-filled-fg: var(--color-on-primary);
+  --air-button-filled-state: var(--color-on-primary);
+
+  /* Elevated Button */
+  --air-button-elevated-bg: var(--color-surface-container-low);
+  --air-button-elevated-fg: var(--color-primary);
+  --air-button-elevated-state: var(--color-primary);
+
+  /* Tonal Button */
+  --air-button-tonal-bg: var(--color-secondary-container);
+  --air-button-tonal-fg: var(--color-on-secondary-container);
+  --air-button-tonal-state: var(--color-on-secondary-container);
+
+  /* Outlined Button */
+  --air-button-outlined-bg: color-mix(in srgb, var(--color-primary) 0%, transparent);
+  --air-button-outlined-fg: var(--color-primary);
+  --air-button-outlined-border: var(--color-outline);
+  --air-button-outlined-border-focus: var(--color-primary);
+  --air-button-outlined-state: var(--color-primary);
+
+  /* Text Button */
+  --air-button-text-bg: color-mix(in srgb, var(--color-primary) 0%, transparent);
+  --air-button-text-fg: var(--color-primary);
+  --air-button-text-state: var(--color-primary);
+
+  /* Toggle Base */
+  --air-button-toggle-bg: var(--color-surface-container);
+  --air-button-toggle-fg: var(--color-on-surface);
+  --air-button-toggle-state: var(--color-on-surface);
+
+  /* Toggle Active State */
+  --air-button-selected-bg: var(--color-secondary-container, var(--color-primary-container));
+  --air-button-selected-fg: var(--color-on-secondary-container, var(--color-on-primary-container));
+  --air-button-selected-state: var(--color-on-secondary-container, var(--color-on-primary-container));
 }
 
 /* Base Structure */
 @utility air-button-base {
   --air-icon-size: var(--air-button-icon-size);
-  @apply inline-flex items-center justify-center;
+  @apply inline-flex items-center justify-center relative;
   @apply select-none box-border cursor-pointer air-focus-ring air-touch-area;
 
   gap: var(--air-button-gap);
@@ -73,8 +152,8 @@
 /* Disabled State Utility */
 @utility air-button-disabled {
   cursor: not-allowed;
-  background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
-  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
+  background-color: var(--color-disabled-bg);
+  color: var(--color-disabled-fg);
   border-color: transparent;
   /* Disable state layer */
   --state-layer-color: transparent;
@@ -83,9 +162,9 @@
 /* Filled Button (High Emphasis) */
 @utility air-button {
   @apply air-button-base air-button-icon-slot air-state-layer;
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
-  --state-layer-color: var(--color-on-primary);
+  background-color: var(--air-button-filled-bg);
+  color: var(--air-button-filled-fg);
+  --state-layer-color: var(--air-button-filled-state);
 
   &:disabled,
   &[aria-disabled='true'] {
@@ -100,9 +179,9 @@
 /* Elevated Button (High Emphasis) */
 @utility air-button-elevated {
   @apply air-button-base air-button-icon-slot air-state-layer;
-  background-color: var(--color-surface-container-low);
-  color: var(--color-primary);
-  --state-layer-color: var(--color-primary);
+  background-color: var(--air-button-elevated-bg);
+  color: var(--air-button-elevated-fg);
+  --state-layer-color: var(--air-button-elevated-state);
 
   &:disabled,
   &[aria-disabled='true'] {
@@ -113,9 +192,9 @@
 /* Filled Tonal (Medium Emphasis) */
 @utility air-button-tonal {
   @apply air-button-base air-button-icon-slot air-state-layer;
-  background-color: var(--color-secondary-container);
-  color: var(--color-on-secondary-container);
-  --state-layer-color: var(--color-on-secondary-container);
+  background-color: var(--air-button-tonal-bg);
+  color: var(--air-button-tonal-fg);
+  --state-layer-color: var(--air-button-tonal-state);
 
   &:disabled,
   &[aria-disabled='true'] {
@@ -126,15 +205,15 @@
 /* Outlined (Medium Emphasis) */
 @utility air-button-outlined {
   @apply air-button-base air-button-icon-slot air-state-layer;
-  background-color: color-mix(in srgb, var(--color-primary) 0%, transparent);
-  color: var(--color-primary);
+  background-color: var(--air-button-outlined-bg);
+  color: var(--air-button-outlined-fg);
   border-width: var(--shadow-base, 1px);
   border-style: solid;
-  border-color: var(--color-outline);
-  --state-layer-color: var(--color-primary);
+  border-color: var(--air-button-outlined-border);
+  --state-layer-color: var(--air-button-outlined-state);
 
   &:focus-visible:not(:disabled, [aria-disabled='true']) {
-    border-color: var(--color-primary);
+    border-color: var(--air-button-outlined-border-focus);
   }
 
   &:disabled,
@@ -146,11 +225,11 @@
 /* Text Button (Low Emphasis) */
 @utility air-button-text {
   @apply air-button-base air-button-icon-slot air-state-layer;
-  background-color: color-mix(in srgb, var(--color-primary) 0%, transparent);
-  color: var(--color-primary);
+  background-color: var(--air-button-text-bg);
+  color: var(--air-button-text-fg);
   /* Text buttons have tighter padding */
   padding-inline: calc(var(--air-button-padding-x) * 0.5); /* 12px */
-  --state-layer-color: var(--color-primary);
+  --state-layer-color: var(--air-button-text-state);
 
   &:disabled,
   &[aria-disabled='true'] {
@@ -165,18 +244,18 @@
   &[aria-pressed='true'],
   &[aria-selected='true'],
   &[aria-checked='true'] {
-    background-color: var(--color-secondary-container, var(--color-primary-container));
-    color: var(--color-on-secondary-container, var(--color-on-primary-container));
-    --state-layer-color: var(--color-on-secondary-container, var(--color-on-primary-container));
+    background-color: var(--air-button-selected-bg);
+    color: var(--air-button-selected-fg);
+    --state-layer-color: var(--air-button-selected-state);
   }
 }
 
 /* Toggle Button */
 @utility air-toggle-button {
   @apply air-button-base air-button-icon-slot air-state-layer air-toggle-state;
-  background-color: var(--color-surface-container);
-  color: var(--color-on-surface);
-  --state-layer-color: var(--color-on-surface);
+  background-color: var(--air-button-toggle-bg);
+  color: var(--air-button-toggle-fg);
+  --state-layer-color: var(--air-button-toggle-state);
 
   &:disabled,
   &[aria-disabled='true'] {
@@ -184,14 +263,123 @@
   }
 }
 
+/* Color Variants */
+@utility air-button-secondary {
+  --air-button-filled-bg: var(--color-secondary);
+  --air-button-filled-fg: var(--color-on-secondary);
+  --air-button-filled-state: var(--color-on-secondary);
+
+  --air-button-tonal-bg: var(--color-secondary-container);
+  --air-button-tonal-fg: var(--color-on-secondary-container);
+  --air-button-tonal-state: var(--color-on-secondary-container);
+
+  --air-button-outlined-fg: var(--color-secondary);
+  --air-button-outlined-border: var(--color-secondary);
+  --air-button-outlined-border-focus: var(--color-secondary);
+  --air-button-outlined-state: var(--color-secondary);
+
+  --air-button-text-fg: var(--color-secondary);
+  --air-button-text-state: var(--color-secondary);
+}
+
+@utility air-button-tertiary {
+  --air-button-filled-bg: var(--color-tertiary);
+  --air-button-filled-fg: var(--color-on-tertiary);
+  --air-button-filled-state: var(--color-on-tertiary);
+
+  --air-button-tonal-bg: var(--color-tertiary-container);
+  --air-button-tonal-fg: var(--color-on-tertiary-container);
+  --air-button-tonal-state: var(--color-on-tertiary-container);
+
+  --air-button-outlined-fg: var(--color-tertiary);
+  --air-button-outlined-border: var(--color-tertiary);
+  --air-button-outlined-border-focus: var(--color-tertiary);
+  --air-button-outlined-state: var(--color-tertiary);
+
+  --air-button-text-fg: var(--color-tertiary);
+  --air-button-text-state: var(--color-tertiary);
+}
+
+@utility air-button-error {
+  --air-button-filled-bg: var(--color-error);
+  --air-button-filled-fg: var(--color-on-error);
+  --air-button-filled-state: var(--color-on-error);
+
+  --air-button-tonal-bg: var(--color-error-container);
+  --air-button-tonal-fg: var(--color-on-error-container);
+  --air-button-tonal-state: var(--color-on-error-container);
+
+  --air-button-outlined-fg: var(--color-error);
+  --air-button-outlined-border: var(--color-error);
+  --air-button-outlined-border-focus: var(--color-error);
+  --air-button-outlined-state: var(--color-error);
+
+  --air-button-text-fg: var(--color-error);
+  --air-button-text-state: var(--color-error);
+}
+
+@utility air-button-success {
+  --air-button-filled-bg: var(--color-success);
+  --air-button-filled-fg: var(--color-on-success);
+  --air-button-filled-state: var(--color-on-success);
+
+  --air-button-tonal-bg: var(--color-success-container);
+  --air-button-tonal-fg: var(--color-on-success-container);
+  --air-button-tonal-state: var(--color-on-success-container);
+
+  --air-button-outlined-fg: var(--color-success);
+  --air-button-outlined-border: var(--color-success);
+  --air-button-outlined-border-focus: var(--color-success);
+  --air-button-outlined-state: var(--color-success);
+
+  --air-button-text-fg: var(--color-success);
+  --air-button-text-state: var(--color-success);
+}
+
+@utility air-button-warning {
+  --air-button-filled-bg: var(--color-warning);
+  --air-button-filled-fg: var(--color-on-warning);
+  --air-button-filled-state: var(--color-on-warning);
+
+  --air-button-tonal-bg: var(--color-warning-container);
+  --air-button-tonal-fg: var(--color-on-warning-container);
+  --air-button-tonal-state: var(--color-on-warning-container);
+
+  --air-button-outlined-fg: var(--color-warning);
+  --air-button-outlined-border: var(--color-warning);
+  --air-button-outlined-border-focus: var(--color-warning);
+  --air-button-outlined-state: var(--color-warning);
+
+  --air-button-text-fg: var(--color-warning);
+  --air-button-text-state: var(--color-warning);
+}
+
+@utility air-button-info {
+  --air-button-filled-bg: var(--color-info);
+  --air-button-filled-fg: var(--color-on-info);
+  --air-button-filled-state: var(--color-on-info);
+
+  --air-button-tonal-bg: var(--color-info-container);
+  --air-button-tonal-fg: var(--color-on-info-container);
+  --air-button-tonal-state: var(--color-on-info-container);
+
+  --air-button-outlined-fg: var(--color-info);
+  --air-button-outlined-border: var(--color-info);
+  --air-button-outlined-border-focus: var(--color-info);
+  --air-button-outlined-state: var(--color-info);
+
+  --air-button-text-fg: var(--color-info);
+  --air-button-text-state: var(--color-info);
+}
+
 /* Button Sizes (M3 Expressive) */
 @utility air-button-xs {
   @apply air-segment-xs;
-  --air-button-height: calc(var(--spacing) * 6);
-  --air-button-padding-x: calc(var(--spacing) * 2);
-  --air-button-icon-padding-x: calc(var(--spacing) * 2);
-  --air-button-gap: var(--spacing);
-  --air-button-icon-size: calc(var(--spacing) * 3.5);
+  --air-button-height: var(--air-button-height-xs);
+  --air-button-padding-x: var(--air-button-padding-x-xs);
+  --air-button-icon-padding-x: var(--air-button-icon-padding-x-xs);
+  --air-button-gap: var(--air-button-gap-xs);
+  --air-button-icon-size: var(--air-button-icon-size-xs);
   font-size: var(--font-label-sm-size);
   font-weight: var(--font-label-sm-weight);
   line-height: var(--font-label-sm-line-height);
@@ -200,11 +388,11 @@
 
 @utility air-button-sm {
   @apply air-segment-sm;
-  --air-button-height: calc(var(--spacing) * 8);
-  --air-button-padding-x: calc(var(--spacing) * 4);
-  --air-button-icon-padding-x: calc(var(--spacing) * 2.5);
-  --air-button-gap: calc(var(--spacing) * 1.5);
-  --air-button-icon-size: calc(var(--spacing) * 4);
+  --air-button-height: var(--air-button-height-sm);
+  --air-button-padding-x: var(--air-button-padding-x-sm);
+  --air-button-icon-padding-x: var(--air-button-icon-padding-x-sm);
+  --air-button-gap: var(--air-button-gap-sm);
+  --air-button-icon-size: var(--air-button-icon-size-sm);
   font-size: var(--font-label-md-size);
   font-weight: var(--font-label-md-weight);
   line-height: var(--font-label-md-line-height);
@@ -213,11 +401,11 @@
 
 @utility air-button-md {
   @apply air-segment-md;
-  --air-button-height: calc(var(--spacing) * 10);
-  --air-button-padding-x: calc(var(--spacing) * 6);
-  --air-button-icon-padding-x: calc(var(--spacing) * 4);
-  --air-button-gap: calc(var(--spacing) * 2);
-  --air-button-icon-size: calc(var(--spacing) * 4.5);
+  --air-button-height: var(--air-button-height-md);
+  --air-button-padding-x: var(--air-button-padding-x-md);
+  --air-button-icon-padding-x: var(--air-button-icon-padding-x-md);
+  --air-button-gap: var(--air-button-gap-md);
+  --air-button-icon-size: var(--air-button-icon-size-md);
   font-size: var(--font-label-lg-size);
   font-weight: var(--font-label-lg-weight);
   line-height: var(--font-label-lg-line-height);
@@ -226,11 +414,11 @@
 
 @utility air-button-lg {
   @apply air-segment-lg;
-  --air-button-height: calc(var(--spacing) * 12);
-  --air-button-padding-x: calc(var(--spacing) * 8);
-  --air-button-icon-padding-x: calc(var(--spacing) * 5.5);
-  --air-button-gap: calc(var(--spacing) * 2.5);
-  --air-button-icon-size: calc(var(--spacing) * 5);
+  --air-button-height: var(--air-button-height-lg);
+  --air-button-padding-x: var(--air-button-padding-x-lg);
+  --air-button-icon-padding-x: var(--air-button-icon-padding-x-lg);
+  --air-button-gap: var(--air-button-gap-lg);
+  --air-button-icon-size: var(--air-button-icon-size-lg);
   font-size: var(--font-title-sm-size);
   font-weight: var(--font-title-sm-weight);
   line-height: var(--font-title-sm-line-height);
@@ -239,13 +427,26 @@
 
 @utility air-button-xl {
   @apply air-segment-xl;
-  --air-button-height: calc(var(--spacing) * 14);
-  --air-button-padding-x: calc(var(--spacing) * 10);
-  --air-button-icon-padding-x: calc(var(--spacing) * 7);
-  --air-button-gap: calc(var(--spacing) * 3);
-  --air-button-icon-size: calc(var(--spacing) * 6);
+  --air-button-height: var(--air-button-height-xl);
+  --air-button-padding-x: var(--air-button-padding-x-xl);
+  --air-button-icon-padding-x: var(--air-button-icon-padding-x-xl);
+  --air-button-gap: var(--air-button-gap-xl);
+  --air-button-icon-size: var(--air-button-icon-size-xl);
   font-size: var(--font-title-md-size);
   font-weight: var(--font-title-md-weight);
   line-height: var(--font-title-md-line-height);
   letter-spacing: var(--font-title-md-tracking);
+}
+
+@utility air-button-xxl {
+  @apply air-segment-xxl;
+  --air-button-height: var(--air-button-height-xxl);
+  --air-button-padding-x: var(--air-button-padding-x-xxl);
+  --air-button-icon-padding-x: var(--air-button-icon-padding-x-xxl);
+  --air-button-gap: var(--air-button-gap-xxl);
+  --air-button-icon-size: var(--air-button-icon-size-xxl);
+  font-size: var(--font-title-lg-size);
+  font-weight: var(--font-title-lg-weight);
+  line-height: var(--font-title-lg-line-height);
+  letter-spacing: var(--font-title-lg-tracking);
 }

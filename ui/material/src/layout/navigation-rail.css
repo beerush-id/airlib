@@ -1,5 +1,12 @@
 @theme {
   --air-nav-rail-width: calc(var(--spacing) * 20); /* 80px */
+  --air-nav-rail-bg: var(--color-surface);
+  --air-nav-rail-fg: var(--color-on-surface-variant);
+  --air-nav-rail-border: var(--color-outline-variant);
+  --air-nav-rail-item-fg: var(--color-on-surface-variant);
+  --air-nav-rail-item-selected-fg: var(--color-on-surface);
+  --air-nav-rail-icon-selected-bg: var(--color-secondary-container);
+  --air-nav-rail-icon-selected-fg: var(--color-on-secondary-container);
 }
 
 /* Base Layout */
@@ -14,11 +21,11 @@
 
 /* Surface Visuals */
 @utility air-navigation-rail-surface {
-  background-color: var(--color-surface);
-  color: var(--color-on-surface-variant);
+  background-color: var(--air-nav-rail-bg);
+  color: var(--air-nav-rail-fg);
   border-inline-end-width: 1px;
   border-inline-end-style: solid;
-  border-inline-end-color: var(--color-outline-variant);
+  border-inline-end-color: var(--air-nav-rail-border);
 }
 
 /* Item Base Layout */
@@ -51,11 +58,11 @@
 
 /* Item Surface Visuals */
 @utility air-navigation-rail-item-surface {
-  color: var(--color-on-surface-variant);
+  color: var(--air-nav-rail-item-fg);
 }
 
 @utility air-navigation-rail-item-selected-surface {
-  color: var(--color-on-surface);
+  color: var(--air-nav-rail-item-selected-fg);
 }
 
 /* Icon Container Layout */
@@ -75,8 +82,8 @@
 }
 
 @utility air-nav-rail-icon-container-selected-surface {
-  background-color: var(--color-secondary-container);
-  color: var(--color-on-secondary-container);
+  background-color: var(--air-nav-rail-icon-selected-bg);
+  color: var(--air-nav-rail-icon-selected-fg);
 }
 
 /* Composed Utilities */

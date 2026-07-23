@@ -1,3 +1,11 @@
+@theme {
+  --air-divider-thickness: 1px;
+  --air-divider-inset-margin: calc(var(--spacing) * 4); /* 16px */
+  
+  --air-divider-surface-bg: var(--color-outline-variant);
+  --air-divider-primary-surface-bg: var(--color-primary);
+}
+
 /* Layout utilities */
 @utility air-divider-base {
   @apply m-0 box-border;
@@ -8,26 +16,26 @@
 
 @utility air-divider-horizontal-layout {
   @apply w-full;
-  height: 1px;
+  height: var(--air-divider-thickness);
 }
 
 @utility air-divider-vertical-layout {
   @apply h-full;
-  width: 1px;
+  width: var(--air-divider-thickness);
 }
 
 @utility air-divider-inset-layout {
-  width: calc(100% - calc(var(--spacing) * 4)); /* Leaves 16px margin */
-  margin-inline-start: calc(var(--spacing) * 4);
+  width: calc(100% - var(--air-divider-inset-margin));
+  margin-inline-start: var(--air-divider-inset-margin);
 }
 
 /* Visual utilities */
 @utility air-divider-surface {
-  background-color: var(--color-outline-variant);
+  background-color: var(--air-divider-surface-bg);
 }
 
 @utility air-divider-primary-surface {
-  background-color: var(--color-primary);
+  background-color: var(--air-divider-primary-surface-bg);
 }
 
 /* Composed Utilities */

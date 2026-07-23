@@ -4,6 +4,17 @@
   --air-dialog-max-width: calc(var(--spacing) * 140); /* 560px */
   --air-dialog-surface: var(--color-surface-container-high);
 
+  /* Colors */
+  --air-dialog-scrim-bg: color-mix(in srgb, var(--color-scrim) 32%, transparent);
+  --air-dialog-overlay-bg: color-mix(in srgb, var(--color-scrim) 75%, transparent);
+  --air-dialog-fg: var(--color-on-surface);
+  --air-dialog-title-fg: var(--color-on-surface);
+  --air-dialog-content-fg: var(--color-on-surface-variant);
+  
+  /* Warning Banner */
+  --air-dialog-warning-bg: var(--color-on-error);
+  --air-dialog-warning-fg: var(--color-error);
+
   @keyframes air-dialog-show {
     from {
       opacity: 0;
@@ -57,7 +68,7 @@
 
   /* Backdrop Scrim */
   &::backdrop {
-    background-color: color-mix(in srgb, var(--color-scrim) 32%, transparent);
+    background-color: var(--air-dialog-scrim-bg);
     backdrop-filter: blur(2px);
     opacity: 0;
     transition-property: opacity;
@@ -74,7 +85,7 @@
 @utility air-dialog-surface {
   --color-ghost-surface: var(--air-dialog-surface);
   background-color: var(--air-dialog-surface);
-  color: var(--color-on-surface);
+  color: var(--air-dialog-fg);
 }
 
 /* Fullscreen Dialog Utility */
@@ -97,8 +108,8 @@
 
 /* Custom Dialog Wrapper */
 @utility air-dialog {
-  @apply fixed inset-0 w-screen h-screen flex items-center justify-center z-modal overflow-hidden;
-  @apply bg-scrim/75 backdrop-blur-sm;
+  @apply fixed inset-0 w-screen h-screen flex items-center justify-center z-modal overflow-hidden backdrop-blur-sm;
+  background-color: var(--air-dialog-overlay-bg);
 
   &[aria-hidden='false'] {
     animation-name: air-dialog-show;
@@ -161,13 +172,14 @@
   font-weight: var(--font-headline-sm-weight);
   line-height: var(--font-headline-sm-line-height);
   letter-spacing: var(--font-headline-sm-tracking);
-  color: var(--color-on-surface);
+  color: var(--air-dialog-title-fg);
   margin-top: 0;
   margin-bottom: calc(var(--spacing) * 4); /* 16px */
 }
 
 @utility air-dialog-content {
-  @apply w-full flex flex-col text-on-surface-variant;
+  @apply w-full flex flex-col;
+  color: var(--air-dialog-content-fg);
   font-family: var(--font-brand, system-ui);
   font-size: var(--font-body-md-size);
   font-weight: var(--font-body-md-weight);
@@ -193,8 +205,9 @@
 }
 
 @utility air-dialog-warning {
-  @apply flex items-start gap-3 mt-6 rounded-full;
-  @apply text-error bg-on-error py-2 px-4 text-xs;
+  @apply flex items-start gap-3 mt-6 rounded-full py-2 px-4 text-xs;
+  color: var(--air-dialog-warning-fg);
+  background-color: var(--air-dialog-warning-bg);
 
   & > svg {
     @apply shrink-0;

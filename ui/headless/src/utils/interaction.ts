@@ -148,6 +148,21 @@ export function bindInteraction(
     );
   }
 
+  let isPointerDown = false;
+  teardowns.push(
+    subscribeEvent(document, 'pointerdown', (e) => {
+      isPointerDown = true;
+      if (modes.includes('hover') && !el.contains(e.target as Node)) {
+        close();
+      }
+    }),
+    subscribeEvent(document, 'pointerup', () => {
+      setTimeout(() => {
+        isPointerDown = false;
+      }, 50);
+    })
+  );
+
   if (modes.includes('focus')) {
     const onFocusOut = (e: Event) => {
       const rel = (e as FocusEvent).relatedTarget as Node | null;
@@ -155,8 +170,12 @@ export function bindInteraction(
       close();
     };
     teardowns.push(
-      subscribeEvent(anchorEl, 'focusin', () => open()),
-      subscribeEvent(el, 'focusin', () => open()),
+      subscribeEvent(anchorEl, 'focusin', () => {
+        if (!isPointerDown) open();
+      }),
+      subscribeEvent(el, 'focusin', () => {
+        if (!isPointerDown) open();
+      }),
       subscribeEvent(anchorEl, 'focusout', onFocusOut),
       subscribeEvent(el, 'focusout', onFocusOut)
     );

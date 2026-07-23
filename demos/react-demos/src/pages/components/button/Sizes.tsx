@@ -22,5 +22,9 @@ export default () => (
       <Icon name="star" />
       <span>Extra Large</span>
     </Button>
+    <Button variant="tonal" size="xxl">
+      <Icon name="star" />
+      <span>Extra Large</span>
+    </Button>
   </div>
 );

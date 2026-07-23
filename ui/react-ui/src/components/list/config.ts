@@ -10,10 +10,12 @@ export const LIST_CONFIGS = {
   segmentedClass: 'air-list-view-segmented',
   contiguousClass: 'air-list-view-contiguous',
   itemClass: 'air-list-view-item',
+  buttonClass: 'air-list-view-button',
   itemVariant: {
     surface: 'air-list-view-item-surface',
     filled: 'air-list-view-item-filled',
   } as Record<ListItemVariant, string>,
   contentClass: 'air-list-view-item-content',
-  supportingTextClass: 'air-list-view-item-supporting-text',
+  titleClass: 'air-list-title',
+  subtitleClass: 'air-list-subtitle',
 };

@@ -1,3 +1,10 @@
+@theme {
+  --air-accordion-header-bg: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
+  --air-accordion-header-fg: var(--color-on-surface);
+  --air-accordion-inner-fg: var(--color-on-surface-variant);
+  --air-accordion-item-bg: var(--color-surface-container-low);
+}
+
 /* Accordion Header Layout */
 @utility air-accordion-header-base {
   @apply air-focus-ring;
@@ -30,8 +37,8 @@
 
 /* Accordion Header Surface */
 @utility air-accordion-header-surface {
-  background-color: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
-  color: var(--color-on-surface);
+  background-color: var(--air-accordion-header-bg);
+  color: var(--air-accordion-header-fg);
 }
 
 /* Accordion Content */
@@ -45,14 +52,14 @@
   transition-duration: var(--duration-medium);
   transition-timing-function: var(--ease-emphasized-decelerate);
 
-  .air-accordion-content[data-state='open'] & {
+  .air-accordion-content[aria-hidden='false'] & {
     padding-block-start: 0;
     padding-block-end: calc(var(--spacing) * 4);
   }
 }
 
 @utility air-accordion-inner-surface {
-  color: var(--color-on-surface-variant);
+  color: var(--air-accordion-inner-fg);
 }
 
 /* Composed Utilities */
@@ -60,7 +67,7 @@
   @apply air-accordion-header-base air-accordion-header-surface air-state-layer;
 
   /* Soften the bottom radius when the accordion is open */
-  .air-accordion-item:has(.air-accordion-content[data-state='open']) > & {
+  .air-accordion-item:has(.air-accordion-content[aria-hidden='false']) > & {
     border-end-start-radius: var(--_inner-radius, var(--radius-sm));
     border-end-end-radius: var(--_inner-radius, var(--radius-sm));
   }
@@ -73,7 +80,7 @@
   transition-duration: var(--duration-medium);
   transition-timing-function: var(--ease-emphasized-decelerate);
 
-  &[data-state='open'] {
+  &[aria-hidden='false'] {
     grid-template-rows: 1fr;
   }
 }
@@ -97,7 +104,7 @@
 }
 
 @utility air-accordion-item {
-  background-color: var(--color-surface-container-low);
+  background-color: var(--air-accordion-item-bg);
   transition-property: background-color, border-radius;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);

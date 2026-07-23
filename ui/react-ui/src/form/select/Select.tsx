@@ -186,6 +186,24 @@ export function createSelect<T = string>(init?: PopoverInit) {
       },
     } as { current: HTMLButtonElement | null };
 
+    effect.client(() => {
+      const el = popup.anchor as HTMLElement;
+      if (!el) return;
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          e.stopPropagation();
+          popup.open = true;
+        }
+      };
+
+      el.addEventListener('keydown', handleKeyDown);
+      return () => {
+        el.removeEventListener('keydown', handleKeyDown);
+      };
+    });
+
     return render(() => props.children(state, ref), 'SelectTrigger');
   }, 'SelectTrigger');
 

@@ -4,6 +4,10 @@
   --spacing-resizer: calc(var(--spacing) * 1.25); /* 5px */
   --air-minimized-transform: translate3d(0, 100%, 0) scale(0.3);
 
+  --air-window-border: var(--color-surface-container-low);
+  --air-window-border-focus: light-dark(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1));
+  --air-window-control-inactive: light-dark(oklch(0% 0 0 / 0.2), oklch(100% 0 0 / 0.2));
+
   @keyframes window-focus-in {
     from {
       box-shadow: var(--shadow-window);
@@ -64,7 +68,7 @@
   box-shadow: var(--shadow-window);
   border-width: 1px;
   border-style: solid;
-  border-color: var(--color-surface-container-low);
+  border-color: var(--air-window-border);
   outline: none;
 
   opacity: 0;
@@ -84,7 +88,7 @@
     animation-duration: var(--duration-short);
     animation-timing-function: var(--ease-emphasized);
     box-shadow: var(--shadow-window-active);
-    border-color: light-dark(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1));
+    border-color: var(--air-window-border-focus);
   }
 
   &[data-maximized='true'] {
@@ -162,7 +166,7 @@
   }
 
   .air-window:not(:focus-within) &:not(:hover, :active, :focus) {
-    background-color: light-dark(oklch(0% 0 0 / 0.2), oklch(100% 0 0 / 0.2));
+    background-color: var(--air-window-control-inactive);
   }
 }
 
@@ -171,7 +175,7 @@
   @apply bg-yellow-500 text-black;
 
   .air-window:not(:focus-within) &:not(:hover, :active, :focus) {
-    background-color: light-dark(oklch(0% 0 0 / 0.2), oklch(100% 0 0 / 0.2));
+    background-color: var(--air-window-control-inactive);
   }
 
   &:hover {
@@ -196,7 +200,7 @@
   }
 
   .air-window:not(:focus-within) &:not(:hover, :active, :focus) {
-    background-color: light-dark(oklch(0% 0 0 / 0.2), oklch(100% 0 0 / 0.2));
+    background-color: var(--air-window-control-inactive);
   }
 }
 
@@ -215,7 +219,7 @@
   @apply -translate-x-1/2 -translate-y-1/2 z-popover;
   border-width: 1px;
   border-style: solid;
-  border-color: light-dark(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1));
+  border-color: var(--air-window-border-focus);
 }
 
 @utility air-resize {

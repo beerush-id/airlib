@@ -2,6 +2,62 @@
   --air-badge-size: calc(var(--spacing) * 4);
   --air-badge-padding-x: var(--spacing);
   --air-badge-font-size: var(--font-label-sm-size);
+  --air-badge-radius: var(--radius-full);
+
+  /* Size Variants (xs) */
+  --air-badge-size-xs: calc(var(--spacing) * 1);
+  --air-badge-padding-x-xs: 0;
+  --air-badge-font-size-xs: 0;
+
+  /* Size Variants (sm) */
+  --air-badge-size-sm: calc(var(--spacing) * 1.5);
+  --air-badge-padding-x-sm: 0;
+  --air-badge-font-size-sm: 0;
+
+  /* Size Variants (md) */
+  --air-badge-size-md: calc(var(--spacing) * 3);
+  --air-badge-padding-x-md: var(--spacing);
+  --air-badge-font-size-md: var(--font-label-sm-size);
+
+  /* Size Variants (lg) */
+  --air-badge-size-lg: calc(var(--spacing) * 4);
+  --air-badge-padding-x-lg: var(--spacing);
+  --air-badge-font-size-lg: var(--font-label-sm-size);
+
+  /* Size Variants (xl) */
+  --air-badge-size-xl: calc(var(--spacing) * 5);
+  --air-badge-padding-x-xl: calc(var(--spacing) * 1.5);
+  --air-badge-font-size-xl: var(--font-label-md-size);
+
+  /* Size Variants (xxl) */
+  --air-badge-size-xxl: calc(var(--spacing) * 6);
+  --air-badge-padding-x-xxl: calc(var(--spacing) * 2);
+  --air-badge-font-size-xxl: var(--font-label-lg-size);
+
+  /* Variants */
+  --air-badge-error-bg: var(--color-error);
+  --air-badge-error-fg: var(--color-on-error);
+
+  --air-badge-primary-bg: var(--color-primary);
+  --air-badge-primary-fg: var(--color-on-primary);
+
+  --air-badge-secondary-bg: var(--color-secondary-container);
+  --air-badge-secondary-fg: var(--color-on-secondary-container);
+
+  --air-badge-surface-bg: var(--color-surface-container-high);
+  --air-badge-surface-fg: var(--color-on-surface);
+
+  --air-badge-tertiary-bg: var(--color-tertiary-container);
+  --air-badge-tertiary-fg: var(--color-on-tertiary-container);
+
+  --air-badge-success-bg: var(--color-success);
+  --air-badge-success-fg: var(--color-on-success);
+
+  --air-badge-warning-bg: var(--color-warning);
+  --air-badge-warning-fg: var(--color-on-warning);
+
+  --air-badge-info-bg: var(--color-info);
+  --air-badge-info-fg: var(--color-on-info);
 }
 
 @utility air-badge-container {
@@ -11,7 +67,7 @@
 /* Base shape and placement */
 @utility air-badge-base {
   @apply inline-flex items-center justify-center box-border;
-  border-radius: var(--radius-full);
+  border-radius: var(--air-badge-radius);
 
   height: var(--air-badge-size);
   min-width: var(--air-badge-size);
@@ -31,42 +87,81 @@
 }
 
 /* Sizing Utilities */
+@utility air-badge-xs {
+  --air-badge-size: var(--air-badge-size-xs);
+  --air-badge-padding-x: var(--air-badge-padding-x-xs);
+  --air-badge-font-size: var(--air-badge-font-size-xs);
+}
+
 @utility air-badge-sm {
-  --air-badge-size: calc(var(--spacing) * 1.5);
-  --air-badge-padding-x: 0;
-  --air-badge-font-size: 0;
+  --air-badge-size: var(--air-badge-size-sm);
+  --air-badge-padding-x: var(--air-badge-padding-x-sm);
+  --air-badge-font-size: var(--air-badge-font-size-sm);
+}
+
+@utility air-badge-md {
+  --air-badge-size: var(--air-badge-size-md);
+  --air-badge-padding-x: var(--air-badge-padding-x-md);
+  --air-badge-font-size: var(--air-badge-font-size-md);
 }
 
 @utility air-badge-lg {
-  --air-badge-size: calc(var(--spacing) * 4);
-  --air-badge-padding-x: var(--spacing);
-  --air-badge-font-size: var(--font-label-sm-size);
+  --air-badge-size: var(--air-badge-size-lg);
+  --air-badge-padding-x: var(--air-badge-padding-x-lg);
+  --air-badge-font-size: var(--air-badge-font-size-lg);
+}
+
+@utility air-badge-xl {
+  --air-badge-size: var(--air-badge-size-xl);
+  --air-badge-padding-x: var(--air-badge-padding-x-xl);
+  --air-badge-font-size: var(--air-badge-font-size-xl);
+}
+
+@utility air-badge-xxl {
+  --air-badge-size: var(--air-badge-size-xxl);
+  --air-badge-padding-x: var(--air-badge-padding-x-xxl);
+  --air-badge-font-size: var(--air-badge-font-size-xxl);
 }
 
 /* Color Utilities */
 @utility air-badge-error-surface {
-  background-color: var(--color-error);
-  color: var(--color-on-error);
+  background-color: var(--air-badge-error-bg);
+  color: var(--air-badge-error-fg);
 }
 
 @utility air-badge-primary-surface {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
+  background-color: var(--air-badge-primary-bg);
+  color: var(--air-badge-primary-fg);
 }
 
 @utility air-badge-secondary-surface {
-  background-color: var(--color-secondary-container);
-  color: var(--color-on-secondary-container);
+  background-color: var(--air-badge-secondary-bg);
+  color: var(--air-badge-secondary-fg);
 }
 
 @utility air-badge-surface-color {
-  background-color: var(--color-surface-container-high);
-  color: var(--color-on-surface);
+  background-color: var(--air-badge-surface-bg);
+  color: var(--air-badge-surface-fg);
 }
 
 @utility air-badge-tertiary-surface {
-  background-color: var(--color-tertiary-container);
-  color: var(--color-on-tertiary-container);
+  background-color: var(--air-badge-tertiary-bg);
+  color: var(--air-badge-tertiary-fg);
+}
+
+@utility air-badge-success-surface {
+  background-color: var(--air-badge-success-bg);
+  color: var(--air-badge-success-fg);
+}
+
+@utility air-badge-warning-surface {
+  background-color: var(--air-badge-warning-bg);
+  color: var(--air-badge-warning-fg);
+}
+
+@utility air-badge-info-surface {
+  background-color: var(--air-badge-info-bg);
+  color: var(--air-badge-info-fg);
 }
 
 /* Composed Utilities */
@@ -88,6 +183,18 @@
 
 @utility air-badge-tertiary {
   @apply air-badge-base air-badge-lg air-badge-tertiary-surface;
+}
+
+@utility air-badge-success {
+  @apply air-badge-base air-badge-lg air-badge-success-surface;
+}
+
+@utility air-badge-warning {
+  @apply air-badge-base air-badge-lg air-badge-warning-surface;
+}
+
+@utility air-badge-info {
+  @apply air-badge-base air-badge-lg air-badge-info-surface;
 }
 
 @utility air-badge-dot {

@@ -1,11 +1,11 @@
-import { Button, Card, CardBody, CardHeader, CardTitle } from '@airlib/react-ui/components';
+import { Button, Card, CardBody, CardHeader, CardSubtitle, CardTitle } from '@airlib/react-ui/components';
 
 export default () => (
   <div className="flex justify-center">
     <Card className="max-w-md w-full">
       <CardHeader>
         <CardTitle>Glass Souls</CardTitle>
-        <p className="air-body-sm text-on-surface-variant">By M. T. Anderson</p>
+        <CardSubtitle>By M. T. Anderson</CardSubtitle>
       </CardHeader>
       <CardBody>
         <p className="air-body-md">

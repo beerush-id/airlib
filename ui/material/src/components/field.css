@@ -15,6 +15,15 @@
   --air-field-radius: var(--radius-md);
   --air-field-font-size: var(--font-body-lg-size);
 
+  /* Extra Small Tokens */
+  --air-field-padding-x-xs: calc(var(--spacing) * 2);
+  --air-field-padding-y-xs: calc(var(--spacing) * 2);
+  --air-field-icon-padding-x-xs: calc(var(--spacing) * 8);
+  --air-field-font-size-xs: var(--font-body-sm-size);
+  --air-field-radius-xs: var(--radius-xs);
+  --air-field-label-size-xs: var(--font-body-sm-size);
+  --air-field-label-line-height-xs: var(--font-body-sm-line-height);
+
   /* Small Tokens */
   --air-field-padding-x-sm: calc(var(--spacing) * 3);
   --air-field-padding-y-sm: calc(var(--spacing) * 3);
@@ -41,6 +50,35 @@
   --air-field-radius-lg: var(--radius-lg);
   --air-field-label-size-lg: var(--font-body-lg-size);
   --air-field-label-line-height-lg: var(--font-body-lg-line-height);
+
+  /* Extra Large Tokens */
+  --air-field-padding-x-xl: calc(var(--spacing) * 6);
+  --air-field-padding-y-xl: calc(var(--spacing) * 7);
+  --air-field-icon-padding-x-xl: calc(var(--spacing) * 16);
+  --air-field-font-size-xl: var(--font-title-sm-size);
+  --air-field-radius-xl: var(--radius-xl);
+  --air-field-label-size-xl: var(--font-title-sm-size);
+  --air-field-label-line-height-xl: var(--font-title-sm-line-height);
+
+  /* Extra Extra Large Tokens */
+  --air-field-padding-x-xxl: calc(var(--spacing) * 8);
+  --air-field-padding-y-xxl: calc(var(--spacing) * 8);
+  --air-field-icon-padding-x-xxl: calc(var(--spacing) * 20);
+  --air-field-font-size-xxl: var(--font-title-md-size);
+  --air-field-radius-xxl: var(--radius-xxl);
+  --air-field-label-size-xxl: var(--font-title-md-size);
+  --air-field-label-line-height-xxl: var(--font-title-md-line-height);
+
+  /* Structural Extras */
+  --air-field-floating-margin-top: calc(var(--spacing) * 2);
+  --air-field-floating-label-margin-inline-start: calc(var(--spacing) * -1);
+  --air-field-floating-label-padding-inline: var(--spacing);
+
+  --air-field-label-margin-bottom: var(--spacing);
+  --air-field-supporting-margin-top: var(--spacing);
+  --air-field-supporting-padding-inline: var(--spacing);
+
+  --air-field-disabled-opacity: 0.38;
 }
 
 @utility air-field {
@@ -83,7 +121,7 @@
 /* Container Wrapper (Shared styling for all floating label types) */
 @utility air-floating-field-container {
   @apply flex flex-col relative w-full outline-none;
-  margin-top: calc(var(--spacing) * 2);
+  margin-top: var(--air-field-floating-margin-top);
 
   /* Smart Layout & Padding Setup */
   --air-field-leading-padding: var(--air-field-padding-x);
@@ -103,11 +141,11 @@
     line-height: 1;
     top: var(--air-field-padding-y);
     inset-inline-start: calc(var(--air-field-leading-padding, var(--air-field-padding-x)) + 1px);
-    margin-inline-start: calc(var(--spacing) * -1);
+    margin-inline-start: var(--air-field-floating-label-margin-inline-start);
     margin-bottom: 0;
     pointer-events: none;
     padding-block: 0;
-    padding-inline: var(--spacing);
+    padding-inline: var(--air-field-floating-label-padding-inline);
     border-radius: var(--radius-md);
 
     transform-origin: left top;
@@ -124,7 +162,22 @@
   &:has(:is(input, textarea, select, .air-select-field):-webkit-autofill) .air-field-label {
     /* Translate UP by the fixed padding to hit the border (0px), then slightly more (-0.375em) to perfectly center the scaled label on the outline */
     transform: translateY(calc((var(--air-field-padding-y) * -1) - 0.35em)) scale(0.75);
-    background-color: var(--color-ghost-surface, var(--color-surface, #fff));
+    background-color: var(--color-ghost-surface, transparent);
+  }
+}
+
+@utility air-field-xs {
+  --air-field-label-size: var(--air-field-label-size-xs);
+  --air-field-label-line-height: var(--air-field-label-line-height-xs);
+  --air-field-padding-x: var(--air-field-padding-x-xs);
+  --air-field-padding-y: var(--air-field-padding-y-xs);
+  --air-field-icon-padding-x: var(--air-field-icon-padding-x-xs);
+
+  --air-field-font-size: var(--air-field-font-size-xs);
+  --air-field-radius: var(--air-field-radius-xs);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-xs;
   }
 }
 
@@ -173,6 +226,36 @@
   }
 }
 
+@utility air-field-xl {
+  --air-field-label-size: var(--air-field-label-size-xl);
+  --air-field-label-line-height: var(--air-field-label-line-height-xl);
+  --air-field-padding-x: var(--air-field-padding-x-xl);
+  --air-field-padding-y: var(--air-field-padding-y-xl);
+  --air-field-icon-padding-x: var(--air-field-icon-padding-x-xl);
+
+  --air-field-font-size: var(--air-field-font-size-xl);
+  --air-field-radius: var(--air-field-radius-xl);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-xl;
+  }
+}
+
+@utility air-field-xxl {
+  --air-field-label-size: var(--air-field-label-size-xxl);
+  --air-field-label-line-height: var(--air-field-label-line-height-xxl);
+  --air-field-padding-x: var(--air-field-padding-x-xxl);
+  --air-field-padding-y: var(--air-field-padding-y-xxl);
+  --air-field-icon-padding-x: var(--air-field-icon-padding-x-xxl);
+
+  --air-field-font-size: var(--air-field-font-size-xxl);
+  --air-field-radius: var(--air-field-radius-xxl);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-xxl;
+  }
+}
+
 @utility air-field-error {
   --air-field-color: var(--color-error);
   --air-field-outline-color: var(--color-error);
@@ -185,8 +268,68 @@
   }
 }
 
+@utility air-field-secondary {
+  --air-field-color: var(--color-secondary);
+  --air-field-outline-color: var(--color-secondary);
+  --air-field-outline-focus-color: var(--color-secondary);
+  --air-field-label-color: var(--color-secondary);
+  --air-field-supporting-color: var(--color-secondary);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-secondary;
+  }
+}
+
+@utility air-field-tertiary {
+  --air-field-color: var(--color-tertiary);
+  --air-field-outline-color: var(--color-tertiary);
+  --air-field-outline-focus-color: var(--color-tertiary);
+  --air-field-label-color: var(--color-tertiary);
+  --air-field-supporting-color: var(--color-tertiary);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-tertiary;
+  }
+}
+
+@utility air-field-success {
+  --air-field-color: var(--color-success);
+  --air-field-outline-color: var(--color-success);
+  --air-field-outline-focus-color: var(--color-success);
+  --air-field-label-color: var(--color-success);
+  --air-field-supporting-color: var(--color-success);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-success;
+  }
+}
+
+@utility air-field-warning {
+  --air-field-color: var(--color-warning);
+  --air-field-outline-color: var(--color-warning);
+  --air-field-outline-focus-color: var(--color-warning);
+  --air-field-label-color: var(--color-warning);
+  --air-field-supporting-color: var(--color-warning);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-warning;
+  }
+}
+
+@utility air-field-info {
+  --air-field-color: var(--color-info);
+  --air-field-outline-color: var(--color-info);
+  --air-field-outline-focus-color: var(--color-info);
+  --air-field-label-color: var(--color-info);
+  --air-field-supporting-color: var(--color-info);
+
+  &:has(.air-text-field, .air-textarea) {
+    @apply air-text-field-info;
+  }
+}
+
 @utility air-field-disabled {
-  opacity: 0.38;
+  opacity: var(--air-field-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -198,13 +341,13 @@
   line-height: var(--font-body-sm-line-height);
   font-family: var(--font-brand, system-ui), serif;
   letter-spacing: var(--font-body-sm-tracking);
-  margin-bottom: var(--spacing);
+  margin-bottom: var(--air-field-label-margin-bottom);
   color: var(--air-field-label-color);
   transition-property: color;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
 
-  .air-field:has(:focus-within, :active) & {
+  .air-field:not(:has(.air-checkbox, .air-switch, .air-radio)):has(:focus-within, :active) > & {
     color: var(--air-field-outline-focus-color);
   }
 }
@@ -216,9 +359,9 @@
   line-height: var(--font-body-sm-line-height);
   font-family: var(--font-brand, system-ui), serif;
   letter-spacing: var(--font-body-sm-tracking);
-  margin-top: var(--spacing);
+  margin-top: var(--air-field-supporting-margin-top);
   padding-block: 0;
-  padding-inline: var(--spacing);
+  padding-inline: var(--air-field-supporting-padding-inline);
   color: var(--air-field-supporting-color);
   transition-property: color;
   transition-duration: var(--duration-short);

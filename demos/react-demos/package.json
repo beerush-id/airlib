@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build:client": "vite build --outDir dist/client",
-    "build:server": "vite build --ssr src/worker.ts --outDir dist/server",
+    "build:server": "vite build --ssr --outDir dist/server",
     "build": "bun run build:client && bun run build:server",
     "start": "NODE_ENV=production bun dist/server/worker.js",
     "preview": "vite preview --outDir dist/client",

@@ -1,13 +1,32 @@
 @theme {
-  --air-card-radius: var(--radius-xl); /* 28px standard container radius */
+  --air-card-outer-radius: var(--radius-xl); /* 28px standard container radius */
+  --air-card-inner-radius: var(--radius-xl);
   --air-card-padding: calc(var(--spacing) * 6); /* 24px standard padding */
+
+  /* Typography */
+  --air-card-title-fg: var(--color-on-surface);
+  --air-card-subtitle-fg: var(--color-on-surface-variant);
+
+  /* Elevated Card */
+  --air-card-elevated-bg: var(--color-surface-container-low);
+
+  /* Filled Card */
+  --air-card-filled-bg: var(--color-surface-container-highest);
+
+  /* Outlined Card */
+  --air-card-outlined-bg: var(--color-surface);
+  --air-card-outlined-border: var(--color-outline-variant);
+  --air-card-outlined-border-focus: var(--color-outline);
+
+  /* Interactive State */
+  --air-card-interactive-state: var(--color-on-surface);
 }
 
 /* Base Layout and Typography */
 @utility air-card-base {
   @apply flex flex-col relative;
   @apply overflow-hidden box-border;
-  border-radius: var(--air-card-radius);
+  border-radius: var(--air-card-outer-radius);
 
   /* Typography: Body Medium default */
   font-family: var(--font-brand, system-ui);
@@ -24,8 +43,8 @@
 
 /* Elevated Card */
 @utility air-card-elevated-surface {
-  --color-ghost-surface: var(--color-surface-container-low);
-  background-color: var(--color-surface-container-low);
+  --color-ghost-surface: var(--air-card-elevated-bg);
+  background-color: var(--air-card-elevated-bg);
   border-width: 0;
   border-style: solid;
   border-color: transparent;
@@ -33,8 +52,8 @@
 
 /* Filled Card */
 @utility air-card-filled-surface {
-  --color-ghost-surface: var(--color-surface-container-highest);
-  background-color: var(--color-surface-container-highest);
+  --color-ghost-surface: var(--air-card-filled-bg);
+  background-color: var(--air-card-filled-bg);
   border-width: 0;
   border-style: solid;
   border-color: transparent;
@@ -44,13 +63,13 @@
 @utility air-card-outlined-surface {
   border-width: 1px;
   border-style: solid;
-  border-color: var(--color-outline-variant);
+  border-color: var(--air-card-outlined-border);
 }
 
 /* Optional Interactive Modifier */
 @utility air-card-interactive {
   @apply cursor-pointer air-focus-ring air-state-layer;
-  --state-layer-color: var(--color-on-surface);
+  --state-layer-color: var(--air-card-interactive-state);
 }
 
 /* Composed Utilities */
@@ -66,7 +85,7 @@
   @apply air-card-base air-card-outlined-surface;
 
   &.air-card-interactive:focus-visible {
-    border-color: var(--color-outline);
+    border-color: var(--air-card-outlined-border-focus);
   }
 }
 
@@ -79,18 +98,20 @@
 }
 
 @utility air-card-title {
-  @apply air-title-md;
+  @apply flex items-center gap-1 air-title-md;
   margin: 0;
-  color: var(--color-on-surface);
+  color: var(--air-card-title-fg);
 }
 
 @utility air-card-subtitle {
-  @apply air-body-md;
+  @apply flex items-center gap-1 air-body-sm;
   margin: 0;
-  color: var(--color-on-surface-variant);
+  color: var(--air-card-subtitle-fg);
 }
 
 @utility air-card-body {
+  display: flex;
+  flex-direction: column;
   padding-block-start: var(--air-card-padding);
   padding-inline: var(--air-card-padding);
   flex-grow: 1;
@@ -118,20 +139,23 @@
   @apply flex flex-col;
   gap: calc(var(--spacing) * 0.5); /* 2px gap between segments */
 
-  --_inner-radius: var(--radius-sm);
-  --_outer-radius: var(--air-card-radius, var(--radius-md));
+  --air-card-inner-radius: var(--radius-sm);
 
   & > * {
-    border-radius: var(--_inner-radius);
+    border-radius: var(--air-card-inner-radius);
+  }
+
+  & .air-tab-content .air-card:first-child {
+    border-radius: var(--air-tabs-inner-radius);
   }
 
   & > *:first-child {
-    border-start-start-radius: var(--_outer-radius);
-    border-start-end-radius: var(--_outer-radius);
+    border-start-start-radius: var(--air-card-outer-radius);
+    border-start-end-radius: var(--air-card-outer-radius);
   }
 
   & > *:last-child {
-    border-end-start-radius: var(--_outer-radius);
-    border-end-end-radius: var(--_outer-radius);
+    border-end-start-radius: var(--air-card-outer-radius);
+    border-end-end-radius: var(--air-card-outer-radius);
   }
 }

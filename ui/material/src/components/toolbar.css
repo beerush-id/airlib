@@ -8,6 +8,11 @@
   --air-toolbar-group-gap: calc(var(--spacing) * 2); /* 8px */
   --air-toolbar-outer-radius: calc(var(--spacing) * 4);
   --air-toolbar-group-label-color: var(--color-on-surface);
+
+  --air-toolbar-bg: var(--color-surface-container-high);
+  --air-toolbar-fg: var(--color-on-surface);
+  --air-toolbar-outlined-border: var(--color-outline-variant);
+  --air-toolbar-separator-bg: var(--color-outline-variant);
 }
 
 /* Base Toolbar Layout */
@@ -25,15 +30,15 @@
 
 /* Surface Variants */
 @utility air-toolbar-surface {
-  background-color: var(--color-surface-container-high);
-  color: var(--color-on-surface);
+  background-color: var(--air-toolbar-bg);
+  color: var(--air-toolbar-fg);
 }
 
 @utility air-toolbar-outlined-surface {
   @apply air-toolbar-surface;
   border-width: 1px;
   border-style: solid;
-  border-color: var(--color-outline-variant);
+  border-color: var(--air-toolbar-outlined-border);
 }
 
 /* Toolbar Separator */
@@ -42,7 +47,7 @@
   width: 1px;
   margin-block: calc(var(--spacing) * 1);
   margin-inline: calc(var(--spacing) * 1);
-  background-color: var(--color-outline-variant);
+  background-color: var(--air-toolbar-separator-bg);
   border-width: 0;
   border-style: solid;
   border-color: transparent;

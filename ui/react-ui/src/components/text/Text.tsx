@@ -1,6 +1,11 @@
 import { classx } from '@airlib/headless/utils';
 import { template } from '@anchorlib/react';
+import { Display } from '../display/Display.tsx';
+import { Headline } from '../headline/Headline.tsx';
 import { type ElementProps, renderDynamic } from '../renderer.js';
+import { Subtitle } from '../subtitle/Subtitle.tsx';
+import { TextLabel } from '../text-label/TextLabel.tsx';
+import { Title } from '../title/Title.tsx';
 import { TEXT_CONFIGS } from './config.js';
 
 export type TextProps = ElementProps<'p'> & {
@@ -8,7 +13,7 @@ export type TextProps = ElementProps<'p'> & {
   strong?: boolean;
 };
 
-export const Text = template<TextProps>(({ children, className, size = 'md', strong, ...rest }) => {
+export const Paragraph = template<TextProps>(({ children, className, size = 'md', strong, ...rest }) => {
   const key = `${size}${strong ? 'Strong' : ''}` as keyof typeof TEXT_CONFIGS;
   return (
     <p {...rest} className={classx([TEXT_CONFIGS[key], className])}>
@@ -16,3 +21,11 @@ export const Text = template<TextProps>(({ children, className, size = 'md', str
     </p>
   );
 }, 'Paragraph');
+
+export const Text = Object.assign(Paragraph, {
+  Label: TextLabel,
+  Title: Title,
+  Display: Display,
+  Subtitle: Subtitle,
+  Headline: Headline,
+});

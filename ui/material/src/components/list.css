@@ -1,5 +1,31 @@
 @theme {
   --air-list-item-min-height: calc(var(--spacing) * 14); /* 56px */
+  --air-list-item-padding-block: calc(var(--spacing) * 3.5);
+  --air-list-item-padding-inline: calc(var(--spacing) * 4);
+  --air-list-item-gap: calc(var(--spacing) * 4);
+  --air-list-item-radius: var(--radius-sm);
+  --air-list-radius: var(--radius-xl);
+  --air-list-gap: calc(var(--spacing) * 0.5);
+
+  /* List Colors */
+  --air-list-filled-bg: var(--color-surface-container-low);
+
+  /* List Item Colors */
+  --air-list-item-bg: transparent;
+  --air-list-item-fg: var(--color-on-surface);
+  --air-list-item-state: var(--color-on-surface);
+
+  /* Filled Item */
+  --air-list-item-filled-bg: var(--color-surface-container);
+  --air-list-item-filled-state: var(--color-on-surface);
+
+  /* Selected State */
+  --air-list-item-selected-bg: var(--color-secondary-container);
+  --air-list-item-selected-fg: var(--color-on-secondary-container);
+  --air-list-item-selected-state: var(--color-on-secondary-container);
+
+  /* Content */
+  --air-list-item-supporting-fg: var(--color-on-surface-variant);
 }
 
 @utility air-list-view {
@@ -7,16 +33,22 @@
   list-style: none;
 
   /* Segmented setup */
-  gap: calc(var(--spacing) * 0.5);
-  border-radius: var(--radius-xl);
+  gap: var(--air-list-gap);
+  border-radius: var(--air-list-radius);
 }
 
 @utility air-list-view-filled {
-  background-color: var(--color-surface-container-low);
+  background-color: var(--air-list-filled-bg);
 }
 
 @utility air-list-view-segmented {
-  gap: calc(var(--spacing) * 0.5);
+  gap: var(--air-list-gap);
+  background-color: transparent;
+
+  & > .air-list-view-item,
+  & > .air-list-view-button {
+    background-color: var(--air-list-item-filled-bg);
+  }
 }
 
 @utility air-list-view-contiguous {
@@ -41,13 +73,12 @@
 
 /* Item Filled Variant */
 @utility air-list-view-item-filled {
-  @apply air-state-layer;
-  background-color: var(--color-surface-container);
-  --state-layer-color: var(--color-on-surface);
+  background-color: var(--air-list-item-filled-bg);
+  --state-layer-color: var(--air-list-item-filled-state);
 
   &[aria-selected='true'] {
-    background-color: var(--color-secondary-container);
-    --state-layer-color: var(--color-on-secondary-container);
+    background-color: var(--air-list-item-selected-bg);
+    --state-layer-color: var(--air-list-item-selected-state);
   }
 }
 
@@ -56,11 +87,11 @@
   @apply flex items-center box-border;
   @apply air-focus-ring;
 
-  border-radius: var(--radius-sm); /* Inner segmentation radius */
+  border-radius: var(--air-list-item-radius); /* Inner segmentation radius */
   min-height: var(--air-list-item-min-height); /* 56px */
-  padding-block: calc(var(--spacing) * 3.5);
-  padding-inline: calc(var(--spacing) * 4); /* 14px 16px */
-  gap: calc(var(--spacing) * 4); /* 16px */
+  padding-block: var(--air-list-item-padding-block);
+  padding-inline: var(--air-list-item-padding-inline); /* 14px 16px */
+  gap: var(--air-list-item-gap); /* 16px */
 
   &:first-child {
     border-start-start-radius: inherit;
@@ -84,36 +115,45 @@
 
 /* Default Visuals */
 @utility air-list-view-item-surface {
-  background-color: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
-  color: var(--color-on-surface);
+  background-color: var(--air-list-item-bg);
+  color: var(--air-list-item-fg);
 }
 
 @utility air-list-view-item-selected-surface {
-  --color-ghost-surface: var(--color-secondary-container);
-  background-color: var(--color-secondary-container);
-  color: var(--color-on-secondary-container);
+  --color-ghost-surface: var(--air-list-item-selected-bg);
+  background-color: var(--air-list-item-selected-bg);
+  color: var(--air-list-item-selected-fg);
 }
 
 @utility air-list-view-item-content {
   @apply flex flex-col justify-center flex-1 items-start;
 }
 
-@utility air-list-view-item-supporting-text {
+@utility air-list-title {
+  @apply flex items-center gap-1 air-title-md text-on-surface;
+}
+
+@utility air-list-subtitle {
+  @apply inline-flex items-center gap-1;
   font-family: var(--font-brand, system-ui);
   font-size: var(--font-body-md-size);
   font-weight: var(--font-body-md-weight);
   line-height: var(--font-body-md-line-height);
   letter-spacing: var(--font-body-md-tracking);
-  color: var(--color-on-surface-variant);
+  color: var(--air-list-item-supporting-fg);
 }
 
 /* Composed Utilities */
 @utility air-list-view-item {
-  @apply air-list-view-item-base air-list-view-item-surface cursor-pointer air-state-layer;
-  --state-layer-color: var(--color-on-surface);
+  @apply air-list-view-item-base air-list-view-item-surface;
+}
+
+@utility air-list-view-button {
+  @apply air-list-view-item cursor-pointer air-state-layer;
+  --state-layer-color: var(--air-list-item-state);
 
   &[aria-selected='true'] {
     @apply air-list-view-item-selected-surface;
-    --state-layer-color: var(--color-on-secondary-container);
+    --state-layer-color: var(--air-list-item-selected-state);
   }
 }

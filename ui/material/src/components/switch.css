@@ -3,6 +3,38 @@
   --air-switch-track-height: calc(var(--spacing) * 8); /* 32px */
   --air-switch-handle-size: calc(var(--spacing) * 6); /* 24px */
   --air-switch-handle-active-size: calc(var(--spacing) * 8); /* 32px */
+
+  /* Size Variants */
+  --air-switch-track-width-xs: calc(var(--spacing) * 8);
+  --air-switch-track-height-xs: calc(var(--spacing) * 4);
+  --air-switch-handle-size-xs: calc(var(--spacing) * 3);
+
+  --air-switch-track-width-sm: calc(var(--spacing) * 10);
+  --air-switch-track-height-sm: calc(var(--spacing) * 6);
+  --air-switch-handle-size-sm: calc(var(--spacing) * 4);
+
+  --air-switch-track-width-md: calc(var(--spacing) * 13);
+  --air-switch-track-height-md: calc(var(--spacing) * 8);
+  --air-switch-handle-size-md: calc(var(--spacing) * 6);
+
+  --air-switch-track-width-lg: calc(var(--spacing) * 16);
+  --air-switch-track-height-lg: calc(var(--spacing) * 10);
+  --air-switch-handle-size-lg: calc(var(--spacing) * 8);
+
+  --air-switch-track-width-xl: calc(var(--spacing) * 20);
+  --air-switch-track-height-xl: calc(var(--spacing) * 12);
+  --air-switch-handle-size-xl: calc(var(--spacing) * 10);
+
+  --air-switch-track-width-xxl: calc(var(--spacing) * 24);
+  --air-switch-track-height-xxl: calc(var(--spacing) * 14);
+  --air-switch-handle-size-xxl: calc(var(--spacing) * 12);
+
+  /* Colors */
+  --air-switch-track-checked-bg: var(--color-primary);
+  --air-switch-track-checked-border: var(--color-primary);
+  --air-switch-handle-checked-bg: var(--color-on-primary);
+  --air-switch-icon-checked-fill: var(--color-primary);
+  --air-switch-hover-shadow: var(--color-primary);
 }
 
 /* Base Track */
@@ -28,8 +60,8 @@
 }
 
 @utility air-switch-track-checked {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
+  background-color: var(--air-switch-track-checked-bg);
+  border-color: var(--air-switch-track-checked-border);
 }
 
 @utility air-switch-track-disabled {
@@ -61,7 +93,7 @@
   inset-inline-start: calc(100% - var(--air-switch-handle-size) - 2px);
   width: var(--air-switch-handle-size);
   height: var(--air-switch-handle-size);
-  background-color: var(--color-on-primary);
+  background-color: var(--air-switch-handle-checked-bg);
 }
 
 @utility air-switch-handle-hover {
@@ -74,7 +106,7 @@
 @utility air-switch-handle-checked-hover {
   inset-inline-start: calc(100% - var(--air-switch-handle-size) - 2px);
   transform: translate3d(-2px, 0, 0);
-  box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-primary) 8%, transparent);
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--air-switch-hover-shadow) 8%, transparent);
 }
 
 @utility air-switch-handle-focus {
@@ -82,7 +114,7 @@
 }
 
 @utility air-switch-handle-checked-focus {
-  box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-primary) 12%, transparent);
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--air-switch-hover-shadow) 12%, transparent);
 }
 
 /* Handle SVG Base */
@@ -98,7 +130,7 @@
 
 @utility air-switch-icon-checked {
   opacity: 1;
-  fill: var(--color-primary);
+  fill: var(--air-switch-icon-checked-fill);
 }
 
 /* Composed Utilities */
@@ -151,4 +183,90 @@
   .air-switch[aria-checked='true']:focus-visible:not(:disabled) & {
     @apply air-switch-handle-checked-focus;
   }
+}
+
+/* Size Variants */
+@utility air-switch-xs {
+  --air-switch-track-width: var(--air-switch-track-width-xs);
+  --air-switch-track-height: var(--air-switch-track-height-xs);
+  --air-switch-handle-size: var(--air-switch-handle-size-xs);
+}
+
+@utility air-switch-sm {
+  --air-switch-track-width: var(--air-switch-track-width-sm);
+  --air-switch-track-height: var(--air-switch-track-height-sm);
+  --air-switch-handle-size: var(--air-switch-handle-size-sm);
+}
+
+@utility air-switch-md {
+  --air-switch-track-width: var(--air-switch-track-width-md);
+  --air-switch-track-height: var(--air-switch-track-height-md);
+  --air-switch-handle-size: var(--air-switch-handle-size-md);
+}
+
+@utility air-switch-lg {
+  --air-switch-track-width: var(--air-switch-track-width-lg);
+  --air-switch-track-height: var(--air-switch-track-height-lg);
+  --air-switch-handle-size: var(--air-switch-handle-size-lg);
+}
+
+@utility air-switch-xl {
+  --air-switch-track-width: var(--air-switch-track-width-xl);
+  --air-switch-track-height: var(--air-switch-track-height-xl);
+  --air-switch-handle-size: var(--air-switch-handle-size-xl);
+}
+
+@utility air-switch-xxl {
+  --air-switch-track-width: var(--air-switch-track-width-xxl);
+  --air-switch-track-height: var(--air-switch-track-height-xxl);
+  --air-switch-handle-size: var(--air-switch-handle-size-xxl);
+}
+
+/* Color Variants */
+@utility air-switch-secondary {
+  --air-switch-track-checked-bg: var(--color-secondary);
+  --air-switch-track-checked-border: var(--color-secondary);
+  --air-switch-handle-checked-bg: var(--color-on-secondary);
+  --air-switch-icon-checked-fill: var(--color-secondary);
+  --air-switch-hover-shadow: var(--color-secondary);
+}
+
+@utility air-switch-tertiary {
+  --air-switch-track-checked-bg: var(--color-tertiary);
+  --air-switch-track-checked-border: var(--color-tertiary);
+  --air-switch-handle-checked-bg: var(--color-on-tertiary);
+  --air-switch-icon-checked-fill: var(--color-tertiary);
+  --air-switch-hover-shadow: var(--color-tertiary);
+}
+
+@utility air-switch-error {
+  --air-switch-track-checked-bg: var(--color-error);
+  --air-switch-track-checked-border: var(--color-error);
+  --air-switch-handle-checked-bg: var(--color-on-error);
+  --air-switch-icon-checked-fill: var(--color-error);
+  --air-switch-hover-shadow: var(--color-error);
+}
+
+@utility air-switch-success {
+  --air-switch-track-checked-bg: var(--color-success);
+  --air-switch-track-checked-border: var(--color-success);
+  --air-switch-handle-checked-bg: var(--color-on-success);
+  --air-switch-icon-checked-fill: var(--color-success);
+  --air-switch-hover-shadow: var(--color-success);
+}
+
+@utility air-switch-warning {
+  --air-switch-track-checked-bg: var(--color-warning);
+  --air-switch-track-checked-border: var(--color-warning);
+  --air-switch-handle-checked-bg: var(--color-on-warning);
+  --air-switch-icon-checked-fill: var(--color-warning);
+  --air-switch-hover-shadow: var(--color-warning);
+}
+
+@utility air-switch-info {
+  --air-switch-track-checked-bg: var(--color-info);
+  --air-switch-track-checked-border: var(--color-info);
+  --air-switch-handle-checked-bg: var(--color-on-info);
+  --air-switch-icon-checked-fill: var(--color-info);
+  --air-switch-hover-shadow: var(--color-info);
 }

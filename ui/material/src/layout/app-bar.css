@@ -1,5 +1,8 @@
 @theme {
   --air-app-bar-height: calc(var(--spacing) * 16); /* 64px standard */
+  --air-app-bar-bg: var(--color-surface);
+  --air-app-bar-fg: var(--color-on-surface);
+  --air-app-bar-scrolled-bg: var(--color-surface-container-high);
 }
 
 /* Base Layout */
@@ -21,12 +24,12 @@
 
 /* Surface Visuals */
 @utility air-app-bar-surface {
-  background-color: var(--color-surface);
-  color: var(--color-on-surface);
+  background-color: var(--air-app-bar-bg);
+  color: var(--air-app-bar-fg);
 }
 
 @utility air-app-bar-surface-scrolled {
-  background-color: var(--color-surface-container-high);
+  background-color: var(--air-app-bar-scrolled-bg);
 }
 
 @utility air-app-bar-title {

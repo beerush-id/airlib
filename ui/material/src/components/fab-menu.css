@@ -1,3 +1,8 @@
+@theme {
+  --air-fab-menu-list-gap: calc(var(--spacing) * 4); /* 16px */
+  --air-fab-menu-list-padding-bottom: calc(var(--spacing) * 4); /* 16px */
+}
+
 /* Base Container */
 @utility air-fab-menu {
   @apply relative inline-flex flex-col-reverse items-center;
@@ -40,8 +45,8 @@
   @apply pointer-events-none z-[9];
   transform: translateX(-50%);
 
-  gap: calc(var(--spacing) * 4); /* 16px between mini fabs */
-  padding-bottom: calc(var(--spacing) * 4); /* space between list and trigger */
+  gap: var(--air-fab-menu-list-gap);
+  padding-bottom: var(--air-fab-menu-list-padding-bottom);
 }
 
 /* Mini FAB animation states */

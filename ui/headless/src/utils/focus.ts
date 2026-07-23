@@ -92,6 +92,12 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
  * @param parent - The container element to search within.
  */
 export function focusFrom(parent: HTMLElement) {
+  const active = parent.querySelector('[aria-selected="true"], [aria-checked="true"], [data-active="true"]') as HTMLElement;
+  if (active && active.tabIndex !== -1) {
+    active.focus();
+    return;
+  }
+
   const focusable = parent.querySelector(FOCUSABLE_SELECTORS) as HTMLElement;
   focusable ? focusable.focus() : parent.focus();
 }

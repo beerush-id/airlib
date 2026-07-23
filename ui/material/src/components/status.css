@@ -2,6 +2,19 @@
   --air-status-height: calc(var(--spacing) * 5); /* 20px */
   --air-status-padding-x: calc(var(--spacing) * 2); /* 8px */
   --air-status-dot-size: calc(var(--spacing) * 1.5); /* 6px */
+
+  /* Extracted Colors */
+  --air-status-error-bg: light-dark(oklch(0.92 0.08 25), oklch(0.28 0.09 25));
+  --air-status-error-fg: light-dark(oklch(0.35 0.15 25), oklch(0.94 0.08 25));
+
+  --air-status-success-bg: light-dark(oklch(0.92 0.08 150), oklch(0.25 0.07 150));
+  --air-status-success-fg: light-dark(oklch(0.3 0.1 150), oklch(0.92 0.08 150));
+
+  --air-status-warning-bg: light-dark(oklch(0.94 0.09 75), oklch(0.3 0.08 75));
+  --air-status-warning-fg: light-dark(oklch(0.35 0.12 75), oklch(0.95 0.09 75));
+
+  --air-status-info-bg: light-dark(oklch(0.92 0.06 240), oklch(0.25 0.06 240));
+  --air-status-info-fg: light-dark(oklch(0.32 0.09 240), oklch(0.92 0.06 240));
 }
 
 /* Base shape and placement */
@@ -29,6 +42,15 @@
 }
 
 /* Sizing Variants */
+@utility air-status-xs {
+  --air-status-height: calc(var(--spacing) * 3); /* 12px */
+  --air-status-padding-x: calc(var(--spacing) * 1); /* 4px */
+  --air-status-dot-size: calc(var(--spacing) * 0.75); /* 3px */
+  font-size: calc(var(--font-label-sm-size) - 2px); /* 8px */
+  line-height: var(--font-label-sm-line-height);
+  letter-spacing: var(--font-label-sm-tracking);
+}
+
 @utility air-status-sm {
   --air-status-height: calc(var(--spacing) * 4); /* 16px */
   --air-status-padding-x: calc(var(--spacing) * 1.5); /* 6px */
@@ -54,6 +76,24 @@
   font-size: var(--font-label-lg-size); /* 14px */
   line-height: var(--font-label-lg-line-height);
   letter-spacing: var(--font-label-lg-tracking);
+}
+
+@utility air-status-xl {
+  --air-status-height: calc(var(--spacing) * 7); /* 28px */
+  --air-status-padding-x: calc(var(--spacing) * 3); /* 12px */
+  --air-status-dot-size: calc(var(--spacing) * 2.5); /* 10px */
+  font-size: var(--font-body-md-size); /* 16px */
+  line-height: var(--font-body-md-line-height);
+  letter-spacing: var(--font-body-md-tracking);
+}
+
+@utility air-status-xxl {
+  --air-status-height: calc(var(--spacing) * 8); /* 32px */
+  --air-status-padding-x: calc(var(--spacing) * 3.5); /* 14px */
+  --air-status-dot-size: calc(var(--spacing) * 3); /* 12px */
+  font-size: var(--font-body-lg-size); /* 18px */
+  line-height: var(--font-body-lg-line-height);
+  letter-spacing: var(--font-body-lg-tracking);
 }
 
 /* Color & Semantic Variants */
@@ -83,26 +123,26 @@
 
 @utility air-status-error {
   @apply air-status-base;
-  background-color: light-dark(oklch(0.92 0.08 25), oklch(0.28 0.09 25));
-  color: light-dark(oklch(0.35 0.15 25), oklch(0.94 0.08 25));
+  background-color: var(--air-status-error-bg);
+  color: var(--air-status-error-fg);
 }
 
 @utility air-status-success {
   @apply air-status-base;
-  background-color: light-dark(oklch(0.92 0.08 150), oklch(0.25 0.07 150));
-  color: light-dark(oklch(0.3 0.1 150), oklch(0.92 0.08 150));
+  background-color: var(--air-status-success-bg);
+  color: var(--air-status-success-fg);
 }
 
 @utility air-status-warning {
   @apply air-status-base;
-  background-color: light-dark(oklch(0.94 0.09 75), oklch(0.3 0.08 75));
-  color: light-dark(oklch(0.35 0.12 75), oklch(0.95 0.09 75));
+  background-color: var(--air-status-warning-bg);
+  color: var(--air-status-warning-fg);
 }
 
 @utility air-status-info {
   @apply air-status-base;
-  background-color: light-dark(oklch(0.92 0.06 240), oklch(0.25 0.06 240));
-  color: light-dark(oklch(0.32 0.09 240), oklch(0.92 0.06 240));
+  background-color: var(--air-status-info-bg);
+  color: var(--air-status-info-fg);
 }
 
 @utility air-status {

@@ -1,3 +1,8 @@
+@theme {
+  --air-segmented-button-bg: var(--color-surface-container);
+  --air-segmented-button-fg: var(--color-on-surface);
+}
+
 @utility air-segmented-group {
   @apply air-button-group;
 }
@@ -9,8 +14,8 @@
 
 /* Default State */
 @utility air-segmented-button-surface {
-  background-color: var(--color-surface-container);
-  color: var(--color-on-surface);
+  background-color: var(--air-segmented-button-bg);
+  color: var(--air-segmented-button-fg);
 }
 
 /* Composed Utilities */

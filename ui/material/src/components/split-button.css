@@ -1,3 +1,22 @@
+@theme {
+  /* Filled */
+  --air-split-filled-bg: var(--color-primary);
+  --air-split-filled-fg: var(--color-on-primary);
+
+  /* Tonal */
+  --air-split-tonal-bg: var(--color-secondary-container);
+  --air-split-tonal-fg: var(--color-on-secondary-container);
+
+  /* Elevated */
+  --air-split-elevated-bg: var(--color-surface-container-low);
+  --air-split-elevated-fg: var(--color-primary);
+
+  /* Outlined */
+  --air-split-outlined-bg: transparent;
+  --air-split-outlined-fg: var(--color-primary);
+  --air-split-outlined-border: var(--color-outline);
+}
+
 /* Container */
 @utility air-split-button-group {
   @apply air-button-group;
@@ -18,43 +37,43 @@
 @utility air-split-button-filled {
   & > .air-split-button-base,
   & > .air-split-button-trailing {
-    background-color: var(--color-primary);
-    color: var(--color-on-primary);
-    --state-layer-color: var(--color-on-primary);
+    background-color: var(--air-split-filled-bg);
+    color: var(--air-split-filled-fg);
+    --state-layer-color: var(--air-split-filled-fg);
   }
 }
 
 @utility air-split-button-tonal {
   & > .air-split-button-base,
   & > .air-split-button-trailing {
-    background-color: var(--color-secondary-container);
-    color: var(--color-on-secondary-container);
-    --state-layer-color: var(--color-on-secondary-container);
+    background-color: var(--air-split-tonal-bg);
+    color: var(--air-split-tonal-fg);
+    --state-layer-color: var(--air-split-tonal-fg);
   }
 }
 
 @utility air-split-button-elevated {
   & > .air-split-button-base,
   & > .air-split-button-trailing {
-    background-color: var(--color-surface-container-low);
-    color: var(--color-primary);
+    background-color: var(--air-split-elevated-bg);
+    color: var(--air-split-elevated-fg);
     box-shadow: var(--elevation-1);
-    --state-layer-color: var(--color-primary);
+    --state-layer-color: var(--air-split-elevated-fg);
   }
 }
 
 @utility air-split-button-outlined {
   & > .air-split-button-base,
   & > .air-split-button-trailing {
-    background-color: transparent;
-    color: var(--color-primary);
+    background-color: var(--air-split-outlined-bg);
+    color: var(--air-split-outlined-fg);
     border-width: var(--shadow-base, 1px);
     border-style: solid;
-    border-color: var(--color-outline);
-    --state-layer-color: var(--color-primary);
+    border-color: var(--air-split-outlined-border);
+    --state-layer-color: var(--air-split-outlined-fg);
 
     &:focus-visible:not(:disabled, [aria-disabled='true']) {
-      border-color: var(--color-primary);
+      border-color: var(--air-split-outlined-fg);
     }
   }
 }

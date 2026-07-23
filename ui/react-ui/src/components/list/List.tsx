@@ -12,6 +12,10 @@ export type ListItemProps = ElementProps<'div'> & {
   variant?: ListItemVariant;
 };
 
+export type ListButtonProps = ElementProps<'button'> & {
+  variant?: ListItemVariant;
+};
+
 export const ListItemContent = template<ElementProps<'div'>>(
   ({ children, className, ...rest }) => (
     <div {...rest} className={classx([LIST_CONFIGS.contentClass, className])}>
@@ -21,27 +25,50 @@ export const ListItemContent = template<ElementProps<'div'>>(
   'ListItemContent'
 );
 
-export const ListItemSupportingText = template<ElementProps<'span'>>(
+export const ListTitle = template<ElementProps<'h4'>>(
   ({ children, className, ...rest }) => (
-    <span {...rest} className={classx([LIST_CONFIGS.supportingTextClass, className])}>
+    <h4 {...rest} className={classx([LIST_CONFIGS.titleClass, className])}>
+      {renderDynamic(children)}
+    </h4>
+  ),
+  'ListTitle'
+);
+
+export const ListSubtitle = template<ElementProps<'span'>>(
+  ({ children, className, ...rest }) => (
+    <span {...rest} className={classx([LIST_CONFIGS.subtitleClass, className])}>
       {renderDynamic(children)}
     </span>
   ),
-  'ListItemSupportingText'
+  'ListSubtitle'
 );
 
 export const ListItem = template<ListItemProps>(
   ({ children, className, variant = 'surface', ...rest }) => (
-    <div
-      {...rest}
-      role="menuitem"
-      tabIndex={rest.tabIndex ?? 0}
-      className={classx([LIST_CONFIGS.itemClass, LIST_CONFIGS.itemVariant[variant], className])}
-    >
+    <div {...rest} className={classx([LIST_CONFIGS.itemClass, LIST_CONFIGS.itemVariant[variant], className])}>
       {renderDynamic(children)}
     </div>
   ),
   'ListItem'
+);
+
+export const ListButton = template<ListButtonProps>(
+  ({ children, className, variant = 'surface', ...rest }) => (
+    <button
+      {...rest}
+      role="menuitem"
+      tabIndex={rest.tabIndex ?? 0}
+      className={classx([
+        LIST_CONFIGS.itemClass,
+        LIST_CONFIGS.buttonClass,
+        LIST_CONFIGS.itemVariant[variant],
+        className,
+      ])}
+    >
+      {renderDynamic(children)}
+    </button>
+  ),
+  'ListButton'
 );
 
 export const List = template<ListProps>(

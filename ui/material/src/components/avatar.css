@@ -1,9 +1,75 @@
+@theme {
+  --air-avatar-size: var(--size-md);
+  --air-avatar-radius: var(--radius-full);
+  --air-avatar-icon-size: calc(var(--spacing) * 6);
+
+  /* Shapes */
+  --air-avatar-radius-circle: var(--radius-full);
+  --air-avatar-radius-rounded: var(--radius-md);
+
+  /* Size Variants (xs) */
+  --air-avatar-size-xs: var(--size-xs);
+  --air-avatar-icon-size-xs: calc(var(--spacing) * 3.5);
+
+  /* Size Variants (sm) */
+  --air-avatar-size-sm: var(--size-sm);
+  --air-avatar-icon-size-sm: calc(var(--spacing) * 4.5);
+
+  /* Size Variants (md) */
+  --air-avatar-size-md: var(--size-md);
+  --air-avatar-icon-size-md: calc(var(--spacing) * 6);
+
+  /* Size Variants (lg) */
+  --air-avatar-size-lg: var(--size-lg);
+  --air-avatar-icon-size-lg: calc(var(--spacing) * 8);
+
+  /* Size Variants (xl) */
+  --air-avatar-size-xl: var(--size-xl);
+  --air-avatar-icon-size-xl: calc(var(--spacing) * 10);
+
+  /* Size Variants (xxl) */
+  --air-avatar-size-xxl: var(--size-xxl);
+  --air-avatar-icon-size-xxl: calc(var(--spacing) * 12);
+
+  /* Surface */
+  --air-avatar-surface-bg: var(--color-surface-container-high);
+  --air-avatar-surface-fg: var(--color-on-surface);
+
+  /* Primary */
+  --air-avatar-primary-bg: var(--color-primary-container);
+  --air-avatar-primary-fg: var(--color-on-primary-container);
+
+  /* Secondary */
+  --air-avatar-secondary-bg: var(--color-secondary-container);
+  --air-avatar-secondary-fg: var(--color-on-secondary-container);
+
+  /* Tertiary */
+  --air-avatar-tertiary-bg: var(--color-tertiary-container);
+  --air-avatar-tertiary-fg: var(--color-on-tertiary-container);
+
+  /* Error */
+  --air-avatar-error-bg: var(--color-error-container);
+  --air-avatar-error-fg: var(--color-on-error-container);
+
+  /* Success */
+  --air-avatar-success-bg: var(--color-success-container);
+  --air-avatar-success-fg: var(--color-on-success-container);
+
+  /* Warning */
+  --air-avatar-warning-bg: var(--color-warning-container);
+  --air-avatar-warning-fg: var(--color-on-warning-container);
+
+  /* Info */
+  --air-avatar-info-bg: var(--color-info-container);
+  --air-avatar-info-fg: var(--color-on-info-container);
+}
+
 @utility air-avatar {
   @apply inline-flex items-center justify-center shrink-0 font-semibold select-none overflow-hidden box-border;
-  width: var(--air-avatar-size, calc(var(--spacing) * 10));
-  height: var(--air-avatar-size, calc(var(--spacing) * 10));
-  border-radius: var(--air-avatar-radius, var(--radius-full));
-  --air-icon-size: calc(var(--spacing) * 6);
+  width: var(--air-avatar-size);
+  height: var(--air-avatar-size);
+  border-radius: var(--air-avatar-radius);
+  --air-icon-size: var(--air-avatar-icon-size);
 }
 
 @utility air-avatar-img {
@@ -12,54 +78,87 @@
 
 /* Shapes */
 @utility air-avatar-circle {
-  --air-avatar-radius: var(--radius-full);
+  --air-avatar-radius: var(--air-avatar-radius-circle);
 }
 
 @utility air-avatar-rounded {
-  --air-avatar-radius: var(--radius-md);
+  --air-avatar-radius: var(--air-avatar-radius-rounded);
 }
 
 /* Sizes */
+@utility air-avatar-xs {
+  --air-avatar-size: var(--air-avatar-size-xs);
+  --air-avatar-icon-size: var(--air-avatar-icon-size-xs);
+  @apply air-label-sm;
+}
+
 @utility air-avatar-sm {
-  --air-avatar-size: calc(var(--spacing) * 8);
-  --air-icon-size: calc(var(--spacing) * 4.5);
+  --air-avatar-size: var(--air-avatar-size-sm);
+  --air-avatar-icon-size: var(--air-avatar-icon-size-sm);
   @apply air-label-md;
 }
 
 @utility air-avatar-md {
-  --air-avatar-size: calc(var(--spacing) * 10);
-  --air-icon-size: calc(var(--spacing) * 6);
+  --air-avatar-size: var(--air-avatar-size-md);
+  --air-avatar-icon-size: var(--air-avatar-icon-size-md);
   @apply air-label-lg;
 }
 
 @utility air-avatar-lg {
-  --air-avatar-size: calc(var(--spacing) * 14);
-  --air-icon-size: calc(var(--spacing) * 8);
+  --air-avatar-size: var(--air-avatar-size-lg);
+  --air-avatar-icon-size: var(--air-avatar-icon-size-lg);
   @apply air-title-lg;
+}
+
+@utility air-avatar-xl {
+  --air-avatar-size: var(--air-avatar-size-xl);
+  --air-avatar-icon-size: var(--air-avatar-icon-size-xl);
+  @apply air-title-lg;
+}
+
+@utility air-avatar-xxl {
+  --air-avatar-size: var(--air-avatar-size-xxl);
+  --air-avatar-icon-size: var(--air-avatar-icon-size-xxl);
+  @apply air-display-sm;
 }
 
 /* Variants */
 @utility air-avatar-surface {
-  background-color: var(--color-surface-container-high);
-  color: var(--color-on-surface);
+  background-color: var(--air-avatar-surface-bg);
+  color: var(--air-avatar-surface-fg);
 }
 
 @utility air-avatar-primary {
-  background-color: var(--color-primary-container);
-  color: var(--color-on-primary-container);
+  background-color: var(--air-avatar-primary-bg);
+  color: var(--air-avatar-primary-fg);
 }
 
 @utility air-avatar-secondary {
-  background-color: var(--color-secondary-container);
-  color: var(--color-on-secondary-container);
+  background-color: var(--air-avatar-secondary-bg);
+  color: var(--air-avatar-secondary-fg);
 }
 
 @utility air-avatar-tertiary {
-  background-color: var(--color-tertiary-container);
-  color: var(--color-on-tertiary-container);
+  background-color: var(--air-avatar-tertiary-bg);
+  color: var(--air-avatar-tertiary-fg);
 }
 
 @utility air-avatar-error {
-  background-color: var(--color-error-container);
-  color: var(--color-on-error-container);
+  background-color: var(--air-avatar-error-bg);
+  color: var(--air-avatar-error-fg);
+}
+
+@utility air-avatar-success {
+  background-color: var(--air-avatar-success-bg);
+  color: var(--air-avatar-success-fg);
+}
+
+@utility air-avatar-warning {
+  background-color: var(--air-avatar-warning-bg);
+  color: var(--air-avatar-warning-fg);
+}
+
+@utility air-avatar-info {
+  background-color: var(--air-avatar-info-bg);
+  color: var(--air-avatar-info-fg);
 }

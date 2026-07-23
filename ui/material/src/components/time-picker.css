@@ -1,5 +1,11 @@
 @theme {
   --air-time-picker-unit-size: calc(var(--spacing) * 24); /* 96px */
+
+  --air-time-picker-bg: var(--color-surface-container-high);
+  --air-time-picker-unit-bg: var(--color-surface-variant);
+  --air-time-picker-unit-fg: var(--color-on-surface);
+  --air-time-picker-unit-selected-bg: var(--color-primary-container);
+  --air-time-picker-unit-selected-fg: var(--color-on-primary-container);
 }
 
 /* Base Layout */
@@ -11,7 +17,7 @@
 
 /* Surface Visuals */
 @utility air-time-picker-surface {
-  background-color: var(--color-surface-container-high);
+  background-color: var(--air-time-picker-bg);
 }
 
 @utility air-time-picker-display {
@@ -47,14 +53,14 @@
 
 /* Default Unit Surface */
 @utility air-time-picker-unit-surface {
-  background-color: var(--color-surface-variant);
-  color: var(--color-on-surface);
+  background-color: var(--air-time-picker-unit-bg);
+  color: var(--air-time-picker-unit-fg);
 }
 
 /* Selected Unit Surface */
 @utility air-time-picker-unit-selected-surface {
-  background-color: var(--color-primary-container);
-  color: var(--color-on-primary-container);
+  background-color: var(--air-time-picker-unit-selected-bg);
+  color: var(--air-time-picker-unit-selected-fg);
 }
 
 @utility air-time-picker-separator {

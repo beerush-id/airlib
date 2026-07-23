@@ -1,13 +1,23 @@
-/* Component Variables */
 @theme {
   --air-menu-min-width: calc(var(--spacing) * 50);
   --air-menu-radius: var(--radius-lg);
+  --air-menu-gap: calc(var(--spacing) * 0.5);
   --air-menu-padding-x: calc(var(--spacing) * 1);
   --air-menu-padding-y: calc(var(--spacing) * 1);
+  --air-menu-bg: var(--color-surface-container);
 
   --air-menu-item-radius: var(--radius-xs);
   --air-menu-item-height: calc(var(--spacing) * 10);
   --air-menu-item-padding-x: calc(var(--spacing) * 3);
+  --air-menu-item-bg: transparent;
+  --air-menu-item-fg: var(--color-on-surface);
+  --air-menu-item-state: var(--color-on-surface);
+
+  --air-menu-item-disabled-fg: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
+  --air-menu-separator-color: var(--color-outline-variant);
+
+  --air-menu-tips-bg: var(--color-surface-container-highest);
+  --air-menu-tips-fg: var(--color-on-surface-variant);
 }
 
 /* Menu Surface (the floating container) */
@@ -17,7 +27,7 @@
   padding-inline: var(--air-menu-padding-x);
   list-style: none;
   min-width: var(--air-menu-min-width);
-  background-color: var(--color-surface-container);
+  background-color: var(--air-menu-bg);
   border-radius: var(--air-menu-radius);
 
   /* Animation */
@@ -75,26 +85,27 @@
 
 /* Default Visuals */
 @utility air-menu-item-surface {
-  background-color: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
-  color: var(--color-on-surface);
+  background-color: var(--air-menu-item-bg);
+  color: var(--air-menu-item-fg);
 }
 
 @utility air-menu-item-disabled {
   cursor: not-allowed;
-  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
+  color: var(--air-menu-item-disabled-fg);
   background-color: transparent;
   pointer-events: none;
 }
 
 /* Composed Utilities */
 @utility air-menu {
-  @apply air-menu-surface fixed z-popover;
+  @apply flex flex-col air-menu-surface fixed z-popover;
+  gap: var(--air-menu-gap);
   box-shadow: 0 calc(var(--spacing) * 0.5) calc(var(--spacing) * 4) light-dark(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.5));
 }
 
 @utility air-menu-item {
   @apply air-menu-item-base air-menu-item-surface air-state-layer;
-  --state-layer-color: var(--color-on-surface);
+  --state-layer-color: var(--air-menu-item-state);
 
   &:disabled,
   &[aria-disabled='true'] {
@@ -104,7 +115,10 @@
 }
 
 @utility air-menu-separator {
-  @apply border-b border-solid border-b-outline-variant my-1 mx-2;
+  @apply my-1 mx-2;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--air-menu-separator-color);
 }
 
 @utility air-menu-item-text {
@@ -112,7 +126,34 @@
 }
 
 @utility air-menu-item-tips {
-  @apply rounded-sm px-2 py-1 ml-4;
-  @apply bg-surface-container-highest pointer-events-none;
-  @apply text-xs text-on-surface-variant font-semibold;
+  @apply rounded-sm px-2 py-1 ml-4 pointer-events-none;
+  background-color: var(--air-menu-tips-bg);
+  color: var(--air-menu-tips-fg);
+  font-size: var(--font-label-sm-size);
+  font-weight: 600;
+}
+
+/* Size Variants */
+@utility air-menu-sm {
+  --air-menu-min-width: calc(var(--spacing) * 32);
+  --air-menu-padding-y: calc(var(--spacing) * 1);
+  --air-menu-item-height: calc(var(--spacing) * 8); /* 32px */
+  --air-menu-item-padding-x: calc(var(--spacing) * 3);
+
+  /* Scale down the base typography for items inside */
+  --font-label-lg-size: var(--font-label-md-size);
+  --font-label-lg-line-height: var(--font-label-md-line-height);
+  --font-label-lg-tracking: var(--font-label-md-tracking);
+}
+
+@utility air-menu-xs {
+  --air-menu-min-width: calc(var(--spacing) * 24);
+  --air-menu-padding-y: calc(var(--spacing) * 1);
+  --air-menu-item-height: calc(var(--spacing) * 6); /* 24px */
+  --air-menu-item-padding-x: calc(var(--spacing) * 2);
+
+  /* Scale down the base typography for items inside */
+  --font-label-lg-size: var(--font-label-sm-size);
+  --font-label-lg-line-height: var(--font-label-sm-line-height);
+  --font-label-lg-tracking: var(--font-label-sm-tracking);
 }

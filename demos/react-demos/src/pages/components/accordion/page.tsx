@@ -4,6 +4,7 @@ import {
   CardBody,
   CardGroup,
   CardHeader,
+  CardSubtitle,
   CardTitle,
   CodeBlock,
   Icon,
@@ -39,10 +40,10 @@ const AccordionDemo = setup(() => {
               <CardTitle>
                 <span>Single Selection Group</span>
               </CardTitle>
-              <p className="air-body-sm">
+              <CardSubtitle>
                 When a `value` prop is provided to the `Accordion` container, only one section can remain open at a
                 time.
-              </p>
+              </CardSubtitle>
             </div>
             <Button variant="text" active={$bind(codeState, 'single')}>
               <Icon name={() => (codeState.single ? 'code_off' : 'code')} />
@@ -65,10 +66,10 @@ const AccordionDemo = setup(() => {
           <CardHeader className="flex-row">
             <div className="flex flex-col gap-2 flex-1">
               <CardTitle>Individual Expand & Collapse</CardTitle>
-              <p className="air-body-sm">
+              <CardSubtitle>
                 When used without a `value` prop, each item manages its own expansion state independently, allowing
                 multiple open panels simultaneously.
-              </p>
+              </CardSubtitle>
             </div>
             <Button variant="text" active={$bind(codeState, 'individual')}>
               <Icon name={() => (codeState.individual ? 'code_off' : 'code')} />
@@ -91,10 +92,10 @@ const AccordionDemo = setup(() => {
           <CardHeader className="flex-row">
             <div className="flex flex-col gap-2 flex-1">
               <CardTitle>Custom Header & Composable Structure</CardTitle>
-              <p className="air-body-sm">
+              <CardSubtitle>
                 Use `AccordionHeader` and `AccordionContent` directly within `Accordion` for rich custom layouts with
                 badges, icons, and status indicators.
-              </p>
+              </CardSubtitle>
             </div>
             <Button variant="text" active={$bind(codeState, 'custom')}>
               <Icon name={() => (codeState.custom ? 'code_off' : 'code')} />

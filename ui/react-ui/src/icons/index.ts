@@ -1,3 +1,7 @@
+export * from './ArrowDown.js';
+export * from './ArrowLeft.js';
+export * from './ArrowRight.js';
+export * from './ArrowUp.js';
 export * from './Check.js';
 export * from './Close.js';
 export * from './ContentPaste.js';
@@ -16,5 +20,7 @@ export * from './Restore.js';
 export * from './Search.js';
 export * from './Settings.js';
 export * from './SystemTheme.js';
+export * from './UnfoldLess.js';
+export * from './UnfoldMore.js';
 export * from './Warning.js';
 export * from './Window.js';

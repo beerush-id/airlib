@@ -40,7 +40,7 @@ export const Checkbox = setup<CheckboxProps>((props) => {
     className: classx([
       CHECKBOX_CONFIGS.boxClass,
       input.checked && CHECKBOX_CONFIGS.boxCheckedClass,
-      props.indeterminate && CHECKBOX_CONFIGS.boxIndeterminateClass,
+      props.indeterminate && !input.checked && CHECKBOX_CONFIGS.boxIndeterminateClass,
     ]),
   }));
 

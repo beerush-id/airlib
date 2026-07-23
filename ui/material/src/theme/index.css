@@ -114,6 +114,24 @@
   --color-error-container: light-dark(oklch(90% 0.05 20), oklch(30% 0.1 20));
   --color-on-error-container: light-dark(oklch(10% 0.1 20), oklch(90% 0.05 20));
 
+  /* Success */
+  --color-success: light-dark(oklch(60% 0.15 150), oklch(75% 0.15 150));
+  --color-on-success: light-dark(oklch(98% 0.02 150), oklch(20% 0.05 150));
+  --color-success-container: light-dark(oklch(90% 0.05 150), oklch(30% 0.1 150));
+  --color-on-success-container: light-dark(oklch(10% 0.1 150), oklch(90% 0.05 150));
+
+  /* Warning */
+  --color-warning: light-dark(oklch(65% 0.15 70), oklch(80% 0.15 70));
+  --color-on-warning: light-dark(oklch(20% 0.05 70), oklch(98% 0.02 70));
+  --color-warning-container: light-dark(oklch(90% 0.05 70), oklch(30% 0.1 70));
+  --color-on-warning-container: light-dark(oklch(20% 0.1 70), oklch(90% 0.05 70));
+
+  /* Info */
+  --color-info: light-dark(oklch(60% 0.15 250), oklch(80% 0.15 250));
+  --color-on-info: light-dark(oklch(98% 0.02 250), oklch(20% 0.05 250));
+  --color-info-container: light-dark(oklch(90% 0.05 250), oklch(30% 0.1 250));
+  --color-on-info-container: light-dark(oklch(10% 0.1 250), oklch(90% 0.05 250));
+
   /* Overlays */
   --color-scrim: oklch(0% 0 0);
   --color-shadow: oklch(0% 0 0);
@@ -121,6 +139,14 @@
 
   /* Abstract Base Math */
   --spacing: 0.25rem;
+
+  /* Component Sizing */
+  --size-xs: calc(var(--spacing) * 6);
+  --size-sm: calc(var(--spacing) * 8);
+  --size-md: calc(var(--spacing) * 10);
+  --size-lg: calc(var(--spacing) * 12);
+  --size-xl: calc(var(--spacing) * 14);
+  --size-xxl: calc(var(--spacing) * 16);
 
   /* Shape Scale */
   --radius-base: var(--spacing);
@@ -135,11 +161,60 @@
   --radius-xxl: calc(var(--radius-base) * 12);
   --radius-full: 9999px;
 
-  /* State Layers */
+  /* State Layers Opacity */
   --opacity-hover: 0.08;
   --opacity-focus: 0.12;
   --opacity-pressed: 0.12;
   --opacity-dragged: 0.16;
+
+  /* Pre-computed Interaction States (Hover = 8%) */
+  --color-primary-hover: color-mix(in srgb, var(--color-on-primary) 8%, var(--color-primary));
+  --color-primary-container-hover: color-mix(in srgb, var(--color-on-primary-container) 8%, var(--color-primary-container));
+  --color-secondary-hover: color-mix(in srgb, var(--color-on-secondary) 8%, var(--color-secondary));
+  --color-secondary-container-hover: color-mix(in srgb, var(--color-on-secondary-container) 8%, var(--color-secondary-container));
+  --color-tertiary-hover: color-mix(in srgb, var(--color-on-tertiary) 8%, var(--color-tertiary));
+  --color-tertiary-container-hover: color-mix(in srgb, var(--color-on-tertiary-container) 8%, var(--color-tertiary-container));
+  --color-error-hover: color-mix(in srgb, var(--color-on-error) 8%, var(--color-error));
+  --color-error-container-hover: color-mix(in srgb, var(--color-on-error-container) 8%, var(--color-error-container));
+  --color-success-hover: color-mix(in srgb, var(--color-on-success) 8%, var(--color-success));
+  --color-success-container-hover: color-mix(in srgb, var(--color-on-success-container) 8%, var(--color-success-container));
+  --color-warning-hover: color-mix(in srgb, var(--color-on-warning) 8%, var(--color-warning));
+  --color-warning-container-hover: color-mix(in srgb, var(--color-on-warning-container) 8%, var(--color-warning-container));
+  --color-info-hover: color-mix(in srgb, var(--color-on-info) 8%, var(--color-info));
+  --color-info-container-hover: color-mix(in srgb, var(--color-on-info-container) 8%, var(--color-info-container));
+  --color-surface-hover: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface));
+  --color-surface-container-lowest-hover: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-lowest));
+  --color-surface-container-low-hover: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-low));
+  --color-surface-container-hover: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container));
+  --color-surface-container-high-hover: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-high));
+  --color-surface-container-highest-hover: color-mix(in srgb, var(--color-on-surface) 8%, var(--color-surface-container-highest));
+
+  /* Pre-computed Interaction States (Pressed/Focus = 12%) */
+  --color-primary-pressed: color-mix(in srgb, var(--color-on-primary) 12%, var(--color-primary));
+  --color-primary-container-pressed: color-mix(in srgb, var(--color-on-primary-container) 12%, var(--color-primary-container));
+  --color-secondary-pressed: color-mix(in srgb, var(--color-on-secondary) 12%, var(--color-secondary));
+  --color-secondary-container-pressed: color-mix(in srgb, var(--color-on-secondary-container) 12%, var(--color-secondary-container));
+  --color-tertiary-pressed: color-mix(in srgb, var(--color-on-tertiary) 12%, var(--color-tertiary));
+  --color-tertiary-container-pressed: color-mix(in srgb, var(--color-on-tertiary-container) 12%, var(--color-tertiary-container));
+  --color-error-pressed: color-mix(in srgb, var(--color-on-error) 12%, var(--color-error));
+  --color-error-container-pressed: color-mix(in srgb, var(--color-on-error-container) 12%, var(--color-error-container));
+  --color-success-pressed: color-mix(in srgb, var(--color-on-success) 12%, var(--color-success));
+  --color-success-container-pressed: color-mix(in srgb, var(--color-on-success-container) 12%, var(--color-success-container));
+  --color-warning-pressed: color-mix(in srgb, var(--color-on-warning) 12%, var(--color-warning));
+  --color-warning-container-pressed: color-mix(in srgb, var(--color-on-warning-container) 12%, var(--color-warning-container));
+  --color-info-pressed: color-mix(in srgb, var(--color-on-info) 12%, var(--color-info));
+  --color-info-container-pressed: color-mix(in srgb, var(--color-on-info-container) 12%, var(--color-info-container));
+  --color-surface-pressed: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface));
+  --color-surface-container-lowest-pressed: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-lowest));
+  --color-surface-container-low-pressed: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-low));
+  --color-surface-container-pressed: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container));
+  --color-surface-container-high-pressed: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-high));
+  --color-surface-container-highest-pressed: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container-highest));
+
+  /* Pre-computed Generic Disabled State */
+  --color-disabled-bg: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
+  --color-disabled-fg: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
+  --color-disabled-border: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
 
   /* Focus Ring */
   --focus-ring-width: 3px;

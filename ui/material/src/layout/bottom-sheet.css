@@ -1,6 +1,10 @@
 @theme {
   --air-bottom-sheet-radius: var(--radius-xl);
   --air-bottom-sheet-max-width: 40rem; /* 640px */
+  --air-bottom-sheet-bg: var(--color-surface-container-low);
+  --air-bottom-sheet-fg: var(--color-on-surface);
+  --air-bottom-sheet-handle-bg: var(--color-outline);
+  --air-bottom-sheet-scrim-bg: color-mix(in srgb, var(--color-scrim) 32%, transparent);
 }
 
 /* Base Layout */
@@ -24,8 +28,8 @@
 
 /* Surface Visuals */
 @utility air-bottom-sheet-surface {
-  background-color: var(--color-surface-container-low);
-  color: var(--color-on-surface);
+  background-color: var(--air-bottom-sheet-bg);
+  color: var(--air-bottom-sheet-fg);
 }
 
 @utility air-bottom-sheet-handle-base {
@@ -38,7 +42,7 @@
 }
 
 @utility air-bottom-sheet-handle-surface {
-  background-color: var(--color-outline);
+  background-color: var(--air-bottom-sheet-handle-bg);
 }
 
 @utility air-bottom-sheet-scrim-base {
@@ -54,7 +58,7 @@
 }
 
 @utility air-bottom-sheet-scrim-surface {
-  background-color: color-mix(in srgb, var(--color-scrim) 32%, transparent);
+  background-color: var(--air-bottom-sheet-scrim-bg);
 }
 
 /* Composed Utilities */

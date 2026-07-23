@@ -9,7 +9,8 @@ import {
   List,
   ListItem,
   ListItemContent,
-  ListItemSupportingText,
+  ListSubtitle,
+  ListTitle,
 } from '@airlib/react-ui/components';
 import { page, setup } from '@anchorlib/react';
 import { listRoute } from '../route.js';
@@ -38,8 +39,8 @@ const ListDemo = setup(() => {
                     <Icon name="person" />
                   </Avatar>
                   <ListItemContent>
-                    <span className="air-title-md text-on-surface">Alex Smith</span>
-                    <ListItemSupportingText>Online</ListItemSupportingText>
+                    <ListTitle>Alex Smith</ListTitle>
+                    <ListSubtitle>Online</ListSubtitle>
                   </ListItemContent>
                 </ListItem>
                 <ListItem>
@@ -47,8 +48,8 @@ const ListDemo = setup(() => {
                     <Icon name="person" />
                   </Avatar>
                   <ListItemContent>
-                    <span className="air-title-md text-on-surface">Jane Doe</span>
-                    <ListItemSupportingText>Away</ListItemSupportingText>
+                    <ListTitle>Jane Doe</ListTitle>
+                    <ListSubtitle>Away</ListSubtitle>
                   </ListItemContent>
                 </ListItem>
               </List>
@@ -69,8 +70,8 @@ const ListDemo = setup(() => {
                     <Icon name="description" />
                   </Avatar>
                   <ListItemContent>
-                    <span className="air-title-md text-on-surface">Document.pdf</span>
-                    <ListItemSupportingText>Updated 2 mins ago</ListItemSupportingText>
+                    <ListTitle>Document.pdf</ListTitle>
+                    <ListSubtitle>Updated 2 mins ago</ListSubtitle>
                   </ListItemContent>
                   <button className="air-icon-button ml-4 shrink-0">
                     <Icon name="more_vert" />
@@ -81,8 +82,8 @@ const ListDemo = setup(() => {
                     <Icon name="image" />
                   </Avatar>
                   <ListItemContent>
-                    <span className="air-title-md text-on-surface">Image.png</span>
-                    <ListItemSupportingText>Updated 1 hour ago</ListItemSupportingText>
+                    <ListTitle>Image.png</ListTitle>
+                    <ListSubtitle>Updated 1 hour ago</ListSubtitle>
                   </ListItemContent>
                   <button className="air-icon-button ml-4 shrink-0">
                     <Icon name="more_vert" />

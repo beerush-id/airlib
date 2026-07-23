@@ -4,6 +4,7 @@ import {
   CardBody,
   CardGroup,
   CardHeader,
+  CardSubtitle,
   CardTitle,
   CodeBlock,
   Icon,
@@ -36,7 +37,7 @@ const CardDemo = setup(() => {
           <CardHeader className="flex-row">
             <div className="flex flex-col gap-2 flex-1">
               <CardTitle>Standard Cards</CardTitle>
-              <p className="air-body-sm">Cards come in three variants: elevated (default), filled, and outlined.</p>
+              <CardSubtitle>Cards come in three variants: elevated (default), filled, and outlined.</CardSubtitle>
             </div>
             <Button variant="text" active={$bind(codeState, 'standard')}>
               <Icon name={() => (codeState.standard ? 'code_off' : 'code')} />
@@ -59,7 +60,7 @@ const CardDemo = setup(() => {
           <CardHeader className="flex-row">
             <div className="flex flex-col gap-2 flex-1">
               <CardTitle>Cards with Actions</CardTitle>
-              <p className="air-body-sm">Cards can contain buttons and other interactive elements.</p>
+              <CardSubtitle>Cards can contain buttons and other interactive elements.</CardSubtitle>
             </div>
             <Button variant="text" active={$bind(codeState, 'action')}>
               <Icon name={() => (codeState.action ? 'code_off' : 'code')} />
@@ -82,7 +83,7 @@ const CardDemo = setup(() => {
           <CardHeader className="flex-row">
             <div className="flex flex-col gap-2 flex-1">
               <CardTitle>Segmented Card Group</CardTitle>
-              <p className="air-body-sm">Cards can be grouped together into a segmented surface.</p>
+              <CardSubtitle>Cards can be grouped together into a segmented surface.</CardSubtitle>
             </div>
             <Button variant="text" active={$bind(codeState, 'segmented')}>
               <Icon name={() => (codeState.segmented ? 'code_off' : 'code')} />

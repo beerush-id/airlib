@@ -31,6 +31,7 @@ const ICON_BUTTON_SIZES: SizeClassifier = {
   md: 'air-icon-button-md',
   lg: 'air-icon-button-lg',
   xl: 'air-icon-button-xl',
+  xxl: 'air-icon-button-xxl',
 };
 
 export const BUTTON_CONFIGS = {

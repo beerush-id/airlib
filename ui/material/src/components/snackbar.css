@@ -1,9 +1,12 @@
-/* Component Variables */
 @theme {
   --air-snackbar-min-height: calc(var(--spacing) * 12); /* 48px */
   --air-snackbar-padding-x: calc(var(--spacing) * 4); /* 16px */
   --air-snackbar-radius: var(--radius-xs);
   --air-snackbar-gap: calc(var(--spacing) * 2); /* 8px */
+
+  --air-snackbar-bg: var(--color-inverse-surface);
+  --air-snackbar-fg: var(--color-inverse-on-surface);
+  --air-snackbar-action-fg: var(--color-inverse-primary);
 }
 
 /* Base Snackbar Layout */
@@ -39,8 +42,8 @@
 
 /* Visual Surface */
 @utility air-snackbar-surface {
-  background-color: var(--color-inverse-surface);
-  color: var(--color-inverse-on-surface);
+  background-color: var(--air-snackbar-bg);
+  color: var(--air-snackbar-fg);
 }
 
 /* Snackbar Action Button */
@@ -51,11 +54,11 @@
   border-style: solid;
   border-color: transparent;
   background-color: transparent;
-  color: var(--color-inverse-primary);
+  color: var(--air-snackbar-action-fg);
   padding-block: calc(var(--spacing) * 2);
   padding-inline: calc(var(--spacing) * 3);
   border-radius: var(--radius-full);
-  --state-layer-color: var(--color-inverse-primary);
+  --state-layer-color: var(--air-snackbar-action-fg);
 
   /* Typography */
   font-family: var(--font-brand, system-ui);
@@ -72,4 +75,29 @@
 /* Composed Utilities */
 @utility air-snackbar {
   @apply air-snackbar-base air-snackbar-surface;
+}
+
+/* Color Variants */
+@utility air-snackbar-error {
+  --air-snackbar-bg: var(--color-error-container);
+  --air-snackbar-fg: var(--color-on-error-container);
+  --air-snackbar-action-fg: var(--color-error);
+}
+
+@utility air-snackbar-success {
+  --air-snackbar-bg: var(--color-success-container);
+  --air-snackbar-fg: var(--color-on-success-container);
+  --air-snackbar-action-fg: var(--color-success);
+}
+
+@utility air-snackbar-warning {
+  --air-snackbar-bg: var(--color-warning-container);
+  --air-snackbar-fg: var(--color-on-warning-container);
+  --air-snackbar-action-fg: var(--color-warning);
+}
+
+@utility air-snackbar-info {
+  --air-snackbar-bg: var(--color-info-container);
+  --air-snackbar-fg: var(--color-on-info-container);
+  --air-snackbar-action-fg: var(--color-info);
 }

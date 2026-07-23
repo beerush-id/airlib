@@ -73,6 +73,14 @@
   }
 }
 
+@utility air-text-field-xs {
+  --air-text-field-height: calc(var(--spacing) * 8);
+  --air-field-font-size: var(--air-field-font-size-xs, var(--font-body-sm-size));
+  --air-field-radius: var(--air-field-radius-xs, var(--radius-xs));
+  --air-field-padding-x: var(--air-field-padding-x-xs, calc(var(--spacing) * 2));
+  --air-field-padding-y: var(--air-field-padding-y-xs, calc(var(--spacing) * 2));
+}
+
 @utility air-text-field-sm {
   --air-text-field-height: calc(var(--spacing) * 10);
   --air-field-font-size: var(--air-field-font-size-sm, var(--font-body-md-size));
@@ -97,10 +105,56 @@
   --air-field-padding-y: var(--air-field-padding-y-lg, calc(var(--spacing) * 6));
 }
 
+@utility air-text-field-xl {
+  --air-text-field-height: calc(var(--spacing) * 18);
+  --air-field-font-size: var(--air-field-font-size-xl, var(--font-title-sm-size));
+  --air-field-radius: var(--air-field-radius-xl, var(--radius-xl));
+  --air-field-padding-x: var(--air-field-padding-x-xl, calc(var(--spacing) * 6));
+  --air-field-padding-y: var(--air-field-padding-y-xl, calc(var(--spacing) * 7));
+}
+
+@utility air-text-field-xxl {
+  --air-text-field-height: calc(var(--spacing) * 20);
+  --air-field-font-size: var(--air-field-font-size-xxl, var(--font-title-md-size));
+  --air-field-radius: var(--air-field-radius-xxl, var(--radius-xxl));
+  --air-field-padding-x: var(--air-field-padding-x-xxl, calc(var(--spacing) * 8));
+  --air-field-padding-y: var(--air-field-padding-y-xxl, calc(var(--spacing) * 8));
+}
+
 @utility air-text-field-error {
   --air-field-color: var(--color-error);
   --air-field-outline-color: var(--color-error);
   --air-field-outline-focus-color: var(--color-error);
+}
+
+@utility air-text-field-secondary {
+  --air-field-color: var(--color-secondary);
+  --air-field-outline-color: var(--color-secondary);
+  --air-field-outline-focus-color: var(--color-secondary);
+}
+
+@utility air-text-field-tertiary {
+  --air-field-color: var(--color-tertiary);
+  --air-field-outline-color: var(--color-tertiary);
+  --air-field-outline-focus-color: var(--color-tertiary);
+}
+
+@utility air-text-field-success {
+  --air-field-color: var(--color-success);
+  --air-field-outline-color: var(--color-success);
+  --air-field-outline-focus-color: var(--color-success);
+}
+
+@utility air-text-field-warning {
+  --air-field-color: var(--color-warning);
+  --air-field-outline-color: var(--color-warning);
+  --air-field-outline-focus-color: var(--color-warning);
+}
+
+@utility air-text-field-info {
+  --air-field-color: var(--color-info);
+  --air-field-outline-color: var(--color-info);
+  --air-field-outline-focus-color: var(--color-info);
 }
 
 @utility air-text-field-input {

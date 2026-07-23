@@ -1,5 +1,13 @@
 @theme {
   --air-icon-size: calc(var(--spacing) * 6);
+  --air-icon-line-height: 1;
+
+  --air-icon-size-xs: calc(var(--spacing) * 4);
+  --air-icon-size-sm: calc(var(--spacing) * 5);
+  --air-icon-size-md: calc(var(--spacing) * 6);
+  --air-icon-size-lg: calc(var(--spacing) * 7);
+  --air-icon-size-xl: calc(var(--spacing) * 8);
+  --air-icon-size-xxl: calc(var(--spacing) * 9);
 }
 
 @utility air-icon {
@@ -7,7 +15,7 @@
   font-weight: var(--icon-weight);
   font-style: normal;
   font-size: var(--air-icon-size); /* 24px default */
-  line-height: 1;
+  line-height: var(--air-icon-line-height);
   letter-spacing: normal;
   text-transform: none;
   display: inline-flex;
@@ -23,10 +31,39 @@
   height: 1em;
   fill: currentColor;
 
+  transition-property: color, fill, stroke, background-color, transform;
+  transition-duration: var(--duration-short);
+  transition-timing-function: var(--ease-standard);
+
   /* Target nested SVGs (e.g., <span class="air-icon"><svg /></span>) */
   & > svg {
     width: 100%;
     height: 100%;
     fill: currentColor;
   }
+}
+
+/* Size Variants */
+@utility air-icon-xs {
+  --air-icon-size: var(--air-icon-size-xs);
+}
+
+@utility air-icon-sm {
+  --air-icon-size: var(--air-icon-size-sm);
+}
+
+@utility air-icon-md {
+  --air-icon-size: var(--air-icon-size-md);
+}
+
+@utility air-icon-lg {
+  --air-icon-size: var(--air-icon-size-lg);
+}
+
+@utility air-icon-xl {
+  --air-icon-size: var(--air-icon-size-xl);
+}
+
+@utility air-icon-xxl {
+  --air-icon-size: var(--air-icon-size-xxl);
 }

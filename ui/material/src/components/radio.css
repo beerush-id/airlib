@@ -1,6 +1,32 @@
 @theme {
   --air-radio-target: calc(var(--spacing) * 12); /* 48px */
   --air-radio-size: calc(var(--spacing) * 5); /* 20px */
+
+  /* Size Variants */
+  --air-radio-target-xs: calc(var(--spacing) * 8);
+  --air-radio-size-xs: calc(var(--spacing) * 4);
+
+  --air-radio-target-sm: calc(var(--spacing) * 10);
+  --air-radio-size-sm: calc(var(--spacing) * 4.5);
+
+  --air-radio-target-md: calc(var(--spacing) * 12);
+  --air-radio-size-md: calc(var(--spacing) * 5);
+
+  --air-radio-target-lg: calc(var(--spacing) * 14);
+  --air-radio-size-lg: calc(var(--spacing) * 5.5);
+
+  --air-radio-target-xl: calc(var(--spacing) * 16);
+  --air-radio-size-xl: calc(var(--spacing) * 6);
+
+  --air-radio-target-xxl: calc(var(--spacing) * 20);
+  --air-radio-size-xxl: calc(var(--spacing) * 7);
+
+  /* Colors */
+  --air-radio-checked-border: var(--color-primary);
+  --air-radio-dot-bg: var(--color-primary);
+  --air-radio-state: var(--color-on-surface-variant);
+  --air-radio-checked-state: var(--color-primary);
+  --air-radio-focus-ring: var(--color-secondary);
 }
 
 @utility air-radio-base {
@@ -38,7 +64,7 @@
   transform: translate(-50%, -50%) scale(0);
   width: calc(var(--air-radio-size) * 0.5);
   height: calc(var(--air-radio-size) * 0.5);
-  background-color: var(--color-primary);
+  background-color: var(--air-radio-dot-bg);
   transition-property: transform;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
@@ -46,7 +72,7 @@
 
 /* Composable States */
 @utility air-radio-checked {
-  border-color: var(--color-primary);
+  border-color: var(--air-radio-checked-border);
 }
 
 @utility air-radio-checked-dot {
@@ -66,7 +92,7 @@
 /* Composed Utilities */
 @utility air-radio {
   @apply air-radio-base air-state-layer;
-  --state-layer-color: var(--color-on-surface-variant);
+  --state-layer-color: var(--air-radio-state);
 
   /* Override state-layer ::before to create a 48x48 clickable touch target */
   &::before {
@@ -81,13 +107,13 @@
   }
 
   &[aria-checked='true'] {
-    --state-layer-color: var(--color-primary);
+    --state-layer-color: var(--air-radio-checked-state);
   }
 
   &:focus-visible:not(:disabled) .air-radio-visual {
     outline-width: var(--air-focus-ring-width, 3px);
     outline-style: solid;
-    outline-color: var(--color-secondary);
+    outline-color: var(--air-radio-focus-ring);
     outline-offset: var(--air-focus-ring-offset, 2px);
   }
 
@@ -103,8 +129,82 @@
   }
 }
 
+/* Size Variants */
+@utility air-radio-xs {
+  --air-radio-size: var(--air-radio-size-xs);
+  --air-radio-target: var(--air-radio-target-xs);
+}
+
+@utility air-radio-sm {
+  --air-radio-size: var(--air-radio-size-sm);
+  --air-radio-target: var(--air-radio-target-sm);
+}
+
+@utility air-radio-md {
+  --air-radio-size: var(--air-radio-size-md);
+  --air-radio-target: var(--air-radio-target-md);
+}
+
+@utility air-radio-lg {
+  --air-radio-size: var(--air-radio-size-lg);
+  --air-radio-target: var(--air-radio-target-lg);
+}
+
+@utility air-radio-xl {
+  --air-radio-size: var(--air-radio-size-xl);
+  --air-radio-target: var(--air-radio-target-xl);
+}
+
+@utility air-radio-xxl {
+  --air-radio-size: var(--air-radio-size-xxl);
+  --air-radio-target: var(--air-radio-target-xxl);
+}
+
+/* Color Variants */
+@utility air-radio-secondary {
+  --air-radio-checked-border: var(--color-secondary);
+  --air-radio-dot-bg: var(--color-secondary);
+  --air-radio-checked-state: var(--color-secondary);
+  --air-radio-focus-ring: var(--color-secondary);
+}
+
+@utility air-radio-tertiary {
+  --air-radio-checked-border: var(--color-tertiary);
+  --air-radio-dot-bg: var(--color-tertiary);
+  --air-radio-checked-state: var(--color-tertiary);
+  --air-radio-focus-ring: var(--color-tertiary);
+}
+
+@utility air-radio-error {
+  --air-radio-checked-border: var(--color-error);
+  --air-radio-dot-bg: var(--color-error);
+  --air-radio-checked-state: var(--color-error);
+  --air-radio-focus-ring: var(--color-error);
+}
+
+@utility air-radio-success {
+  --air-radio-checked-border: var(--color-success);
+  --air-radio-dot-bg: var(--color-success);
+  --air-radio-checked-state: var(--color-success);
+  --air-radio-focus-ring: var(--color-success);
+}
+
+@utility air-radio-warning {
+  --air-radio-checked-border: var(--color-warning);
+  --air-radio-dot-bg: var(--color-warning);
+  --air-radio-checked-state: var(--color-warning);
+  --air-radio-focus-ring: var(--color-warning);
+}
+
+@utility air-radio-info {
+  --air-radio-checked-border: var(--color-info);
+  --air-radio-dot-bg: var(--color-info);
+  --air-radio-checked-state: var(--color-info);
+  --air-radio-focus-ring: var(--color-info);
+}
+
 @utility air-radio-group {
-  @apply flex gap-8 items-center justify-start;
+  @apply flex;
 
   .air-field {
     @apply w-auto;

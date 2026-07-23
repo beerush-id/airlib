@@ -1,4 +1,4 @@
-import { createContext, mutable } from '@anchorlib/core';
+import { createContext, effect, mutable } from '@anchorlib/core';
 import type { AnyType } from '../types.js';
 
 export type SelectionContext<T> = {
@@ -17,9 +17,17 @@ export function createSelectionState<T = string>(input?: SelectionInput<T>): Sel
     value: input?.value,
     select: (value?: T) => {
       state.value = value;
-      if (input) input.value = value;
     },
   });
+
+  if (input) {
+    effect(() => {
+      state.value = input.value;
+    });
+    effect(() => {
+      input.value = state.value;
+    });
+  }
 
   selectionCtx.set(state);
   return state as SelectionContext<T>;

@@ -3,6 +3,32 @@
   --air-slider-handle-size: calc(var(--spacing) * 11); /* 44px */
   --air-slider-handle-width: var(--spacing); /* 4px */
   --air-slider-handle-gap: var(--spacing); /* 4px visual split */
+
+  /* Size Variants */
+  --air-slider-track-height-xs: calc(var(--spacing) * 2);
+  --air-slider-handle-size-xs: calc(var(--spacing) * 7);
+
+  --air-slider-track-height-sm: calc(var(--spacing) * 3);
+  --air-slider-handle-size-sm: calc(var(--spacing) * 9);
+
+  --air-slider-track-height-md: calc(var(--spacing) * 4);
+  --air-slider-handle-size-md: calc(var(--spacing) * 11);
+
+  --air-slider-track-height-lg: calc(var(--spacing) * 5);
+  --air-slider-handle-size-lg: calc(var(--spacing) * 13);
+
+  --air-slider-track-height-xl: calc(var(--spacing) * 6);
+  --air-slider-handle-size-xl: calc(var(--spacing) * 15);
+
+  --air-slider-track-height-xxl: calc(var(--spacing) * 8);
+  --air-slider-handle-size-xxl: calc(var(--spacing) * 17);
+
+  /* Shared Color Variables */
+  --air-slider-track-bg: var(--color-secondary-container);
+  --air-slider-active-bg: var(--color-primary);
+  --air-slider-handle-bg: var(--color-primary);
+  --air-slider-hover: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  --air-slider-focus: color-mix(in srgb, var(--color-primary) 12%, transparent);
 }
 
 /* Base Layout for Custom Slider */
@@ -61,21 +87,21 @@
 
 /* Primary Color Utilities for Custom Slider */
 @utility air-slider-track-secondary {
-  background-color: var(--color-secondary-container);
+  background-color: var(--air-slider-track-bg);
 }
 
 @utility air-slider-track-active-primary {
-  background-color: var(--color-primary);
+  background-color: var(--air-slider-active-bg);
 }
 
 @utility air-slider-handle-primary {
   &::after {
-    background-color: var(--color-primary);
+    background-color: var(--air-slider-handle-bg);
   }
 }
 
 @utility air-slider-handle-hover {
-  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  background-color: var(--air-slider-hover);
 }
 
 /* Native Input Variant Base */
@@ -150,20 +176,20 @@
 /* Native Input Primary Color Utility */
 @utility air-slider-native-primary-surface {
   --_slider-hover-color: transparent;
-  background-color: var(--color-secondary-container);
+  background-color: var(--air-slider-track-bg);
 
   &:hover {
-    --_slider-hover-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+    --_slider-hover-color: var(--air-slider-hover);
   }
 
   &:active,
   &:focus-visible {
-    --_slider-hover-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    --_slider-hover-color: var(--air-slider-focus);
     background-color: var(--color-surface-container-highest);
   }
 
   &::-webkit-slider-thumb {
-    background-color: var(--color-primary);
+    background-color: var(--air-slider-handle-bg);
     box-shadow:
       0 0 0 10px var(--_slider-hover-color),
       calc(var(--air-slider-handle-gap) * -1) 0 0 0 var(--color-ghost-surface),
@@ -171,11 +197,11 @@
   }
 
   &::-moz-range-progress {
-    background-color: var(--color-primary);
+    background-color: var(--air-slider-active-bg);
   }
 
   &::-moz-range-thumb {
-    background-color: var(--color-primary);
+    background-color: var(--air-slider-handle-bg);
     box-shadow:
       0 0 0 10px var(--_slider-hover-color),
       calc(var(--air-slider-handle-gap) * -1) 0 0 0 var(--color-ghost-surface),
@@ -203,4 +229,79 @@
 
 @utility air-slider-handle {
   @apply air-slider-handle-base air-slider-handle-primary;
+}
+
+/* Size Variants */
+@utility air-slider-xs {
+  --air-slider-track-height: var(--air-slider-track-height-xs);
+  --air-slider-handle-size: var(--air-slider-handle-size-xs);
+}
+@utility air-slider-sm {
+  --air-slider-track-height: var(--air-slider-track-height-sm);
+  --air-slider-handle-size: var(--air-slider-handle-size-sm);
+}
+@utility air-slider-md {
+  --air-slider-track-height: var(--air-slider-track-height-md);
+  --air-slider-handle-size: var(--air-slider-handle-size-md);
+}
+@utility air-slider-lg {
+  --air-slider-track-height: var(--air-slider-track-height-lg);
+  --air-slider-handle-size: var(--air-slider-handle-size-lg);
+}
+@utility air-slider-xl {
+  --air-slider-track-height: var(--air-slider-track-height-xl);
+  --air-slider-handle-size: var(--air-slider-handle-size-xl);
+}
+@utility air-slider-xxl {
+  --air-slider-track-height: var(--air-slider-track-height-xxl);
+  --air-slider-handle-size: var(--air-slider-handle-size-xxl);
+}
+
+/* Color Variants */
+@utility air-slider-secondary {
+  --air-slider-track-bg: var(--color-secondary-container);
+  --air-slider-active-bg: var(--color-secondary);
+  --air-slider-handle-bg: var(--color-secondary);
+  --air-slider-hover: color-mix(in srgb, var(--color-secondary) 8%, transparent);
+  --air-slider-focus: color-mix(in srgb, var(--color-secondary) 12%, transparent);
+}
+
+@utility air-slider-tertiary {
+  --air-slider-track-bg: var(--color-tertiary-container);
+  --air-slider-active-bg: var(--color-tertiary);
+  --air-slider-handle-bg: var(--color-tertiary);
+  --air-slider-hover: color-mix(in srgb, var(--color-tertiary) 8%, transparent);
+  --air-slider-focus: color-mix(in srgb, var(--color-tertiary) 12%, transparent);
+}
+
+@utility air-slider-error {
+  --air-slider-track-bg: var(--color-error-container);
+  --air-slider-active-bg: var(--color-error);
+  --air-slider-handle-bg: var(--color-error);
+  --air-slider-hover: color-mix(in srgb, var(--color-error) 8%, transparent);
+  --air-slider-focus: color-mix(in srgb, var(--color-error) 12%, transparent);
+}
+
+@utility air-slider-success {
+  --air-slider-track-bg: var(--color-success-container);
+  --air-slider-active-bg: var(--color-success);
+  --air-slider-handle-bg: var(--color-success);
+  --air-slider-hover: color-mix(in srgb, var(--color-success) 8%, transparent);
+  --air-slider-focus: color-mix(in srgb, var(--color-success) 12%, transparent);
+}
+
+@utility air-slider-warning {
+  --air-slider-track-bg: var(--color-warning-container);
+  --air-slider-active-bg: var(--color-warning);
+  --air-slider-handle-bg: var(--color-warning);
+  --air-slider-hover: color-mix(in srgb, var(--color-warning) 8%, transparent);
+  --air-slider-focus: color-mix(in srgb, var(--color-warning) 12%, transparent);
+}
+
+@utility air-slider-info {
+  --air-slider-track-bg: var(--color-info-container);
+  --air-slider-active-bg: var(--color-info);
+  --air-slider-handle-bg: var(--color-info);
+  --air-slider-hover: color-mix(in srgb, var(--color-info) 8%, transparent);
+  --air-slider-focus: color-mix(in srgb, var(--color-info) 12%, transparent);
 }

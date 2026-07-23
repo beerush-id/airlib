@@ -4,6 +4,57 @@
   --air-chip-gap: calc(var(--spacing) * 2);
   --air-chip-padding-x: calc(var(--spacing) * 4);
   --air-chip-icon-padding-x: calc(var(--spacing) * 2);
+
+  /* Size Variants (xs) */
+  --air-chip-height-xs: calc(var(--spacing) * 5);
+  --air-chip-padding-x-xs: calc(var(--spacing) * 1.5);
+  --air-chip-radius-xs: calc(var(--radius-xs) * 0.5);
+
+  /* Size Variants (sm) */
+  --air-chip-height-sm: calc(var(--spacing) * 6);
+  --air-chip-padding-x-sm: calc(var(--spacing) * 2);
+  --air-chip-radius-sm: var(--radius-xs);
+
+  /* Size Variants (md) */
+  --air-chip-height-md: calc(var(--spacing) * 8);
+  --air-chip-padding-x-md: calc(var(--spacing) * 4);
+  --air-chip-radius-md: var(--radius-sm);
+
+  /* Size Variants (lg) */
+  --air-chip-height-lg: calc(var(--spacing) * 10);
+  --air-chip-padding-x-lg: calc(var(--spacing) * 6);
+  --air-chip-radius-lg: var(--radius-md);
+
+  /* Size Variants (xl) */
+  --air-chip-height-xl: calc(var(--spacing) * 12);
+  --air-chip-padding-x-xl: calc(var(--spacing) * 8);
+  --air-chip-radius-xl: var(--radius-lg);
+
+  /* Size Variants (xxl) */
+  --air-chip-height-xxl: calc(var(--spacing) * 14);
+  --air-chip-padding-x-xxl: calc(var(--spacing) * 10);
+  --air-chip-radius-xxl: var(--radius-xl);
+
+  /* Outlined Chip */
+  --air-chip-outlined-bg: transparent;
+  --air-chip-outlined-fg: var(--color-on-surface-variant);
+  --air-chip-outlined-border: var(--color-outline-variant);
+  --air-chip-outlined-border-focus: var(--color-on-surface-variant);
+  --air-chip-outlined-state: var(--color-on-surface-variant);
+
+  /* Elevated Chip */
+  --air-chip-elevated-bg: var(--color-surface-container-low);
+  --air-chip-elevated-fg: var(--color-on-surface-variant);
+  --air-chip-elevated-state: var(--color-on-surface-variant);
+
+  /* Selected State */
+  --air-chip-selected-bg: var(--color-secondary-container);
+  --air-chip-selected-fg: var(--color-on-secondary-container);
+  --air-chip-selected-border: transparent;
+  --air-chip-selected-state: var(--color-on-secondary-container);
+
+  /* Disabled State */
+  --air-chip-disabled-opacity: 0.38;
 }
 
 /* Base Layout and Typography */
@@ -47,48 +98,161 @@
 @utility air-chip-outlined-surface {
   border-width: 1px;
   border-style: solid;
-  border-color: var(--color-outline-variant);
-  background-color: transparent;
-  color: var(--color-on-surface-variant);
+  border-color: var(--air-chip-outlined-border);
+  background-color: var(--air-chip-outlined-bg);
+  color: var(--air-chip-outlined-fg);
 }
 
 @utility air-chip-outlined-selected-surface {
-  background-color: var(--color-secondary-container);
-  color: var(--color-on-secondary-container);
-  border-color: transparent;
+  background-color: var(--air-chip-selected-bg);
+  color: var(--air-chip-selected-fg);
+  border-color: var(--air-chip-selected-border);
 }
 
 /* Elevated Variant */
 @utility air-chip-elevated-surface {
-  background-color: var(--color-surface-container-low);
-  color: var(--color-on-surface-variant);
+  background-color: var(--air-chip-elevated-bg);
+  color: var(--air-chip-elevated-fg);
 }
 
 @utility air-chip-elevated-selected-surface {
-  background-color: var(--color-secondary-container);
-  color: var(--color-on-secondary-container);
+  background-color: var(--air-chip-selected-bg);
+  color: var(--air-chip-selected-fg);
 }
 
 /* Common Disabled State */
 @utility air-chip-disabled {
-  opacity: 0.38;
+  opacity: var(--air-chip-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
+}
+
+/* Color Variants */
+@utility air-chip-primary {
+  --air-chip-outlined-bg: transparent;
+  --air-chip-outlined-fg: var(--color-primary);
+  --air-chip-outlined-border: var(--color-primary);
+  --air-chip-outlined-border-focus: var(--color-primary);
+  --air-chip-outlined-state: var(--color-primary);
+
+  --air-chip-elevated-bg: var(--color-primary-container);
+  --air-chip-elevated-fg: var(--color-on-primary-container);
+  --air-chip-elevated-state: var(--color-on-primary-container);
+
+  --air-chip-selected-bg: var(--color-primary);
+  --air-chip-selected-fg: var(--color-on-primary);
+  --air-chip-selected-state: var(--color-on-primary);
+}
+
+@utility air-chip-secondary {
+  --air-chip-outlined-bg: transparent;
+  --air-chip-outlined-fg: var(--color-secondary);
+  --air-chip-outlined-border: var(--color-secondary);
+  --air-chip-outlined-border-focus: var(--color-secondary);
+  --air-chip-outlined-state: var(--color-secondary);
+
+  --air-chip-elevated-bg: var(--color-secondary-container);
+  --air-chip-elevated-fg: var(--color-on-secondary-container);
+  --air-chip-elevated-state: var(--color-on-secondary-container);
+
+  --air-chip-selected-bg: var(--color-secondary);
+  --air-chip-selected-fg: var(--color-on-secondary);
+  --air-chip-selected-state: var(--color-on-secondary);
+}
+
+@utility air-chip-tertiary {
+  --air-chip-outlined-bg: transparent;
+  --air-chip-outlined-fg: var(--color-tertiary);
+  --air-chip-outlined-border: var(--color-tertiary);
+  --air-chip-outlined-border-focus: var(--color-tertiary);
+  --air-chip-outlined-state: var(--color-tertiary);
+
+  --air-chip-elevated-bg: var(--color-tertiary-container);
+  --air-chip-elevated-fg: var(--color-on-tertiary-container);
+  --air-chip-elevated-state: var(--color-on-tertiary-container);
+
+  --air-chip-selected-bg: var(--color-tertiary);
+  --air-chip-selected-fg: var(--color-on-tertiary);
+  --air-chip-selected-state: var(--color-on-tertiary);
+}
+
+@utility air-chip-error {
+  --air-chip-outlined-bg: transparent;
+  --air-chip-outlined-fg: var(--color-error);
+  --air-chip-outlined-border: var(--color-error);
+  --air-chip-outlined-border-focus: var(--color-error);
+  --air-chip-outlined-state: var(--color-error);
+
+  --air-chip-elevated-bg: var(--color-error-container);
+  --air-chip-elevated-fg: var(--color-on-error-container);
+  --air-chip-elevated-state: var(--color-on-error-container);
+
+  --air-chip-selected-bg: var(--color-error);
+  --air-chip-selected-fg: var(--color-on-error);
+  --air-chip-selected-state: var(--color-on-error);
+}
+
+@utility air-chip-success {
+  --air-chip-outlined-bg: transparent;
+  --air-chip-outlined-fg: var(--color-success);
+  --air-chip-outlined-border: var(--color-success);
+  --air-chip-outlined-border-focus: var(--color-success);
+  --air-chip-outlined-state: var(--color-success);
+
+  --air-chip-elevated-bg: var(--color-success-container);
+  --air-chip-elevated-fg: var(--color-on-success-container);
+  --air-chip-elevated-state: var(--color-on-success-container);
+
+  --air-chip-selected-bg: var(--color-success);
+  --air-chip-selected-fg: var(--color-on-success);
+  --air-chip-selected-state: var(--color-on-success);
+}
+
+@utility air-chip-warning {
+  --air-chip-outlined-bg: transparent;
+  --air-chip-outlined-fg: var(--color-warning);
+  --air-chip-outlined-border: var(--color-warning);
+  --air-chip-outlined-border-focus: var(--color-warning);
+  --air-chip-outlined-state: var(--color-warning);
+
+  --air-chip-elevated-bg: var(--color-warning-container);
+  --air-chip-elevated-fg: var(--color-on-warning-container);
+  --air-chip-elevated-state: var(--color-on-warning-container);
+
+  --air-chip-selected-bg: var(--color-warning);
+  --air-chip-selected-fg: var(--color-on-warning);
+  --air-chip-selected-state: var(--color-on-warning);
+}
+
+@utility air-chip-info {
+  --air-chip-outlined-bg: transparent;
+  --air-chip-outlined-fg: var(--color-info);
+  --air-chip-outlined-border: var(--color-info);
+  --air-chip-outlined-border-focus: var(--color-info);
+  --air-chip-outlined-state: var(--color-info);
+
+  --air-chip-elevated-bg: var(--color-info-container);
+  --air-chip-elevated-fg: var(--color-on-info-container);
+  --air-chip-elevated-state: var(--color-on-info-container);
+
+  --air-chip-selected-bg: var(--color-info);
+  --air-chip-selected-fg: var(--color-on-info);
+  --air-chip-selected-state: var(--color-on-info);
 }
 
 /* Composed Utilities */
 @utility air-chip {
   @apply air-chip-base air-chip-outlined-surface air-state-layer;
-  --state-layer-color: var(--color-on-surface-variant);
+  --state-layer-color: var(--air-chip-outlined-state);
 
   &:focus-visible:not(:disabled) {
-    border-color: var(--color-on-surface-variant);
+    border-color: var(--air-chip-outlined-border-focus);
   }
 
   &[aria-selected='true'],
   &[aria-checked='true'] {
     @apply air-chip-outlined-selected-surface;
-    --state-layer-color: var(--color-on-secondary-container);
+    --state-layer-color: var(--air-chip-selected-state);
   }
 
   &:disabled,
@@ -100,12 +264,12 @@
 
 @utility air-chip-elevated {
   @apply air-chip-base air-chip-elevated-surface air-state-layer;
-  --state-layer-color: var(--color-on-surface-variant);
+  --state-layer-color: var(--air-chip-elevated-state);
 
   &[aria-selected='true'],
   &[aria-checked='true'] {
     @apply air-chip-elevated-selected-surface;
-    --state-layer-color: var(--color-on-secondary-container);
+    --state-layer-color: var(--air-chip-selected-state);
   }
 
   &:disabled,
@@ -116,10 +280,21 @@
 }
 
 /* Chip Sizes */
+@utility air-chip-xs {
+  --air-chip-height: var(--air-chip-height-xs);
+  --air-chip-padding-x: var(--air-chip-padding-x-xs);
+  --air-chip-radius: var(--air-chip-radius-xs);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-label-sm-size);
+  font-weight: var(--font-label-sm-weight);
+  line-height: var(--font-label-sm-line-height);
+  letter-spacing: var(--font-label-sm-tracking);
+}
+
 @utility air-chip-sm {
-  --air-chip-height: calc(var(--spacing) * 6);
-  --air-chip-padding-x: calc(var(--spacing) * 2);
-  --air-chip-radius: var(--radius-xs);
+  --air-chip-height: var(--air-chip-height-sm);
+  --air-chip-padding-x: var(--air-chip-padding-x-sm);
+  --air-chip-radius: var(--air-chip-radius-sm);
   font-family: var(--font-brand, system-ui);
   font-size: var(--font-label-md-size);
   font-weight: var(--font-label-md-weight);
@@ -128,9 +303,9 @@
 }
 
 @utility air-chip-md {
-  --air-chip-height: calc(var(--spacing) * 8);
-  --air-chip-padding-x: calc(var(--spacing) * 4);
-  --air-chip-radius: var(--radius-sm);
+  --air-chip-height: var(--air-chip-height-md);
+  --air-chip-padding-x: var(--air-chip-padding-x-md);
+  --air-chip-radius: var(--air-chip-radius-md);
   font-family: var(--font-brand, system-ui);
   font-size: var(--font-label-lg-size);
   font-weight: var(--font-label-lg-weight);
@@ -139,12 +314,34 @@
 }
 
 @utility air-chip-lg {
-  --air-chip-height: calc(var(--spacing) * 10);
-  --air-chip-padding-x: calc(var(--spacing) * 6);
-  --air-chip-radius: var(--radius-md);
+  --air-chip-height: var(--air-chip-height-lg);
+  --air-chip-padding-x: var(--air-chip-padding-x-lg);
+  --air-chip-radius: var(--air-chip-radius-lg);
   font-family: var(--font-brand, system-ui);
   font-size: var(--font-title-sm-size);
   font-weight: var(--font-title-sm-weight);
   line-height: var(--font-title-sm-line-height);
   letter-spacing: var(--font-title-sm-tracking);
+}
+
+@utility air-chip-xl {
+  --air-chip-height: var(--air-chip-height-xl);
+  --air-chip-padding-x: var(--air-chip-padding-x-xl);
+  --air-chip-radius: var(--air-chip-radius-xl);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-title-md-size);
+  font-weight: var(--font-title-md-weight);
+  line-height: var(--font-title-md-line-height);
+  letter-spacing: var(--font-title-md-tracking);
+}
+
+@utility air-chip-xxl {
+  --air-chip-height: var(--air-chip-height-xxl);
+  --air-chip-padding-x: var(--air-chip-padding-x-xxl);
+  --air-chip-radius: var(--air-chip-radius-xxl);
+  font-family: var(--font-brand, system-ui);
+  font-size: var(--font-title-lg-size);
+  font-weight: var(--font-title-lg-weight);
+  line-height: var(--font-title-lg-line-height);
+  letter-spacing: var(--font-title-lg-tracking);
 }

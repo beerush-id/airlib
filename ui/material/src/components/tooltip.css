@@ -1,10 +1,13 @@
-/* Component Variables */
 @theme {
   --air-tooltip-plain-padding-x: calc(var(--spacing) * 2); /* 8px */
   --air-tooltip-plain-padding-y: var(--spacing); /* 4px */
+  --air-tooltip-plain-bg: var(--color-inverse-surface);
+  --air-tooltip-plain-fg: var(--color-inverse-on-surface);
 
   --air-tooltip-rich-padding-x: calc(var(--spacing) * 4); /* 16px */
   --air-tooltip-rich-padding-y: calc(var(--spacing) * 3); /* 12px */
+  --air-tooltip-rich-bg: var(--color-surface-variant);
+  --air-tooltip-rich-fg: var(--color-on-surface-variant);
 }
 
 /* Base Tooltip Structure */
@@ -39,8 +42,8 @@
 
 /* Plain Tooltip Surface */
 @utility air-tooltip-plain-surface {
-  background-color: var(--color-inverse-surface);
-  color: var(--color-inverse-on-surface);
+  background-color: var(--air-tooltip-plain-bg);
+  color: var(--air-tooltip-plain-fg);
 }
 
 /* Rich Tooltip Layout */
@@ -62,8 +65,8 @@
 
 /* Rich Tooltip Surface */
 @utility air-tooltip-rich-surface {
-  background-color: var(--color-surface-variant);
-  color: var(--color-on-surface-variant);
+  background-color: var(--air-tooltip-rich-bg);
+  color: var(--air-tooltip-rich-fg);
 }
 
 /* Composed Utilities */

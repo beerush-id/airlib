@@ -9,7 +9,8 @@ import {
   List,
   ListItem,
   ListItemContent,
-  ListItemSupportingText,
+  ListSubtitle,
+  ListTitle,
   Status,
   type StatusVariant,
 } from '@airlib/react-ui/components';
@@ -53,8 +54,8 @@ const StatusDemo = setup(() => {
                   <Icon name="dns" />
                 </Avatar>
                 <ListItemContent className="min-w-0">
-                  <span className="air-title-md text-on-surface truncate">US-East Main Cluster</span>
-                  <ListItemSupportingText className="truncate">PostgreSQL v16.3 Node</ListItemSupportingText>
+                  <ListTitle className="truncate">US-East Main Cluster</ListTitle>
+                  <ListSubtitle className="truncate">PostgreSQL v16.3 Node</ListSubtitle>
                 </ListItemContent>
                 <Status variant="success" size="sm" dot={true} className="ml-4 shrink-0">
                   Connected
@@ -66,8 +67,8 @@ const StatusDemo = setup(() => {
                   <Icon name="memory" />
                 </Avatar>
                 <ListItemContent className="min-w-0">
-                  <span className="air-title-md text-on-surface truncate">EU-Central Redis Cache</span>
-                  <ListItemSupportingText className="truncate">In-Memory Store 32GB</ListItemSupportingText>
+                  <ListTitle className="truncate">EU-Central Redis Cache</ListTitle>
+                  <ListSubtitle className="truncate">In-Memory Store 32GB</ListSubtitle>
                 </ListItemContent>
                 <Status variant="warning" size="sm" dot={true} className="ml-4 shrink-0">
                   High Memory (88%)
@@ -79,8 +80,8 @@ const StatusDemo = setup(() => {
                   <Icon name="backup" />
                 </Avatar>
                 <ListItemContent className="min-w-0">
-                  <span className="air-title-md text-on-surface truncate">AP-South Archival Node</span>
-                  <ListItemSupportingText className="truncate">Daily Cold Storage Sync</ListItemSupportingText>
+                  <ListTitle className="truncate">AP-South Archival Node</ListTitle>
+                  <ListSubtitle className="truncate">Daily Cold Storage Sync</ListSubtitle>
                 </ListItemContent>
                 <Status variant="error" size="sm" dot={true} className="ml-4 shrink-0">
                   Sync Offline
@@ -92,8 +93,8 @@ const StatusDemo = setup(() => {
                   <Icon name="verified_user" />
                 </Avatar>
                 <ListItemContent className="min-w-0">
-                  <span className="air-title-md text-on-surface truncate">Enterprise Identity Gateway</span>
-                  <ListItemSupportingText className="truncate">OIDC & SAML Authentication</ListItemSupportingText>
+                  <ListTitle className="truncate">Enterprise Identity Gateway</ListTitle>
+                  <ListSubtitle className="truncate">OIDC & SAML Authentication</ListSubtitle>
                 </ListItemContent>
                 <div className="inline-flex items-center gap-2 ml-4 shrink-0">
                   <Status variant="primary" size="sm">

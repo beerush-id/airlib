@@ -9,18 +9,17 @@ export type TabProps<T = string> = HTMLAttributes<HTMLDivElement> & {
   value?: Bindable<T>;
   deferred?: boolean;
   orientation?: 'horizontal' | 'vertical';
+  outlined?: boolean;
 };
 
 export type TabListProps = HTMLAttributes<HTMLDivElement>;
 
 export type TabButtonProps<T = string> = HTMLAttributes<HTMLButtonElement> & {
   name: T;
-  activeClass?: string;
 };
 
 export type TabContentProps<T = string> = HTMLAttributes<HTMLDivElement> & {
   name: T;
-  activeClass?: string;
 };
 
 export type TabComponent<T> = ReturnType<typeof setup<TabProps<T>>> & {
@@ -32,7 +31,7 @@ export type TabComponent<T> = ReturnType<typeof setup<TabProps<T>>> & {
 export function createTab<T = string>(): TabComponent<T> {
   const Tab = setup<TabProps<T>>((props) => {
     const tab = createTabState({ deferred: props.deferred, orientation: props.orientation });
-    const restProps = props.$omit(['value', 'className', 'deferred', 'orientation']);
+    const restProps = props.$omit(['value', 'className', 'deferred', 'orientation', 'outlined']);
 
     effect(() => {
       tab.current = props.value;
@@ -44,7 +43,10 @@ export function createTab<T = string>(): TabComponent<T> {
 
     return render(
       () => (
-        <div {...restProps} className={props.className || TAB_CONFIGS.class}>
+        <div
+          {...restProps}
+          className={classx([TAB_CONFIGS.class, { [TAB_CONFIGS.outlinedClass]: props.outlined }, props.className])}
+        >
           {props.children}
         </div>
       ),
@@ -61,7 +63,7 @@ export function createTab<T = string>(): TabComponent<T> {
       const { x = 0, y = 0, width, height } = tab?.triggerRect ?? {};
 
       return {
-        className: props.className || TAB_CONFIGS.list.class,
+        className: classx([TAB_CONFIGS.list.class, props.className]),
         style: stylex({
           '--air-tab-item-x': x - rx,
           '--air-tab-item-y': y - ry,
@@ -88,7 +90,7 @@ export function createTab<T = string>(): TabComponent<T> {
           ref={assignRef}
           role="tablist"
           aria-orientation={tab?.orientation}
-          className={props.className || TAB_CONFIGS.list.class}
+          className={classx([TAB_CONFIGS.list.class, props.className])}
         >
           <span className={TAB_CONFIGS.button.indicatorClass}></span>
           {props.children}
@@ -101,15 +103,16 @@ export function createTab<T = string>(): TabComponent<T> {
   const TabButton = setup<TabButtonProps>((props) => {
     const tab = getTab<T>();
     const item = tab?.item(props.name as T);
-    const restProps = props.$omit(['name', 'className', 'activeClass', 'onClick']);
+    const restProps = props.$omit(['name', 'className', 'onClick']);
     const ref = nodeRef<HTMLButtonElement>(
       () =>
         ({
           id: `${TAB_CONFIGS.prefix}-${props.name}`,
           tabIndex: item?.active ? 0 : -1,
           className: classx([
-            props.className || TAB_CONFIGS.button.class,
-            { [props.activeClass ?? TAB_CONFIGS.button.activeClass]: item?.active },
+            TAB_CONFIGS.button.class,
+            { [TAB_CONFIGS.button.activeClass]: item?.active },
+            props.className,
           ]),
           'aria-selected': item?.active,
           'aria-controls': `${TAB_CONFIGS.panelPrefix}-${props.name}`,
@@ -152,14 +155,15 @@ export function createTab<T = string>(): TabComponent<T> {
           id: `${TAB_CONFIGS.panelPrefix}-${props.name}`,
           hidden: !tab?.options?.deferred && tab?.current !== props.name,
           className: classx([
-            props.className || TAB_CONFIGS.content.class,
-            { [props.activeClass ?? TAB_CONFIGS.content.activeClass]: tab?.current === props.name },
+            TAB_CONFIGS.content.class,
+            { [TAB_CONFIGS.content.activeClass]: tab?.current === props.name },
+            props.className,
           ]),
           'aria-current': tab?.current === props.name,
           'aria-labelledby': `${TAB_CONFIGS.prefix}-${props.name}`,
         }) as TabContentProps
     );
-    const restProps = props.$omit(['name', 'className', 'activeClass']);
+    const restProps = props.$omit(['name', 'className']);
 
     if (tab?.options?.deferred) {
       return render(() => {
