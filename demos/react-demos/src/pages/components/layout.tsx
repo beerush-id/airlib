@@ -38,7 +38,7 @@ export const UILayout = page(uiRoute).render(({ children }) => (
   <div className="air-page">
     <aside className="air-sidebar top-[80px] max-h-[calc(100vh-96px)]">
       <nav className="air-nav">
-        <Link href={UIPage.route.path} className="air-link-nav">
+        <Link to={UIPage} className="air-link-nav">
           <span className="air-list-view-item-content">Overview</span>
         </Link>
 

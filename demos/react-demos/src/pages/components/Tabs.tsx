@@ -1,5 +1,5 @@
-import { createTab } from '@airlib/react-ui';
-import { mutable, setup, snippet } from '@anchorlib/react';
+import { Badge, Chip, createTab } from '@airlib/react-ui';
+import { mutable, setup } from '@anchorlib/react';
 
 const tabNames = ['flight', 'hotel', 'car', 'counter'] as const;
 const Tab = createTab<(typeof tabNames)[number]>();
@@ -7,18 +7,16 @@ const Tab = createTab<(typeof tabNames)[number]>();
 const Counter = setup(() => {
   const count = mutable(0);
 
-  const CounterBadge = snippet(() => <span className="air-badge">{count.value}</span>, 'CounterBadge');
-
   return (
     <>
       <div className="air-card-header">
         <h2 className="air-card-title">Counter</h2>
       </div>
       <div className="air-card-body flex items-center justify-between gap-4">
-        <div className="air-chip">
+        <Chip>
           <span>Notifications</span>
-          <CounterBadge />
-        </div>
+          <Badge>{() => count.value}</Badge>
+        </Chip>
         <button onClick={() => count.value++} className="air-button">
           Increment
         </button>

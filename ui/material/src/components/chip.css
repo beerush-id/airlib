@@ -1,6 +1,7 @@
 @theme {
   --air-chip-height: calc(var(--spacing) * 8);
   --air-chip-radius: var(--radius-sm);
+  --air-chip-gap: calc(var(--spacing) * 2);
   --air-chip-padding-x: calc(var(--spacing) * 4);
   --air-chip-icon-padding-x: calc(var(--spacing) * 2);
 }
@@ -10,6 +11,7 @@
   @apply inline-flex items-center justify-center;
   @apply box-border cursor-pointer;
   height: var(--air-chip-height);
+  gap: var(--air-chip-gap);
   padding-block: 0;
   padding-inline: var(--air-chip-padding-x);
   border-radius: var(--air-chip-radius);
