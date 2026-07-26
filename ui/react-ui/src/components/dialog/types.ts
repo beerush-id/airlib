@@ -18,4 +18,6 @@ export interface DialogProps<T, O> extends DialogBaseProps, Omit<DialogHTMLAttri
 export type DialogComponent<T, O> = ReturnType<typeof setup<DialogProps<T, O>>> & {
   get(): DialogState<T, O>;
   set(state: DialogState<T, O>): void;
+  show(data: T): Promise<O>;
+  state(): DialogState<T, O>;
 };

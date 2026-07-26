@@ -9,7 +9,7 @@
 
 /* Base Layout (composed from button base and segment row) */
 @utility air-segmented-button-base {
-  @apply air-button-base air-segment-row;
+  @apply air-button air-segment-row;
 }
 
 /* Default State */

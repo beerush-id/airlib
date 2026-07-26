@@ -1,10 +1,21 @@
-import { anchor, effect, getContext, mutable, onCleanup, setContext, untrack } from '@anchorlib/core';
+import {
+  type AnyType,
+  anchor,
+  effect,
+  getContext,
+  isNullish,
+  mutable,
+  onCleanup,
+  setContext,
+  untrack,
+} from '@anchorlib/core';
 import { createFocusTrap, type FocusTrapOptions } from '../../utils/index.js';
 
 export interface DialogInit<T> {
   data?: T | (() => T);
   open?: boolean;
   container?: HTMLElement;
+  abortWith?: AnyType;
 }
 
 /**
@@ -14,7 +25,7 @@ export interface DialogInit<T> {
  * @param options - Focus trapping and keyboard dismiss options.
  * @returns A reactive DialogState controller instance.
  */
-export function createDialog<T, O>(init: DialogInit<T> = mutable({ open: false }), options?: FocusTrapOptions) {
+export function createDialogState<T, O>(init: DialogInit<T> = mutable({ open: false }), options?: FocusTrapOptions) {
   const dialog = new DialogState<T, O>(init);
 
   effect.client(() => {
@@ -24,7 +35,11 @@ export function createDialog<T, O>(init: DialogInit<T> = mutable({ open: false }
       const release = createFocusTrap(self, {
         ...options,
         onRelease: (e) => {
-          dialog.hide();
+          if (!isNullish(init.abortWith)) {
+            dialog.hide(init.abortWith);
+          } else {
+            dialog.abort();
+          }
           options?.onRelease?.(e);
         },
       });
@@ -86,7 +101,7 @@ export class DialogState<T, O> {
   private reject?: (reason?: Error) => void;
   private promise?: Promise<O | undefined>;
 
-  constructor(private init: DialogInit<T> = mutable({ open: false })) {
+  constructor(public init: DialogInit<T> = mutable({ open: false })) {
     if (!anchor.has(init)) {
       this.init = mutable(init);
     }
@@ -125,11 +140,17 @@ export class DialogState<T, O> {
     if (result instanceof Error) {
       this.reject?.(result);
     } else {
-      this.accept?.(result);
+      this.accept?.(result ?? (anchor.get(this.init.data!, false) as O));
     }
 
     this.promise = undefined;
     this.resolved = true;
     return this;
   }
+
+  public abort() {
+    this.hide(new DialogCancelError('Dialog aborted'));
+  }
 }
+
+export class DialogCancelError extends Error {}

@@ -1,5 +1,5 @@
 @theme {
-  --air-accordion-header-bg: color-mix(in srgb, var(--color-on-surface) 0%, transparent);
+  --air-accordion-header-bg: transparent;
   --air-accordion-header-fg: var(--color-on-surface);
   --air-accordion-inner-fg: var(--color-on-surface-variant);
   --air-accordion-item-bg: var(--color-surface-container-low);

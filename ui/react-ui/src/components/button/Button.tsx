@@ -1,4 +1,4 @@
-import { buttonState, createSelectionState, type Sizing, type SizingLite, type Variant } from '@airlib/headless';
+import { buttonState, createSelectionState, type Sizing, type SizingLite, type Variant, type ColorVariant } from '@airlib/headless';
 import { classx } from '@airlib/headless/utils';
 import { type Bindable, render, setup, template } from '@anchorlib/react';
 import type { ComponentProps, MouseEventHandler } from 'react';
@@ -17,6 +17,7 @@ export function createButton<T>() {
     value?: Bindable<T>;
     active?: Bindable<boolean>;
     variant?: Variant;
+    color?: ColorVariant;
   };
 
   type IconButtonProps = Omit<ButtonProps, 'variant'> & {

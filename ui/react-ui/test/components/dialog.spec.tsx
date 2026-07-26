@@ -1,4 +1,4 @@
-import { createDialog } from '@airlib/headless';
+import { createDialogState } from '@airlib/headless';
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Dialog } from '../../src/index.js';
@@ -10,7 +10,7 @@ describe('Dialog', () => {
   });
 
   it('should render hidden by default', () => {
-    const state = createDialog({ data: null });
+    const state = createDialogState({ data: null });
     render(
       <Dialog dialog={state}>
         <p>Content</p>
@@ -22,7 +22,7 @@ describe('Dialog', () => {
   });
 
   it('should have aria-labelledby via aria-labelledby attribute', () => {
-    const state = createDialog({ data: null });
+    const state = createDialogState({ data: null });
     render(
       <Dialog dialog={state} aria-labelledby="my-title">
         <h2 id="my-title">Title</h2>
@@ -34,7 +34,7 @@ describe('Dialog', () => {
   });
 
   it('should render open when state is open', () => {
-    const state = createDialog({ data: null, open: true });
+    const state = createDialogState({ data: null, open: true });
     render(
       <Dialog dialog={state}>
         <p>Content</p>
@@ -47,7 +47,7 @@ describe('Dialog', () => {
   });
 
   it('should not render in lazy mode when closed', () => {
-    const state = createDialog({ data: null });
+    const state = createDialogState({ data: null });
     render(
       <Dialog dialog={state} renderMode="lazy">
         <p>Content</p>
@@ -58,7 +58,7 @@ describe('Dialog', () => {
   });
 
   it('should render in lazy mode when open', () => {
-    const state = createDialog({ data: null, open: true });
+    const state = createDialogState({ data: null, open: true });
     render(
       <Dialog dialog={state} renderMode="lazy">
         <p>Content</p>

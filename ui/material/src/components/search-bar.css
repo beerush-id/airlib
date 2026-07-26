@@ -37,7 +37,7 @@
   border-width: 0;
   border-style: solid;
   border-color: transparent;
-  background-color: color-mix(in srgb, var(--air-search-bar-fg) 0%, transparent);
+  background-color: transparent;
   color: var(--air-search-bar-fg);
 
   /* Title Small */

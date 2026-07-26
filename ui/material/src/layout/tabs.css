@@ -7,7 +7,7 @@
 
   --air-tabs-list-bg: var(--color-surface-container-low);
   --air-tabs-list-outlined-border: var(--color-outline-variant);
-  --air-tabs-item-bg: color-mix(in srgb, var(--color-on-surface-variant) 0%, transparent);
+  --air-tabs-item-bg: transparent;
   --air-tabs-item-fg: var(--color-on-surface-variant);
   --air-tabs-item-selected-fg: var(--color-primary);
   --air-tabs-indicator-bg: var(--color-primary);

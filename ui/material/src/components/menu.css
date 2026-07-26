@@ -103,6 +103,10 @@
   box-shadow: 0 calc(var(--spacing) * 0.5) calc(var(--spacing) * 4) light-dark(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.5));
 }
 
+@utility air-menu-button {
+  @apply air-button air-button-tonal;
+}
+
 @utility air-menu-item {
   @apply air-menu-item-base air-menu-item-surface air-state-layer;
   --state-layer-color: var(--air-menu-item-state);

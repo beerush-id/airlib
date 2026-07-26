@@ -60,11 +60,11 @@
   --air-icon-button-outlined-selected-state: var(--color-inverse-on-surface);
 }
 
-/* Base Layout */
-@utility air-icon-button-base {
+/* Composed Utilities */
+@utility air-icon-button {
   @apply inline-flex items-center justify-center relative;
   @apply box-border p-0 cursor-pointer select-none no-underline;
-  @apply air-focus-ring air-touch-area;
+  @apply air-focus-ring air-touch-area air-state-layer;
   width: var(--air-icon-button-size);
   height: var(--air-icon-button-size);
   border-radius: var(--air-icon-button-radius);
@@ -96,24 +96,7 @@
   & [type='color'] {
     @apply absolute inset-0 opacity-0 cursor-pointer;
   }
-}
 
-/* Common Disabled State */
-@utility air-icon-button-disabled {
-  cursor: not-allowed;
-  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
-  border-color: transparent;
-  background-color: transparent;
-  pointer-events: none;
-}
-
-@utility air-icon-button-filled-disabled {
-  background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
-}
-
-/* Composed Utilities */
-@utility air-icon-button {
-  @apply air-icon-button-base air-state-layer;
   background-color: var(--air-icon-button-bg);
   color: var(--air-icon-button-fg);
   --state-layer-color: var(--air-icon-button-state);
@@ -134,8 +117,20 @@
   }
 }
 
+/* Common Disabled State */
+@utility air-icon-button-disabled {
+  cursor: not-allowed;
+  color: color-mix(in srgb, var(--color-on-surface) 38%, transparent);
+  border-color: transparent;
+  background-color: transparent;
+  pointer-events: none;
+}
+
+@utility air-icon-button-filled-disabled {
+  background-color: color-mix(in srgb, var(--color-on-surface) 12%, transparent);
+}
+
 @utility air-icon-button-filled {
-  @apply air-icon-button-base air-state-layer;
   background-color: var(--air-icon-button-filled-bg);
   color: var(--air-icon-button-filled-fg);
   --state-layer-color: var(--air-icon-button-filled-state);
@@ -154,7 +149,6 @@
 }
 
 @utility air-icon-button-tonal {
-  @apply air-icon-button-base air-state-layer;
   background-color: var(--air-icon-button-tonal-bg);
   color: var(--air-icon-button-tonal-fg);
   --state-layer-color: var(--air-icon-button-tonal-state);
@@ -173,7 +167,6 @@
 }
 
 @utility air-icon-button-outlined {
-  @apply air-icon-button-base air-state-layer;
   background-color: var(--air-icon-button-outlined-bg);
   color: var(--air-icon-button-outlined-fg);
   border-width: var(--shadow-base, 1px);
@@ -200,6 +193,21 @@
 }
 
 /* Color Variants */
+@utility air-icon-button-primary {
+  --air-icon-button-active-fg: var(--color-primary);
+  --air-icon-button-selected-fg: var(--color-primary);
+
+  --air-icon-button-filled-bg: var(--color-primary);
+  --air-icon-button-filled-fg: var(--color-on-primary);
+  --air-icon-button-filled-state: var(--color-on-primary);
+  --air-icon-button-filled-unselected-fg: var(--color-primary);
+  --air-icon-button-filled-unselected-state: var(--color-primary);
+
+  --air-icon-button-tonal-bg: var(--color-primary-container);
+  --air-icon-button-tonal-fg: var(--color-on-primary-container);
+  --air-icon-button-tonal-state: var(--color-on-primary-container);
+}
+
 @utility air-icon-button-secondary {
   --air-icon-button-active-fg: var(--color-secondary);
   --air-icon-button-selected-fg: var(--color-secondary);

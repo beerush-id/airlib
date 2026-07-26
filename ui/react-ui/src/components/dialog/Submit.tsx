@@ -1,11 +1,12 @@
-import { getDialog } from '@airlib/headless/components';
-import { captureStack } from '@anchorlib/core';
+import { type DialogState, getDialog } from '@airlib/headless/components';
+import { type AnyType, captureStack, classx } from '@anchorlib/core';
 import { render, setup } from '@anchorlib/react';
-import type { HTMLAttributes, MouseEventHandler } from 'react';
+import type { MouseEventHandler, ReactNode, ComponentProps as ReactProps } from 'react';
 import { DIALOG_CONFIGS } from './config.js';
 
-export interface DialogSubmitProps extends HTMLAttributes<HTMLButtonElement> {
+export interface DialogSubmitProps extends Omit<ReactProps<'button'>, 'children' | 'value'> {
   value?: unknown;
+  children?: ((dialog?: DialogState<AnyType, AnyType>) => ReactNode) | ReactNode;
 }
 
 export const DialogSubmit = setup<DialogSubmitProps>((props) => {
@@ -26,17 +27,20 @@ export const DialogSubmit = setup<DialogSubmitProps>((props) => {
     );
   }
 
-  return render(
-    () => (
+  return render(() => {
+    if (typeof props.children === 'function') {
+      return props.children(dialog);
+    }
+
+    return (
       <button
         {...restProps}
         type="button"
-        className={props.className || DIALOG_CONFIGS.submit.class}
+        className={classx(DIALOG_CONFIGS.submit.class, props.className)}
         onClick={handleClick}
       >
         {props.children}
       </button>
-    ),
-    'DialogSubmit'
-  );
+    );
+  }, 'DialogSubmit');
 }, 'DialogSubmit');

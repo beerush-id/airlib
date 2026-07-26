@@ -1,16 +1,16 @@
-import { createDialog } from '@airlib/headless/components';
+import { createDialogState } from '@airlib/headless/components';
 import { captureStack, isBrowser } from '@anchorlib/core';
-import { DIALOG_CONFIGS } from './config.js';
 import { WarningIcon } from '../../icons/Warning.js';
 import { DialogCancel } from './Cancel.js';
 import { DialogContent } from './Content.js';
-import { CONFIRM_DIALOG_LIST } from './supporting.js';
-import { dialogComponent } from './Dialog.js';
+import { DIALOG_CONFIGS } from './config.js';
+import { createDialog } from './Dialog.js';
 import { DialogFooter } from './Footer.js';
 import { DialogHeader } from './Header.js';
-import { DialogToolbar } from './Toolbar.js';
 import { DialogSubmit } from './Submit.js';
+import { CONFIRM_DIALOG_LIST } from './supporting.js';
 import { DialogTitle } from './Title.js';
+import { DialogToolbar } from './Toolbar.js';
 
 export type DialogConfirmData = {
   type?: 'info' | 'help' | 'warning' | 'error';
@@ -39,7 +39,7 @@ export async function dialogConfirm(data: DialogConfirmData) {
     return Promise.resolve();
   }
 
-  const dialog = createDialog<DialogConfirmData, boolean>({});
+  const dialog = createDialogState<DialogConfirmData, boolean>();
   CONFIRM_DIALOG_LIST.add(dialog);
 
   try {
@@ -55,14 +55,14 @@ export async function dialogConfirm(data: DialogConfirmData) {
   }
 }
 
-export const ConfirmDialog = dialogComponent<DialogConfirmData, boolean>((dialog) => {
-  const Icon = DIALOG_CONFIGS.confirm.icons[dialog.data.type ?? 'info'];
+export const ConfirmDialog = createDialog<DialogConfirmData, boolean>((data, dialog) => {
+  const Icon = DIALOG_CONFIGS.confirm.icons[data.type ?? 'info'];
 
   return (
     <>
-      {dialog.data.type && (
+      {data.type && (
         <DialogToolbar>
-          <Icon className={DIALOG_CONFIGS.confirm.colors[dialog.data.type ?? 'info']} />
+          <Icon className={DIALOG_CONFIGS.confirm.colors[data.type ?? 'info']} />
         </DialogToolbar>
       )}
       <DialogHeader data-header>

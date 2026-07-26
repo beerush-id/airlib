@@ -1,10 +1,11 @@
+import { classx } from '@anchorlib/core';
 import { template } from '@anchorlib/react';
-import type { HTMLAttributes } from 'react';
+import type { ComponentProps as ReactProps } from 'react';
 import { DIALOG_CONFIGS } from './config.js';
 
-export const DialogFooter = template<HTMLAttributes<HTMLElement>>(
+export const DialogFooter = template<ReactProps<'footer'>>(
   ({ className, children, ...rest }) => (
-    <footer className={className || DIALOG_CONFIGS.footer.class} {...rest}>
+    <footer className={classx(DIALOG_CONFIGS.footer.class, className)} {...rest}>
       {children}
     </footer>
   ),

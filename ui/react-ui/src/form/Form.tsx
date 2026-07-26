@@ -2,13 +2,13 @@ import {
   type AnyType,
   type DeepPaths,
   type FormField as FormFieldType,
-  formField,
   type FormState,
+  formField,
   formState,
   getForm,
   type PathValue,
 } from '@airlib/form';
-import { decorationClass, type Sizing, type Variant } from '@airlib/headless';
+import { type ColorVariant, decorationClass, type Sizing, type Variant } from '@airlib/headless';
 import { classx } from '@airlib/headless/utils';
 import { derived, render, setup, snippet } from '@anchorlib/react';
 import type {
@@ -20,7 +20,7 @@ import type {
   SubmitEvent,
 } from 'react';
 import { BUTTON_CONFIGS } from 'src/components/button/config.ts';
-import { type input, z, type ZodObject, type ZodRawShape } from 'zod';
+import { type input, type ZodObject, type ZodRawShape, z } from 'zod';
 import { FieldSupportingText } from '../components/index.js';
 import { FIELD_CONFIG, FORM_CONFIG, RESET_CONFIG, SUBMIT_CONFIG } from './config.js';
 
@@ -33,7 +33,7 @@ interface TypedFormProps<S extends ZodObject<ZodRawShape>, T>
 
 interface TypedFieldProps<T, S extends ZodObject<ZodRawShape>>
   extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
-  name: DeepPaths<T>;
+  name?: DeepPaths<T>;
   size?: 'sm' | 'md' | 'lg';
   match?: DeepPaths<T> | ((form: FormState<S>) => boolean);
   label?: string;
@@ -47,6 +47,7 @@ interface TypedFieldProps<T, S extends ZodObject<ZodRawShape>>
 interface TypedFormSubmitProps<S extends ZodObject<ZodRawShape>>
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   size?: Sizing;
+  color?: ColorVariant;
   variant?: Variant;
   children?: ReactNode | ((form: FormState<S>) => ReactNode);
   pendingClass?: string;
@@ -55,6 +56,7 @@ interface TypedFormSubmitProps<S extends ZodObject<ZodRawShape>>
 interface TypedFormResetProps<S extends ZodObject<ZodRawShape>>
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   size?: Sizing;
+  color?: ColorVariant;
   clear?: boolean;
   variant?: Variant;
   children?: ReactNode | ((form: FormState<S>) => ReactNode);
@@ -157,10 +159,6 @@ export function createForm<T extends ZodObject<ZodRawShape>>(schema: T): TypedFo
     };
 
     return render(() => {
-      if (!field.name) {
-        return <span className={FIELD_CONFIG.errorClass}>[FieldError]: Name property is required!</span>;
-      }
-
       if (typeof $props.children === 'function') {
         return $props.children(field);
       }

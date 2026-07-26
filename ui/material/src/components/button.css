@@ -64,14 +64,14 @@
   --air-button-tonal-state: var(--color-on-secondary-container);
 
   /* Outlined Button */
-  --air-button-outlined-bg: color-mix(in srgb, var(--color-primary) 0%, transparent);
+  --air-button-outlined-bg: transparent;
   --air-button-outlined-fg: var(--color-primary);
   --air-button-outlined-border: var(--color-outline);
   --air-button-outlined-border-focus: var(--color-primary);
   --air-button-outlined-state: var(--color-primary);
 
   /* Text Button */
-  --air-button-text-bg: color-mix(in srgb, var(--color-primary) 0%, transparent);
+  --air-button-text-bg: transparent;
   --air-button-text-fg: var(--color-primary);
   --air-button-text-state: var(--color-primary);
 
@@ -87,10 +87,11 @@
 }
 
 /* Base Structure */
-@utility air-button-base {
+@utility air-button {
   --air-icon-size: var(--air-button-icon-size);
   @apply inline-flex items-center justify-center relative;
   @apply select-none box-border cursor-pointer air-focus-ring air-touch-area;
+  @apply air-button-icon-slot air-state-layer;
 
   gap: var(--air-button-gap);
   height: var(--air-button-height);
@@ -160,51 +161,28 @@
 }
 
 /* Filled Button (High Emphasis) */
-@utility air-button {
-  @apply air-button-base air-button-icon-slot air-state-layer;
+@utility air-button-filled {
   background-color: var(--air-button-filled-bg);
   color: var(--air-button-filled-fg);
   --state-layer-color: var(--air-button-filled-state);
-
-  &:disabled,
-  &[aria-disabled='true'] {
-    @apply air-button-disabled;
-  }
-}
-
-@utility air-button-filled {
-  @apply air-button;
 }
 
 /* Elevated Button (High Emphasis) */
 @utility air-button-elevated {
-  @apply air-button-base air-button-icon-slot air-state-layer;
   background-color: var(--air-button-elevated-bg);
   color: var(--air-button-elevated-fg);
   --state-layer-color: var(--air-button-elevated-state);
-
-  &:disabled,
-  &[aria-disabled='true'] {
-    @apply air-button-disabled;
-  }
 }
 
 /* Filled Tonal (Medium Emphasis) */
 @utility air-button-tonal {
-  @apply air-button-base air-button-icon-slot air-state-layer;
   background-color: var(--air-button-tonal-bg);
   color: var(--air-button-tonal-fg);
   --state-layer-color: var(--air-button-tonal-state);
-
-  &:disabled,
-  &[aria-disabled='true'] {
-    @apply air-button-disabled;
-  }
 }
 
 /* Outlined (Medium Emphasis) */
 @utility air-button-outlined {
-  @apply air-button-base air-button-icon-slot air-state-layer;
   background-color: var(--air-button-outlined-bg);
   color: var(--air-button-outlined-fg);
   border-width: var(--shadow-base, 1px);
@@ -215,26 +193,15 @@
   &:focus-visible:not(:disabled, [aria-disabled='true']) {
     border-color: var(--air-button-outlined-border-focus);
   }
-
-  &:disabled,
-  &[aria-disabled='true'] {
-    @apply air-button-disabled;
-  }
 }
 
 /* Text Button (Low Emphasis) */
 @utility air-button-text {
-  @apply air-button-base air-button-icon-slot air-state-layer;
   background-color: var(--air-button-text-bg);
   color: var(--air-button-text-fg);
   /* Text buttons have tighter padding */
   padding-inline: calc(var(--air-button-padding-x) * 0.5); /* 12px */
   --state-layer-color: var(--air-button-text-state);
-
-  &:disabled,
-  &[aria-disabled='true'] {
-    @apply air-button-disabled;
-  }
 }
 
 /* Toggle & Tool Control State Bases (DRY utilities for resting, hover, active, and toggled states) */
@@ -252,18 +219,31 @@
 
 /* Toggle Button */
 @utility air-toggle-button {
-  @apply air-button-base air-button-icon-slot air-state-layer air-toggle-state;
+  @apply air-toggle-state;
   background-color: var(--air-button-toggle-bg);
   color: var(--air-button-toggle-fg);
   --state-layer-color: var(--air-button-toggle-state);
-
-  &:disabled,
-  &[aria-disabled='true'] {
-    @apply air-button-disabled;
-  }
 }
 
 /* Color Variants */
+@utility air-button-primary {
+  --air-button-filled-bg: var(--color-primary);
+  --air-button-filled-fg: var(--color-on-primary);
+  --air-button-filled-state: var(--color-on-primary);
+
+  --air-button-tonal-bg: var(--color-primary-container);
+  --air-button-tonal-fg: var(--color-on-primary-container);
+  --air-button-tonal-state: var(--color-on-primary-container);
+
+  --air-button-outlined-fg: var(--color-primary);
+  --air-button-outlined-border: var(--color-primary);
+  --air-button-outlined-border-focus: var(--color-primary);
+  --air-button-outlined-state: var(--color-primary);
+
+  --air-button-text-fg: var(--color-primary);
+  --air-button-text-state: var(--color-primary);
+}
+
 @utility air-button-secondary {
   --air-button-filled-bg: var(--color-secondary);
   --air-button-filled-fg: var(--color-on-secondary);

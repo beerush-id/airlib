@@ -13,8 +13,13 @@ export function createDialogRef(props: ComponentProps<DialogProps<unknown, unkno
   return nodeRef<HTMLDivElement>((node) => {
     if (node) {
       props.dialog.container = node;
+
       if (props.ref) {
-        typeof props.ref === 'function' ? props.ref(node) : (props.ref.current = node);
+        if (typeof props.ref === 'function') {
+          props.ref(node);
+        } else {
+          props.ref.current = node;
+        }
       }
     }
 

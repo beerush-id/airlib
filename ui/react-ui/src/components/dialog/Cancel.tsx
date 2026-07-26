@@ -1,24 +1,28 @@
-import { getDialog } from '@airlib/headless/components';
-import { captureStack } from '@anchorlib/core';
+import { type DialogState, getDialog } from '@airlib/headless/components';
+import { type AnyType, captureStack, classx, isNullish } from '@anchorlib/core';
 import { render, setup } from '@anchorlib/react';
-import type { HTMLAttributes, MouseEventHandler } from 'react';
+import type { MouseEventHandler, ReactNode, ComponentProps as ReactProps } from 'react';
 import { DIALOG_CONFIGS } from './config.js';
 
-export interface DialogCancelProps extends HTMLAttributes<HTMLButtonElement> {
+export interface DialogCancelProps extends Omit<ReactProps<'button'>, 'children' | 'value'> {
   value?: unknown;
   reason?: string;
+  children?: ((dialog?: DialogState<AnyType, AnyType>) => ReactNode) | ReactNode;
 }
 
 export const DialogCancel = setup<DialogCancelProps>((props) => {
   const dialog = getDialog();
-  const restProps = props.$omit(['className', 'onClick', 'value', 'reason']);
+  const restProps = props.$omit(['className', 'onClick', 'reason', 'value']);
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     if (props.reason) {
       dialog?.hide(new Error(props.reason));
-    } else {
+    } else if ('value' in props) {
       dialog?.hide(props.value);
+    } else {
+      dialog?.abort();
     }
+
     props.onClick?.(e);
   };
 
@@ -31,17 +35,24 @@ export const DialogCancel = setup<DialogCancelProps>((props) => {
     );
   }
 
-  return render(
-    () => (
+  if ('value' in props && dialog && isNullish(dialog.init.abortWith)) {
+    dialog.init.abortWith = props.value;
+  }
+
+  return render(() => {
+    if (typeof props.children === 'function') {
+      return props.children(dialog);
+    }
+
+    return (
       <button
         {...restProps}
         type="button"
-        className={props.className || DIALOG_CONFIGS.cancel.class}
+        className={classx(DIALOG_CONFIGS.cancel.class, props.className)}
         onClick={handleClick}
       >
         {props.children}
       </button>
-    ),
-    'DialogCancel'
-  );
+    );
+  }, 'DialogCancel');
 }, 'DialogCancel');

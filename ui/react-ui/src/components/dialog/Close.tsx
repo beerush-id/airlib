@@ -1,19 +1,26 @@
-import { getDialog } from '@airlib/headless/components';
-import { captureStack } from '@anchorlib/core';
+import { type DialogState, getDialog } from '@airlib/headless/components';
+import { type AnyType, captureStack, classx, isNullish } from '@anchorlib/core';
 import { render, setup } from '@anchorlib/react';
-import type { HTMLAttributes, MouseEventHandler } from 'react';
-import { DIALOG_CONFIGS } from './config.js';
+import type { MouseEventHandler, ReactNode, ComponentProps as ReactProps } from 'react';
 import { CloseIcon } from '../../icons/index.js';
+import { DIALOG_CONFIGS } from './config.js';
 
-export interface DialogCloseProps extends HTMLAttributes<HTMLButtonElement> {
+export interface DialogCloseProps extends Omit<ReactProps<'button'>, 'children' | 'value'> {
+  value?: unknown;
   iconClass?: string;
+  children?: ((dialog?: DialogState<AnyType, AnyType>) => ReactNode) | ReactNode;
 }
 
 export const DialogClose = setup<DialogCloseProps>((props) => {
   const dialog = getDialog();
-  const restProps = props.$omit(['className', 'iconClass', 'onClick']);
+  const restProps = props.$omit(['className', 'iconClass', 'onClick', 'value']);
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
-    dialog?.hide();
+    if ('value' in props) {
+      dialog?.hide(props.value);
+    } else {
+      dialog?.abort();
+    }
+
     props.onClick?.(e);
   };
 
@@ -26,17 +33,24 @@ export const DialogClose = setup<DialogCloseProps>((props) => {
     );
   }
 
-  return render(
-    () => (
+  if ('value' in props && dialog && isNullish(dialog.init.abortWith)) {
+    dialog.init.abortWith = props.value;
+  }
+
+  return render(() => {
+    if (typeof props.children === 'function') {
+      return props.children(dialog);
+    }
+
+    return (
       <button
         {...restProps}
         type="button"
-        className={props.className || DIALOG_CONFIGS.close.class}
+        className={classx(DIALOG_CONFIGS.close.class, props.className)}
         onClick={handleClick}
       >
         {props.children ?? <CloseIcon className={props.iconClass ?? DIALOG_CONFIGS.close.icon.class} />}
       </button>
-    ),
-    'DialogClose'
-  );
+    );
+  }, 'DialogClose');
 }, 'DialogClose');

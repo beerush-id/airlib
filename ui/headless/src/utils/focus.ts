@@ -7,11 +7,14 @@ export { FOCUSABLE_SELECTORS };
 
 export type FocusTrapOptions = {
   onRelease?: (e: MouseEvent | KeyboardEvent) => void;
+  area?: string;
   autofocus?: boolean;
   trapOverflow?: boolean;
   releaseOnEsc?: boolean;
   releaseOnClickOutside?: boolean;
 };
+
+const CURRENT_TRAP_CONTAINERS: HTMLElement[] = [];
 
 /**
  * Traps keyboard navigation (Tab and Shift+Tab) within a specified DOM container.
@@ -24,14 +27,17 @@ export type FocusTrapOptions = {
 export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptions) {
   if (!isBrowser() || !container) return () => {};
 
+  CURRENT_TRAP_CONTAINERS.push(container);
+
   const {
+    area = '[role="region"]',
     autofocus = KIT_CONFIGS.autofocus,
     trapOverflow = KIT_CONFIGS.trapOverflow,
     releaseOnEsc = true,
     releaseOnClickOutside = true,
     onRelease,
   } = options || {};
-  const focusArea = container.querySelector('[data-focus-area]') ?? container;
+  const focusArea = container.querySelector(area) ?? container;
   const prevFocusElement: HTMLElement | undefined = document.activeElement as HTMLElement;
   const releaseOverflow = trapOverflow ? suspendOverflow(prevFocusElement) : () => {};
   const [schedule, cancel] = microtask(5);
@@ -42,6 +48,8 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
   }
 
   const handleKeydown = (e: KeyboardEvent) => {
+    if (CURRENT_TRAP_CONTAINERS[CURRENT_TRAP_CONTAINERS.length - 1] !== container) return;
+
     if (e.key === 'Escape' && releaseOnEsc) {
       onRelease?.(e);
       return;
@@ -67,6 +75,8 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
   };
 
   const handleClickOutside = (e: MouseEvent) => {
+    if (CURRENT_TRAP_CONTAINERS[CURRENT_TRAP_CONTAINERS.length - 1] !== container) return;
+
     if (focusArea.contains(e.target as Node)) return;
     onRelease?.(e);
   };
@@ -77,6 +87,9 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
   }
 
   return () => {
+    const idx = CURRENT_TRAP_CONTAINERS.indexOf(container);
+    if (idx !== -1) CURRENT_TRAP_CONTAINERS.splice(idx, 1);
+
     cancel();
     releaseOverflow();
     if (autofocus) prevFocusElement?.focus();
@@ -92,7 +105,9 @@ export function createFocusTrap(container: HTMLElement, options?: FocusTrapOptio
  * @param parent - The container element to search within.
  */
 export function focusFrom(parent: HTMLElement) {
-  const active = parent.querySelector('[aria-selected="true"], [aria-checked="true"], [data-active="true"]') as HTMLElement;
+  const active = parent.querySelector(
+    '[aria-selected="true"], [aria-checked="true"], [data-active="true"]'
+  ) as HTMLElement;
   if (active && active.tabIndex !== -1) {
     active.focus();
     return;

@@ -81,6 +81,7 @@ export class FormField<T> {
         });
       });
     }
+
     if (this.#form) {
       const unsubscribe = this.#form.subscribe(({ type }) => {
         if (type === 'reset' || type === 'submit') this.#touched.value = false;
@@ -89,9 +90,9 @@ export class FormField<T> {
         unsubscribe();
         this.#form!.unblock(this.name);
       });
-    }
 
-    context.write(FORM_FIELD_SYMBOL, this);
+      context.write(FORM_FIELD_SYMBOL, this);
+    }
   }
 
   input(props: FormInputProps<T>, options?: FormInputOptions<T>) {

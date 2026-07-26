@@ -1,134 +1,61 @@
 @theme {
-  --air-dialog-padding: calc(var(--spacing) * 6); /* 24px */
-  --air-dialog-radius: var(--radius-xl);
   --air-dialog-max-width: calc(var(--spacing) * 140); /* 560px */
-  --air-dialog-surface: var(--color-surface-container-high);
-
-  /* Colors */
-  --air-dialog-scrim-bg: color-mix(in srgb, var(--color-scrim) 32%, transparent);
-  --air-dialog-overlay-bg: color-mix(in srgb, var(--color-scrim) 75%, transparent);
-  --air-dialog-fg: var(--color-on-surface);
-  --air-dialog-title-fg: var(--color-on-surface);
-  --air-dialog-content-fg: var(--color-on-surface-variant);
-  
-  /* Warning Banner */
+  --air-dialog-overlay-bg: color-mix(in srgb, var(--color-scrim) 50%, transparent);
   --air-dialog-warning-bg: var(--color-on-error);
   --air-dialog-warning-fg: var(--color-error);
-
-  @keyframes air-dialog-show {
-    from {
-      opacity: 0;
-      visibility: hidden;
-    }
-    to {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-
-  @keyframes air-dialog-hide {
-    from {
-      opacity: 1;
-      visibility: visible;
-    }
-    to {
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
 }
 
-/* Base Dialog Structure (Native <dialog>) */
-@utility air-native-dialog-base {
-  @apply m-auto outline-none;
-  /* Using native <dialog> element */
-  padding-block: var(--air-dialog-padding);
-  padding-inline: var(--air-dialog-padding);
-  border-radius: var(--air-dialog-radius);
-  max-width: var(--air-dialog-max-width);
-  width: calc(100% - var(--air-dialog-padding) * 2);
-
-  /* Reset native borders */
-  border-width: 0;
-  border-style: solid;
-  border-color: transparent;
-
-  /* Animations */
-  opacity: 0;
-  transform: scale(0.95);
-  transition-property: opacity, transform, background-color;
-  transition-duration: var(--duration-short);
-  transition-timing-function: var(--ease-standard);
-
-  &[open],
-  &[aria-hidden='false'] {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  /* Backdrop Scrim */
-  &::backdrop {
-    background-color: var(--air-dialog-scrim-bg);
-    backdrop-filter: blur(2px);
+@keyframes air-dialog-show {
+  from {
     opacity: 0;
-    transition-property: opacity;
-    transition-duration: var(--duration-short);
-    transition-timing-function: var(--ease-standard);
+    visibility: hidden;
   }
-
-  &[open]::backdrop {
+  to {
     opacity: 1;
+    visibility: visible;
   }
 }
 
-/* Visual Surface Utility */
-@utility air-dialog-surface {
-  --color-ghost-surface: var(--air-dialog-surface);
-  background-color: var(--air-dialog-surface);
-  color: var(--air-dialog-fg);
+@keyframes air-dialog-hide {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
-/* Fullscreen Dialog Utility */
+@utility air-dialog {
+  @apply w-screen h-screen flex items-center justify-center;
+  @apply fixed inset-0 z-modal overflow-hidden backdrop-blur-sm;
+
+  background-color: var(--air-dialog-overlay-bg);
+  animation-duration: var(--duration-short);
+  animation-timing-function: var(--ease-standard);
+  animation-fill-mode: forwards;
+
+  &[aria-hidden='false'] {
+    animation-name: air-dialog-show;
+  }
+  &[aria-hidden='true'] {
+    opacity: 0;
+    visibility: hidden;
+    animation-name: air-dialog-hide;
+  }
+}
+
 @utility air-dialog-fullscreen {
   @apply w-screen h-screen m-0 rounded-none;
   max-width: 100vw;
   max-height: 100vh;
 }
 
-/* Dialog Actions Area */
-@utility air-dialog-actions {
-  @apply flex items-center justify-end;
-  gap: calc(var(--spacing) * 2); /* 8px */
-}
-
-/* Composed Utilities for Native <dialog> */
-@utility air-native-dialog {
-  @apply air-native-dialog-base air-dialog-surface;
-}
-
-/* Custom Dialog Wrapper */
-@utility air-dialog {
-  @apply fixed inset-0 w-screen h-screen flex items-center justify-center z-modal overflow-hidden backdrop-blur-sm;
-  background-color: var(--air-dialog-overlay-bg);
-
-  &[aria-hidden='false'] {
-    animation-name: air-dialog-show;
-    animation-duration: var(--duration-short);
-    animation-timing-function: var(--ease-standard);
-    animation-fill-mode: forwards;
-  }
-  &[aria-hidden='true'] {
-    animation-name: air-dialog-hide;
-    animation-duration: var(--duration-short);
-    animation-timing-function: var(--ease-standard);
-    animation-fill-mode: forwards;
-  }
-}
-
 @utility air-dialog-confirm {
   @apply air-dialog;
 
-  & > [data-focus-area] {
+  & > [role='region'] {
     @apply max-w-96;
   }
 }
@@ -138,23 +65,21 @@
 }
 
 @utility air-dialog-body {
-  @apply air-dialog-surface z-elevated;
-  border-radius: var(--air-dialog-radius);
+  @apply air-card-filled z-elevated;
+
   max-width: var(--air-dialog-max-width);
   min-width: calc(var(--spacing) * 80);
 
-  .air-dialog-confirm & > [data-header] {
+  .air-dialog-confirm & > .air-dialog-header {
     @apply justify-center;
   }
 }
 
 @utility air-dialog-header {
-  @apply w-full flex items-center justify-between;
-  padding-inline: var(--air-dialog-padding);
-  padding-block-start: var(--air-dialog-padding);
+  @apply air-card-header flex-row;
 
   & ~ .air-dialog-content {
-    padding-block-start: calc(var(--spacing) * 4);
+    padding-block-start: 0;
   }
 }
 
@@ -162,46 +87,28 @@
   @apply air-dialog-header justify-center;
 
   & ~ .air-dialog-header {
-    padding-block-start: calc(var(--spacing) * 4);
+    padding-block-start: 0;
   }
 }
 
 @utility air-dialog-title {
-  font-family: var(--font-brand, system-ui);
-  font-size: var(--font-headline-sm-size);
-  font-weight: var(--font-headline-sm-weight);
-  line-height: var(--font-headline-sm-line-height);
-  letter-spacing: var(--font-headline-sm-tracking);
-  color: var(--air-dialog-title-fg);
-  margin-top: 0;
-  margin-bottom: calc(var(--spacing) * 4); /* 16px */
+  @apply air-title-lg;
 }
 
 @utility air-dialog-content {
-  @apply w-full flex flex-col;
-  color: var(--air-dialog-content-fg);
-  font-family: var(--font-brand, system-ui);
-  font-size: var(--font-body-md-size);
-  font-weight: var(--font-body-md-weight);
-  line-height: var(--font-body-md-line-height);
-  letter-spacing: var(--font-body-md-tracking);
-  padding-block: var(--air-dialog-padding);
-  padding-inline: var(--air-dialog-padding);
-  margin-bottom: calc(var(--spacing) * 6); /* 24px */
+  @apply air-card-body w-full;
 }
 
 @utility air-dialog-footer {
-  @apply w-full air-dialog-actions;
-  padding-inline: var(--air-dialog-padding);
-  padding-block-end: var(--air-dialog-padding);
+  @apply air-card-body flex-row justify-end w-full gap-2;
 }
 
 @utility air-dialog-cancel {
-  @apply air-button-text;
+  @apply air-button air-button-text;
 }
 
 @utility air-dialog-submit {
-  @apply air-button;
+  @apply air-button air-button-filled;
 }
 
 @utility air-dialog-warning {
@@ -209,7 +116,11 @@
   color: var(--air-dialog-warning-fg);
   background-color: var(--air-dialog-warning-bg);
 
-  & > svg {
+  & > .air-icon {
     @apply shrink-0;
   }
+}
+
+@utility air-dialog-close {
+  @apply air-icon-button absolute top-2 right-2;
 }

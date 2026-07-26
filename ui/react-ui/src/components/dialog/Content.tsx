@@ -1,10 +1,11 @@
+import { classx } from '@anchorlib/core';
 import { template } from '@anchorlib/react';
-import type { HTMLAttributes } from 'react';
+import type { ComponentProps as ReactProps } from 'react';
 import { DIALOG_CONFIGS } from './config.js';
 
-export const DialogContent = template<HTMLAttributes<HTMLElement>>(
+export const DialogContent = template<ReactProps<'section'>>(
   ({ className, children, ...rest }) => (
-    <section className={className || DIALOG_CONFIGS.content.class} {...rest}>
+    <section className={classx(DIALOG_CONFIGS.content.class, className)} {...rest}>
       {children}
     </section>
   ),

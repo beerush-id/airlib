@@ -20,7 +20,7 @@ export const FIELD_CONFIG = {
 };
 
 export const SUBMIT_CONFIG = {
-  class: 'air-button-text',
+  class: 'air-button air-button-text',
   pendingClass: 'air-form-submit-pending',
 };
 

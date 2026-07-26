@@ -1,6 +1,6 @@
 import { clearContextStore, createLifecycle } from '@anchorlib/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createDialog, DialogState, getDialog, setDialog } from '../../src/index.js';
+import { createDialogState, DialogState, getDialog, setDialog } from '../../src/index.js';
 
 let container: HTMLElement | undefined;
 
@@ -20,23 +20,23 @@ describe('createDialog', () => {
 
   describe('state', () => {
     it('should default to closed', () => {
-      const dialog = createDialog();
+      const dialog = createDialogState();
       expect(dialog.open).toBe(false);
     });
 
     it('should accept custom initial state', () => {
-      const dialog = createDialog({ open: true });
+      const dialog = createDialogState({ open: true });
       expect(dialog.open).toBe(true);
     });
 
     it('should open via show()', () => {
-      const dialog = createDialog();
+      const dialog = createDialogState();
       dialog.show();
       expect(dialog.open).toBe(true);
     });
 
     it('should close via hide()', () => {
-      const dialog = createDialog({ open: true });
+      const dialog = createDialogState({ open: true });
       dialog.hide();
       expect(dialog.open).toBe(false);
     });
@@ -44,24 +44,24 @@ describe('createDialog', () => {
 
   describe('data', () => {
     it('should return undefined when no data is provided', () => {
-      const dialog = createDialog();
+      const dialog = createDialogState();
       expect(dialog.data).toBeUndefined();
     });
 
     it('should return static data', () => {
-      const dialog = createDialog({ data: { id: 1 } });
+      const dialog = createDialogState({ data: { id: 1 } });
       expect(dialog.data).toEqual({ id: 1 });
     });
 
     it('should call function data each time it is accessed', () => {
       let count = 0;
-      const dialog = createDialog({ data: () => ++count });
+      const dialog = createDialogState({ data: () => ++count });
       expect(dialog.data).toBe(1);
       expect(dialog.data).toBe(2);
     });
 
     it('should override data when show() is called with data', () => {
-      const dialog = createDialog<string, void>({ data: 'initial' });
+      const dialog = createDialogState<string, void>({ data: 'initial' });
       expect(dialog.data).toBe('initial');
 
       dialog.show('updated');
@@ -73,23 +73,23 @@ describe('createDialog', () => {
 
   describe('container', () => {
     it('should expose container as undefined by default', () => {
-      const dialog = createDialog();
+      const dialog = createDialogState();
       expect(dialog.container).toBeUndefined();
     });
 
     it('should accept container via init', () => {
-      const dialog = createDialog({ container });
+      const dialog = createDialogState({ container });
       expect(dialog.container).toBe(container);
     });
 
     it('should allow setting container after creation', () => {
-      const dialog = createDialog();
+      const dialog = createDialogState();
       dialog.container = container;
       expect(dialog.container).toBe(container);
     });
 
     it('should allow replacing container', () => {
-      const dialog = createDialog({ container });
+      const dialog = createDialogState({ container });
       const newContainer = document.createElement('div');
       dialog.container = newContainer;
       expect(dialog.container).toBe(newContainer);
@@ -97,7 +97,7 @@ describe('createDialog', () => {
 
     it('should close on mouseup outside the container', () => {
       const handler = vi.fn();
-      const dialog = createDialog({ container }, { onRelease: handler });
+      const dialog = createDialogState({ container }, { onRelease: handler });
       dialog.show();
       expect(dialog.open).toBe(true);
 
@@ -107,7 +107,7 @@ describe('createDialog', () => {
     });
 
     it('should NOT close on mouseup inside the container', () => {
-      const dialog = createDialog({ container });
+      const dialog = createDialogState({ container });
       dialog.show();
       expect(dialog.open).toBe(true);
 
@@ -118,7 +118,7 @@ describe('createDialog', () => {
     });
 
     it('should close on Escape key', () => {
-      const dialog = createDialog({ container });
+      const dialog = createDialogState({ container });
       dialog.show();
       expect(dialog.open).toBe(true);
 
@@ -127,7 +127,7 @@ describe('createDialog', () => {
     });
 
     it('should NOT close on non-Escape keys', () => {
-      const dialog = createDialog({ container });
+      const dialog = createDialogState({ container });
       dialog.show();
       expect(dialog.open).toBe(true);
 
@@ -142,7 +142,7 @@ describe('createDialog', () => {
       let dialog: DialogState<void, string> | undefined;
 
       scope.run(() => {
-        dialog = createDialog({ container });
+        dialog = createDialogState({ container });
         dialog.show();
       });
 
@@ -156,21 +156,21 @@ describe('createDialog', () => {
 
   describe('promise resolution', () => {
     it('should resolve the show() promise when hide() is called with a value', async () => {
-      const dialog = createDialog<void, string>();
+      const dialog = createDialogState<void, string>();
       const promise = dialog.show();
       dialog.hide('result');
       await expect(promise).resolves.toBe('result');
     });
 
     it('should resolve with undefined when hide() is called without arguments', async () => {
-      const dialog = createDialog<void, string>();
+      const dialog = createDialogState<void, string>();
       const promise = dialog.show();
       dialog.hide();
       await expect(promise).resolves.toBeUndefined();
     });
 
     it('should reject the show() promise when hide() is called with an Error', async () => {
-      const dialog = createDialog<void, string>();
+      const dialog = createDialogState<void, string>();
       const promise = dialog.show();
       const error = new Error('cancelled');
       dialog.hide(error);
@@ -178,7 +178,7 @@ describe('createDialog', () => {
     });
 
     it('should return the same promise when show() is called multiple times while open', () => {
-      const dialog = createDialog<void, void>();
+      const dialog = createDialogState<void, void>();
       const p1 = dialog.show();
       const p2 = dialog.show();
       expect(p1).toBe(p2);
@@ -188,7 +188,7 @@ describe('createDialog', () => {
 
   describe('hide() idempotency', () => {
     it('should be a no-op when called a second time', async () => {
-      const dialog = createDialog<void, number>();
+      const dialog = createDialogState<void, number>();
       const promise = dialog.show();
       dialog.hide(42);
       // Second hide should be a no-op
@@ -197,7 +197,7 @@ describe('createDialog', () => {
     });
 
     it('should return the dialog instance for chaining', () => {
-      const dialog = createDialog({ open: true });
+      const dialog = createDialogState({ open: true });
       const result = dialog.hide();
       expect(result).toBe(dialog);
     });
@@ -205,7 +205,7 @@ describe('createDialog', () => {
 
   describe('scroll lock', () => {
     it('should lock body scroll when opened', () => {
-      const dialog = createDialog({ container });
+      const dialog = createDialogState({ container });
       dialog.show();
 
       expect(document.body.style.overflow).toBe('hidden');
@@ -215,7 +215,7 @@ describe('createDialog', () => {
 
     it('should restore body scroll when closed', () => {
       document.body.style.overflow = 'auto';
-      const dialog = createDialog({ container });
+      const dialog = createDialogState({ container });
 
       dialog.show();
       expect(document.body.style.overflow).toBe('hidden');
@@ -227,7 +227,7 @@ describe('createDialog', () => {
 
   describe('context', () => {
     it('should set context on creation', () => {
-      const dialog = createDialog();
+      const dialog = createDialogState();
       setDialog(dialog);
 
       const retrieved = getDialog();
@@ -241,7 +241,7 @@ describe('createDialog', () => {
     });
 
     it('should retrieve the same dialog instance that was set', () => {
-      const dialog = createDialog<string, number>({ data: 'hello' });
+      const dialog = createDialogState<string, number>({ data: 'hello' });
       setDialog(dialog);
 
       const retrieved = getDialog<string, number>();

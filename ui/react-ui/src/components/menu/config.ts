@@ -15,6 +15,6 @@ export const MENU_CONFIGS = {
   },
   portal: 'body',
   trigger: {
-    class: 'air-menu-trigger',
+    class: 'air-menu-button',
   },
 };
