@@ -58,7 +58,7 @@ const General = setup(() => {
             <CardTitle>Register Form</CardTitle>
             <p className="air-card-subtitle">A complete form showing all available input types and validations.</p>
           </CardHeader>
-          <CardBody className="flex flex-col gap-2">
+          <CardBody className="gap-3">
             <div className="flex items-start gap-4">
               <FormField name="username" label="Username">
                 <TextField placeholder="Enter your username" />
@@ -112,29 +112,27 @@ const General = setup(() => {
           <CardHeader>
             <CardTitle>Preferences</CardTitle>
           </CardHeader>
-          <CardBody>
-            <div className="w-full flex gap-4 items-end justify-between">
-              <FormField name="theme" label="Theme Setting" className="w-auto" block>
-                <RadioGroup className="mb-1">
-                  <Field>
-                    <Radio value="light" />
-                    <FieldLabel>Light</FieldLabel>
-                  </Field>
-                  <Field>
-                    <Radio value="dark" />
-                    <FieldLabel>Dark</FieldLabel>
-                  </Field>
-                </RadioGroup>
-              </FormField>
-              <FormField name="notifications" inline="before" label="Enable notifications" className={'w-auto'}>
-                <Switch />
-              </FormField>
-            </div>
+          <CardBody className="flex-row justify-between items-end">
+            <FormField name="theme" label="Theme Setting" className="w-auto" block>
+              <RadioGroup className="gap-8 mb-1">
+                <Field>
+                  <Radio value="light" />
+                  <FieldLabel>Light</FieldLabel>
+                </Field>
+                <Field>
+                  <Radio value="dark" />
+                  <FieldLabel>Dark</FieldLabel>
+                </Field>
+              </RadioGroup>
+            </FormField>
+            <FormField name="notifications" inline="before" label="Enable notifications" className={'w-auto'}>
+              <Switch />
+            </FormField>
           </CardBody>
         </Card>
         <Card variant="filled">
-          <CardBody className="flex gap-2">
-            <FormField name="terms" inline="after" label="I agree to the Terms and Conditions">
+          <CardBody className="flex-row">
+            <FormField name="terms" inline="after" label="I agree to the Terms and Conditions" className="flex-1">
               <Checkbox />
             </FormField>
             <div className="flex items-center shrink-0 gap-2">

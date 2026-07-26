@@ -1,15 +1,15 @@
 import {
+  Card,
+  CardBody,
+  CardGroup,
+  CardHeader,
+  CardTitle,
   Menu,
   MenuButton,
   MenuContent,
   MenuItem,
   SubMenu,
   Tooltip,
-  Card,
-  CardBody,
-  CardGroup,
-  CardHeader,
-  CardTitle,
 } from '@airlib/react-ui/components';
 import { page, setup } from '@anchorlib/react';
 import { menuRoute } from '../route.js';
@@ -33,7 +33,7 @@ const MenuDemo = setup(() => {
           <CardBody>
             <div className="flex gap-4 items-center h-64">
               <Menu open>
-                <MenuButton className="air-button-tonal">
+                <MenuButton>
                   Open Menu <span className="air-icon ml-2">arrow_drop_down</span>
                 </MenuButton>
 
@@ -85,13 +85,13 @@ const MenuDemo = setup(() => {
           </CardHeader>
           <CardBody>
             <div className="flex gap-4 items-center h-48">
-              <div className="air-icon-button-tonal">
+              <div className="air-icon-button air-icon-button-tonal">
                 <span className="air-icon">info</span>
                 <Tooltip yPos="after" xPos="center">
                   This is a self-governing tooltip!
                 </Tooltip>
               </div>
-              <div className="air-icon-button-tonal">
+              <div className="air-icon-button air-icon-button-tonal">
                 <span className="air-icon">info</span>
                 <Tooltip rich yPos="after" xPos="start">
                   <div className="max-w-sm">

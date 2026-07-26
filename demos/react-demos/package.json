@@ -14,10 +14,10 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@airlib/headless": "workspace:*",
     "@airlib/material": "workspace:*",
     "@airlib/react-form": "workspace:*",
     "@airlib/react-ui": "workspace:*",
-    "@airlib/headless": "workspace:*",
     "@anchorlib/core": "catalog:app",
     "@anchorlib/react": "catalog:app",
     "@anchorlib/storage": "catalog:app",
@@ -31,6 +31,7 @@
   "devDependencies": {
     "@anchorlib/vite-ssr": "catalog:app",
     "@biomejs/biome": "catalog:",
+    "@napi-rs/image": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@types/bun": "catalog:",
     "@types/react": "catalog:",

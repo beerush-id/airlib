@@ -52,7 +52,7 @@ export default function Typed() {
         </Card>
         <Card variant="filled">
           <CardBody>
-            <div className="flex gap-2 justify-end">
+            <div className="flex-row justify-end">
               <PostForm.Field name="publish" inline="after" label="Publish immediately" className="w-auto">
                 <Switch />
               </PostForm.Field>

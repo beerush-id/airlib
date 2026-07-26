@@ -36,7 +36,7 @@ export default () => (
     </Card>
 
     <CollapsibleGroup className="air-card">
-      <Collapsible name="details" expanded>
+      <Collapsible name="details">
         <CollapsibleContent>
           <CardBody className="gap-2">
             <Text>

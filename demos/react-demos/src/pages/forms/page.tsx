@@ -14,6 +14,7 @@ import {
 import { For, page, Title } from '@anchorlib/react';
 import { z } from 'zod';
 import { formsRoute } from './route.js';
+import { Card, CardHeader, CardTitle, CardBody } from '@airlib/react-ui/components';
 
 const accountSchema = z.object({
   profile: z.object({
@@ -68,11 +69,11 @@ export const FormsPage = page(formsRoute).render(() => (
       className="air-card-group gap-2 [--card-padding:1.5rem] sm:[--card-padding:2rem]"
     >
       {/* Profile Section */}
-      <div className="air-card">
-        <div className="air-card-header">
-          <h2 className="air-card-title">Profile Information</h2>
-        </div>
-        <div className="air-card-body grid gap-6 sm:grid-cols-2">
+      <Card>
+        <CardHeader>
+          <CardTitle>Profile Information</CardTitle>
+        </CardHeader>
+        <CardBody className="grid gap-6 sm:grid-cols-2">
           <AccountForm.Field name="profile.fullName" label="Full Name">
             <TextInput placeholder="Jane Doe" />
           </AccountForm.Field>
@@ -84,15 +85,15 @@ export const FormsPage = page(formsRoute).render(() => (
           <AccountForm.Field name="profile.bio" label="Biography" className="air-field sm:col-span-2">
             <Textarea placeholder="Tell us a bit about yourself..." rows={3} />
           </AccountForm.Field>
-        </div>
-      </div>
+        </CardBody>
+      </Card>
 
       {/* Security Section */}
-      <div className="air-card">
-        <div className="air-card-header">
-          <h2 className="air-card-title">Security Settings</h2>
-        </div>
-        <div className="air-card-body grid gap-6 sm:grid-cols-2">
+      <Card>
+        <CardHeader>
+          <CardTitle>Security Settings</CardTitle>
+        </CardHeader>
+        <CardBody className="grid gap-6 sm:grid-cols-2">
           <AccountForm.Field name="password" label="New Password">
             <PasswordInput placeholder="••••••••" />
           </AccountForm.Field>
@@ -105,22 +106,22 @@ export const FormsPage = page(formsRoute).render(() => (
           >
             <PasswordInput placeholder="••••••••" />
           </AccountForm.Field>
-        </div>
-      </div>
+        </CardBody>
+      </Card>
 
       {/* Addresses Section */}
-      <div className="air-card">
-        <div className="air-card-header">
-          <h2 className="air-card-title">Address Information</h2>
-        </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Address Information</CardTitle>
+        </CardHeader>
 
         <AccountForm.FieldList name="addresses">
           {(items) => (
-            <div className="air-card-body space-y-2">
+            <CardBody className="space-y-2">
               <For each={() => items}>
                 {(_, index) => (
-                  <div className="air-card-outlined">
-                    <div className="air-card-body grid gap-6 sm:grid-cols-2">
+                  <Card variant="outlined">
+                    <CardBody className="grid gap-6 sm:grid-cols-2">
                       <AccountForm.Field
                         name={`addresses.${index}.street`}
                         label="Street Address"
@@ -154,8 +155,8 @@ export const FormsPage = page(formsRoute).render(() => (
                           Remove Address
                         </button>
                       </div>
-                    </div>
-                  </div>
+                    </CardBody>
+                  </Card>
                 )}
               </For>
 
@@ -176,17 +177,17 @@ export const FormsPage = page(formsRoute).render(() => (
               >
                 + Add New Address
               </button>
-            </div>
+            </CardBody>
           )}
         </AccountForm.FieldList>
-      </div>
+      </Card>
 
       {/* Preferences Section */}
-      <div className="air-card">
-        <div className="air-card-header">
-          <h2 className="air-card-title">App Preferences</h2>
-        </div>
-        <div className="air-card-body grid gap-8 sm:grid-cols-2">
+      <Card>
+        <CardHeader>
+          <CardTitle>App Preferences</CardTitle>
+        </CardHeader>
+        <CardBody className="grid gap-8 sm:grid-cols-2">
           <AccountForm.Field name="preferences.theme" label="Interface Theme">
             <Select>
               <option value="light">Light Mode</option>
@@ -221,16 +222,16 @@ export const FormsPage = page(formsRoute).render(() => (
               </div>
             </label>
           </AccountForm.Field>
-        </div>
-      </div>
+        </CardBody>
+      </Card>
 
       {/* Actions */}
-      <div className="air-card">
-        <div className="air-card-body flex items-center justify-end gap-3 bg-surface-variant">
+      <Card>
+        <CardBody className="flex-row items-center justify-end gap-3 bg-surface-variant">
           <FormReset>Discard Changes</FormReset>
           <FormSubmit>{(form) => (form?.pending ? 'Saving...' : 'Save Settings')}</FormSubmit>
-        </div>
-      </div>
+        </CardBody>
+      </Card>
     </AccountForm>
   </div>
 ));
