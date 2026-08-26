@@ -37,7 +37,8 @@
         "noNonNullAssertion": "off"
       },
       "suspicious": {
-        "useIterableCallbackReturn": "off"
+        "useIterableCallbackReturn": "off",
+        "noUnknownAtRules": "off"
       },
       "a11y": {
         "noLabelWithoutControl": "off",
