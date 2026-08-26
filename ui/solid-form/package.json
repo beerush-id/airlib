@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@airlib/solid-form",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Reactive and declarative SolidJS form components built on AIR Stack. Typed forms, field validation, cross-field matching, and array fields with fine-grained reactivity.",
   "keywords": ["solid", "solidjs", "form", "validation", "zod", "reactive", "air-stack", "anchor", "typescript"],
   "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",

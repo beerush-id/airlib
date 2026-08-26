@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@airlib/form",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Reactive and declarative, framework-agnostic form engine powered by Zod schemas. Validation, dirty tracking, cross-field matching, and submission lifecycle built on AIR Stack.",
   "keywords": ["form", "validation", "zod", "reactive", "state", "air-stack", "anchor", "typescript"],
   "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
