@@ -7,7 +7,7 @@ AIR Form is a reactive, framework-agnostic form engine powered by Zod schemas.
 To use AIR Form inside a reactive component, create a typed form factory outside the component, and initialize the form state within the component's `setup` phase.
 
 ```tsx
-import { setup, render } from '@anchorlib/react';
+import { setup, render } from '@airlib/react';
 import { formState } from '@airlib/form';
 import { z } from 'zod';
 
@@ -139,7 +139,7 @@ To build composable input components without passing props, use the `formField` 
 
 ```tsx
 import { formField, FormInputType } from '@airlib/form';
-import { setup, render } from '@anchorlib/react';
+import { setup, render } from '@airlib/react';
 
 export const TextInput = setup<{ name: string, label: string, type?: FormInputType }>((props) => {
   const input = formField<string>(props.name).input(props);

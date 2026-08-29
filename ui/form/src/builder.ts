@@ -1,4 +1,4 @@
-import { anchor } from '@anchorlib/core';
+import { anchor } from '@airlib/core';
 import { createBaseline } from './context.js';
 import type { AnyType, SchemaMap } from './types.js';
 import { readPath, writePath } from './utils.js';

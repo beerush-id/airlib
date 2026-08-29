@@ -1,4 +1,4 @@
-import { anchor, clearContextStore, createLifecycle } from '@anchorlib/core';
+import { anchor, clearContextStore, createLifecycle } from '@airlib/core';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { formFactory } from '../src/index.js';

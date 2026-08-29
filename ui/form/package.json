@@ -39,7 +39,7 @@
     "vitest": "catalog:"
   },
   "peerDependencies": {
-    "@anchorlib/core": "catalog:lib",
+    "@airlib/core": "catalog:lib",
     "typescript": "catalog:lib",
     "zod": "catalog:lib"
   },

@@ -1,4 +1,4 @@
-import { captureStack } from '@anchorlib/core';
+import { captureStack } from '@airlib/core';
 import { type FormContext, schemaOf } from './context.js';
 import { detectChanged, initField } from './init.js';
 import type { AnyType } from './types.js';

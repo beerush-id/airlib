@@ -1,4 +1,4 @@
-import { anchor, clearContextStore, createLifecycle, mutable } from '@anchorlib/core';
+import { anchor, clearContextStore, createLifecycle, mutable } from '@airlib/core';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { FORM_INPUT } from '../src/constant.js';

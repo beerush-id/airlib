@@ -1,4 +1,4 @@
-import { anchor, mutable } from '@anchorlib/core';
+import { anchor, mutable } from '@airlib/core';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { buildShell } from '../src/builder.js';
