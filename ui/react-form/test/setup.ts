@@ -1,5 +1,4 @@
-import '@anchorlib/react/client';
-import { anchor } from '@anchorlib/react';
+import { anchor } from '@airlib/react';
 import { beforeEach } from 'vitest';
 
 beforeEach(() => {

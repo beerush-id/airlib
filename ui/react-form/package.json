@@ -42,7 +42,7 @@
   },
   "peerDependencies": {
     "@airlib/form": "workspace:*",
-    "@anchorlib/react": "catalog:lib",
+    "@airlib/react": "catalog:lib",
     "react": "catalog:lib",
     "react-dom": "catalog:lib",
     "typescript": "catalog:lib",

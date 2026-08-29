@@ -1,6 +1,6 @@
 import type { AnyType, FormInputOptions } from '@airlib/form';
 import { formInput } from '@airlib/form';
-import { derived, render, setup } from '@anchorlib/react';
+import { derived, render, setup } from '@airlib/react';
 import type { FocusEvent, InputEvent } from 'react';
 import { getInputClasses, getSpecificOptions, INPUT_OPTIONS_KEYS } from '../config.js';
 

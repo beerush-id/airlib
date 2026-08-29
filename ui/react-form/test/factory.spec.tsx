@@ -1,5 +1,4 @@
-import '@anchorlib/react/client';
-import { mutable } from '@anchorlib/react';
+import { mutable } from '@airlib/react';
 import { act, cleanup, fireEvent, render as renderComponent, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';

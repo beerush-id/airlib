@@ -1,5 +1,5 @@
 import { type AnyType, formField } from '@airlib/form';
-import { render, setup } from '@anchorlib/react';
+import { render, setup } from '@airlib/react';
 import type { ReactNode } from 'react';
 import { FIELD_OPTIONS } from './config.js';
 

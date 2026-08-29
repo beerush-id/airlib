@@ -1,4 +1,4 @@
-import type { Bindable } from '@anchorlib/react';
+import type { Bindable } from '@airlib/react';
 import type { InputHTMLAttributes } from 'react';
 import { createInput } from './createInput.js';
 

@@ -1,7 +1,6 @@
-import '@anchorlib/react/client';
 import { FORM_SYMBOL } from '@airlib/form';
-import { setContext } from '@anchorlib/react';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { setContext } from '@airlib/react';
+import { act, cleanup, fireEvent, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { Field } from '../src/Field.js';

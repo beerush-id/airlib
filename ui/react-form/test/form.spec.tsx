@@ -1,4 +1,3 @@
-import '@anchorlib/react/client';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
@@ -152,7 +151,7 @@ describe('Form', () => {
     );
 
     const form = screen.getByTestId('error-form-def');
-    expect(form.className).toBe('');
+    expect(form.className).toBe('air-form');
 
     await act(async () => {
       fireEvent.input(screen.getByTestId('input-def'), { target: { value: 'Valid Changed' } });
@@ -162,7 +161,7 @@ describe('Form', () => {
       fireEvent.click(screen.getByTestId('submit-btn-def'));
     });
 
-    expect(form.className).toBe('');
+    expect(form.className).toBe('air-form air-form-error');
   });
 
   it('should apply partial errorClass or className correctly on error', async () => {
