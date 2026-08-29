@@ -1,5 +1,5 @@
 import { classx } from '@airlib/headless/utils';
-import { template } from '@anchorlib/react';
+import { template } from '@airlib/react';
 import type { ElementProps } from '../renderer.js';
 import { PROGRESS_CONFIGS } from './config.js';
 

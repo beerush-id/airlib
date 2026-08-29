@@ -7,7 +7,7 @@ import {
   type WindowInstance,
 } from '@airlib/headless';
 import type { DragRef } from '@airlib/headless/components';
-import { getContext, setup } from '@anchorlib/react';
+import { getContext, setup } from '@airlib/react';
 import type { ReactNode } from 'react';
 import { WindowSplash } from '../components/index.js';
 

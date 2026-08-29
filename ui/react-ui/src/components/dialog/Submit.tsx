@@ -1,7 +1,7 @@
 import { type DialogState, getDialog } from '@airlib/headless/components';
-import { type AnyType, captureStack, classx } from '@anchorlib/core';
-import { render, setup } from '@anchorlib/react';
-import type { MouseEventHandler, ReactNode, ComponentProps as ReactProps } from 'react';
+import { type AnyType, captureStack } from '@airlib/core';
+import { classx, render, setup } from '@airlib/react';
+import type { ComponentProps as ReactProps, MouseEventHandler, ReactNode } from 'react';
 import { DIALOG_CONFIGS } from './config.js';
 
 export interface DialogSubmitProps extends Omit<ReactProps<'button'>, 'children' | 'value'> {

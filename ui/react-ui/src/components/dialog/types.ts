@@ -1,5 +1,5 @@
 import type { DialogState } from '@airlib/headless/components';
-import type { setup } from '@anchorlib/react';
+import type { setup } from '@airlib/react';
 import type { DialogHTMLAttributes, ReactNode, RefObject } from 'react';
 
 export type DialogBaseProps = {

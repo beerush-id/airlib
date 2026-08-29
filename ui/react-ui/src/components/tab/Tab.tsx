@@ -1,6 +1,6 @@
 import { arrowRef, createTabState, getTab } from '@airlib/headless';
 import { classx } from '@airlib/headless/utils';
-import { type Bindable, effect, nodeRef, render, setup } from '@anchorlib/react';
+import { type Bindable, effect, nodeRef, render, setup } from '@airlib/react';
 import type { HTMLAttributes, MouseEventHandler } from 'react';
 import { stylex } from '../../utils/index.js';
 import { TAB_CONFIGS } from './config.js';

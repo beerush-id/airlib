@@ -1,10 +1,10 @@
 import { popover, type PopoverInit } from '@airlib/headless';
 import { classx } from '@airlib/headless/utils';
-import { isFunction, isObject } from '@anchorlib/core';
-import { render, setup } from '@anchorlib/react';
-import type { ComponentProps, ReactNode } from 'react';
+import { isFunction, isObject } from '@airlib/core';
+import { render, setup } from '@airlib/react';
+import type { ReactNode } from 'react';
 import { TOOLTIP_CONFIGS } from './config.js';
-import { renderDynamic, type ElementProps } from '../renderer.ts';
+import { type ElementProps, renderDynamic } from '../renderer.ts';
 
 export interface TooltipProps extends Pick<PopoverInit, 'xPos' | 'yPos'>, ElementProps<'div'> {
   rich?: boolean;

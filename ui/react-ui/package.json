@@ -73,8 +73,8 @@
   "peerDependencies": {
     "@airlib/form": "workspace:*",
     "@airlib/headless": "workspace:*",
-    "@anchorlib/core": "catalog:lib",
-    "@anchorlib/react": "catalog:lib",
+    "@airlib/core": "catalog:lib",
+    "@airlib/react": "catalog:lib",
     "react": "catalog:lib",
     "react-dom": "catalog:lib",
     "typescript": "catalog:lib"

@@ -1,10 +1,10 @@
 import { getFormField } from '@airlib/form';
-import { arrowRef, type PopoverInstance, popover } from '@airlib/headless';
+import { arrowRef, popover, type PopoverInstance } from '@airlib/headless';
 import type { PopoverInit } from '@airlib/headless/components';
 import { classx, uIndex } from '@airlib/headless/utils';
-import { derived, isFunction, isObject, mutable, untrack } from '@anchorlib/core';
-import { type Bindable, type ComponentProps, createContext, effect, render, setup } from '@anchorlib/react';
-import type { KeyboardEventHandler, MouseEventHandler, ReactNode, ComponentProps as ReactProps } from 'react';
+import { derived, isFunction, isObject, mutable, untrack } from '@airlib/core';
+import { type Bindable, type ComponentProps, createContext, effect, render, setup } from '@airlib/react';
+import type { ComponentProps as ReactProps, KeyboardEventHandler, MouseEventHandler, ReactNode } from 'react';
 import { CheckIcon, DropDown } from '../../icons/index.js';
 import { teleport } from '../../lib/index.js';
 import { SELECT_CONFIGS } from './config.js';

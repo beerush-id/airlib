@@ -1,6 +1,4 @@
-import { classx } from '@airlib/headless/utils';
-import { mutable } from '@anchorlib/core';
-import { effect, render, setup } from '@anchorlib/react';
+import { classx, effect, mutable, render, setup } from '@airlib/react';
 import { type ElementProps, renderDynamic } from '../renderer.js';
 import { AVATAR_CONFIGS, type AvatarShape, type AvatarSize, type AvatarVariant } from './config.js';
 

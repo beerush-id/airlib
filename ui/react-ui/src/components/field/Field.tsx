@@ -1,5 +1,4 @@
-import { classx } from '@airlib/headless/utils';
-import { render, setup, template } from '@anchorlib/react';
+import { classx, render, setup, template } from '@airlib/react';
 import type { ComponentProps, MouseEventHandler } from 'react';
 import { type ElementProps, renderDynamic } from '../renderer.js';
 import { FIELD_CONFIGS } from './config.js';

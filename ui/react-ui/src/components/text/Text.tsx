@@ -1,5 +1,5 @@
 import { classx } from '@airlib/headless/utils';
-import { template } from '@anchorlib/react';
+import { template } from '@airlib/react';
 import { Display } from '../display/Display.tsx';
 import { Headline } from '../headline/Headline.tsx';
 import { type ElementProps, renderDynamic } from '../renderer.js';

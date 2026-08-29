@@ -1,8 +1,8 @@
 import { formInput } from '@airlib/form';
 import type { AnyType } from '@airlib/headless';
 import { classx } from '@airlib/headless/utils';
-import { derived } from '@anchorlib/core';
-import { type Bindable, render, setup, type StableComponent } from '@anchorlib/react';
+import { derived } from '@airlib/core';
+import { type Bindable, render, setup, type StableComponent } from '@airlib/react';
 import type { ComponentProps, FocusEventHandler, InputEventHandler } from 'react';
 import { TEXT_FIELD_CONFIGS } from './config.js';
 

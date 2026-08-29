@@ -1,4 +1,4 @@
-import { template } from '@anchorlib/react';
+import { template } from '@airlib/react';
 import { type ElementProps, renderDynamic } from '../renderer.js';
 
 export type AnchorProps = ElementProps<'a'>;

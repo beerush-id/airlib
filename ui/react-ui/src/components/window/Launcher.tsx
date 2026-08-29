@@ -1,5 +1,5 @@
 import type { AnyType, WebWindow } from '@airlib/headless';
-import { render, setup, template } from '@anchorlib/react';
+import { render, setup, template } from '@airlib/react';
 import type { ReactNode } from 'react';
 import { WindowIcon } from '../../icons/index.js';
 import { BadgeDot } from '../badge/index.js';

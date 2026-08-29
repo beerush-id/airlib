@@ -1,6 +1,5 @@
 import { type AnyType, createDialogState, type DialogState, getDialog, setDialog } from '@airlib/headless';
-import { classx, mutable, subscribe } from '@anchorlib/core';
-import { For, render, setup, template } from '@anchorlib/react';
+import { classx, For, mutable, render, setup, subscribe, template } from '@airlib/react';
 import type { ReactNode } from 'react';
 import { teleport } from '../../lib/index.js';
 import { DIALOG_CONFIGS } from './config.js';

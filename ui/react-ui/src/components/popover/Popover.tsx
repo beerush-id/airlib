@@ -1,7 +1,6 @@
 import { popover as createPopover, type PopoverInit, type PopoverInstance } from '@airlib/headless';
-import { classx } from '@airlib/headless/utils';
-import { isFunction, isObject } from '@anchorlib/core';
-import { render, setup } from '@anchorlib/react';
+import { isFunction, isObject } from '@airlib/core';
+import { classx, render, setup } from '@airlib/react';
 import type { ComponentProps } from 'react';
 import { POPOVER_CONFIGS } from './config.js';
 

@@ -1,5 +1,4 @@
-import { classx } from '@airlib/headless/utils';
-import { template } from '@anchorlib/react';
+import { classx, template } from '@airlib/react';
 import { type ElementProps, renderDynamic } from '../renderer.js';
 import { LIST_CONFIGS, type ListItemVariant, type ListVariant } from './config.js';
 

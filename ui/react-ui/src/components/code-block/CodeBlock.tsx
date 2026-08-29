@@ -1,6 +1,6 @@
 import { classx, colorScheme } from '@airlib/headless/utils';
-import { type AnyType, query, sleep } from '@anchorlib/core';
-import { mutable, render, setup, snippet } from '@anchorlib/react';
+import { type AnyType, query, sleep } from '@airlib/core';
+import { mutable, render, setup, snippet } from '@airlib/react';
 import type { ComponentProps } from 'react';
 import type { HighlighterGeneric } from 'shiki';
 import { CheckIcon } from 'src/icons/Check.tsx';

@@ -1,4 +1,4 @@
-import { render, setup } from '@anchorlib/react';
+import { render, setup } from '@airlib/react';
 import type { HTMLAttributes } from 'react';
 import { getWindowCtx } from '../../lib/index.js';
 import { WindowControl, type WindowControls } from './Control.js';

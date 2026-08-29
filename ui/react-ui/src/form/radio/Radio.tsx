@@ -1,8 +1,8 @@
 import { formInput, getFormField } from '@airlib/form';
 import { createSelectionState, selectionCtx } from '@airlib/headless';
 import { classx } from '@airlib/headless/utils';
-import type { AnyType } from '@anchorlib/core';
-import { type Bindable, render, setup } from '@anchorlib/react';
+import type { AnyType } from '@airlib/core';
+import { type Bindable, render, setup } from '@airlib/react';
 import type { ComponentProps, MouseEventHandler } from 'react';
 import { RADIO_CONFIGS } from './config.js';
 

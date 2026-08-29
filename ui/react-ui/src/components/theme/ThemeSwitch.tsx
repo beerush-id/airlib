@@ -1,5 +1,5 @@
 import { colorScheme } from '@airlib/headless/utils';
-import { render, setup } from '@anchorlib/react';
+import { render, setup } from '@airlib/react';
 import type { HTMLAttributes } from 'react';
 import { DarkModeIcon, LightModeIcon } from '../../icons/index.js';
 import { Tooltip } from '../tooltip/Tooltip.tsx';

@@ -1,5 +1,5 @@
 import { stylex as _stylex } from '@airlib/headless/utils';
-import { $use, type Linked } from '@anchorlib/react';
+import { $use, type Linked } from '@airlib/react';
 import type { CSSProperties } from 'react';
 
 export type CSSInput = CSSProperties & {

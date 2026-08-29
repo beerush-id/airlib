@@ -1,5 +1,4 @@
-import { classx } from '@airlib/headless/utils';
-import { template } from '@anchorlib/react';
+import { classx, template } from '@airlib/react';
 import { stylex } from '../../utils/index.js';
 import { type ElementProps, renderDynamic } from '../renderer.ts';
 import { ICON_CONFIGS } from './config.js';

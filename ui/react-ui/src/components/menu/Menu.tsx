@@ -1,7 +1,5 @@
 import { arrowRef, popover, type PopoverInit, type PopoverInstance } from '@airlib/headless';
-import { classx } from '@airlib/headless/utils';
-import { derived, effect } from '@anchorlib/core';
-import { type Bindable, createContext, render, setup } from '@anchorlib/react';
+import { type Bindable, classx, createContext, derived, effect, render, setup } from '@airlib/react';
 import type { ComponentProps, HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 import { teleport } from '../../lib/index.js';
 import { MENU_CONFIGS } from './config.js';

@@ -1,7 +1,7 @@
 import { formInput } from '@airlib/form';
 import { classx } from '@airlib/headless/utils';
-import { derived } from '@anchorlib/core';
-import { type Bindable, render, setup } from '@anchorlib/react';
+import { derived } from '@airlib/core';
+import { type Bindable, render, setup } from '@airlib/react';
 import type { ComponentProps, InputEventHandler } from 'react';
 import { TEXTAREA_CONFIGS } from './config.js';
 

@@ -1,5 +1,5 @@
 import { createDialogState } from '@airlib/headless/components';
-import { captureStack, isBrowser } from '@anchorlib/core';
+import { captureStack, isBrowser } from '@airlib/core';
 import { WarningIcon } from '../../icons/Warning.js';
 import { DialogCancel } from './Cancel.js';
 import { DialogContent } from './Content.js';

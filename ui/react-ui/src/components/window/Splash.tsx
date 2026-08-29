@@ -1,5 +1,5 @@
 import type { AnyType, WebWindowRenderer } from '@airlib/headless';
-import { render } from '@anchorlib/react';
+import { render } from '@airlib/react';
 import type { ReactNode } from 'react';
 import { WindowIcon } from '../../icons/Window.js';
 import { WINDOW_CONFIGS } from './config.js';

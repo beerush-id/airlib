@@ -1,7 +1,7 @@
 import { type AnyType, createSelectionState, type SelectionContext, selectionCtx } from '@airlib/headless';
 import { classx } from '@airlib/headless/utils';
-import { createContext, derived } from '@anchorlib/core';
-import { type Bindable, render, setup } from '@anchorlib/react';
+import { createContext, derived } from '@airlib/core';
+import { type Bindable, render, setup } from '@airlib/react';
 import type { MouseEventHandler, ReactNode } from 'react';
 import { ArrowDown } from '../../icons/ArrowDown.js';
 import type { createIcon } from '../../icons/Icon.js';

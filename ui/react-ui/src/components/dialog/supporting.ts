@@ -1,7 +1,7 @@
 import type { AnyType } from '@airlib/headless';
 import type { DialogState } from '@airlib/headless/components';
 import { impure } from '@airlib/headless/utils';
-import { type ComponentProps, nodeRef } from '@anchorlib/react';
+import { type ComponentProps, nodeRef } from '@airlib/react';
 import { DIALOG_CONFIGS } from './config.js';
 import type { DialogProps } from './types.js';
 

@@ -1,7 +1,7 @@
 import { formInput } from '@airlib/form';
 import { classx } from '@airlib/headless/utils';
-import type { AnyType } from '@anchorlib/core';
-import { type Bindable, nodeRef, setup } from '@anchorlib/react';
+import type { AnyType } from '@airlib/core';
+import { type Bindable, nodeRef, setup } from '@airlib/react';
 import type { MouseEvent, MouseEventHandler } from 'react';
 import type { ElementProps } from '../../components/renderer.js';
 import { CheckIcon, CheckIndeterminateIcon } from '../../icons/index.js';

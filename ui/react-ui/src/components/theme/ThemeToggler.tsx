@@ -1,5 +1,5 @@
 import { colorScheme } from '@airlib/headless/utils';
-import { render, setup } from '@anchorlib/react';
+import { render, setup } from '@airlib/react';
 import type { HTMLAttributes } from 'react';
 import { DarkModeIcon, LightModeIcon, SystemThemeIcon } from '../../icons/index.js';
 import { THEME_CONFIGS } from './config.js';

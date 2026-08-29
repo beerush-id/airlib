@@ -1,4 +1,4 @@
-import { For, template } from '@anchorlib/react';
+import { For, template } from '@airlib/react';
 import { ConfirmDialog } from './Confirm.js';
 import { DIALOG_CONFIGS } from './config.js';
 import { CONFIRM_DIALOG_LIST } from './supporting.js';

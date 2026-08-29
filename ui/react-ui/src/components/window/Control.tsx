@@ -1,5 +1,5 @@
 import { classx } from '@airlib/headless/utils';
-import { render, setup } from '@anchorlib/react';
+import { render, setup } from '@airlib/react';
 import type { HTMLAttributes, MouseEventHandler } from 'react';
 import { CloseIcon, MaximizeIcon, MinimizeIcon, RestoreIcon } from '../../icons/index.js';
 import { getWindowCtx } from '../../lib/index.js';

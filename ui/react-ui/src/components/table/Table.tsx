@@ -1,5 +1,5 @@
 import { classx } from '@airlib/headless/utils';
-import { derived, isFunction, untrack } from '@anchorlib/core';
+import { derived, isFunction, untrack } from '@airlib/core';
 import {
   $use,
   type Bindable,
@@ -11,7 +11,7 @@ import {
   render,
   setup,
   template,
-} from '@anchorlib/react';
+} from '@airlib/react';
 import type { ComponentProps as ReactProps, ReactNode } from 'react';
 import { Checkbox } from '../../form/index.js';
 import { DropDown } from '../../icons/index.js';

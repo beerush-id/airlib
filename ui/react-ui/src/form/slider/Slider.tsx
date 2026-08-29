@@ -1,7 +1,7 @@
 import { formInput } from '@airlib/form';
 import type { AnyType } from '@airlib/headless';
 import { classx } from '@airlib/headless/utils';
-import { type Bindable, render, setup } from '@anchorlib/react';
+import { type Bindable, render, setup } from '@airlib/react';
 import type { ComponentProps } from 'react';
 import { SLIDER_CONFIGS } from './config.js';
 

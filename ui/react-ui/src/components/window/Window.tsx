@@ -1,5 +1,5 @@
 import { dragRef, focusRef, KIT_CONFIGS, resizeRef } from '@airlib/headless';
-import { render, setContext, setup } from '@anchorlib/react';
+import { render, setContext, setup } from '@airlib/react';
 import type { HTMLAttributes } from 'react';
 import { getWindow, WINDOW_CTX_SYMBOL } from '../../lib/index.js';
 import type { WindowControls } from './Control.js';

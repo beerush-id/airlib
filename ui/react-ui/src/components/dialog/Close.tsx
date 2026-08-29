@@ -1,7 +1,7 @@
 import { type DialogState, getDialog } from '@airlib/headless/components';
-import { type AnyType, captureStack, classx, isNullish } from '@anchorlib/core';
-import { render, setup } from '@anchorlib/react';
-import type { MouseEventHandler, ReactNode, ComponentProps as ReactProps } from 'react';
+import { type AnyType, captureStack, isNullish } from '@airlib/core';
+import { classx, render, setup } from '@airlib/react';
+import type { ComponentProps as ReactProps, MouseEventHandler, ReactNode } from 'react';
 import { CloseIcon } from '../../icons/index.js';
 import { DIALOG_CONFIGS } from './config.js';
 
