@@ -1,4 +1,4 @@
-import type { StateUnsubscribe } from '@anchorlib/core';
+import type { StateUnsubscribe } from '@airlib/core';
 import { ATTR_SUFFIXES, CSS_SUFFIXES } from './rect.js';
 import { impure } from './state.js';
 

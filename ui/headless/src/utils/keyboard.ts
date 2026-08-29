@@ -1,4 +1,4 @@
-import type { StateUnsubscribe } from '@anchorlib/core';
+import type { StateUnsubscribe } from '@airlib/core';
 import type { MouseModifier } from './mouse.js';
 import { impure } from './state.js';
 

@@ -1,4 +1,4 @@
-import { anchor, isBrowser, type StateUnsubscribe } from '@anchorlib/core';
+import { anchor, isBrowser, type StateUnsubscribe } from '@airlib/core';
 import { impure } from './state.js';
 
 export type ViewportSelectors = typeof MEDIA_SELECTORS;

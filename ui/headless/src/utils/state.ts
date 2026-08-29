@@ -1,5 +1,5 @@
-import type { MutableRef, Primitive, StateOptions } from '@anchorlib/core';
-import { isBrowser, linkable, mutable } from '@anchorlib/core';
+import type { MutableRef, Primitive, StateOptions } from '@airlib/core';
+import { isBrowser, linkable, mutable } from '@airlib/core';
 import type { AnyType } from '../types.js';
 
 /**

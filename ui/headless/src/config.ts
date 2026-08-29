@@ -1,4 +1,4 @@
-import { onCleanup } from '@anchorlib/core';
+import { onCleanup } from '@airlib/core';
 import type { KitConfigs } from './types.js';
 import { watchDocument, watchKeyboard, watchMedia, watchPointer } from './utils/index.js';
 

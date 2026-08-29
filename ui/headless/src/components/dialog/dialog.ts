@@ -1,6 +1,6 @@
 import {
-  type AnyType,
   anchor,
+  type AnyType,
   effect,
   getContext,
   isNullish,
@@ -8,7 +8,7 @@ import {
   onCleanup,
   setContext,
   untrack,
-} from '@anchorlib/core';
+} from '@airlib/core';
 import { createFocusTrap, type FocusTrapOptions } from '../../utils/index.js';
 
 export interface DialogInit<T> {

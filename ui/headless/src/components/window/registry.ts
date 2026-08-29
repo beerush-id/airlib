@@ -1,4 +1,4 @@
-import { safeRun } from '@anchorlib/core';
+import { safeRun } from '@airlib/core';
 import { impure } from '../../utils/index.js';
 import { WindowLauncher } from './launcher.js';
 import { WindowStacks } from './stack.js';

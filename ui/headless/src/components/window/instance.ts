@@ -1,4 +1,4 @@
-import { createObserver, onCleanup, type StateUnsubscribe, untrack, uuid } from '@anchorlib/core';
+import { createObserver, onCleanup, type StateUnsubscribe, untrack, uuid } from '@airlib/core';
 import { KIT_CONFIGS } from '../../config.js';
 import type { AnyType } from '../../types.js';
 import { impure } from '../../utils/index.js';

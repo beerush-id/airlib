@@ -1,4 +1,4 @@
-import { anchor, getContext, type Linkable, mutable, setContext } from '@anchorlib/core';
+import { anchor, getContext, type Linkable, mutable, setContext } from '@airlib/core';
 
 export type TabOptions = {
   deferred?: boolean;

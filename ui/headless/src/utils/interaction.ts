@@ -1,4 +1,4 @@
-import { anchor, effect } from '@anchorlib/core';
+import { anchor, effect } from '@airlib/core';
 import type { AnyType } from '../types.js';
 import { subscribeEvent } from './document.js';
 import { getPointer, MOUSE_BUTTONS, type MouseButton } from './mouse.js';

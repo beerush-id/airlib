@@ -1,4 +1,4 @@
-import { derived } from '@anchorlib/core';
+import { derived } from '@airlib/core';
 import { classx } from 'src/utils/classx.ts';
 import type { SizeClassifier, Sizing } from './sizing.ts';
 

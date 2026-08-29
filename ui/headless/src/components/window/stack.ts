@@ -1,4 +1,4 @@
-import { untrack } from '@anchorlib/core';
+import { untrack } from '@airlib/core';
 import { KIT_CONFIGS } from '../../config.js';
 import type { AnyType } from '../../types.js';
 import type { WindowInstance } from './instance.js';

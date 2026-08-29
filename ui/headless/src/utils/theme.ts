@@ -1,4 +1,4 @@
-import { cookies, effect, isBrowser, untrack } from '@anchorlib/core';
+import { cookies, effect, isBrowser, untrack } from '@airlib/core';
 import { KIT_CONFIGS } from '../config.js';
 
 export type ColorScheme = {

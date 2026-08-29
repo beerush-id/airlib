@@ -1,4 +1,4 @@
-import { createLifecycle } from '@anchorlib/core';
+import { createLifecycle } from '@airlib/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { popover } from '../../src/components/popover.js';
 

@@ -1,4 +1,4 @@
-import { derived } from '@anchorlib/core';
+import { derived } from '@airlib/core';
 import { type ClassInput, classx } from '../../utils/index.js';
 import { selectionCtx } from '../selection.js';
 import type { SizeClassifier, Sizing } from '../sizing.js';

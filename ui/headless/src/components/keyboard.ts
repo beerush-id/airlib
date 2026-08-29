@@ -1,4 +1,4 @@
-import { effect, mutable } from '@anchorlib/core';
+import { effect, mutable } from '@airlib/core';
 import { getFocusable } from '../utils/index.js';
 
 export type ArrowRefOptions = {

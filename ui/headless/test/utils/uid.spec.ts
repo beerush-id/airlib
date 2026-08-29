@@ -1,4 +1,4 @@
-import { createLifecycle } from '@anchorlib/core';
+import { createLifecycle } from '@airlib/core';
 import { describe, expect, it } from 'vitest';
 import { uIndex } from '../../src/utils/uid.js';
 

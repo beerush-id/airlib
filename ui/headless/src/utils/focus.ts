@@ -1,4 +1,4 @@
-import { isBrowser, microtask } from '@anchorlib/core';
+import { isBrowser, microtask } from '@airlib/core';
 import { KIT_CONFIGS } from '../config.js';
 import { FOCUSABLE_SELECTORS, getFocusable } from './document.js';
 import { suspendOverflow } from './scroll.js';

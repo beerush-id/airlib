@@ -1,4 +1,4 @@
-import { anchor, type Linkable, type StateUnsubscribe, untrack } from '@anchorlib/core';
+import { anchor, type Linkable, type StateUnsubscribe, untrack } from '@airlib/core';
 import { impure } from './state.js';
 
 export type MouseButton = 0 | 1 | 2 | 3 | 4;

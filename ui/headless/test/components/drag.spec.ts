@@ -1,4 +1,4 @@
-import { createLifecycle, microtask } from '@anchorlib/core';
+import { createLifecycle, microtask } from '@airlib/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SNAP_BOUND } from '../../src/config.js';
 import { dragRef, dragState } from '../../src/index.js';

@@ -45,8 +45,8 @@
     "vitest": "catalog:"
   },
   "peerDependencies": {
-    "@anchorlib/core": "catalog:lib",
-    "@anchorlib/storage": "catalog:lib",
+    "@airlib/core": "catalog:lib",
+    "@airlib/storage": "catalog:lib",
     "typescript": "catalog:lib"
   },
   "scripts": {

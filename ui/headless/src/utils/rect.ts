@@ -1,4 +1,4 @@
-import { microtask } from '@anchorlib/core';
+import { microtask } from '@airlib/core';
 import { KIT_CONFIGS, SNAP_BOUND } from '../config.js';
 import type { SnapToBound } from '../types.js';
 

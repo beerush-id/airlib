@@ -1,4 +1,4 @@
-import { clearContextStore, createLifecycle } from '@anchorlib/core';
+import { clearContextStore, createLifecycle } from '@airlib/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDialogState, DialogState, getDialog, setDialog } from '../../src/index.js';
 

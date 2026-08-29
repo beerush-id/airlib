@@ -1,4 +1,4 @@
-import { mutable } from '@anchorlib/core';
+import { mutable } from '@airlib/core';
 import type { AnyType } from 'src/types.ts';
 
 export const LIST_OPTIONS = {

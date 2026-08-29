@@ -1,4 +1,4 @@
-import { isBrowser, onCleanup } from '@anchorlib/core';
+import { isBrowser, onCleanup } from '@airlib/core';
 import { KIT_CONFIGS } from '../config.js';
 import type { SnapToBound } from '../types.js';
 import type {

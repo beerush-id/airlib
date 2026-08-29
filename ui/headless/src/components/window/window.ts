@@ -1,5 +1,5 @@
-import { captureStack, isBrowser } from '@anchorlib/core';
-import { persistent } from '@anchorlib/storage';
+import { captureStack, isBrowser } from '@airlib/core';
+import { persistent } from '@airlib/storage';
 import { KIT_CONFIGS } from '../../config.js';
 import type { AnyType } from '../../types.js';
 import { impure } from '../../utils/index.js';

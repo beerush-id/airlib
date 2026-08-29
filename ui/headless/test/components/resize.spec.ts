@@ -1,4 +1,4 @@
-import { createLifecycle, microtask } from '@anchorlib/core';
+import { createLifecycle, microtask } from '@airlib/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { KIT_CONFIGS } from '../../src/config.js';
 import { resizeRef, resizeState } from '../../src/index.js';

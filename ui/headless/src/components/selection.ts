@@ -1,4 +1,4 @@
-import { createContext, effect, mutable } from '@anchorlib/core';
+import { createContext, effect, mutable } from '@airlib/core';
 import type { AnyType } from '../types.js';
 
 export type SelectionContext<T> = {

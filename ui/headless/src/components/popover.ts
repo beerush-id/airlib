@@ -1,9 +1,9 @@
-import { anchor, effect, mutable, untrack } from '@anchorlib/core';
+import { anchor, effect, mutable, untrack } from '@airlib/core';
 import {
   type AnchorOffset,
-  type AxisPosition,
   animationFrame,
   applyPlacement,
+  type AxisPosition,
   bindInteraction,
   captureSnapshot,
   clearPlacement,
