@@ -1,5 +1,5 @@
 import { type AnyType, formState } from '@airlib/form';
-import { derived, setup } from '@anchorlib/solid';
+import { derived, setup } from '@airlib/solid';
 import type { JSX } from 'solid-js';
 import type { ZodObject, ZodRawShape } from 'zod';
 import { FORM_OPTIONS, FORM_OPTIONS_KEYS, type FormDefaultOptions } from './config.js';

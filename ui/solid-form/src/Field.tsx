@@ -1,6 +1,6 @@
 import type { AnyType, FormField, FormState } from '@airlib/form';
 import { formField } from '@airlib/form';
-import { setup } from '@anchorlib/solid';
+import { setup } from '@airlib/solid';
 import { createMemo, For, type JSX } from 'solid-js';
 import type { ZodObject, ZodRawShape } from 'zod';
 import { FIELD_OPTIONS, FIELD_OPTIONS_KEYS, type FieldDefaultOptions } from './config.js';

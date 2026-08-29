@@ -1,6 +1,6 @@
 /** @jsxImportSource solid-js */
 
-import { mutable } from '@anchorlib/solid';
+import { mutable } from '@airlib/solid';
 import { cleanup, fireEvent, render as renderComponent, screen } from '@solidjs/testing-library';
 import { act } from 'react';
 import { For } from 'solid-js';

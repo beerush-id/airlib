@@ -1,5 +1,5 @@
 import { type AnyType, formField } from '@airlib/form';
-import { setup } from '@anchorlib/solid';
+import { setup } from '@airlib/solid';
 import { createMemo, type JSX } from 'solid-js';
 import { FIELD_OPTIONS } from './config.js';
 

@@ -50,7 +50,7 @@
   },
   "peerDependencies": {
     "@airlib/form": "workspace:*",
-    "@anchorlib/solid": "catalog:lib",
+    "@airlib/solid": "catalog:lib",
     "solid-js": "catalog:lib",
     "typescript": "catalog:lib",
     "zod": "catalog:lib"

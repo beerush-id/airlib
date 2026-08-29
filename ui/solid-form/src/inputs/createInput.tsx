@@ -1,6 +1,6 @@
 import type { AnyType, FormInputOptions } from '@airlib/form';
 import { formInput } from '@airlib/form';
-import { derived, setup } from '@anchorlib/solid';
+import { derived, setup } from '@airlib/solid';
 import { getInputClasses, getSpecificOptions, INPUT_OPTIONS_KEYS } from '../config.js';
 
 export function createInput<P extends Record<string, AnyType>, T = AnyType>(

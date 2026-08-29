@@ -1,6 +1,6 @@
 # AIR Solid Form
 
-Handling form states, validations, and complex data structures like arrays and nested objects in standard SolidJS can be verbose and hard to optimize for performance. `@airlib/solid-form` provides reactive form components built on top of `@anchorlib/solid` to solve this, ensuring high performance without unnecessary re-renders while giving a deep type-safe structure.
+Handling form states, validations, and complex data structures like arrays and nested objects in standard SolidJS can be verbose and hard to optimize for performance. `@airlib/solid-form` provides reactive form components built on top of `@airlib/solid` to solve this, ensuring high performance without unnecessary re-renders while giving a deep type-safe structure.
 
 ## Creating Typed Forms
 
@@ -145,14 +145,14 @@ export function TeamEditor() {
 }
 ```
 
-The `FieldList` exposes the array items to the render function, allowing direct reactive mutations like `.push()` on the array. Because this uses `@anchorlib/solid` under the hood, these mutations are tracked without the need for verbose state management hooks.
+The `FieldList` exposes the array items to the render function, allowing direct reactive mutations like `.push()` on the array. Because this uses `@airlib/solid` under the hood, these mutations are tracked without the need for verbose state management hooks.
 
 ## Working With Custom Inputs
 
 Sometimes standard inputs are not enough. Building custom inputs that integrate with the form state is trivial using the built-in `formInput` hook or the `createInput` factory.
 
 ```tsx
-import { setup } from '@anchorlib/solid';
+import { setup } from '@airlib/solid';
 import { formInput } from '@airlib/form';
 
 export const CustomInput = setup<{ name: string }>((props) => {

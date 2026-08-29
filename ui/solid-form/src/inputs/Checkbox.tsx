@@ -1,5 +1,5 @@
 import { type AnyType, formInput } from '@airlib/form';
-import { type Bindable, derived, setup } from '@anchorlib/solid';
+import { type Bindable, derived, setup } from '@airlib/solid';
 import type { JSX as Jsx } from 'solid-js';
 import { CHECKBOX_OPTIONS, CHECKBOX_OPTIONS_KEYS, getInputClasses, INPUT_OPTIONS_KEYS } from '../config.js';
 

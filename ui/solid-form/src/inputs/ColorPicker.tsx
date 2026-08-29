@@ -1,4 +1,4 @@
-import type { Bindable } from '@anchorlib/solid';
+import type { Bindable } from '@airlib/solid';
 import type { JSX as Jsx } from 'solid-js/jsx-runtime';
 import { createInput } from './createInput.js';
 

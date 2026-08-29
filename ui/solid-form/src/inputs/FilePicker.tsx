@@ -1,5 +1,5 @@
 import { type AnyType, formInput } from '@airlib/form';
-import { derived, setup } from '@anchorlib/solid';
+import { derived, setup } from '@airlib/solid';
 import type { JSX } from 'solid-js';
 import { FILE_OPTIONS, FILE_OPTIONS_KEYS, getInputClasses, INPUT_OPTIONS_KEYS } from '../config.js';
 

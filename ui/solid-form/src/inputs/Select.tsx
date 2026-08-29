@@ -1,5 +1,5 @@
 import { type AnyType, formInput } from '@airlib/form';
-import { type Bindable, derived, setup } from '@anchorlib/solid';
+import { type Bindable, derived, setup } from '@airlib/solid';
 import { createEffect, type JSX as Jsx } from 'solid-js';
 import { getInputClasses, INPUT_OPTIONS_KEYS, SELECT_OPTIONS, SELECT_OPTIONS_KEYS } from '../config.js';
 

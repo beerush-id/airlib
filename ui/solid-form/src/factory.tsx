@@ -1,6 +1,6 @@
 import type { AnyType, DeepPaths, FormField, FormState, PathValue } from '@airlib/form';
 import { formField, formState, getForm } from '@airlib/form';
-import { derived, setup } from '@anchorlib/solid';
+import { derived, setup } from '@airlib/solid';
 import { createMemo, For, type JSX } from 'solid-js';
 import type { input, ZodObject, ZodRawShape } from 'zod';
 import type { FieldDefaultOptions, FormDefaultOptions, FormGeneralOptions } from './config.js';
