@@ -1,0 +1,102 @@
+{
+  "type": "module",
+  "name": "@airlib/aikit",
+  "version": "1.0.0",
+  "description": "AI toolkit abstraction for AIR Stack",
+  "keywords": ["ai", "gen ai", "ai toolkit"],
+  "author": "Nanang Mahdaen El Agung <mahdaen@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beerush-id/airlib.git"
+  },
+  "sideEffects": false,
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./constructor": {
+      "types": "./dist/constructor.d.ts",
+      "import": "./dist/constructor.js"
+    },
+    "./drivers": {
+      "types": "./dist/drivers/index.d.ts",
+      "import": "./dist/drivers/index.js"
+    },
+    "./chat": {
+      "types": "./dist/chat/index.d.ts",
+      "import": "./dist/chat/index.js"
+    },
+    "./chat/constructor": {
+      "types": "./dist/chat/constructor.d.ts",
+      "import": "./dist/chat/constructor.js"
+    },
+    "./image": {
+      "types": "./dist/image/index.d.ts",
+      "import": "./dist/image/index.js"
+    },
+    "./image/constructor": {
+      "types": "./dist/image/constructor.d.ts",
+      "import": "./dist/image/constructor.js"
+    },
+    "./music": {
+      "types": "./dist/text/index.d.ts",
+      "import": "./dist/text/index.js"
+    },
+    "./music/constructor": {
+      "types": "./dist/music/constructor.d.ts",
+      "import": "./dist/music/constructor.js"
+    },
+    "./speech": {
+      "types": "./dist/speech/index.d.ts",
+      "import": "./dist/speech/index.js"
+    },
+    "./speech/constructor": {
+      "types": "./dist/speech/constructor.d.ts",
+      "import": "./dist/speech/constructor.js"
+    },
+    "./video": {
+      "types": "./dist/video/index.d.ts",
+      "import": "./dist/video/index.js"
+    },
+    "./video/constructor": {
+      "types": "./dist/video/constructor.d.ts",
+      "import": "./dist/video/constructor.js"
+    }
+  },
+  "files": ["dist"],
+  "directories": {
+    "dist": "dist"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "fake-indexeddb": "catalog:",
+    "publint": "catalog:",
+    "rimraf": "catalog:",
+    "tsdown": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "@irpclib/irpc": "catalog:lib",
+    "typescript": "catalog:lib",
+    "zod": "catalog:lib"
+  },
+  "scripts": {
+    "dev": "tsdown --watch ./src",
+    "clean": "rimraf dist",
+    "build": "bun run clean && tsdown && publint",
+    "prepublish": "bun run format && bun run build",
+    "format": "biome format --write",
+    "test:run": "rimraf coverage && vitest --run",
+    "test:preview": "rimraf coverage && vitest --run && vite preview --outDir coverage"
+  },
+  "license": "MIT"
+}

@@ -1,7 +1,7 @@
 import { Tooltip, WindowDock, WindowLauncher } from '@airlib/react-ui';
 import { CloseIcon } from '@airlib/react-ui/icons';
 import { webWindow } from '@airlib/react-ui/lib';
-import { Link, page, Title } from '@anchorlib/react';
+import { Link, page, Title } from '@airlib/react';
 import RootPage from '../page.js';
 import DemoWindow from './DemoWindow.js';
 import { desktopIndex } from './route.js';

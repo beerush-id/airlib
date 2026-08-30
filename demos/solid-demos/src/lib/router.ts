@@ -1,4 +1,4 @@
-import { createRouter } from '@anchorlib/solid';
+import { createRouter } from '@airlib/solid';
 import type { JSX } from 'solid-js';
 
 export const router = createRouter<JSX.Element>();

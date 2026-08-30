@@ -78,7 +78,8 @@
   border-width: 0;
   border-style: solid;
   border-color: transparent;
-  @apply no-underline select-none air-focus-ring;
+  @extend air-focus-ring;
+  @apply no-underline select-none;
 
   /* Smart Icon Padding (M3 Spec) */
   &:has(> .air-icon:first-child:not(:last-child)) {
@@ -242,7 +243,7 @@
 
 /* Composed Utilities */
 @utility air-chip {
-  @apply air-chip-base air-chip-outlined-surface air-state-layer;
+  @extend air-chip-base air-chip-outlined-surface air-state-layer;
   --state-layer-color: var(--air-chip-outlined-state);
 
   &:focus-visible:not(:disabled) {
@@ -251,30 +252,30 @@
 
   &[aria-selected='true'],
   &[aria-checked='true'] {
-    @apply air-chip-outlined-selected-surface;
+    @extend air-chip-outlined-selected-surface;
     --state-layer-color: var(--air-chip-selected-state);
   }
 
   &:disabled,
   &[aria-disabled='true'] {
-    @apply air-chip-disabled;
+    @extend air-chip-disabled;
     --state-layer-color: transparent;
   }
 }
 
 @utility air-chip-elevated {
-  @apply air-chip-base air-chip-elevated-surface air-state-layer;
+  @extend air-chip-base air-chip-elevated-surface air-state-layer;
   --state-layer-color: var(--air-chip-elevated-state);
 
   &[aria-selected='true'],
   &[aria-checked='true'] {
-    @apply air-chip-elevated-selected-surface;
+    @extend air-chip-elevated-selected-surface;
     --state-layer-color: var(--air-chip-selected-state);
   }
 
   &:disabled,
   &[aria-disabled='true'] {
-    @apply air-chip-disabled;
+    @extend air-chip-disabled;
     --state-layer-color: transparent;
   }
 }

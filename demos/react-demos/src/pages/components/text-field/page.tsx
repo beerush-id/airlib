@@ -9,7 +9,7 @@ import {
   FieldSupportingText,
 } from '@airlib/react-ui/components';
 import { TextField } from '@airlib/react-ui/form';
-import { page, setup } from '@anchorlib/react';
+import { page, setup } from '@airlib/react';
 import { textFieldRoute } from '../route.js';
 
 const TextFieldDemo = setup(() => {

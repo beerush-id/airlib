@@ -1,6 +1,6 @@
 import { createDialogState } from '@airlib/headless/components';
 import { Button, Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@airlib/react-ui/components';
-import { setup } from '@anchorlib/react';
+import { setup } from '@airlib/react';
 
 const Fullscreen = setup(() => {
   const dialog = createDialogState();

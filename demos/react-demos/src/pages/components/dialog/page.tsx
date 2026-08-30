@@ -10,7 +10,7 @@ import {
   Icon,
   Tooltip,
 } from '@airlib/react-ui/components';
-import { $bind, mutable, page, Show, setup } from '@anchorlib/react';
+import { $bind, mutable, page, Show, setup } from '@airlib/react';
 import { dialogRoute } from '../route.js';
 import Data from './Data.js';
 import Fullscreen from './Fullscreen.js';

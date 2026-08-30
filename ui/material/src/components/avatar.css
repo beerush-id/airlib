@@ -89,37 +89,37 @@
 @utility air-avatar-xs {
   --air-avatar-size: var(--air-avatar-size-xs);
   --air-avatar-icon-size: var(--air-avatar-icon-size-xs);
-  @apply air-label-sm;
+  @extend air-label-sm;
 }
 
 @utility air-avatar-sm {
   --air-avatar-size: var(--air-avatar-size-sm);
   --air-avatar-icon-size: var(--air-avatar-icon-size-sm);
-  @apply air-label-md;
+  @extend air-label-md;
 }
 
 @utility air-avatar-md {
   --air-avatar-size: var(--air-avatar-size-md);
   --air-avatar-icon-size: var(--air-avatar-icon-size-md);
-  @apply air-label-lg;
+  @extend air-label-lg;
 }
 
 @utility air-avatar-lg {
   --air-avatar-size: var(--air-avatar-size-lg);
   --air-avatar-icon-size: var(--air-avatar-icon-size-lg);
-  @apply air-title-lg;
+  @extend air-title-lg;
 }
 
 @utility air-avatar-xl {
   --air-avatar-size: var(--air-avatar-size-xl);
   --air-avatar-icon-size: var(--air-avatar-icon-size-xl);
-  @apply air-title-lg;
+  @extend air-title-lg;
 }
 
 @utility air-avatar-xxl {
   --air-avatar-size: var(--air-avatar-size-xxl);
   --air-avatar-icon-size: var(--air-avatar-icon-size-xxl);
-  @apply air-display-sm;
+  @extend air-display-sm;
 }
 
 /* Variants */

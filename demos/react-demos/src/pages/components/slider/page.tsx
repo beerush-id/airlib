@@ -1,6 +1,6 @@
 import { Card, CardBody, CardGroup, CardHeader, CardTitle, Field, FieldLabel } from '@airlib/react-ui/components';
 import { Slider } from '@airlib/react-ui/form';
-import { $bind, mutable, page, setup } from '@anchorlib/react';
+import { $bind, mutable, page, setup } from '@airlib/react';
 import { sliderRoute } from '../route.js';
 
 const SliderDemo = setup(() => {

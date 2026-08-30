@@ -59,7 +59,7 @@
   --window-max-height: auto;
   --window-z-index: var(--z-index-modal);
 
-  @apply air-window-surface air-window-collapsed;
+  @extend air-window-surface air-window-collapsed;
 
   z-index: var(--window-z-index);
   animation-name: window-focus-out;
@@ -92,7 +92,7 @@
   }
 
   &[data-maximized='true'] {
-    @apply air-window-expanded;
+    @extend air-window-expanded;
   }
 
   &[data-maximized='true'][data-drag-out] {
@@ -146,7 +146,7 @@
 @utility air-window-control-btn {
   @apply rounded-full p-0.5 flex items-center justify-center;
   @apply bg-surface-container-high transition-colors;
-  @apply air-focus-ring;
+  @extend air-focus-ring;
 
   &:focus-visible svg {
     @apply opacity-100;
@@ -154,7 +154,7 @@
 }
 
 @utility air-window-close {
-  @apply air-window-control-btn;
+  @extend air-window-control-btn;
   @apply bg-red-500 text-black;
 
   &:hover {
@@ -171,7 +171,7 @@
 }
 
 @utility air-window-minimize {
-  @apply air-window-control-btn;
+  @extend air-window-control-btn;
   @apply bg-yellow-500 text-black;
 
   .air-window:not(:focus-within) &:not(:hover, :active, :focus) {
@@ -188,7 +188,7 @@
 }
 
 @utility air-window-maximize {
-  @apply air-window-control-btn;
+  @extend air-window-control-btn;
   @apply bg-green-500 text-black;
 
   &:hover {
@@ -205,16 +205,16 @@
 }
 
 @utility air-window-title {
-  @apply air-title-sm-strong;
+  @extend air-title-sm-strong;
 }
 
 @utility air-window-subtitle {
-  @apply air-field-label;
+  @extend air-field-label;
 }
 
 @utility air-window-splash {
-  @apply air-window-surface z-modal;
-  @apply flex flex-col items-center justify-center gap-4;
+  @extend air-window-surface;
+  @apply z-modal flex flex-col items-center justify-center gap-4;
   @apply min-w-96 min-h-64 left-1/2 top-1/2 shadow-window-active;
   @apply -translate-x-1/2 -translate-y-1/2 z-popover;
   border-width: 1px;
@@ -228,56 +228,68 @@
 }
 
 @utility air-resize-corner {
-  @apply air-resize w-resizer h-resizer;
+  @extend air-resize;
+  @apply w-resizer h-resizer;
   z-index: 1;
 }
 
 @utility air-resize-x {
-  @apply air-resize w-resizer h-full top-0;
+  @extend air-resize;
+  @apply w-resizer h-full top-0;
 }
 
 @utility air-resize-y {
-  @apply air-resize h-resizer w-full left-0;
+  @extend air-resize;
+  @apply h-resizer w-full left-0;
 }
 
 @utility air-resize-t {
-  @apply air-resize-y -top-resizer;
+  @extend air-resize-y;
+  @apply -top-resizer;
   cursor: ns-resize;
 }
 @utility air-resize-r {
-  @apply air-resize-x -right-resizer;
+  @extend air-resize-x;
+  @apply -right-resizer;
   cursor: ew-resize;
 }
 @utility air-resize-b {
-  @apply air-resize-y -bottom-resizer;
+  @extend air-resize-y;
+  @apply -bottom-resizer;
   cursor: ns-resize;
 }
 @utility air-resize-l {
-  @apply air-resize-x -left-resizer;
+  @extend air-resize-x;
+  @apply -left-resizer;
   cursor: ew-resize;
 }
 @utility air-resize-tr {
-  @apply air-resize-corner -top-resizer -right-resizer;
+  @extend air-resize-corner;
+  @apply -top-resizer -right-resizer;
   cursor: nesw-resize;
 }
 @utility air-resize-tl {
-  @apply air-resize-corner -top-resizer -left-resizer;
+  @extend air-resize-corner;
+  @apply -top-resizer -left-resizer;
   cursor: nwse-resize;
 }
 @utility air-resize-br {
-  @apply air-resize-corner -bottom-resizer -right-resizer;
+  @extend air-resize-corner;
+  @apply -bottom-resizer -right-resizer;
   cursor: nwse-resize;
 }
 @utility air-resize-bl {
-  @apply air-resize-corner -bottom-resizer -left-resizer;
+  @extend air-resize-corner;
+  @apply -bottom-resizer -left-resizer;
   cursor: nesw-resize;
 }
 
 @utility air-window-launcher {
-  @apply air-window-surface py-2 px-2 flex items-center gap-2;
+  @extend air-window-surface;
+  @apply py-2 px-2 flex items-center gap-2;
   @apply z-fixed bottom-2 left-1/2 -translate-x-1/2;
 }
 
 @utility air-window-launcher-button {
-  @apply air-icon-button;
+  @extend air-icon-button;
 }

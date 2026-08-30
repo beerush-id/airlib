@@ -97,7 +97,8 @@
 
 /* Base row setup for focus and z-index */
 @utility air-table-row {
-  @apply air-focus-ring relative;
+  @extend air-focus-ring;
+  @apply relative;
   transition-property: background-color, color, outline-color;
   transition-duration: var(--duration-short);
   transition-timing-function: var(--ease-standard);
@@ -109,7 +110,8 @@
 
 /* Filled Segmented Variant */
 @utility air-table-row-filled {
-  @apply air-table-row cursor-pointer;
+  @extend air-table-row;
+  @apply cursor-pointer;
   background-color: var(--air-table-row-filled-bg);
 
   &:hover {

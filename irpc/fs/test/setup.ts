@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { anchor } from '@anchorlib/core';
+import { anchor } from '@airlib/core';
 import { beforeEach } from 'vitest';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

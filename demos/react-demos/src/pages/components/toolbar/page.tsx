@@ -20,7 +20,7 @@ import {
   Tooltip,
 } from '@airlib/react-ui/components';
 import { Select, SelectItem, SelectMenu, SelectTrigger } from '@airlib/react-ui/form';
-import { $bind, $use, history, mutable, page, setup, template } from '@anchorlib/react';
+import { $bind, $use, history, mutable, page, setup, template } from '@airlib/react';
 import { toolbarRoute } from '../route.js';
 
 const ALIGNMENT = {

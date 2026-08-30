@@ -85,7 +85,7 @@
 /* Base Layout for List Item */
 @utility air-list-view-item-base {
   @apply flex items-center box-border;
-  @apply air-focus-ring;
+  @extend air-focus-ring;
 
   border-radius: var(--air-list-item-radius); /* Inner segmentation radius */
   min-height: var(--air-list-item-min-height); /* 56px */
@@ -130,7 +130,8 @@
 }
 
 @utility air-list-title {
-  @apply flex items-center gap-1 air-title-md text-on-surface;
+  @extend air-title-md;
+  @apply flex items-center gap-1 text-on-surface;
 }
 
 @utility air-list-subtitle {
@@ -145,15 +146,16 @@
 
 /* Composed Utilities */
 @utility air-list-view-item {
-  @apply air-list-view-item-base air-list-view-item-surface;
+  @extend air-list-view-item-base air-list-view-item-surface;
 }
 
 @utility air-list-view-button {
-  @apply air-list-view-item cursor-pointer air-state-layer;
+  @extend air-list-view-item air-state-layer;
+  @apply cursor-pointer;
   --state-layer-color: var(--air-list-item-state);
 
   &[aria-selected='true'] {
-    @apply air-list-view-item-selected-surface;
+    @extend air-list-view-item-selected-surface;
     --state-layer-color: var(--air-list-item-selected-state);
   }
 }

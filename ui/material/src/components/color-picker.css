@@ -6,7 +6,7 @@
 
 @utility air-color-picker {
   @apply appearance-none p-0 cursor-pointer;
-  @apply air-focus-ring;
+  @extend air-focus-ring;
   width: var(--air-color-picker-width);
   height: var(--air-color-picker-height);
   border-width: 0;

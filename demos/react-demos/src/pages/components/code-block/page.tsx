@@ -1,7 +1,7 @@
 import { Card, CardBody, CardGroup, CardHeader, CardTitle, CodeBlock } from '@airlib/react-ui/components';
-import { page, setup } from '@anchorlib/react';
+import { page, setup } from '@airlib/react';
 import { codeBlockRoute } from '../route.js';
-import { sleep } from '@anchorlib/core';
+import { sleep } from '@airlib/core';
 
 const CodeBlockDemo = setup(() => {
   return (

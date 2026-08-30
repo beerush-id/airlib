@@ -1,6 +1,6 @@
 import './styles/styles.css';
 
-import { UIRouter } from '@anchorlib/solid';
+import { UIRouter } from '@airlib/solid';
 import { render } from 'solid-js/web';
 import { router } from './lib/router.js';
 import { RootLayout } from './pages/layout.js';

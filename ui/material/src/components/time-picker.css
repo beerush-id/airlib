@@ -29,7 +29,7 @@
 @utility air-time-picker-unit-base {
   @apply flex items-center justify-center;
   @apply cursor-pointer;
-  @apply air-focus-ring;
+  @extend air-focus-ring;
   width: var(--air-time-picker-unit-size);
   height: var(--air-time-picker-unit-size);
   border-radius: var(--radius-md);
@@ -74,15 +74,15 @@
 
 /* Composed Utilities */
 @utility air-time-picker {
-  @apply air-time-picker-base air-time-picker-surface;
+  @extend air-time-picker-base air-time-picker-surface;
 }
 
 @utility air-time-picker-unit {
-  @apply air-time-picker-unit-base air-time-picker-unit-surface air-state-layer;
+  @extend air-time-picker-unit-base air-time-picker-unit-surface air-state-layer;
   --state-layer-color: var(--color-on-surface);
 
   &[aria-selected='true'] {
-    @apply air-time-picker-unit-selected-surface;
+    @extend air-time-picker-unit-selected-surface;
     --state-layer-color: var(--color-on-primary-container);
   }
 }

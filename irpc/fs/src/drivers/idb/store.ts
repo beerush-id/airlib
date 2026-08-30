@@ -1,29 +1,24 @@
-export interface MetaEntry {
-  path: string;
-  size: number;
-  type: string;
-  mime: string;
-  isDirectory: boolean;
-  createdAt: number;
-  updatedAt: number;
-}
+import type { FSEntry } from '../../index.js';
 
 export interface IDBStoreOptions {
   dbName?: string;
   metaStore?: string;
   blobStore?: string;
+  version?: number;
 }
 
 export class IDBStore {
   readonly dbName: string;
   readonly metaStoreName: string;
   readonly blobStoreName: string;
+  readonly version: number;
   private db?: Promise<IDBDatabase>;
 
   constructor(options?: IDBStoreOptions) {
     this.dbName = options?.dbName || 'irpc-fs';
     this.metaStoreName = options?.metaStore || 'meta';
     this.blobStoreName = options?.blobStore || 'blobs';
+    this.version = options?.version || 2;
   }
 
   private getDB(): Promise<IDBDatabase> {
@@ -34,11 +29,35 @@ export class IDBStore {
     }
 
     this.db = new Promise<IDBDatabase>((resolve, reject) => {
-      const req = indexedDB.open(this.dbName, 1);
-      req.onupgradeneeded = () => {
+      const req = indexedDB.open(this.dbName, this.version);
+      req.onupgradeneeded = (e) => {
         const db = req.result;
         if (!db.objectStoreNames.contains(this.metaStoreName)) {
-          db.createObjectStore(this.metaStoreName, { keyPath: 'path' });
+          const store = db.createObjectStore(this.metaStoreName, { keyPath: 'path' });
+          store.createIndex('userId', 'userId', { unique: false });
+          store.createIndex('organizationId', 'organizationId', { unique: false });
+          store.createIndex('projectId', 'projectId', { unique: false });
+          store.createIndex('category', 'category', { unique: false });
+          store.createIndex('status', 'status', { unique: false });
+          store.createIndex('hash', 'hash', { unique: false });
+          store.createIndex('sourcePath', 'sourcePath', { unique: false });
+          store.createIndex('type', 'type', { unique: false });
+          store.createIndex('isDirectory', 'isDirectory', { unique: false });
+        } else {
+          // If the store exists but we're upgrading, ensure new indices exist
+          const tx = req.transaction;
+          if (tx) {
+            const store = tx.objectStore(this.metaStoreName);
+            if (!store.indexNames.contains('userId')) store.createIndex('userId', 'userId', { unique: false });
+            if (!store.indexNames.contains('organizationId'))
+              store.createIndex('organizationId', 'organizationId', { unique: false });
+            if (!store.indexNames.contains('projectId')) store.createIndex('projectId', 'projectId', { unique: false });
+            if (!store.indexNames.contains('category')) store.createIndex('category', 'category', { unique: false });
+            if (!store.indexNames.contains('status')) store.createIndex('status', 'status', { unique: false });
+            if (!store.indexNames.contains('hash')) store.createIndex('hash', 'hash', { unique: false });
+            if (!store.indexNames.contains('sourcePath'))
+              store.createIndex('sourcePath', 'sourcePath', { unique: false });
+          }
         }
         if (!db.objectStoreNames.contains(this.blobStoreName)) {
           db.createObjectStore(this.blobStoreName);
@@ -68,8 +87,8 @@ export class IDBStore {
     );
   }
 
-  async getMeta(key: string): Promise<MetaEntry | null> {
-    return this.tx<MetaEntry | null>(
+  async getMeta(key: string): Promise<FSEntry | null> {
+    return this.tx<FSEntry | null>(
       this.metaStoreName,
       'readonly',
       (store) =>
@@ -81,7 +100,7 @@ export class IDBStore {
     );
   }
 
-  async putMeta(key: string, entry: MetaEntry): Promise<void> {
+  async putMeta(key: string, entry: FSEntry): Promise<void> {
     return this.tx<void>(
       this.metaStoreName,
       'readwrite',
@@ -107,13 +126,13 @@ export class IDBStore {
     );
   }
 
-  async listMeta(prefix: string): Promise<MetaEntry[]> {
-    return this.tx<MetaEntry[]>(
+  async listMeta(prefix: string): Promise<FSEntry[]> {
+    return this.tx<FSEntry[]>(
       this.metaStoreName,
       'readonly',
       (store) =>
         new Promise((resolve, reject) => {
-          const results: MetaEntry[] = [];
+          const results: FSEntry[] = [];
           const range = IDBKeyRange.bound(prefix, `${prefix}\uffff`);
           const req = store.openCursor(range);
           req.onsuccess = () => {
@@ -121,7 +140,7 @@ export class IDBStore {
             if (cursor) {
               const key = cursor.key as string;
               if (key.startsWith(prefix)) {
-                results.push(cursor.value as MetaEntry);
+                results.push(cursor.value as FSEntry);
               }
               cursor.continue();
             } else {

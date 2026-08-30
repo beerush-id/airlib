@@ -1,5 +1,5 @@
 import { dialogConfirm } from '@airlib/react-ui/components';
-import { page, setup } from '@anchorlib/react';
+import { page, setup } from '@airlib/react';
 import { uiIndexRoute } from './route.js';
 import { TabDemo } from './Tabs.js';
 

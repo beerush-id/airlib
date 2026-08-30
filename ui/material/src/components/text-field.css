@@ -4,7 +4,7 @@
 
 /* Container Wrapper (Specific text field overrides) */
 @utility air-text-field-container {
-  @apply air-floating-field-container;
+  @extend air-floating-field-container;
 
   /* Filled Floating Transform Override */
   &:has(.air-text-field-filled:focus) .air-field-label,
@@ -158,7 +158,7 @@
 }
 
 @utility air-text-field-input {
-  @apply air-text-field;
+  @extend air-text-field;
 
   &::placeholder {
     opacity: 1;
@@ -166,7 +166,7 @@
 }
 
 @utility air-text-field-input-filled {
-  @apply air-text-field-input air-text-field-filled;
+  @extend air-text-field-input air-text-field-filled;
   padding-top: 0;
   padding-bottom: 0;
 }

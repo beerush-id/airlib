@@ -9,7 +9,7 @@ import {
   TextInput,
 } from '@airlib/react-form';
 import { Field, FieldLabel, TextField } from '@airlib/react-ui';
-import { $bind, Link, Meta, mutable, page, setup, snippet, Title } from '@anchorlib/react';
+import { $bind, Link, Meta, mutable, page, setup, snippet, Title } from '@airlib/react';
 import airstackLogo from '../assets/airstack.svg';
 import { FormsPage } from './forms/index.js';
 import { contactSchema, submitContact, watchPrice } from './home/function.js';
@@ -476,7 +476,7 @@ export const RootPage = page(indexRoute).render(() => (
 
       <div className="air-card-outlined px-6 py-4 text-left max-w-sm w-full">
         <p className="air-label-sm text-on-surface-variant mb-2">Install</p>
-        <code className="font-mono air-body-sm text-on-surface block">bun add @anchorlib/react @irpclib/irpc</code>
+        <code className="font-mono air-body-sm text-on-surface block">bun add @airlib/react @irpclib/irpc</code>
       </div>
     </section>
   </div>

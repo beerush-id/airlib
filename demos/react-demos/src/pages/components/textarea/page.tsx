@@ -9,7 +9,7 @@ import {
   FieldSupportingText,
 } from '@airlib/react-ui/components';
 import { Textarea } from '@airlib/react-ui/form';
-import { page, setup } from '@anchorlib/react';
+import { page, setup } from '@airlib/react';
 import { textareaRoute } from '../route.js';
 
 const TextareaDemo = setup(() => {

@@ -1,7 +1,7 @@
-import { type IRPCDriver, type IRPCFile } from '@irpclib/irpc';
+import type { IRPCDriver, IRPCFile } from '@irpclib/irpc';
 import type { FSAdapter } from '../../adapter.js';
-import type { FSMeta, FSFile } from '../../index.js';
 import { FSError } from '../../error.js';
+import type { FSEntry, FSMeta } from '../../index.js';
 import { getMimeType, join, withExt } from '../../utils.js';
 import { getIDBFSOptions, type IDBFSOptions } from './context.js';
 import { IDBStore, type MetaEntry } from './store.js';
@@ -57,7 +57,7 @@ export class IDBFSDriver implements IRPCDriver<FSAdapter> {
     }
   }
 
-  private toFSFile(entry: MetaEntry, meta: FSMeta): FSFile {
+  private toFSFile(entry: MetaEntry, meta: FSMeta): FSEntry {
     const key = entry.path;
     return {
       path: entry.path.replace(meta.prefix, '') || '/',
@@ -70,7 +70,7 @@ export class IDBFSDriver implements IRPCDriver<FSAdapter> {
     };
   }
 
-  async read(meta: FSMeta, path: string): Promise<FSFile> {
+  async read(meta: FSMeta, path: string): Promise<FSEntry> {
     const key = this.key(meta, path);
     const entry = await this.getStore().getMeta(key);
     if (!entry) throw FSError.notFound('read', path);
@@ -78,7 +78,7 @@ export class IDBFSDriver implements IRPCDriver<FSAdapter> {
     return this.toFSFile(entry, meta);
   }
 
-  async write(meta: FSMeta, path: string, file: IRPCFile, thumbnail?: IRPCFile): Promise<FSFile> {
+  async write(meta: FSMeta, path: string, file: IRPCFile, thumbnail?: IRPCFile): Promise<FSEntry> {
     const store = this.getStore();
     const key = this.key(meta, path);
     const tKey = this.thumbKey(meta, path);
@@ -147,7 +147,7 @@ export class IDBFSDriver implements IRPCDriver<FSAdapter> {
     return true;
   }
 
-  async dir(meta: FSMeta, path?: string): Promise<FSFile[]> {
+  async dir(meta: FSMeta, path?: string): Promise<FSEntry[]> {
     const store = this.getStore();
     const key = path ? this.key(meta, path) : meta.prefix;
     const prefix = key.endsWith('/') ? key : `${key}/`;
@@ -161,7 +161,7 @@ export class IDBFSDriver implements IRPCDriver<FSAdapter> {
       .map((e) => this.toFSFile(e, meta));
   }
 
-  async mkdir(meta: FSMeta, path: string): Promise<FSFile> {
+  async mkdir(meta: FSMeta, path: string): Promise<FSEntry> {
     const store = this.getStore();
     const key = this.key(meta, path);
     const existing = await store.getMeta(key);
@@ -182,14 +182,14 @@ export class IDBFSDriver implements IRPCDriver<FSAdapter> {
     return this.toFSFile(entry, meta);
   }
 
-  async stat(meta: FSMeta, path: string): Promise<FSFile> {
+  async stat(meta: FSMeta, path: string): Promise<FSEntry> {
     const key = this.key(meta, path);
     const entry = await this.getStore().getMeta(key);
     if (!entry) throw FSError.notFound('stat', path);
     return this.toFSFile(entry, meta);
   }
 
-  async move(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSFile> {
+  async move(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSEntry> {
     const store = this.getStore();
     const srcKey = this.key(meta, from);
     const dst = dstMeta || meta;
@@ -206,7 +206,7 @@ export class IDBFSDriver implements IRPCDriver<FSAdapter> {
     return this.toFSFile({ ...entry, path: dstKey }, dst);
   }
 
-  async copy(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSFile> {
+  async copy(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSEntry> {
     const store = this.getStore();
     const srcKey = this.key(meta, from);
     const dst = dstMeta || meta;

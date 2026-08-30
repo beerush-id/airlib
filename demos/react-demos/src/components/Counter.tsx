@@ -1,4 +1,4 @@
-import { mutable, setup, snippet } from '@anchorlib/react';
+import { mutable, setup, snippet } from '@airlib/react';
 import { watchPrice } from '../pages/home/function.js';
 
 export const Counter = setup(() => {

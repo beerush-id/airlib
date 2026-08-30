@@ -9,7 +9,7 @@ import {
   Icon,
   Tooltip,
 } from '@airlib/react-ui/components';
-import { $bind, mutable, page, Show, setup } from '@anchorlib/react';
+import { $bind, mutable, page, Show, setup } from '@airlib/react';
 import { badgeRoute } from '../route.js';
 import Basic from './Basic.js';
 import Dot from './Dot.js';

@@ -1,6 +1,6 @@
 import { Card, CardBody, CardGroup, CardHeader, CardTitle, Field } from '@airlib/react-ui/components';
 import { Radio } from '@airlib/react-ui/form';
-import { page, setup } from '@anchorlib/react';
+import { page, setup } from '@airlib/react';
 import { radioRoute } from '../route.js';
 
 const RadioDemo = setup(() => {

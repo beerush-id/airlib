@@ -64,7 +64,7 @@
 @utility air-icon-button {
   @apply inline-flex items-center justify-center relative;
   @apply box-border p-0 cursor-pointer select-none no-underline;
-  @apply air-focus-ring air-touch-area air-state-layer;
+  @extend air-focus-ring air-touch-area air-state-layer;
   width: var(--air-icon-button-size);
   height: var(--air-icon-button-size);
   border-radius: var(--air-icon-button-radius);
@@ -112,7 +112,7 @@
   }
 
   &:disabled {
-    @apply air-icon-button-disabled;
+    @extend air-icon-button-disabled;
     --state-layer-color: transparent;
   }
 }
@@ -143,7 +143,7 @@
   }
 
   &:disabled {
-    @apply air-icon-button-disabled air-icon-button-filled-disabled;
+    @extend air-icon-button-disabled air-icon-button-filled-disabled;
     --state-layer-color: transparent;
   }
 }
@@ -161,7 +161,7 @@
   }
 
   &:disabled {
-    @apply air-icon-button-disabled air-icon-button-filled-disabled;
+    @extend air-icon-button-disabled air-icon-button-filled-disabled;
     --state-layer-color: transparent;
   }
 }
@@ -187,7 +187,7 @@
   }
 
   &:disabled {
-    @apply air-icon-button-disabled;
+    @extend air-icon-button-disabled;
     --state-layer-color: transparent;
   }
 }
@@ -296,32 +296,32 @@
 
 /* Icon Button Sizes */
 @utility air-icon-button-xs {
-  @apply air-segment-xs;
+  @extend air-segment-xs;
   --air-icon-button-size: var(--air-icon-button-size-xs);
   --air-icon-button-icon-size: var(--air-icon-button-icon-size-xs);
 }
 @utility air-icon-button-sm {
-  @apply air-segment-sm;
+  @extend air-segment-sm;
   --air-icon-button-size: var(--air-icon-button-size-sm);
   --air-icon-button-icon-size: var(--air-icon-button-icon-size-sm);
 }
 @utility air-icon-button-md {
-  @apply air-segment-md;
+  @extend air-segment-md;
   --air-icon-button-size: var(--air-icon-button-size-md);
   --air-icon-button-icon-size: var(--air-icon-button-icon-size-md);
 }
 @utility air-icon-button-lg {
-  @apply air-segment-lg;
+  @extend air-segment-lg;
   --air-icon-button-size: var(--air-icon-button-size-lg);
   --air-icon-button-icon-size: var(--air-icon-button-icon-size-lg);
 }
 @utility air-icon-button-xl {
-  @apply air-segment-xl;
+  @extend air-segment-xl;
   --air-icon-button-size: var(--air-icon-button-size-xl);
   --air-icon-button-icon-size: var(--air-icon-button-icon-size-xl);
 }
 @utility air-icon-button-xxl {
-  @apply air-segment-xxl;
+  @extend air-segment-xxl;
   --air-icon-button-size: var(--air-icon-button-size-xxl);
   --air-icon-button-icon-size: var(--air-icon-button-icon-size-xxl);
 }

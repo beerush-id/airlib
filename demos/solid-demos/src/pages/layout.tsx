@@ -1,4 +1,4 @@
-import { page } from '@anchorlib/solid';
+import { page } from '@airlib/solid';
 import { Footer } from '../components/Footer.js';
 import { Header } from '../components/Header.js';
 import { router } from '../lib/router.js';

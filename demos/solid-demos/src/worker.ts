@@ -2,7 +2,7 @@
 // This file is built by Vite and becomes the standalone production serverless handler.
 
 import '@irpclib/irpc/server';
-import { createFullWorker, createSSR } from '@anchorlib/solid/ssr';
+import { createFullWorker, createSSR } from '@airlib/solid/ssr';
 import { HTTPRouter } from '@irpclib/http/router';
 import { IRPC_STORE } from '@irpclib/irpc';
 import template from '../dist/client/index.html?raw';

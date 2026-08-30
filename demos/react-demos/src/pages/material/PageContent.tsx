@@ -1,4 +1,4 @@
-import { Meta, Title } from '@anchorlib/react';
+import { Meta, Title } from '@airlib/react';
 
 export const PageContent = () => (
   <div className="container-main">

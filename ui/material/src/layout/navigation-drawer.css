@@ -80,9 +80,9 @@
 
 /* Composed Utilities */
 @utility air-drawer {
-  @apply air-drawer-base air-drawer-surface;
+  @extend air-drawer-base air-drawer-surface;
 }
 
 @utility air-drawer-scrim {
-  @apply air-drawer-scrim-base air-drawer-scrim-surface;
+  @extend air-drawer-scrim-base air-drawer-scrim-surface;
 }

@@ -7,7 +7,7 @@ import {
   ToolIcon,
 } from '@airlib/react-ui/components';
 import { SearchIcon } from '@airlib/react-ui/icons';
-import { $bind, For, Link, mutable, page, Show } from '@anchorlib/react';
+import { $bind, For, Link, mutable, page, Show } from '@airlib/react';
 import { AccordionPage } from './accordion/page.js';
 import { AvatarPage } from './avatar/page.js';
 import { BadgePage } from './badge/page.js';

@@ -1,5 +1,5 @@
 import { ThemeSwitch } from '@airlib/react-ui/components';
-import { Link, template } from '@anchorlib/react';
+import { Link, template } from '@airlib/react';
 import airstackLogo from '../assets/airstack.svg';
 import { UIPage } from '../pages/components/index.js';
 import { DesktopPage } from '../pages/desktop/index.js';

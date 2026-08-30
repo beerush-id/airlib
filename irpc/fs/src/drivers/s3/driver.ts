@@ -1,10 +1,10 @@
 import { HandlerError, type IRPCDriver, type IRPCFile } from '@irpclib/irpc';
 import type { FSAdapter } from '../../adapter.js';
 import { FSError } from '../../error.js';
-import type { FSMeta, FSFile } from '../../index.js';
+import type { FSEntry, FSMeta } from '../../index.js';
 import { getFileExt, getMimeType, join, withExt } from '../../utils.js';
 import { getS3Credentials } from './context.js';
-import { signS3Request, signS3Url, type AwsCredentials } from './signer.js';
+import { type AwsCredentials, signS3Request, signS3Url } from './signer.js';
 
 const DEFAULT_MAX_KEYS = 100;
 const DEFAULT_DELETE_CHUNK_SIZE = 10;
@@ -62,7 +62,7 @@ export class S3Driver implements IRPCDriver<FSAdapter> {
     return key.startsWith(prefix) ? `/${key.substring(prefix.length)}` : `/${key}`;
   }
 
-  async read(meta: FSMeta, path: string): Promise<FSFile> {
+  async read(meta: FSMeta, path: string): Promise<FSEntry> {
     const credentials = this.getCredentials();
     const key = this.s3Key(meta, path);
 
@@ -85,7 +85,7 @@ export class S3Driver implements IRPCDriver<FSAdapter> {
     };
   }
 
-  async write(meta: FSMeta, path: string, file: IRPCFile, thumbnail?: IRPCFile): Promise<FSFile> {
+  async write(meta: FSMeta, path: string, file: IRPCFile, thumbnail?: IRPCFile): Promise<FSEntry> {
     const credentials = this.getCredentials();
     const key = this.s3Key(meta, path);
     const mime = getMimeType(file.meta.type || path);
@@ -114,7 +114,7 @@ export class S3Driver implements IRPCDriver<FSAdapter> {
         throw FSError.failed('write', path);
       }
 
-      const result: FSFile = {
+      const result: FSEntry = {
         path,
         url: await signS3Url(credentials, 'GET', key),
         size: file.meta.size || buf.byteLength,
@@ -196,7 +196,7 @@ export class S3Driver implements IRPCDriver<FSAdapter> {
     return true;
   }
 
-  async dir(meta: FSMeta, path?: string): Promise<FSFile[]> {
+  async dir(meta: FSMeta, path?: string): Promise<FSEntry[]> {
     const credentials = this.getCredentials();
     const prefix = path ? this.s3Key(meta, path) : this.s3Key(meta, '/');
     const dirPrefix = prefix.endsWith('/') ? prefix : `${prefix}/`;
@@ -210,7 +210,7 @@ export class S3Driver implements IRPCDriver<FSAdapter> {
     }
 
     const text = await res.text();
-    const entries: FSFile[] = [];
+    const entries: FSEntry[] = [];
 
     for (const dirPath of extractXmlElements(text, 'Prefix')) {
       if (dirPath === dirPrefix) continue;
@@ -244,7 +244,7 @@ export class S3Driver implements IRPCDriver<FSAdapter> {
     return entries;
   }
 
-  async mkdir(meta: FSMeta, path: string): Promise<FSFile> {
+  async mkdir(meta: FSMeta, path: string): Promise<FSEntry> {
     const credentials = this.getCredentials();
     const key = this.s3Key(meta, path);
     const dirKey = key.endsWith('/') ? key : `${key}/`;
@@ -263,7 +263,7 @@ export class S3Driver implements IRPCDriver<FSAdapter> {
     };
   }
 
-  async stat(meta: FSMeta, path: string): Promise<FSFile> {
+  async stat(meta: FSMeta, path: string): Promise<FSEntry> {
     const credentials = this.getCredentials();
     const key = this.s3Key(meta, path);
     const headRes = await fetch(await signS3Request(credentials, 'HEAD', key));
@@ -281,7 +281,7 @@ export class S3Driver implements IRPCDriver<FSAdapter> {
     };
   }
 
-  async move(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSFile> {
+  async move(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSEntry> {
     const credentials = this.getCredentials();
     const srcKey = this.s3Key(meta, from);
     const dst = dstMeta || meta;
@@ -307,7 +307,7 @@ export class S3Driver implements IRPCDriver<FSAdapter> {
     };
   }
 
-  async copy(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSFile> {
+  async copy(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSEntry> {
     const credentials = this.getCredentials();
     const srcKey = this.s3Key(meta, from);
     const dst = dstMeta || meta;

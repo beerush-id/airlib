@@ -10,7 +10,7 @@ import {
   Icon,
   Tooltip,
 } from '@airlib/react-ui/components';
-import { $bind, mutable, page, Show, setup } from '@anchorlib/react';
+import { $bind, mutable, page, Show, setup } from '@airlib/react';
 import { accordionRoute } from '../route.js';
 import Custom from './Custom.js';
 import Individual from './Individual.js';

@@ -12,23 +12,23 @@
   gap: var(--air-group-gap);
 
   & > :is(input, button, select) {
-    @apply air-segment-row;
+    @extend air-segment-row;
   }
   & > :has(input, button, select) :is(input, button, select) {
-    @apply air-segment-base;
+    @extend air-segment-base;
 
     &:not(:hover, :active, :focus),
     &:disabled {
-      @apply air-segment-inner;
+      @extend air-segment-inner;
     }
   }
   & > :first-child:is(input, button, select),
   & > :first-child:has(input, button, select) :is(input, button, select) {
-    @apply air-segment-row-start;
+    @extend air-segment-row-start;
   }
   & > :last-child:is(input, button, select),
   & > :last-child:has(input, button, select) :is(input, button, select) {
-    @apply air-segment-row-end;
+    @extend air-segment-row-end;
   }
 
   & :is(input, button, select):focus-visible {
@@ -38,7 +38,7 @@
 
 /* Container for standard buttons */
 @utility air-button-group {
-  @apply air-group-base;
+  @extend air-group-base;
   --air-group-outer-radius: var(--air-group-radius-outer);
   --air-group-inner-radius: var(--air-group-radius-inner);
 }

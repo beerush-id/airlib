@@ -1,4 +1,4 @@
-import { $bind, derived, form, Meta, mutable, page, Title } from '@anchorlib/solid';
+import { $bind, derived, form, Meta, mutable, page, Title } from '@airlib/solid';
 import type { JSX } from 'solid-js';
 import { z } from 'zod';
 import { CheckboxField } from '../../../components/CheckboxField.js';

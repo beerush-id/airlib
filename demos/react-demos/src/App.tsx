@@ -1,9 +1,8 @@
-import '@anchorlib/react/client'; // MUST be first import
 import './styles/styles.css';
 
 import { AirApp } from '@airlib/react-ui';
-import { acceptInteractions } from '@anchorlib/core/browser';
-import { anchor, UIRouter } from '@anchorlib/react';
+import { acceptInteractions } from '@airlib/core/browser';
+import { anchor, UIRouter } from '@airlib/react';
 import { hydrateRoot } from 'react-dom/client';
 import { router } from './lib/router.js';
 import { RootLayout } from './pages/index.js';

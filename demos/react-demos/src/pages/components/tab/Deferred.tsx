@@ -11,7 +11,7 @@ import {
   TabContent,
   TabList,
 } from '@airlib/react-ui/components';
-import { effect, mutable, render, setup } from '@anchorlib/react';
+import { effect, mutable, render, setup } from '@airlib/react';
 
 const HeavyChartWidget = setup(() => {
   const state = mutable({

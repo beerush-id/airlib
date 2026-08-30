@@ -7,7 +7,7 @@
 
 /* Accordion Header Layout */
 @utility air-accordion-header-base {
-  @apply air-focus-ring;
+  @extend air-focus-ring;
 
   display: flex;
   align-items: center;
@@ -64,7 +64,7 @@
 
 /* Composed Utilities */
 @utility air-accordion-header {
-  @apply air-accordion-header-base air-accordion-header-surface air-state-layer;
+  @extend air-accordion-header-base air-accordion-header-surface air-state-layer;
 
   /* Soften the bottom radius when the accordion is open */
   .air-accordion-item:has(.air-accordion-content[aria-hidden='false']) > & {
@@ -86,7 +86,7 @@
 }
 
 @utility air-accordion-inner {
-  @apply air-accordion-inner-base air-accordion-inner-surface;
+  @extend air-accordion-inner-base air-accordion-inner-surface;
 }
 
 /* Segmented Structure */
@@ -99,7 +99,7 @@
   --air-segment-inner-radius: var(--radius-sm);
 
   & > .air-accordion-item {
-    @apply air-segment-col;
+    @extend air-segment-col;
   }
 }
 

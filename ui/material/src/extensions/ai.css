@@ -47,7 +47,8 @@
 }
 
 @utility air-ai-prompt-textarea {
-  @apply w-full bg-transparent resize-none outline-none air-body-lg p-6 min-h-[120px];
+  @apply w-full bg-transparent resize-none outline-none p-6 min-h-[120px];
+  @extend air-body-lg;
   color: var(--air-ai-prompt-fg);
 
   &::placeholder {
@@ -99,7 +100,8 @@
 }
 
 @utility air-ai-message-bubble {
-  @apply p-4 air-body-lg;
+  @extend air-body-lg;
+  @apply p-4;
 }
 
 @utility air-ai-avatar {

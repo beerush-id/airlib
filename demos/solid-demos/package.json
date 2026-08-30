@@ -15,16 +15,16 @@
   "dependencies": {
     "@airlib/material": "workspace:*",
     "@airlib/solid-form": "workspace:*",
-    "@anchorlib/core": "catalog:lib",
-    "@anchorlib/solid": "catalog:lib",
-    "@irpclib/http": "catalog:lib",
-    "@irpclib/irpc": "catalog:lib",
-    "@irpclib/ws": "catalog:lib",
-    "solid-js": "catalog:lib",
-    "zod": "catalog:lib"
+    "@airlib/core": "catalog:app",
+    "@airlib/solid": "catalog:app",
+    "@irpclib/http": "catalog:app",
+    "@irpclib/irpc": "catalog:app",
+    "@irpclib/ws": "catalog:app",
+    "solid-js": "catalog:app",
+    "zod": "catalog:app"
   },
   "devDependencies": {
-    "@anchorlib/vite-ssr": "catalog:",
+    "@airlib/vite": "catalog:app",
     "@biomejs/biome": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@types/bun": "catalog:",

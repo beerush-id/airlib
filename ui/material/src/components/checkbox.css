@@ -52,7 +52,8 @@
 }
 
 @utility air-checkbox-container {
-  @apply inline-flex items-center justify-center relative cursor-pointer air-state-layer;
+  @apply inline-flex items-center justify-center relative cursor-pointer;
+  @extend air-state-layer;
   aspect-ratio: 1;
   width: calc(var(--spacing) * 6); /* 24px visual slot */
   height: calc(var(--spacing) * 6);
@@ -83,12 +84,12 @@
     }
 
     & :is(.air-checkbox, .air-checkbox-base) {
-      @apply air-checkbox-disabled;
+      @extend air-checkbox-disabled;
     }
 
     &[aria-checked='true'] :is(.air-checkbox, .air-checkbox-base),
     &[aria-checked='mixed'] :is(.air-checkbox, .air-checkbox-base) {
-      @apply air-checkbox-disabled-checked;
+      @extend air-checkbox-disabled-checked;
     }
   }
 
@@ -271,7 +272,7 @@
 
 /* Composed Utilities */
 @utility air-checkbox {
-  @apply air-checkbox-base;
+  @extend air-checkbox-base;
 
   &:focus {
     outline: none;
@@ -285,7 +286,7 @@
 }
 
 @utility air-checkbox-input {
-  @apply air-checkbox air-state-layer;
+  @extend air-checkbox air-state-layer;
 
   /* Define the default ripple color for the state layer */
   --state-layer-color: var(--air-checkbox-resting-state);
@@ -321,7 +322,7 @@
 
   &:checked,
   &[aria-checked='true'] {
-    @apply air-checkbox-checked;
+    @extend air-checkbox-checked;
     --state-layer-color: var(--air-checkbox-checked-state);
 
     &::after {
@@ -332,7 +333,7 @@
 
   &:indeterminate,
   &[aria-checked='mixed'] {
-    @apply air-checkbox-indeterminate;
+    @extend air-checkbox-indeterminate;
     --state-layer-color: var(--air-checkbox-checked-state);
 
     &::after {
@@ -343,16 +344,16 @@
 
   &:disabled,
   &[aria-disabled='true'] {
-    @apply air-checkbox-disabled;
+    @extend air-checkbox-disabled;
 
     &:checked,
     &[aria-checked='true'],
     &:indeterminate,
     &[aria-checked='mixed'] {
-      @apply air-checkbox-disabled-checked;
+      @extend air-checkbox-disabled-checked;
 
       & ~ .air-checkbox-indeterminate-icon {
-        @apply air-checkbox-indeterminate-icon;
+        @extend air-checkbox-indeterminate-icon;
       }
 
       & ~ .air-checkbox-checked-icon {

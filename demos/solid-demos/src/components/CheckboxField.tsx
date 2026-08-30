@@ -1,4 +1,4 @@
-import { type Bindable, setup } from '@anchorlib/solid';
+import { type Bindable, setup } from '@airlib/solid';
 
 export const CheckboxField = setup<{
   id: string;

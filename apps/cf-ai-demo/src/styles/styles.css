@@ -1,0 +1,167 @@
+@import 'tailwindcss';
+@import '@airlib/material';
+@import '@airlib/material/default.css';
+
+/* ── Custom Theme & Cloudflare Brand Tokens ── */
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Outfit', var(--font-sans);
+
+  /* Brand Colors */
+  --color-cf-orange: #f38020;
+  --color-cf-amber: #f59e0b;
+  --color-air-anchor: #e6611a;
+
+  /* Custom Seed & Surfaces */
+  --seed-color: oklch(65% 0.18 35);
+}
+
+:root {
+  color-scheme: dark;
+  --color-surface: #0b0c10;
+  --color-surface-dim: #07080a;
+  --color-surface-bright: #14161d;
+  --color-surface-container-lowest: #050608;
+  --color-surface-container-low: #11131a;
+  --color-surface-container: #171a23;
+  --color-surface-container-high: #1e222d;
+  --color-surface-container-highest: #262b39;
+  --color-on-surface: #f3f4f6;
+  --color-on-surface-variant: #9ca3af;
+  --color-outline: #262b39;
+  --color-outline-strong: #374151;
+  --color-primary: #f38020;
+  --color-primary-container: rgba(243, 128, 32, 0.15);
+  --color-on-primary-container: #ffbc85;
+}
+
+body {
+  background-color: var(--color-surface-dim);
+  color: var(--color-on-surface);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-container-highest);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-outline-strong);
+}
+
+/* ── Glassmorphism & UI Panels ── */
+.glass-panel {
+  background: rgba(17, 19, 26, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-dock {
+  background: rgba(20, 22, 29, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(243, 128, 32, 0.1);
+}
+
+.glass-card {
+  background: rgba(23, 26, 35, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+.glass-card:hover {
+  background: rgba(30, 34, 45, 0.8);
+  border-color: rgba(243, 128, 32, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Micro Animations ── */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes pulseSubtle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+.animate-slide-up {
+  animation: slideUp 0.35s cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+.animate-pulse-subtle {
+  animation: pulseSubtle 2s infinite ease-in-out;
+}
+
+.shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+/* ── Aspect Ratio Helpers ── */
+.aspect-16-9 {
+  aspect-ratio: 16 / 9;
+}
+.aspect-9-16 {
+  aspect-ratio: 9 / 16;
+}
+.aspect-4-3 {
+  aspect-ratio: 4 / 3;
+}
+.aspect-3-4 {
+  aspect-ratio: 3 / 4;
+}
+.aspect-1-1 {
+  aspect-ratio: 1 / 1;
+}

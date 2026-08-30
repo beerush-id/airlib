@@ -1,6 +1,6 @@
 import { Card, CardBody, CardGroup, CardHeader, CardTitle, Field } from '@airlib/react-ui/components';
 import { Switch } from '@airlib/react-ui/form';
-import { page, setup } from '@anchorlib/react';
+import { page, setup } from '@airlib/react';
 import { switchRoute } from '../route.js';
 
 const SwitchDemo = setup(() => {

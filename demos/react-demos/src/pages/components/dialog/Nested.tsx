@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@airlib/react-ui/components';
-import { setup } from '@anchorlib/react';
+import { setup } from '@airlib/react';
 
 const Nested = setup(() => {
   const primaryDialog = createDialogState();

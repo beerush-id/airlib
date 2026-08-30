@@ -3,6 +3,7 @@ import { getContext, setContext } from '@irpclib/irpc';
 export interface IDBFSOptions {
   dbName: string;
   storeName: string;
+  version?: number;
 }
 
 export const IDB_FS_OPTIONS = Symbol('IDB_FS_OPTIONS');

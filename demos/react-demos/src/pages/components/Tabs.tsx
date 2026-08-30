@@ -1,5 +1,5 @@
 import { Badge, Chip, createTab } from '@airlib/react-ui';
-import { mutable, setup } from '@anchorlib/react';
+import { mutable, setup } from '@airlib/react';
 
 const tabNames = ['flight', 'hotel', 'car', 'counter'] as const;
 const Tab = createTab<(typeof tabNames)[number]>();

@@ -68,21 +68,22 @@
 
 /* Optional Interactive Modifier */
 @utility air-card-interactive {
-  @apply cursor-pointer air-focus-ring air-state-layer;
+  @extend air-focus-ring air-state-layer;
+  @apply cursor-pointer;
   --state-layer-color: var(--air-card-interactive-state);
 }
 
 /* Composed Utilities */
 @utility air-card {
-  @apply air-card-base air-card-elevated-surface;
+  @extend air-card-base air-card-elevated-surface;
 }
 
 @utility air-card-filled {
-  @apply air-card-base air-card-filled-surface;
+  @extend air-card-base air-card-filled-surface;
 }
 
 @utility air-card-outlined {
-  @apply air-card-base air-card-outlined-surface;
+  @extend air-card-base air-card-outlined-surface;
 
   &.air-card-interactive:focus-visible {
     border-color: var(--air-card-outlined-border-focus);
@@ -98,13 +99,15 @@
 }
 
 @utility air-card-title {
-  @apply flex items-center gap-1 air-title-md;
+  @extend air-title-md;
+  @apply flex items-center gap-1;
   margin: 0;
   color: var(--air-card-title-fg);
 }
 
 @utility air-card-subtitle {
-  @apply flex items-center gap-1 air-body-sm;
+  @extend air-body-sm;
+  @apply flex items-center gap-1;
   margin: 0;
   color: var(--air-card-subtitle-fg);
 }

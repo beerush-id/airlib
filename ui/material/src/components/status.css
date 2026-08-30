@@ -98,53 +98,53 @@
 
 /* Color & Semantic Variants */
 @utility air-status-surface {
-  @apply air-status-base;
+  @extend air-status-base;
   background-color: var(--color-surface-container-high);
   color: var(--color-on-surface);
 }
 
 @utility air-status-primary {
-  @apply air-status-base;
+  @extend air-status-base;
   background-color: var(--color-primary);
   color: var(--color-on-primary);
 }
 
 @utility air-status-secondary {
-  @apply air-status-base;
+  @extend air-status-base;
   background-color: var(--color-secondary-container);
   color: var(--color-on-secondary-container);
 }
 
 @utility air-status-tertiary {
-  @apply air-status-base;
+  @extend air-status-base;
   background-color: var(--color-tertiary-container);
   color: var(--color-on-tertiary-container);
 }
 
 @utility air-status-error {
-  @apply air-status-base;
+  @extend air-status-base;
   background-color: var(--air-status-error-bg);
   color: var(--air-status-error-fg);
 }
 
 @utility air-status-success {
-  @apply air-status-base;
+  @extend air-status-base;
   background-color: var(--air-status-success-bg);
   color: var(--air-status-success-fg);
 }
 
 @utility air-status-warning {
-  @apply air-status-base;
+  @extend air-status-base;
   background-color: var(--air-status-warning-bg);
   color: var(--air-status-warning-fg);
 }
 
 @utility air-status-info {
-  @apply air-status-base;
+  @extend air-status-base;
   background-color: var(--air-status-info-bg);
   color: var(--air-status-info-fg);
 }
 
 @utility air-status {
-  @apply air-status-surface air-status-md;
+  @extend air-status-surface air-status-md;
 }

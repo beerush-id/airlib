@@ -91,7 +91,7 @@
 
 /* Composed Utilities */
 @utility air-radio {
-  @apply air-radio-base air-state-layer;
+  @extend air-radio-base air-state-layer;
   --state-layer-color: var(--air-radio-state);
 
   /* Override state-layer ::before to create a 48x48 clickable touch target */

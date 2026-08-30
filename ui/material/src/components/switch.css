@@ -41,7 +41,7 @@
 @utility air-switch-base {
   @apply inline-flex items-center relative box-border;
   @apply cursor-pointer p-0;
-  @apply air-focus-ring;
+  @extend air-focus-ring;
   width: var(--air-switch-track-width);
   height: var(--air-switch-track-height);
   border-radius: var(--radius-full);
@@ -135,7 +135,7 @@
 
 /* Composed Utilities */
 @utility air-switch {
-  @apply air-switch-base air-switch-track;
+  @extend air-switch-base air-switch-track;
 
   /* Ensure minimum 48x48 touch target without affecting visual flow layout */
   &::before {
@@ -152,36 +152,36 @@
   }
 
   &[aria-checked='true'] {
-    @apply air-switch-track-checked;
+    @extend air-switch-track-checked;
   }
 
   &:disabled,
   &[aria-disabled='true'] {
-    @apply air-switch-track-disabled;
+    @extend air-switch-track-disabled;
   }
 }
 
 @utility air-switch-thumb {
-  @apply air-switch-handle air-switch-handle-surface;
+  @extend air-switch-handle air-switch-handle-surface;
 
   .air-switch:hover:not(:disabled) & {
-    @apply air-switch-handle-hover;
+    @extend air-switch-handle-hover;
   }
 
   .air-switch:focus-visible:not(:disabled) & {
-    @apply air-switch-handle-focus;
+    @extend air-switch-handle-focus;
   }
 
   .air-switch[aria-checked='true'] & {
-    @apply air-switch-handle-checked;
+    @extend air-switch-handle-checked;
   }
 
   .air-switch[aria-checked='true']:hover:not(:disabled) & {
-    @apply air-switch-handle-checked-hover;
+    @extend air-switch-handle-checked-hover;
   }
 
   .air-switch[aria-checked='true']:focus-visible:not(:disabled) & {
-    @apply air-switch-handle-checked-focus;
+    @extend air-switch-handle-checked-focus;
   }
 }
 

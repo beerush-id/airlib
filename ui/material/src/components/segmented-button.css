@@ -4,12 +4,12 @@
 }
 
 @utility air-segmented-group {
-  @apply air-button-group;
+  @extend air-button-group;
 }
 
 /* Base Layout (composed from button base and segment row) */
 @utility air-segmented-button-base {
-  @apply air-button air-segment-row;
+  @extend air-button air-segment-row;
 }
 
 /* Default State */
@@ -20,5 +20,5 @@
 
 /* Composed Utilities */
 @utility air-segmented-button {
-  @apply air-toggle-button air-segment-row;
+  @extend air-toggle-button air-segment-row;
 }

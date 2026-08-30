@@ -1,4 +1,4 @@
-import { template } from '@anchorlib/react';
+import { template } from '@airlib/react';
 
 export const Footer = template(() => {
   return (

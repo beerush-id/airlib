@@ -166,37 +166,37 @@
 
 /* Composed Utilities */
 @utility air-badge {
-  @apply air-badge-base air-badge-lg air-badge-error-surface;
+  @extend air-badge-base air-badge-lg air-badge-error-surface;
 }
 
 @utility air-badge-primary {
-  @apply air-badge-base air-badge-lg air-badge-primary-surface;
+  @extend air-badge-base air-badge-lg air-badge-primary-surface;
 }
 
 @utility air-badge-secondary {
-  @apply air-badge-base air-badge-lg air-badge-secondary-surface;
+  @extend air-badge-base air-badge-lg air-badge-secondary-surface;
 }
 
 @utility air-badge-surface {
-  @apply air-badge-base air-badge-lg air-badge-surface-color;
+  @extend air-badge-base air-badge-lg air-badge-surface-color;
 }
 
 @utility air-badge-tertiary {
-  @apply air-badge-base air-badge-lg air-badge-tertiary-surface;
+  @extend air-badge-base air-badge-lg air-badge-tertiary-surface;
 }
 
 @utility air-badge-success {
-  @apply air-badge-base air-badge-lg air-badge-success-surface;
+  @extend air-badge-base air-badge-lg air-badge-success-surface;
 }
 
 @utility air-badge-warning {
-  @apply air-badge-base air-badge-lg air-badge-warning-surface;
+  @extend air-badge-base air-badge-lg air-badge-warning-surface;
 }
 
 @utility air-badge-info {
-  @apply air-badge-base air-badge-lg air-badge-info-surface;
+  @extend air-badge-base air-badge-lg air-badge-info-surface;
 }
 
 @utility air-badge-dot {
-  @apply air-badge-base air-badge-sm air-badge-error-surface;
+  @extend air-badge-base air-badge-sm air-badge-error-surface;
 }

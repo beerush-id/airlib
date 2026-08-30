@@ -1,5 +1,5 @@
 import { Button, dialogConfirm } from '@airlib/react-ui/components';
-import { setup } from '@anchorlib/react';
+import { setup } from '@airlib/react';
 
 const Imperative = setup(() => {
   const showConfirm = () => {

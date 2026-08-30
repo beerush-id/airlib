@@ -45,9 +45,9 @@
 
 /* Composed Utilities */
 @utility air-app-bar {
-  @apply air-app-bar-base air-app-bar-surface;
+  @extend air-app-bar-base air-app-bar-surface;
 
   &[data-scrolled='true'] {
-    @apply air-app-bar-surface-scrolled;
+    @extend air-app-bar-surface-scrolled;
   }
 }

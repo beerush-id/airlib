@@ -10,7 +10,7 @@ import {
   DialogTitle,
   Icon,
 } from '@airlib/react-ui/components';
-import { $bind, setup } from '@anchorlib/react';
+import { $bind, setup } from '@airlib/react';
 
 type UserData = { name: string; email: string };
 

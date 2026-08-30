@@ -90,8 +90,8 @@
 @utility air-button {
   --air-icon-size: var(--air-button-icon-size);
   @apply inline-flex items-center justify-center relative;
-  @apply select-none box-border cursor-pointer air-focus-ring air-touch-area;
-  @apply air-button-icon-slot air-state-layer;
+  @apply select-none box-border cursor-pointer;
+  @extend air-focus-ring air-touch-area air-button-icon-slot air-state-layer;
 
   gap: var(--air-button-gap);
   height: var(--air-button-height);
@@ -121,7 +121,7 @@
 
   &:disabled,
   &[aria-disabled='true'] {
-    @apply air-button-disabled;
+    @extend air-button-disabled;
   }
 
   & :is(input) {
@@ -219,7 +219,7 @@
 
 /* Toggle Button */
 @utility air-toggle-button {
-  @apply air-toggle-state;
+  @extend air-toggle-state;
   background-color: var(--air-button-toggle-bg);
   color: var(--air-button-toggle-fg);
   --state-layer-color: var(--air-button-toggle-state);
@@ -354,7 +354,7 @@
 
 /* Button Sizes (M3 Expressive) */
 @utility air-button-xs {
-  @apply air-segment-xs;
+  @extend air-segment-xs;
   --air-button-height: var(--air-button-height-xs);
   --air-button-padding-x: var(--air-button-padding-x-xs);
   --air-button-icon-padding-x: var(--air-button-icon-padding-x-xs);
@@ -367,7 +367,7 @@
 }
 
 @utility air-button-sm {
-  @apply air-segment-sm;
+  @extend air-segment-sm;
   --air-button-height: var(--air-button-height-sm);
   --air-button-padding-x: var(--air-button-padding-x-sm);
   --air-button-icon-padding-x: var(--air-button-icon-padding-x-sm);
@@ -380,7 +380,7 @@
 }
 
 @utility air-button-md {
-  @apply air-segment-md;
+  @extend air-segment-md;
   --air-button-height: var(--air-button-height-md);
   --air-button-padding-x: var(--air-button-padding-x-md);
   --air-button-icon-padding-x: var(--air-button-icon-padding-x-md);
@@ -393,7 +393,7 @@
 }
 
 @utility air-button-lg {
-  @apply air-segment-lg;
+  @extend air-segment-lg;
   --air-button-height: var(--air-button-height-lg);
   --air-button-padding-x: var(--air-button-padding-x-lg);
   --air-button-icon-padding-x: var(--air-button-icon-padding-x-lg);
@@ -406,7 +406,7 @@
 }
 
 @utility air-button-xl {
-  @apply air-segment-xl;
+  @extend air-segment-xl;
   --air-button-height: var(--air-button-height-xl);
   --air-button-padding-x: var(--air-button-padding-x-xl);
   --air-button-icon-padding-x: var(--air-button-icon-padding-x-xl);
@@ -419,7 +419,7 @@
 }
 
 @utility air-button-xxl {
-  @apply air-segment-xxl;
+  @extend air-segment-xxl;
   --air-button-height: var(--air-button-height-xxl);
   --air-button-padding-x: var(--air-button-padding-x-xxl);
   --air-button-icon-padding-x: var(--air-button-icon-padding-x-xxl);

@@ -12,7 +12,7 @@ import {
   ListSubtitle,
   ListTitle,
 } from '@airlib/react-ui/components';
-import { page, setup } from '@anchorlib/react';
+import { page, setup } from '@airlib/react';
 import { listRoute } from '../route.js';
 
 const ListDemo = setup(() => {

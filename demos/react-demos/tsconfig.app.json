@@ -4,7 +4,7 @@
     "target": "es2023",
     "lib": ["ES2023", "DOM"],
     "module": "esnext",
-    "types": ["vite/client", "bun", "@anchorlib/vite-ssr/ambient"],
+    "types": ["vite/client", "bun", "@airlib/vite/ambient"],
     "skipLibCheck": true,
 
     "moduleResolution": "bundler",

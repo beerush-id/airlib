@@ -3,7 +3,7 @@ import * as nodePath from 'node:path';
 import { HandlerError, type IRPCDriver, type IRPCFile } from '@irpclib/irpc';
 import type { FSAdapter } from '../../adapter.js';
 import { FSError } from '../../error.js';
-import type { FSFile, FSMeta } from '../../index.js';
+import type { FSEntry, FSMeta } from '../../index.js';
 import { errorCode, getFileExt, join, withExt } from '../../utils.js';
 import { getLocalFSOptions, type LocalFSOptions } from './context.js';
 
@@ -18,7 +18,7 @@ export class LocalFSDriver implements IRPCDriver<FSAdapter> {
     return { baseDir, publicUrl };
   }
 
-  async read(meta: FSMeta, path: string): Promise<FSFile> {
+  async read(meta: FSMeta, path: string): Promise<FSEntry> {
     const options = this.getOptions();
     const localPath = this.physical(options, meta, path);
     try {
@@ -42,7 +42,7 @@ export class LocalFSDriver implements IRPCDriver<FSAdapter> {
     }
   }
 
-  async write(meta: FSMeta, path: string, file: IRPCFile, thumbnail?: IRPCFile): Promise<FSFile> {
+  async write(meta: FSMeta, path: string, file: IRPCFile, thumbnail?: IRPCFile): Promise<FSEntry> {
     const options = this.getOptions();
     const localPath = this.physical(options, meta, path);
     const now = Date.now();
@@ -59,7 +59,7 @@ export class LocalFSDriver implements IRPCDriver<FSAdapter> {
       await fs.mkdir(nodePath.dirname(localPath), { recursive: true });
       const buffer = Buffer.from(await file.data.arrayBuffer());
       await fs.writeFile(localPath, buffer);
-      const result: FSFile = {
+      const result: FSEntry = {
         path,
         url: this.url(options.publicUrl, path),
         size: file.meta.size || buffer.length,
@@ -126,7 +126,7 @@ export class LocalFSDriver implements IRPCDriver<FSAdapter> {
     }
   }
 
-  async dir(meta: FSMeta, path?: string): Promise<FSFile[]> {
+  async dir(meta: FSMeta, path?: string): Promise<FSEntry[]> {
     const options = this.getOptions();
     const p = path || '/';
     const localPath = this.physical(options, meta, p);
@@ -134,7 +134,7 @@ export class LocalFSDriver implements IRPCDriver<FSAdapter> {
       const stat = await fs.stat(localPath);
       if (!stat.isDirectory()) throw FSError.notPermitted('dir (not a directory)');
       const entries = await fs.readdir(localPath, { withFileTypes: true });
-      const results: FSFile[] = [];
+      const results: FSEntry[] = [];
       const basePrefix = p.endsWith('/') ? p : `${p}/`;
 
       for (const entry of entries) {
@@ -170,7 +170,7 @@ export class LocalFSDriver implements IRPCDriver<FSAdapter> {
     }
   }
 
-  async mkdir(meta: FSMeta, path: string): Promise<FSFile> {
+  async mkdir(meta: FSMeta, path: string): Promise<FSEntry> {
     const options = this.getOptions();
     const localPath = this.physical(options, meta, path);
     try {
@@ -192,7 +192,7 @@ export class LocalFSDriver implements IRPCDriver<FSAdapter> {
     }
   }
 
-  async stat(meta: FSMeta, path: string): Promise<FSFile> {
+  async stat(meta: FSMeta, path: string): Promise<FSEntry> {
     const options = this.getOptions();
     const localPath = this.physical(options, meta, path);
     try {
@@ -214,7 +214,7 @@ export class LocalFSDriver implements IRPCDriver<FSAdapter> {
     }
   }
 
-  async move(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSFile> {
+  async move(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSEntry> {
     const options = this.getOptions();
     const srcPath = this.physical(options, meta, from);
     const dst = dstMeta || meta;
@@ -240,7 +240,7 @@ export class LocalFSDriver implements IRPCDriver<FSAdapter> {
     }
   }
 
-  async copy(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSFile> {
+  async copy(meta: FSMeta, from: string, to: string, dstMeta?: FSMeta): Promise<FSEntry> {
     const options = this.getOptions();
     const srcPath = this.physical(options, meta, from);
     const dst = dstMeta || meta;

@@ -59,6 +59,6 @@
   }
 
   a:not([class]) {
-    @apply air-link;
+    @extend air-link;
   }
 }

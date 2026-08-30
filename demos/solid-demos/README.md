@@ -19,7 +19,7 @@ bun run dev
 ├── index.html               # HTML shell with SSR outlet
 ├── src/
 │   ├── worker.ts            # Web Standard Edge Worker for Production
-│   ├── entry-client.tsx     # Client hydration — @anchorlib/solid/client init
+│   ├── entry-client.tsx     # Client hydration — @airlib/solid/client init
 │   ├── entry-server.tsx     # SSR render — isolation, lifecycle, headless routing
 │   ├── lib/
 │   │   └── router.ts        # Router instance
@@ -47,7 +47,7 @@ bun run dev
 ### Reactive State
 
 ```tsx
-import { setup, render, mutable } from '@anchorlib/solid';
+import { setup, render, mutable } from '@airlib/solid';
 
 const Counter = setup(() => {
   const state = mutable({ count: 0 });
@@ -64,7 +64,7 @@ const Counter = setup(() => {
 ### Views
 
 ```tsx
-import { template } from '@anchorlib/solid';
+import { template } from '@airlib/solid';
 
 const Footer = template(() => (
   <footer>Built with Anchor + Vite + Solid</footer>

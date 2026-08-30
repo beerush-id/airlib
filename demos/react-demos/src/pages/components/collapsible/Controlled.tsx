@@ -14,7 +14,7 @@ import {
   Tooltip,
 } from '@airlib/react-ui/components';
 import { SearchIcon, UnfoldLess, UnfoldMore } from '@airlib/react-ui/icons';
-import { $bind, mutable, setup } from '@anchorlib/react';
+import { $bind, mutable, setup } from '@airlib/react';
 
 const Controlled = setup(() => {
   const state = mutable({

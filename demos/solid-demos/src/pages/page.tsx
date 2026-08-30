@@ -1,4 +1,4 @@
-import { Meta, page, Title } from '@anchorlib/solid';
+import { Meta, page, Title } from '@airlib/solid';
 import airstackLogo from '../assets/airstack.svg';
 import solidLogo from '../assets/solid.svg';
 import viteLogo from '../assets/vite.svg';

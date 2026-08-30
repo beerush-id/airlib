@@ -1,4 +1,4 @@
-import { derived } from '@anchorlib/solid';
+import { derived } from '@airlib/solid';
 import { getSettings } from '../lib/settings.js';
 
 export function ThemeToggle() {

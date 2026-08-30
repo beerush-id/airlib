@@ -9,7 +9,7 @@ import {
   Icon,
   Tooltip,
 } from '@airlib/react-ui/components';
-import { $bind, mutable, page, Show, setup } from '@anchorlib/react';
+import { $bind, mutable, page, Show, setup } from '@airlib/react';
 import { avatarRoute } from '../route.js';
 import ImageFallback from './ImageFallback.js';
 import Semantic from './Semantic.js';

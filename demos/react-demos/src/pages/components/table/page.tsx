@@ -15,7 +15,7 @@ import {
   ToolIcon,
   Tooltip,
 } from '@airlib/react-ui/components';
-import { $bind, $use, derived, effect, mutable, page, setup, snippet } from '@anchorlib/react';
+import { $bind, $use, derived, effect, mutable, page, setup, snippet } from '@airlib/react';
 import { tableRoute } from '../route.js';
 
 type User = {

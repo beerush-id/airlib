@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableCell,
 } from '@airlib/react-ui/components';
-import { page, setup } from '@anchorlib/react';
+import { page, setup } from '@airlib/react';
 import { tooltipRoute } from '../route.js';
 
 const TooltipDemo = setup(() => {

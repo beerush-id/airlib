@@ -1,4 +1,4 @@
-import { airSSR } from '@anchorlib/vite-ssr';
+import { airSSR } from '@airlib/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import solid from 'vite-plugin-solid';
@@ -11,7 +11,7 @@ export default defineConfig({
     airSSR({
       router: './src/lib/router.ts',
       layout: './src/pages/layout.tsx',
-      renderer: '@anchorlib/solid/ssr',
+      renderer: '@airlib/solid/ssr',
       irpc: {
         module: { path: './src/lib/module.ts', name: 'irpc' },
         transport: { path: './src/lib/module.ts', name: 'transport' },

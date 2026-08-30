@@ -1,5 +1,5 @@
 import { Card, CardBody, CardGroup, CardHeader, CardTitle } from '@airlib/react-ui/components';
-import { page, setup } from '@anchorlib/react';
+import { page, setup } from '@airlib/react';
 import { sideSheetRoute } from '../route.js';
 
 const SideSheetDemo = setup(() => {

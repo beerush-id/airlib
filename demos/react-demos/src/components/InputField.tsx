@@ -1,4 +1,4 @@
-import { render, setup, type Bindable } from '@anchorlib/react';
+import { render, setup, type Bindable } from '@airlib/react';
 
 type FieldError = { message: string } | undefined;
 

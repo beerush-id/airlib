@@ -18,7 +18,7 @@ import {
   Textarea,
   TextField,
 } from '@airlib/react-ui/form';
-import { mutable, setup } from '@anchorlib/react';
+import { mutable, setup } from '@airlib/react';
 import { z } from 'zod';
 
 const formSchema = z.object({

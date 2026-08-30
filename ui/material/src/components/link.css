@@ -32,7 +32,7 @@
 
 /* Inline Link — for body text, paragraph links */
 @utility air-link {
-  @apply air-link-base;
+  @extend air-link-base;
   color: var(--air-link-fg);
 
   &:hover {
@@ -92,7 +92,7 @@
 
   /* Apply link styling to headless collapsible triggers used in nav */
   & .air-collapsible-trigger {
-    @apply air-link-nav;
+    @extend air-link-nav;
   }
 }
 
@@ -116,7 +116,7 @@
 
 /* Nav Link — pill affordance, for navbars and sidebars */
 @utility air-link-nav {
-  @apply air-link-base;
+  @extend air-link-base;
   display: flex;
   align-items: center;
   gap: calc(var(--spacing) * 2); /* 8px */
@@ -143,13 +143,14 @@
   }
 
   &:focus-visible {
-    @apply air-focus-ring;
+    @extend air-focus-ring;
   }
 }
 
 /* Standalone Link — heavier weight, call-to-action style */
 @utility air-link-standalone {
-  @apply air-link-base inline-flex items-center;
+  @extend air-link-base;
+  @apply inline-flex items-center;
   gap: calc(var(--spacing) * 1);
   color: var(--air-link-fg);
   font-weight: 600;

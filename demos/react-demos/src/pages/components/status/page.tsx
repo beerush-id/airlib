@@ -14,7 +14,7 @@ import {
   Status,
   type StatusVariant,
 } from '@airlib/react-ui/components';
-import { page, setup } from '@anchorlib/react';
+import { page, setup } from '@airlib/react';
 import { statusRoute } from '../route.js';
 
 const ALL_VARIANTS: { variant: StatusVariant; label: string }[] = [

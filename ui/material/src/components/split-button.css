@@ -19,17 +19,18 @@
 
 /* Container */
 @utility air-split-button-group {
-  @apply air-button-group;
+  @extend air-button-group;
 }
 
 /* Leading Action Area (Base) */
 @utility air-split-button-base {
-  @apply air-button air-segment-row flex-1;
+  @extend air-button air-segment-row;
+  @apply flex-1;
 }
 
 /* Trailing Action Area (Dropdown Arrow) */
 @utility air-split-button-trailing {
-  @apply air-button air-segment-row;
+  @extend air-button air-segment-row;
   padding-inline: calc(var(--air-button-padding-x) * 0.5);
 }
 

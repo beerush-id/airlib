@@ -10,7 +10,7 @@ import {
   Icon,
   Tooltip,
 } from '@airlib/react-ui/components';
-import { $bind, mutable, page, Show, setup } from '@anchorlib/react';
+import { $bind, mutable, page, Show, setup } from '@airlib/react';
 import { cardRoute } from '../route.js';
 import Action from './Action.js';
 import Segmented from './Segmented.js';

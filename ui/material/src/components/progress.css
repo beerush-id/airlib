@@ -128,11 +128,11 @@
 
 /* Composed Utilities */
 @utility air-progress-linear {
-  @apply air-progress-linear-base air-progress-linear-surface;
+  @extend air-progress-linear-base air-progress-linear-surface;
 }
 
 @utility air-progress-circular {
-  @apply air-progress-circular-base;
+  @extend air-progress-circular-base;
 }
 
 /* Size Variants (Linear) */

@@ -57,32 +57,32 @@
 }
 
 @utility air-segment-row {
-  @apply air-segment-base;
+  @extend air-segment-base;
 
   &:not(:hover, :active, :focus),
   &:disabled {
-    @apply air-segment-inner;
+    @extend air-segment-inner;
   }
   &:first-child {
-    @apply air-segment-row-start;
+    @extend air-segment-row-start;
   }
   &:last-child {
-    @apply air-segment-row-end;
+    @extend air-segment-row-end;
   }
 }
 
 @utility air-segment-col {
-  @apply air-segment-base;
+  @extend air-segment-base;
 
   &:not(:hover, :active, :focus),
   &:disabled {
-    @apply air-segment-inner;
+    @extend air-segment-inner;
   }
   &:first-child {
-    @apply air-segment-col-start;
+    @extend air-segment-col-start;
   }
   &:last-child {
-    @apply air-segment-col-end;
+    @extend air-segment-col-end;
   }
 }
 

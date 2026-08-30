@@ -63,13 +63,13 @@
 
 /* Composed Utilities */
 @utility air-bottom-sheet {
-  @apply air-bottom-sheet-base air-bottom-sheet-surface;
+  @extend air-bottom-sheet-base air-bottom-sheet-surface;
 }
 
 @utility air-bottom-sheet-handle {
-  @apply air-bottom-sheet-handle-base air-bottom-sheet-handle-surface;
+  @extend air-bottom-sheet-handle-base air-bottom-sheet-handle-surface;
 }
 
 @utility air-bottom-sheet-scrim {
-  @apply air-bottom-sheet-scrim-base air-bottom-sheet-scrim-surface;
+  @extend air-bottom-sheet-scrim-base air-bottom-sheet-scrim-surface;
 }

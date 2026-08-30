@@ -1,5 +1,5 @@
 import { colorScheme } from '@airlib/headless/utils';
-import { page, Style } from '@anchorlib/react';
+import { page, Style } from '@airlib/react';
 import { configureApp } from '../../lib/settings.js';
 import { desktopRoute } from './route.js';
 

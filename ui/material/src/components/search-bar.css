@@ -54,7 +54,7 @@
 
 /* Composed Utilities */
 @utility air-search-bar {
-  @apply air-search-bar-base air-search-bar-surface air-state-layer;
+  @extend air-search-bar-base air-search-bar-surface air-state-layer;
   --state-layer-color: var(--color-on-surface);
 
   /* Forward focus from input to trigger the state layer background */
@@ -66,7 +66,7 @@
 }
 
 @utility air-search-bar-input {
-  @apply air-search-bar-input-base;
+  @extend air-search-bar-input-base;
 }
 
 /* Size Variants */

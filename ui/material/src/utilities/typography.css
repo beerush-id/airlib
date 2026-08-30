@@ -196,66 +196,66 @@
 
 /* Expressive Emphasized Typography */
 @utility air-display-lg-strong {
-  @apply air-display-lg;
+  @extend air-display-lg;
   font-weight: 500;
 }
 @utility air-display-md-strong {
-  @apply air-display-md;
+  @extend air-display-md;
   font-weight: 500;
 }
 @utility air-display-sm-strong {
-  @apply air-display-sm;
+  @extend air-display-sm;
   font-weight: 500;
 }
 
 @utility air-headline-lg-strong {
-  @apply air-headline-lg;
+  @extend air-headline-lg;
   font-weight: 500;
 }
 @utility air-headline-md-strong {
-  @apply air-headline-md;
+  @extend air-headline-md;
   font-weight: 500;
 }
 @utility air-headline-sm-strong {
-  @apply air-headline-sm;
+  @extend air-headline-sm;
   font-weight: 500;
 }
 
 @utility air-title-lg-strong {
-  @apply air-title-lg;
+  @extend air-title-lg;
   font-weight: 500;
 }
 @utility air-title-md-strong {
-  @apply air-title-md;
+  @extend air-title-md;
   font-weight: 600;
 }
 @utility air-title-sm-strong {
-  @apply air-title-sm;
+  @extend air-title-sm;
   font-weight: 600;
 }
 
 @utility air-body-lg-strong {
-  @apply air-body-lg;
+  @extend air-body-lg;
   font-weight: 500;
 }
 @utility air-body-md-strong {
-  @apply air-body-md;
+  @extend air-body-md;
   font-weight: 500;
 }
 @utility air-body-sm-strong {
-  @apply air-body-sm;
+  @extend air-body-sm;
   font-weight: 500;
 }
 
 @utility air-label-lg-strong {
-  @apply air-label-lg;
+  @extend air-label-lg;
   font-weight: 600;
 }
 @utility air-label-md-strong {
-  @apply air-label-md;
+  @extend air-label-md;
   font-weight: 600;
 }
 @utility air-label-sm-strong {
-  @apply air-label-sm;
+  @extend air-label-sm;
   font-weight: 600;
 }

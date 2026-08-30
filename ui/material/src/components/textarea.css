@@ -1,6 +1,6 @@
 /* Container Wrapper (Specific textarea overrides) */
 @utility air-textarea-container {
-  @apply air-floating-field-container;
+  @extend air-floating-field-container;
 
   /* Filled Floating Transform Override */
   &:has(.air-textarea-filled:focus) .air-field-label,
@@ -12,7 +12,7 @@
 }
 
 @utility air-textarea {
-  @apply air-text-field;
+  @extend air-text-field;
   field-sizing: content;
   height: auto;
   min-height: calc(var(--air-text-field-height) * 2);
@@ -21,67 +21,67 @@
 }
 
 @utility air-textarea-filled {
-  @apply air-text-field-filled;
+  @extend air-text-field-filled;
   padding-block-start: calc(var(--spacing) * 6);
   padding-block-end: calc(var(--spacing) * 3);
 }
 
 @utility air-textarea-xs {
-  @apply air-text-field-xs;
+  @extend air-text-field-xs;
   min-height: calc(var(--air-text-field-height) * 2);
 }
 
 @utility air-textarea-sm {
-  @apply air-text-field-sm;
+  @extend air-text-field-sm;
   min-height: calc(var(--air-text-field-height) * 2);
 }
 
 @utility air-textarea-md {
-  @apply air-text-field-md;
+  @extend air-text-field-md;
   min-height: calc(var(--air-text-field-height) * 2);
 }
 
 @utility air-textarea-lg {
-  @apply air-text-field-lg;
+  @extend air-text-field-lg;
   min-height: calc(var(--air-text-field-height) * 2);
 }
 
 @utility air-textarea-xl {
-  @apply air-text-field-xl;
+  @extend air-text-field-xl;
   min-height: calc(var(--air-text-field-height) * 2);
 }
 
 @utility air-textarea-xxl {
-  @apply air-text-field-xxl;
+  @extend air-text-field-xxl;
   min-height: calc(var(--air-text-field-height) * 2);
 }
 
 @utility air-textarea-error {
-  @apply air-text-field-error;
+  @extend air-text-field-error;
 }
 
 @utility air-textarea-secondary {
-  @apply air-text-field-secondary;
+  @extend air-text-field-secondary;
 }
 
 @utility air-textarea-tertiary {
-  @apply air-text-field-tertiary;
+  @extend air-text-field-tertiary;
 }
 
 @utility air-textarea-success {
-  @apply air-text-field-success;
+  @extend air-text-field-success;
 }
 
 @utility air-textarea-warning {
-  @apply air-text-field-warning;
+  @extend air-text-field-warning;
 }
 
 @utility air-textarea-info {
-  @apply air-text-field-info;
+  @extend air-text-field-info;
 }
 
 @utility air-textarea-input {
-  @apply air-textarea;
+  @extend air-textarea;
 
   &::placeholder {
     opacity: 1;
@@ -89,6 +89,6 @@
 }
 
 @utility air-textarea-input-filled {
-  @apply air-textarea-input air-textarea-filled;
+  @extend air-textarea-input air-textarea-filled;
   padding-block: var(--air-field-padding-y);
 }

@@ -25,7 +25,7 @@
 @utility air-navigation-bar-item-base {
   @apply inline-flex flex-col items-center justify-center;
   @apply cursor-pointer h-full;
-  @apply air-focus-ring;
+  @extend air-focus-ring;
   min-width: calc(var(--spacing) * 16); /* 64px */
   gap: var(--spacing);
 
@@ -79,24 +79,24 @@
 
 /* Composed Utilities */
 @utility air-navigation-bar {
-  @apply air-navigation-bar-base air-navigation-bar-surface;
+  @extend air-navigation-bar-base air-navigation-bar-surface;
 }
 
 @utility air-navigation-bar-item {
-  @apply air-navigation-bar-item-base air-navigation-bar-item-surface;
+  @extend air-navigation-bar-item-base air-navigation-bar-item-surface;
 
   &[aria-selected='true'] {
-    @apply air-navigation-bar-item-selected-surface;
+    @extend air-navigation-bar-item-selected-surface;
   }
 }
 
 @utility air-nav-icon-container {
-  @apply air-nav-icon-container-base air-nav-icon-container-surface air-state-layer;
+  @extend air-nav-icon-container-base air-nav-icon-container-surface air-state-layer;
   --state-layer-color: var(--color-on-surface-variant);
 
   /* Selected */
   .air-navigation-bar-item[aria-selected='true'] & {
-    @apply air-nav-icon-container-selected-surface;
+    @extend air-nav-icon-container-selected-surface;
     --state-layer-color: var(--color-on-surface);
   }
 }

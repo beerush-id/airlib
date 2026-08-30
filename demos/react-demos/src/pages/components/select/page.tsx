@@ -1,6 +1,6 @@
 import { Card, CardBody, CardGroup, CardHeader, CardTitle, TextLabel } from '@airlib/react-ui/components';
 import { createSelect, Select, SelectButton, SelectItem, SelectMenu } from '@airlib/react-ui/form';
-import { $bind, mutable, page, setup } from '@anchorlib/react';
+import { $bind, mutable, page, setup } from '@airlib/react';
 import { selectRoute } from '../route.js';
 
 const SelectDemo = setup(() => {

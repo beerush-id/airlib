@@ -50,7 +50,8 @@
 /* Base cell layout */
 @utility air-date-picker-cell-base {
   @apply flex items-center justify-center;
-  @apply cursor-pointer air-focus-ring;
+  @extend air-focus-ring;
+  @apply cursor-pointer;
   width: var(--air-date-picker-cell-size);
   height: var(--air-date-picker-cell-size);
   border-radius: var(--air-date-picker-cell-radius);
@@ -114,25 +115,25 @@
 
 /* Composed Utilities */
 @utility air-date-picker {
-  @apply air-date-picker-surface;
+  @extend air-date-picker-surface;
 }
 
 @utility air-date-picker-cell {
-  @apply air-date-picker-cell-base air-date-picker-cell-surface air-state-layer;
+  @extend air-date-picker-cell-base air-date-picker-cell-surface air-state-layer;
   --state-layer-color: var(--air-date-picker-cell-state);
 
   &[aria-selected='true'] {
-    @apply air-date-picker-cell-selected-surface;
+    @extend air-date-picker-cell-selected-surface;
     --state-layer-color: var(--air-date-picker-cell-selected-state);
   }
 
   &[aria-current='date']:not([aria-selected='true']) {
-    @apply air-date-picker-cell-today-surface;
+    @extend air-date-picker-cell-today-surface;
   }
 
   &:disabled,
   &[aria-disabled='true'] {
-    @apply air-date-picker-cell-disabled;
+    @extend air-date-picker-cell-disabled;
     --state-layer-color: transparent;
   }
 }

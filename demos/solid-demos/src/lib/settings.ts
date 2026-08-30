@@ -1,4 +1,4 @@
-import { cookies, getContext, setContext } from '@anchorlib/solid';
+import { cookies, getContext, setContext } from '@airlib/solid';
 
 export type AppTheme = 'light' | 'dark';
 export type AppSettings = {

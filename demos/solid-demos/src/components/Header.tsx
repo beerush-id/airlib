@@ -1,4 +1,4 @@
-import { Link } from '@anchorlib/solid';
+import { Link } from '@airlib/solid';
 import airstackLogo from '../assets/airstack.svg';
 import { AboutPage } from '../pages/about/index.js';
 import { SignInPage } from '../pages/auth/index.js';

@@ -1,4 +1,4 @@
-import { type Bindable, setup } from '@anchorlib/solid';
+import { type Bindable, setup } from '@airlib/solid';
 import type { JSX } from 'solid-js';
 
 type FieldError = { message: string } | undefined;

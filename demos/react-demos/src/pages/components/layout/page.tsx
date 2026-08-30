@@ -1,4 +1,4 @@
-import { page } from '@anchorlib/react';
+import { page } from '@airlib/react';
 import { layoutRoute } from '../route.js';
 
 export const LayoutPage = page(layoutRoute).render(() => (

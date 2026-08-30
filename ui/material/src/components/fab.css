@@ -67,7 +67,7 @@
 @utility air-fab-base {
   @apply inline-flex items-center justify-center;
   @apply box-border cursor-pointer;
-  @apply air-focus-ring;
+  @extend air-focus-ring;
   border-width: 0;
   border-style: solid;
   border-color: transparent;
@@ -165,41 +165,41 @@
 
 /* Composed Utilities */
 @utility air-fab {
-  @apply air-fab-base air-fab-primary-surface air-state-layer;
+  @extend air-fab-base air-fab-primary-surface air-state-layer;
   --state-layer-color: var(--air-fab-primary-state);
 }
 
 @utility air-fab-surface {
-  @apply air-fab-base air-fab-surface-surface air-state-layer;
+  @extend air-fab-base air-fab-surface-surface air-state-layer;
   --state-layer-color: var(--air-fab-surface-state);
 }
 
 @utility air-fab-secondary {
-  @apply air-fab-base air-fab-secondary-surface air-state-layer;
+  @extend air-fab-base air-fab-secondary-surface air-state-layer;
   --state-layer-color: var(--air-fab-secondary-state);
 }
 
 @utility air-fab-tertiary {
-  @apply air-fab-base air-fab-tertiary-surface air-state-layer;
+  @extend air-fab-base air-fab-tertiary-surface air-state-layer;
   --state-layer-color: var(--air-fab-tertiary-state);
 }
 
 @utility air-fab-error {
-  @apply air-fab-base air-fab-error-surface air-state-layer;
+  @extend air-fab-base air-fab-error-surface air-state-layer;
   --state-layer-color: var(--air-fab-error-state);
 }
 
 @utility air-fab-success {
-  @apply air-fab-base air-fab-success-surface air-state-layer;
+  @extend air-fab-base air-fab-success-surface air-state-layer;
   --state-layer-color: var(--air-fab-success-state);
 }
 
 @utility air-fab-warning {
-  @apply air-fab-base air-fab-warning-surface air-state-layer;
+  @extend air-fab-base air-fab-warning-surface air-state-layer;
   --state-layer-color: var(--air-fab-warning-state);
 }
 
 @utility air-fab-info {
-  @apply air-fab-base air-fab-info-surface air-state-layer;
+  @extend air-fab-base air-fab-info-surface air-state-layer;
   --state-layer-color: var(--air-fab-info-state);
 }

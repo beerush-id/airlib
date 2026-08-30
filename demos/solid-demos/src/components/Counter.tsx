@@ -1,4 +1,4 @@
-import { mutable } from '@anchorlib/solid';
+import { mutable } from '@airlib/solid';
 import { watchPrice } from '../pages/home/function.js';
 
 export function Counter() {

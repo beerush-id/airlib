@@ -1,4 +1,3 @@
-import { classx } from '@airlib/headless/utils';
 import {
   Button,
   Collapsible,
@@ -9,7 +8,7 @@ import {
   FieldLabel,
 } from '@airlib/react-ui/components';
 import { TextField } from '@airlib/react-ui/form';
-import { $bind, $use, mutable, Snippet, setup } from '@anchorlib/react';
+import { $bind, $use, classx, mutable, setup, Snippet } from '@airlib/react';
 
 const Single = setup(() => {
   const steps = mutable({
@@ -26,10 +25,10 @@ const Single = setup(() => {
           <Snippet>
             {() => (
               <div
-                className={classx([
+                className={classx(
                   'flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm shrink-0 transition-colors',
                   steps.shipping ? 'bg-primary text-on-primary' : 'bg-primary/20 text-primary',
-                ])}
+                )}
               >
                 1
               </div>
@@ -68,10 +67,10 @@ const Single = setup(() => {
           <Snippet>
             {() => (
               <div
-                className={classx([
+                className={classx(
                   'flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm shrink-0 transition-colors',
                   steps.payment ? 'bg-primary text-on-primary' : 'bg-primary/20 text-primary',
-                ])}
+                )}
               >
                 2
               </div>
@@ -116,10 +115,10 @@ const Single = setup(() => {
           <Snippet>
             {() => (
               <div
-                className={classx([
+                className={classx(
                   'flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm shrink-0 transition-colors',
                   steps.review ? 'bg-primary text-on-primary' : 'bg-primary/20 text-primary',
-                ])}
+                )}
               >
                 3
               </div>

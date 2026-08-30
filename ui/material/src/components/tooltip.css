@@ -71,9 +71,9 @@
 
 /* Composed Utilities */
 @utility air-tooltip-plain {
-  @apply air-tooltip-base air-tooltip-plain-layout air-tooltip-plain-surface;
+  @extend air-tooltip-base air-tooltip-plain-layout air-tooltip-plain-surface;
 }
 
 @utility air-tooltip-rich {
-  @apply air-tooltip-base air-tooltip-rich-layout air-tooltip-rich-surface;
+  @extend air-tooltip-base air-tooltip-rich-layout air-tooltip-rich-surface;
 }

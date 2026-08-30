@@ -10,7 +10,7 @@ import {
   Icon,
 } from '@airlib/react-ui/components';
 import { Checkbox, Radio, RadioGroup } from '@airlib/react-ui/form';
-import { $bind, mutable, setup } from '@anchorlib/react';
+import { $bind, mutable, setup } from '@airlib/react';
 
 const Individual = setup(() => {
   const state = mutable({

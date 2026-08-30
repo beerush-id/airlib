@@ -53,7 +53,7 @@
 }
 
 @utility air-dialog-confirm {
-  @apply air-dialog;
+  @extend air-dialog;
 
   & > [role='region'] {
     @apply max-w-96;
@@ -65,7 +65,8 @@
 }
 
 @utility air-dialog-body {
-  @apply air-card-filled z-elevated;
+  @extend air-card-filled;
+  @apply z-elevated;
 
   max-width: var(--air-dialog-max-width);
   min-width: calc(var(--spacing) * 80);
@@ -76,7 +77,8 @@
 }
 
 @utility air-dialog-header {
-  @apply air-card-header flex-row;
+  @extend air-card-header;
+  @apply flex-row;
 
   & ~ .air-dialog-content {
     padding-block-start: 0;
@@ -84,7 +86,8 @@
 }
 
 @utility air-dialog-toolbar {
-  @apply air-dialog-header justify-center;
+  @extend air-dialog-header;
+  @apply justify-center;
 
   & ~ .air-dialog-header {
     padding-block-start: 0;
@@ -92,23 +95,25 @@
 }
 
 @utility air-dialog-title {
-  @apply air-title-lg;
+  @extend air-title-lg;
 }
 
 @utility air-dialog-content {
-  @apply air-card-body w-full;
+  @extend air-card-body;
+  @apply w-full;
 }
 
 @utility air-dialog-footer {
-  @apply air-card-body flex-row justify-end w-full gap-2;
+  @extend air-card-body;
+  @apply flex-row justify-end w-full gap-2;
 }
 
 @utility air-dialog-cancel {
-  @apply air-button air-button-text;
+  @extend air-button air-button-text;
 }
 
 @utility air-dialog-submit {
-  @apply air-button air-button-filled;
+  @extend air-button air-button-filled;
 }
 
 @utility air-dialog-warning {
@@ -122,5 +127,6 @@
 }
 
 @utility air-dialog-close {
-  @apply air-icon-button absolute top-2 right-2;
+  @extend air-icon-button;
+  @apply absolute top-2 right-2;
 }

@@ -1,4 +1,4 @@
-import { derived, Link, page, redirect } from '@anchorlib/solid';
+import { derived, Link, page, redirect } from '@airlib/solid';
 import { ThemeToggle } from '../../components/ThemeToggle.js';
 import { createSettings } from '../../lib/settings.js';
 import { RootPage } from '../page.js';

@@ -35,7 +35,7 @@
 @utility air-slider-base {
   @apply flex items-center relative w-full;
   @apply box-border cursor-pointer;
-  @apply air-focus-ring;
+  @extend air-focus-ring;
   height: var(--air-slider-handle-size);
   transition-property: box-shadow;
   transition-duration: var(--duration-short);
@@ -106,7 +106,8 @@
 
 /* Native Input Variant Base */
 @utility air-slider-input {
-  @apply relative w-full cursor-pointer air-focus-ring;
+  @apply relative w-full cursor-pointer;
+  @extend air-focus-ring;
   appearance: none;
   height: var(--air-slider-track-height);
   border-radius: var(--radius-full);
@@ -211,24 +212,24 @@
 
 /* Composed Utilities */
 @utility air-slider-input-primary {
-  @apply air-slider-input air-slider-native-primary-surface;
+  @extend air-slider-input air-slider-native-primary-surface;
 }
 
 @utility air-slider {
-  @apply air-slider-base;
+  @extend air-slider-base;
 }
 
 @utility air-slider-track {
-  @apply air-slider-track-base air-slider-track-secondary;
+  @extend air-slider-track-base air-slider-track-secondary;
 }
 
 @utility air-slider-track-active {
-  @apply air-slider-track-active-base air-slider-track-active-primary;
+  @extend air-slider-track-active-base air-slider-track-active-primary;
   width: var(--air-slider-value, 0%);
 }
 
 @utility air-slider-handle {
-  @apply air-slider-handle-base air-slider-handle-primary;
+  @extend air-slider-handle-base air-slider-handle-primary;
 }
 
 /* Size Variants */

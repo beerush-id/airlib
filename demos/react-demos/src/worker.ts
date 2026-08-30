@@ -1,5 +1,5 @@
 import { AirApp } from '@airlib/react-ui/components';
-import { createFullWorker, createSSR } from '@anchorlib/react/ssr';
+import { createFullWorker, createSSR } from '@airlib/react/ssr';
 import { HTTPRouter } from '@irpclib/http/router';
 import { transport } from './lib/module.js';
 import router from './lib/router.js';

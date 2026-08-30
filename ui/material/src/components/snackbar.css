@@ -49,7 +49,8 @@
 /* Snackbar Action Button */
 @utility air-snackbar-action {
   @apply inline-flex items-center justify-center;
-  @apply cursor-pointer air-focus-ring air-state-layer;
+  @extend air-focus-ring air-state-layer;
+  @apply cursor-pointer;
   border-width: 0;
   border-style: solid;
   border-color: transparent;
@@ -74,7 +75,7 @@
 
 /* Composed Utilities */
 @utility air-snackbar {
-  @apply air-snackbar-base air-snackbar-surface;
+  @extend air-snackbar-base air-snackbar-surface;
 }
 
 /* Color Variants */

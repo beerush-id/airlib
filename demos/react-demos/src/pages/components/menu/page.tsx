@@ -11,7 +11,7 @@ import {
   SubMenu,
   Tooltip,
 } from '@airlib/react-ui/components';
-import { page, setup } from '@anchorlib/react';
+import { page, setup } from '@airlib/react';
 import { menuRoute } from '../route.js';
 
 const MenuDemo = setup(() => {

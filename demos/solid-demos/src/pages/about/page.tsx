@@ -1,10 +1,13 @@
-import { Meta, page, Title } from '@anchorlib/solid';
+import { Meta, page, Title } from '@airlib/solid';
 import { aboutRoute } from './route.js';
 
 export const AboutPage = page(aboutRoute).render(() => (
   <>
     <Title>About — AIR Stack</Title>
-    <Meta name="description" content="Anchor for Solid — fine-grained reactive state, SSR routing, and zero boilerplate." />
+    <Meta
+      name="description"
+      content="Anchor for Solid — fine-grained reactive state, SSR routing, and zero boilerplate."
+    />
 
     <h1 class="hero-heading">
       <span class="brand-dim">About&nbsp;</span>
@@ -19,16 +22,16 @@ export const AboutPage = page(aboutRoute).render(() => (
     <div class="card about-card">
       <ul class="about-list">
         <li>
-          <strong class="brand-anchor">Anchor</strong> — Reactive state management. Mutate objects directly, and
-          only the exact DOM fragments reading that data update. No re-render cascades.
+          <strong class="brand-anchor">Anchor</strong> — Reactive state management. Mutate objects directly, and only
+          the exact DOM fragments reading that data update. No re-render cascades.
         </li>
         <li>
-          <strong class="brand-solid">Solid</strong> — Rendering surface only. Anchor controls reactivity; Solid
-          paints the DOM with surgical precision.
+          <strong class="brand-solid">Solid</strong> — Rendering surface only. Anchor controls reactivity; Solid paints
+          the DOM with surgical precision.
         </li>
         <li>
-          <strong class="brand-vite">Vite SSR</strong> — Server-side rendering with Express + Vite middleware.
-          Routes pre-render on the server, hydrate on the client.
+          <strong class="brand-vite">Vite SSR</strong> — Server-side rendering with Express + Vite middleware. Routes
+          pre-render on the server, hydrate on the client.
         </li>
       </ul>
     </div>

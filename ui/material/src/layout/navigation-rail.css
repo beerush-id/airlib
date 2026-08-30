@@ -32,7 +32,7 @@
 @utility air-navigation-rail-item-base {
   @apply inline-flex flex-col items-center justify-center;
   @apply cursor-pointer;
-  @apply air-focus-ring;
+  @extend air-focus-ring;
   width: calc(var(--spacing) * 18); /* 72px */
   min-height: calc(var(--spacing) * 14); /* 56px */
   gap: var(--spacing);
@@ -88,24 +88,24 @@
 
 /* Composed Utilities */
 @utility air-navigation-rail {
-  @apply air-navigation-rail-base air-navigation-rail-surface;
+  @extend air-navigation-rail-base air-navigation-rail-surface;
 }
 
 @utility air-navigation-rail-item {
-  @apply air-navigation-rail-item-base air-navigation-rail-item-surface;
+  @extend air-navigation-rail-item-base air-navigation-rail-item-surface;
 
   &[aria-selected='true'] {
-    @apply air-navigation-rail-item-selected-surface;
+    @extend air-navigation-rail-item-selected-surface;
   }
 }
 
 @utility air-nav-rail-icon-container {
-  @apply air-nav-rail-icon-container-base air-nav-rail-icon-container-surface air-state-layer;
+  @extend air-nav-rail-icon-container-base air-nav-rail-icon-container-surface air-state-layer;
   --state-layer-color: var(--color-on-surface-variant);
 
   /* Selected */
   .air-navigation-rail-item[aria-selected='true'] & {
-    @apply air-nav-rail-icon-container-selected-surface;
+    @extend air-nav-rail-icon-container-selected-surface;
     --state-layer-color: var(--color-on-surface);
   }
 }

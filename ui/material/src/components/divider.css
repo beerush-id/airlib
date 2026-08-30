@@ -40,13 +40,13 @@
 
 /* Composed Utilities */
 @utility air-divider {
-  @apply air-divider-base air-divider-horizontal-layout air-divider-surface;
+  @extend air-divider-base air-divider-horizontal-layout air-divider-surface;
 }
 
 @utility air-divider-vertical {
-  @apply air-divider-base air-divider-vertical-layout air-divider-surface;
+  @extend air-divider-base air-divider-vertical-layout air-divider-surface;
 }
 
 @utility air-divider-inset {
-  @apply air-divider-base air-divider-horizontal-layout air-divider-inset-layout air-divider-surface;
+  @extend air-divider-base air-divider-horizontal-layout air-divider-inset-layout air-divider-surface;
 }

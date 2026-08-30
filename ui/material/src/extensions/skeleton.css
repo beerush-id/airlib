@@ -64,11 +64,11 @@
   & .air-badge,
   & .air-icon-button,
   & .air-fab {
-    @apply air-skeleton;
+    @extend air-skeleton;
   }
 
   /* Don't apply to spans nested inside headings/paragraphs that already have skeleton applied */
   & span:not(p span, h1 span, h2 span, h3 span, h4 span, h5 span, h6 span, a span, button span) {
-    @apply air-skeleton;
+    @extend air-skeleton;
   }
 }

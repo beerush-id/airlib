@@ -35,7 +35,7 @@
 }
 
 @utility air-toolbar-outlined-surface {
-  @apply air-toolbar-surface;
+  @extend air-toolbar-surface;
   border-width: 1px;
   border-style: solid;
   border-color: var(--air-toolbar-outlined-border);
@@ -71,7 +71,8 @@
 }
 
 @utility air-toolbar-group-label {
-  @apply block select-none box-border air-title-sm font-semibold;
+  @apply block select-none box-border font-semibold;
+  @extend air-title-sm;
   color: var(--air-toolbar-group-label-color);
   margin-block-start: 0;
   margin-block-end: 0;
@@ -89,11 +90,11 @@
 
 /* Composed Utilities */
 @utility air-toolbar {
-  @apply air-toolbar-base air-toolbar-surface;
+  @extend air-toolbar-base air-toolbar-surface;
 }
 
 @utility air-toolbar-outlined {
-  @apply air-toolbar-base air-toolbar-outlined-surface;
+  @extend air-toolbar-base air-toolbar-outlined-surface;
 }
 
 /* ==========================================================================
@@ -102,7 +103,7 @@
 
 /* Tool Control State Base */
 @utility air-tool-state {
-  @apply air-toggle-state;
+  @extend air-toggle-state;
   background-color: var(--color-surface-container-low, var(--color-surface-variant));
   color: var(--color-on-surface-variant);
 
@@ -138,7 +139,7 @@
 
 /* Compact Toolbar Button Variant (32px height, transparent resting state, M3 styling) */
 @utility air-tool-button {
-  @apply air-button air-tool-state air-tool-button-icon-slot;
+  @extend air-button air-tool-state air-tool-button-icon-slot;
   --air-button-height: calc(var(--spacing) * 8);
   --air-button-padding-x: calc(var(--spacing) * 3);
   --air-button-icon-padding-x: calc(var(--spacing) * 2);
@@ -153,7 +154,7 @@
 
 /* Compact Toolbar Icon Button Variant (32x32px square/centered, M3 styling) */
 @utility air-tool-icon-button {
-  @apply air-icon-button air-tool-state;
+  @extend air-icon-button air-tool-state;
   --air-icon-button-size: calc(var(--spacing) * 8); /* 32px */
   --air-icon-button-icon-size: calc(var(--spacing) * 4.5); /* 18px */
   --air-icon-button-radius: var(--radius-full);
@@ -162,14 +163,14 @@
 
 /* Container for grouped toolbar controls (inputs, buttons, selects) with M3 non-flat radii */
 @utility air-tool-group {
-  @apply air-group-base;
+  @extend air-group-base;
   --air-segment-outer-radius: var(--air-toolbar-outer-radius);
   --air-segment-inner-radius: calc(var(--spacing) * 1.5);
 }
 
 /* Compact Toolbar Input Variant (32px height, subtle background, M3 styling) */
 @utility air-tool-input {
-  @apply air-text-field-input;
+  @extend air-text-field-input;
   --air-text-field-height: calc(var(--spacing) * 8);
   --air-field-font-size: var(--font-body-sm-size);
   --air-field-radius: var(--radius-full);
@@ -195,7 +196,8 @@
 
 /* Tool Icon Utility */
 @utility air-tool-icon {
-  @apply air-icon select-none box-border;
+  @extend air-icon;
+  @apply select-none box-border;
   --air-icon-size: calc(var(--spacing) * 4); /* 16px */
   color: var(--color-on-surface-variant);
   flex-shrink: 0;
@@ -226,7 +228,8 @@
   }
 
   & input {
-    @apply box-border air-body-sm;
+    @extend air-body-sm;
+    @apply box-border;
     width: 100%;
     height: 100%;
     background-color: transparent;

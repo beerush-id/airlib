@@ -1,4 +1,4 @@
-import { withIsolation } from '@anchorlib/core';
+import { withIsolation } from '@airlib/core';
 import { IRPCFile } from '@irpclib/irpc';
 import { describe, expect, it } from 'vitest';
 import { type FSConfig, setFSConfig } from '../src/context.js';

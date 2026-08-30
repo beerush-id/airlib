@@ -50,6 +50,20 @@ export function resolveRequest(
   return { path: p, meta: fm };
 }
 
+export function resolveEntryPath(
+  path: string,
+  payloadName?: string
+): { path: string; directory: string; name: string } {
+  const cleanPath = path.endsWith('/') && path.length > 1 ? path.slice(0, -1) : path;
+  if (!cleanPath || cleanPath === '/') return { path: '/', directory: '/', name: '' };
+
+  const directory = cleanPath.substring(0, cleanPath.lastIndexOf('/')) || '/';
+  const name = payloadName || cleanPath.substring(cleanPath.lastIndexOf('/') + 1);
+
+  const finalPath = directory === '/' ? `/${name}` : `${directory}/${name}`;
+  return { path: finalPath, directory, name };
+}
+
 export function resolveWriteAccess(): FSConfig {
   const config = getFSConfig();
   if (config.readOnly) {

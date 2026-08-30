@@ -1,14 +1,14 @@
-import { withIsolation } from '@anchorlib/core';
+import { withIsolation } from '@airlib/core';
 import { IRPCFile } from '@irpclib/irpc';
 import { describe, expect, it, vi } from 'vitest';
 import { FSAdapter, type FSDriver, NextGenerator } from '../src/adapter.js';
 import { adapter } from '../src/constructor.js';
 import { FS_CONFIG, setFSConfig } from '../src/context.js';
-import type { FSFile, FSMeta } from '../src/index.js';
+import type { FSEntry, FSMeta } from '../src/index.js';
 import { fileSchema, fs, fsModule } from '../src/index.js';
 import type { AnyType } from '../src/types.js';
 
-const emptyFile: () => FSFile = () => ({
+const emptyFile: () => FSEntry = () => ({
   path: '',
   url: '',
   size: 0,

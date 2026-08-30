@@ -21,11 +21,11 @@
 
 /* Composed Utilities */
 @utility air-select-option {
-  @apply air-menu-item air-toggle-state;
+  @extend air-menu-item air-toggle-state;
 }
 
 @utility air-select-button {
-  @apply air-button air-button-tonal;
+  @extend air-button air-button-tonal;
 
   .air-icon {
     transition-property: transform;
@@ -39,27 +39,27 @@
 }
 
 @utility air-select-menu {
-  @apply air-menu;
+  @extend air-menu;
 }
 
 @utility air-select-item {
-  @apply air-menu-item air-toggle-state;
+  @extend air-menu-item air-toggle-state;
 }
 
 @utility air-select-checkbox {
-  @apply air-checkbox;
+  @extend air-checkbox;
 }
 
 @utility air-select-badge {
-  @apply air-chip-elevated air-chip-sm bg-secondary text-on-secondary ml-4;
-  @apply air-label-sm-strong;
+  @extend air-chip-elevated air-chip-sm air-label-sm-strong;
+  @apply bg-secondary text-on-secondary ml-4;
 
   font-weight: bold;
 }
 
 /* Container Wrapper (Specific select overrides) */
 @utility air-select-field-container {
-  @apply air-floating-field-container;
+  @extend air-floating-field-container;
 
   /* Filled Floating Transform Override */
   &:has(.air-select-field-filled:focus) .air-field-label,
@@ -71,8 +71,8 @@
 }
 
 @utility air-select-field {
-  @apply air-text-field appearance-none cursor-pointer;
-  @apply flex items-center justify-start;
+  @extend air-text-field;
+  @apply appearance-none cursor-pointer flex items-center justify-start;
 
   padding-inline-end: calc(var(--air-field-trailing-padding, var(--air-field-padding-x)) + calc(var(--spacing) * 6));
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 24 24' fill='%2349454f' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/%3E%3C/svg%3E");
@@ -86,61 +86,61 @@
 }
 
 @utility air-select-field-filled {
-  @apply air-text-field-filled;
+  @extend air-text-field-filled;
 }
 
 @utility air-select-field-xs {
-  @apply air-text-field-xs;
+  @extend air-text-field-xs;
 }
 
 @utility air-select-field-sm {
-  @apply air-text-field-sm;
+  @extend air-text-field-sm;
 }
 
 @utility air-select-field-md {
-  @apply air-text-field-md;
+  @extend air-text-field-md;
 }
 
 @utility air-select-field-lg {
-  @apply air-text-field-lg;
+  @extend air-text-field-lg;
 }
 
 @utility air-select-field-xl {
-  @apply air-text-field-xl;
+  @extend air-text-field-xl;
 }
 
 @utility air-select-field-xxl {
-  @apply air-text-field-xxl;
+  @extend air-text-field-xxl;
 }
 
 @utility air-select-field-error {
-  @apply air-text-field-error;
+  @extend air-text-field-error;
 }
 
 @utility air-select-field-secondary {
-  @apply air-text-field-secondary;
+  @extend air-text-field-secondary;
 }
 
 @utility air-select-field-tertiary {
-  @apply air-text-field-tertiary;
+  @extend air-text-field-tertiary;
 }
 
 @utility air-select-field-success {
-  @apply air-text-field-success;
+  @extend air-text-field-success;
 }
 
 @utility air-select-field-warning {
-  @apply air-text-field-warning;
+  @extend air-text-field-warning;
 }
 
 @utility air-select-field-info {
-  @apply air-text-field-info;
+  @extend air-text-field-info;
 }
 
 @utility air-select-field-input {
-  @apply air-select-field;
+  @extend air-select-field;
 }
 
 @utility air-select-field-input-filled {
-  @apply air-select-field-input air-select-field-filled;
+  @extend air-select-field-input air-select-field-filled;
 }

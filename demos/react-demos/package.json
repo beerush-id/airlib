@@ -18,9 +18,9 @@
     "@airlib/material": "workspace:*",
     "@airlib/react-form": "workspace:*",
     "@airlib/react-ui": "workspace:*",
-    "@anchorlib/core": "catalog:app",
-    "@anchorlib/react": "catalog:app",
-    "@anchorlib/storage": "catalog:app",
+    "@airlib/core": "catalog:app",
+    "@airlib/react": "catalog:app",
+    "@airlib/storage": "catalog:app",
     "@irpclib/http": "catalog:app",
     "@irpclib/irpc": "catalog:app",
     "@irpclib/ws": "catalog:app",
@@ -29,15 +29,15 @@
     "zod": "catalog:app"
   },
   "devDependencies": {
-    "@anchorlib/vite-ssr": "catalog:app",
+    "@airlib/vite": "catalog:app",
     "@biomejs/biome": "catalog:",
     "@napi-rs/image": "catalog:",
-    "@tailwindcss/vite": "catalog:",
     "@types/bun": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
-    "tailwindcss": "catalog:",
+    "tailwindplus": "workspace:*",
+    "tailwindplus-vite": "workspace:*",
     "typescript": "catalog:",
     "vite": "catalog:"
   }

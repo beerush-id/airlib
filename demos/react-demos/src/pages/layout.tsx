@@ -1,5 +1,5 @@
 import { colorScheme } from '@airlib/headless/utils';
-import { NotFoundError, page, Style } from '@anchorlib/react';
+import { NotFoundError, page, Style } from '@airlib/react';
 import { Footer } from '../components/Footer.js';
 import { Header } from '../components/Header.js';
 import { router } from '../lib/router.js';
